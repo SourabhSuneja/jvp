@@ -1,1 +1,1182 @@
- 
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <base href="https://myjvp.in/commons/">
+      <meta name="description" content="A smart school syllabus management app where teachers update subject-wise syllabus in real time—easy, organised, and collaborative.">
+      <title>Jamna Vidyapeeth - Syllabus Management System</title>
+      <!-- Google Fonts -->
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <!-- Material Icons -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="dialog.css">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Dialog Box Scripts -->
+      <script src="dialog.js"></script>
+      <style>
+         :root {
+         --primary-color: #1565c0;
+         --primary-dark: #0d47a1;
+         --primary-light: #bbdefb;
+         --accent-color: #ff6e40;
+         --text-primary: #212121;
+         --text-secondary: #757575;
+         --divider-color: #bdbdbd;
+         --background: #f5f5f5;
+         --card-color: #ffffff;
+         --error-color: #d32f2f;
+         --success-color: #388e3c;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         max-height: 9999999999px;
+         }
+         body {
+         font-family: 'Poppins', sans-serif;
+         background-color: var(--background);
+         color: var(--text-primary);
+         line-height: 1.6;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 20px;
+         }
+         .card {
+         background-color: var(--card-color);
+         border-radius: 8px;
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+         padding: 24px;
+         margin-bottom: 24px;
+         }
+         .header {
+         text-align: center;
+         margin-bottom: 30px;
+         }
+         .header h1 {
+         font-size: 28px;
+         font-weight: 600;
+         color: var(--primary-color);
+         margin-bottom: 8px;
+         }
+         .header p {
+         color: var(--text-secondary);
+         font-size: 16px;
+         }
+         .form-group {
+         margin-bottom: 20px;
+         }
+         .form-group label {
+         display: block;
+         margin-bottom: 8px;
+         font-weight: 500;
+         color: var(--text-primary);
+         }
+         .form-control {
+         width: 100%;
+         padding: 12px 16px;
+         font-size: 16px;
+         border: 1px solid var(--divider-color);
+         border-radius: 4px;
+         background-color: var(--card-color);
+         color: var(--text-primary);
+         transition: border-color 0.3s ease;
+         }
+         .form-control:focus {
+         outline: none;
+         border-color: var(--primary-color);
+         box-shadow: 0 0 0 2px rgba(21, 101, 192, 0.2);
+         }
+         .btn {
+         display: inline-block;
+         background-color: var(--primary-color);
+         color: white;
+         padding: 12px 24px;
+         border: none;
+         border-radius: 4px;
+         font-size: 16px;
+         font-weight: 500;
+         cursor: pointer;
+         transition: background-color 0.3s ease, transform 0.2s ease;
+         text-align: center;
+         }
+         .btn:hover {
+         background-color: var(--primary-dark);
+         transform: translateY(-2px);
+         }
+         .btn:active {
+         transform: translateY(0);
+         }
+         .btn-block {
+         display: block;
+         width: 100%;
+         }
+         .btn-accent {
+         background-color: var(--accent-color);
+         }
+         .btn-accent:hover {
+         background-color: #ff5722;
+         }
+         .btn-outline {
+         background-color: transparent;
+         border: 2px solid var(--primary-color);
+         color: var(--primary-color);
+         }
+         .btn-outline:hover {
+         background-color: rgba(21, 101, 192, 0.1);
+         }
+         .alert {
+         padding: 12px 16px;
+         border-radius: 4px;
+         margin-bottom: 20px;
+         font-weight: 500;
+         }
+         .alert-error {
+         background-color: #ffebee;
+         color: var(--error-color);
+         border-left: 4px solid var(--error-color);
+         }
+         .alert-success {
+         background-color: #e8f5e9;
+         color: var(--success-color);
+         border-left: 4px solid var(--success-color);
+         }
+         .login-form {
+         max-width: 400px;
+         margin: 60px auto;
+         }
+         .login-title {
+         text-align: center;
+         margin-bottom: 30px;
+         }
+         .login-title h2 {
+         font-size: 24px;
+         font-weight: 600;
+         margin-bottom: 8px;
+         }
+         .login-title p {
+         color: var(--text-secondary);
+         font-size: 14px;
+         }
+         /* Dashboard Styles */
+         .dashboard {
+         display: none;
+         }
+         .dashboard-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 24px;
+         }
+         .dashboard-title h2 {
+         font-size: 24px;
+         font-weight: 600;
+         }
+         .dashboard-actions {
+         display: flex;
+         gap: 12px;
+         }
+         .dashboard-nav {
+         display: flex;
+         gap: 12px;
+         margin-bottom: 24px;
+         }
+         .nav-pill {
+         padding: 8px 16px;
+         border-radius: 20px;
+         background-color: var(--card-color);
+         color: var(--text-secondary);
+         font-weight: 500;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         }
+         .nav-pill:hover {
+         background-color: var(--primary-light);
+         color: var(--primary-color);
+         }
+         .nav-pill.active {
+         background-color: var(--primary-color);
+         color: white;
+         }
+         /* Syllabus Form */
+         .syllabus-form {
+         display: none;
+         }
+         .syllabus-editor {
+         min-height: 200px;
+         border: 1px solid var(--divider-color);
+         border-radius: 4px;
+         padding: 16px;
+         margin-bottom: 20px;
+         }
+         /* Syllabus Viewer */
+         .syllabus-viewer {
+         display: none;
+         }
+         .subject-card {
+         margin-bottom: 16px;
+         padding: 16px;
+         border-radius: 8px;
+         background-color: var(--card-color);
+         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+         }
+         .subject-card h3 {
+         font-size: 18px;
+         font-weight: 600;
+         margin-bottom: 8px;
+         color: var(--primary-color);
+         }
+         .subject-card p {
+         color: var(--text-primary);
+         white-space: pre-wrap;
+         }
+         .print-header {
+         text-align: center;
+         margin-bottom: 24px;
+         }
+         .print-header h2 {
+         font-size: 24px;
+         font-weight: 700;
+         margin-bottom: 4px;
+         }
+         .print-header p {
+         font-size: 16px;
+         font-weight: 500;
+         }
+         #print-syllabus-btn {
+         margin-left: 12px;
+         }
+         #delete-syllabus-btn {
+         background-color: #e74c3c; 
+         color: white;
+         }
+         #delete-syllabus-btn:hover, #delete-syllabus-btn:focus {
+         background-color: #d14536;
+         }
+         footer {
+         padding: 14px;
+         margin: 21px;
+         background: var(--primary-color);
+         color: white;
+         border-radius: 6px;
+         text-align: center;
+         }
+         /* Responsive Styles */
+         @media (max-width: 768px) {
+         .container {
+         padding: 16px;
+         }
+         .dashboard-header {
+         flex-direction: column;
+         align-items: flex-start;
+         gap: 16px;
+         }
+         .dashboard-nav {
+         flex-wrap: wrap;
+         }
+         .dashboard-actions {
+         width: 100%;
+         }
+         .btn {
+         padding: 10px 16px;
+         font-size: 14px;
+         }
+         }
+         /* Print Styles */
+         @media print {
+         body {
+         background-color: white;
+         margin: 0;
+         padding: 0;
+         }
+         .container {
+         max-width: 100%;
+         width: 100%;
+         }
+         .card {
+         box-shadow: none;
+         border: none;
+         }
+         .dashboard-header, .dashboard-nav, .dashboard-actions, .btn, .alert, .form-group, footer, .completion-badge, .completion-info {
+         display: none !important;
+         }
+         .syllabus-viewer {
+         display: block !important;
+         }
+         .print-header {
+         margin-bottom: 30px;
+         }
+         .print-header h2 {
+         font-size: 26px;
+         }
+         .subject-card {
+         break-inside: avoid;
+         page-break-inside: avoid;
+         border: 1px solid #eee;
+         box-shadow: none;
+         }
+         }
+         .flex-row {
+         display: flex;
+         flex-direction: row;
+         gap: 16px;
+         }
+         .flex-col {
+         display: flex;
+         flex-direction: column;
+         }
+         .w-50 {
+         width: 48%;
+         }
+         @media (max-width: 768px) {
+         .flex-row {
+         flex-direction: column;
+         }
+         .w-50 {
+         width: 100%;
+         }
+         #print-syllabus-btn {
+         margin-top: 12px;
+         margin-left: 0;
+         }
+         }
+         .icon-text {
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         }
+         .icon-text i {
+         font-size: 20px;
+         }
+         .logout-btn {
+         margin-left: auto;
+         background-color: transparent;
+         color: var(--text-secondary);
+         border: none;
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         gap: 8px;
+         }
+         .logout-btn:hover {
+         color: var(--error-color);
+         }
+         .completion-section {
+         margin-top: 20px;
+         padding-top: 15px;
+         border-top: 1px solid var(--divider-color);
+         }
+         .completion-title {
+         font-weight: 600;
+         margin-bottom: 12px;
+         color: var(--primary-color);
+         }
+         .progress-bar-container {
+         width: 100%;
+         height: 15px;
+         margin-top: 4px;
+         background-color: #e0e0e0;
+         border-radius: 10px;
+         margin-bottom: 15px;
+         overflow: hidden;
+         }
+         .progress-bar {
+         height: 100%;
+         background-color: var(--success-color);
+         border-radius: 10px;
+         transition: width 0.3s ease;
+         }
+         .completion-info {
+         display: flex;
+         align-items: center;
+         gap: 5px;
+         margin-bottom: 8px;
+         font-size: 14px;
+         color: var(--text-secondary);
+         }
+         .completion-info i {
+         font-size: 18px;
+         }
+         /* For the subject card to show completion status */
+         .subject-card-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 12px;
+         }
+         .completion-badge {
+         background-color: var(--primary-light);
+         color: var(--primary-dark);
+         padding: 4px 8px;
+         border-radius: 12px;
+         font-size: 12px;
+         font-weight: 500;
+         }
+         .completion-badge.complete {
+         background-color: #e8f5e9;
+         color: var(--success-color);
+         }
+         .completion-notes {
+         margin-top: 12px;
+         padding: 8px;
+         background-color: #f5f5f5;
+         border-left: 3px solid var(--primary-color);
+         font-style: italic;
+         font-size: 14px;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container">
+         <!-- Login Screen -->
+         <div id="login-screen" class="login-form card">
+            <div class="login-title">
+               <img style="height: 90px" src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg">
+               <h2>Jamna Vidyapeeth</h2>
+               <p>Syllabus Management System</p>
+            </div>
+            <div id="login-alert" class="alert alert-error" style="display: none;"></div>
+            <form id="login-form" onsubmit="return false;">
+               <div class="form-group">
+                  <label for="username">Username</label>
+                  <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+               </div>
+               <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+               </div>
+               <div class="form-group">
+                  <button id="login-btn" class="btn btn-block">
+                  <span class="icon-text">
+                  <i class="material-icons">login</i>
+                  <span>Login</span>
+                  </span>
+                  </button>
+               </div>
+            </form>
+         </div>
+         <!-- Dashboard -->
+         <div id="dashboard" class="dashboard">
+            <div class="dashboard-header">
+               <div class="dashboard-title">
+                  <h2>Welcome to Syllabus Management System</h2>
+               </div>
+               <button id="logout-btn" class="logout-btn">
+               <span>Logout</span>
+               <i class="material-icons">logout</i>
+               </button>
+            </div>
+            <div class="dashboard-nav">
+               <div id="createSyllabusPill" class="nav-pill active" data-tab="create-syllabus">Create/Edit Syllabus</div>
+               <div class="nav-pill" data-tab="view-syllabus">View Compiled Syllabus</div>
+            </div>
+            <!-- Create/Edit Syllabus Tab -->
+            <div id="create-syllabus" class="syllabus-form card">
+               <div id="syllabus-alert" class="alert alert-success" style="display: none;"></div>
+               <div class="flex-row">
+                  <div class="form-group w-50">
+                     <label for="subject-select">Subject</label>
+                     <select id="subject-select" class="form-control">
+                        <option value="" disabled selected>Select Subject</option>
+                        <option value="English">English</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Maths">Maths</option>
+                        <option value="Applied Maths">Applied Maths</option>
+                        <option value="Science">Science</option>
+                        <option value="Social Science">Social Science</option>
+                        <option value="Sanskrit">Sanskrit</option>
+                        <option value="EVS">EVS</option>
+                        <option value="GK">GK</option>
+                        <option value="Computer">Computer</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Informatics Practices">Informatics Practices</option>
+                        <option value="Physical Education">Physical Education</option>
+                        <option value="Accountancy">Accountancy</option>
+                        <option value="Business Studies">Business Studies</option>
+                        <option value="Economics">Economics</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Political Science">Political Science</option>
+                        <option value="Psychology">Psychology</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                     </select>
+                  </div>
+                  <div class="form-group w-50">
+                     <label for="class-select">Class</label>
+                     <select id="class-select" class="form-control">
+                        <option value="" disabled selected>Select Class</option>
+                        <option value="1">Class 1</option>
+                        <option value="2">Class 2</option>
+                        <option value="3">Class 3</option>
+                        <option value="4">Class 4</option>
+                        <option value="5">Class 5</option>
+                        <option value="6">Class 6</option>
+                        <option value="7">Class 7</option>
+                        <option value="8">Class 8</option>
+                        <option value="9">Class 9</option>
+                        <option value="10">Class 10</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                     </select>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label for="exam-select">Exam</label>
+                  <select id="exam-select" class="form-control">
+                     <option value="" disabled selected>Select Exam</option>
+                     <option value="PT-1">PT-1</option>
+                     <option value="PT-2">PT-2</option>
+                     <option value="Term-1">Term-1</option>
+                     <option value="PT-3">PT-3</option>
+                     <option value="PT-4">PT-4</option>
+                     <option value="Term-2">Term-2</option>
+                     <option value="Enthusiasm Exam">Enthusiasm Exam</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="syllabus-content">Syllabus Content</label>
+                  <textarea id="syllabus-content" class="form-control syllabus-editor" placeholder="Enter syllabus details here..." rows="10"></textarea>
+                  <!-- Add this after the syllabus content textarea -->
+                  <div class="completion-section">
+                     <div class="completion-title">Syllabus Completion Status</div>
+                     <div class="form-group">
+                        <label for="completion-percentage">Completion Percentage</label>
+                        <div class="flex-row">
+                           <input type="range" id="completion-percentage" class="form-control" min="0" max="100" value="0" style="flex: 3;">
+                           <input type="number" id="completion-percentage-display" class="form-control" min="0" max="100" value="0" style="flex: 1;">
+                        </div>
+                        <div class="progress-bar-container">
+                           <div class="progress-bar" id="completion-progress-bar" style="width: 0%"></div>
+                        </div>
+                     </div>
+                     <div class="form-group" id="expected-completion-container">
+                        <label for="expected-completion-date">Expected Completion Date</label>
+                        <input type="date" id="expected-completion-date" class="form-control">
+                     </div>
+                     <div class="form-group">
+                        <label for="completion-notes">Completion Notes</label>
+                        <textarea id="completion-notes" class="form-control" rows="3" placeholder="Add any notes regarding syllabus progress or challenges..."></textarea>
+                     </div>
+                  </div>
+               </div>
+               <div class="form-group">
+                  <button id="save-syllabus-btn" class="btn btn-block">
+                  <span class="icon-text">
+                  <i class="material-icons">save</i>
+                  <span>Save Syllabus</span>
+                  </span>
+                  </button>
+               </div>
+               <div class="form-group">
+                  <button id="delete-syllabus-btn" class="btn btn-block">
+                  <span class="icon-text">
+                  <i class="material-icons">delete</i>
+                  <span>Delete Syllabus</span>
+                  </span>
+                  </button>
+               </div>
+            </div>
+            <!-- View Syllabus Tab -->
+            <div id="view-syllabus" class="syllabus-viewer card" style="display: none;">
+               <div class="form-group">
+                  <label for="view-class-select">Select Class</label>
+                  <select id="view-class-select" class="form-control">
+                     <option value="" disabled selected>Select Class</option>
+                     <option value="1">Class 1</option>
+                     <option value="2">Class 2</option>
+                     <option value="3">Class 3</option>
+                     <option value="4">Class 4</option>
+                     <option value="5">Class 5</option>
+                     <option value="6">Class 6</option>
+                     <option value="7">Class 7</option>
+                     <option value="8">Class 8</option>
+                     <option value="9">Class 9</option>
+                     <option value="10">Class 10</option>
+                     <option value="11">Class 11</option>
+                     <option value="12">Class 12</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="view-exam-select">Select Exam</label>
+                  <select id="view-exam-select" class="form-control">
+                     <option value="" disabled selected>Select Exam</option>
+                     <option value="PT-1">PT-1</option>
+                     <option value="PT-2">PT-2</option>
+                     <option value="Term-1">Term-1</option>
+                     <option value="PT-3">PT-3</option>
+                     <option value="PT-4">PT-4</option>
+                     <option value="Term-2">Term-2</option>
+                     <option value="Enthusiasm Exam">Enthusiasm Exam</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <button id="load-syllabus-btn" class="btn">
+                  <span class="icon-text">
+                  <i class="material-icons">search</i>
+                  <span>Load Syllabus</span>
+                  </span>
+                  </button>
+                  <button id="print-syllabus-btn" class="btn btn-accent">
+                  <span class="icon-text">
+                  <i class="material-icons">print</i>
+                  <span>Print Syllabus</span>
+                  </span>
+                  </button>
+               </div>
+               <div id="syllabus-display" style="margin-top: 24px;">
+                  <div class="print-header">
+                     <img style="height: 90px" src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg">
+                     <h2>Jamna Vidyapeeth</h2>
+                     <p id="syllabus-title">Class <span id="display-class"></span> - <span id="display-exam"></span> Syllabus (2025-26)</p>
+                  </div>
+                  <div id="subjects-container">
+                     <!-- Subjects will be added here -->
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <footer>Crafted by Sourabh Sir</footer>
+      <script>
+         // Global variables
+         // Global credentials for admin and teacher
+         const CREDENTIALS = {
+             admin: {
+                 username: 'admin',
+                 password: 'sun123'
+             },
+             teacher: {
+                 username: 'jvp',
+                 password: 'jvp123'
+             }
+         };
+         
+         const SUBJECTS = [
+             'English', 'Hindi', 'Maths', 'Science', 
+             'Social Science', 'Sanskrit', 'GK', 'Computer', 'Data Science', 'Informatics Practices', 'Physical Education',
+             'Accountancy', 'Business Studies', 'Economics', 'History', 'Geography', 'Political Science',
+             'Psychology', 'Physics', 'Chemistry', 'Biology'
+         ];
+         
+         const STORAGE_KEY = 'jamna_vidyapeeth_syllabus_data';
+         
+         // Initialize application state
+         let syllabusData = {};
+         
+         // DOM Elements
+         const loginScreen = document.getElementById('login-screen');
+         const dashboard = document.getElementById('dashboard');
+         const loginForm = document.getElementById('login-form');
+         const loginBtn = document.getElementById('login-btn');
+         const logoutBtn = document.getElementById('logout-btn');
+         const loginAlert = document.getElementById('login-alert');
+         const navPills = document.querySelectorAll('.nav-pill');
+         const createSyllabusTab = document.getElementById('create-syllabus');
+         const viewSyllabusTab = document.getElementById('view-syllabus');
+         const subjectSelect = document.getElementById('subject-select');
+         const classSelect = document.getElementById('class-select');
+         const examSelect = document.getElementById('exam-select');
+         const syllabusContent = document.getElementById('syllabus-content');
+         const saveSyllabusBtn = document.getElementById('save-syllabus-btn');
+         const deleteSyllabusBtn = document.getElementById('delete-syllabus-btn');
+         const syllabusAlert = document.getElementById('syllabus-alert');
+         const viewClassSelect = document.getElementById('view-class-select');
+         const viewExamSelect = document.getElementById('view-exam-select');
+         const loadSyllabusBtn = document.getElementById('load-syllabus-btn');
+         const printSyllabusBtn = document.getElementById('print-syllabus-btn');
+         const syllabusDisplay = document.getElementById('syllabus-display');
+         const subjectsContainer = document.getElementById('subjects-container');
+         const displayClass = document.getElementById('display-class');
+         const displayExam = document.getElementById('display-exam');
+         
+         // Event Listeners
+         loginBtn.addEventListener('click', handleLogin);
+         logoutBtn.addEventListener('click', handleLogout);
+         navPills.forEach(pill => {
+             pill.addEventListener('click', () => handleTabSwitch(pill.dataset.tab));
+         });
+         saveSyllabusBtn.addEventListener('click', saveSyllabus);
+         deleteSyllabusBtn.addEventListener('click', deleteSyllabus);
+         loadSyllabusBtn.addEventListener('click', loadSyllabusView);
+         printSyllabusBtn.addEventListener('click', printSyllabus);
+         
+         // Additional event listeners for form changes
+         subjectSelect.addEventListener('change', loadExistingSyllabus);
+         classSelect.addEventListener('change', loadExistingSyllabus);
+         examSelect.addEventListener('change', loadExistingSyllabus);
+         
+         document.getElementById('completion-percentage').addEventListener('input', updateProgressBar);
+         document.getElementById('completion-percentage-display').addEventListener('input', updateProgressBarFromInput);
+         
+         // Functions
+         function handleLogin() {
+         const username = document.getElementById('username').value;
+         const password = document.getElementById('password').value;
+         const createSyllabusPill = document.getElementById('createSyllabusPill');
+         
+         // Hide all tabs
+         createSyllabusTab.style.display = 'none';
+         viewSyllabusTab.style.display = 'none';
+         
+         if (username === CREDENTIALS.admin.username && password === CREDENTIALS.admin.password) {
+         loginScreen.style.display = 'none';
+         dashboard.style.display = 'block';
+         loginAlert.style.display = 'none';
+         
+         // Hide the element for admin
+         if (createSyllabusPill) {
+            createSyllabusPill.style.display = 'none';
+         }
+         
+         } else if (username === CREDENTIALS.teacher.username && password === CREDENTIALS.teacher.password) {
+         loginScreen.style.display = 'none';
+         dashboard.style.display = 'block';
+         loginAlert.style.display = 'none';
+         
+         // Teachers can see the createSyllabusPill
+         if (createSyllabusPill) {
+            createSyllabusPill.style.display = 'block';
+         }
+         
+         } else {
+         loginAlert.textContent = 'Invalid username or password. Please try again.';
+         loginAlert.style.display = 'block';
+         }
+         }
+         
+         function handleLogout() {
+             loginScreen.style.display = 'block';
+             dashboard.style.display = 'none';
+             document.getElementById('username').value = '';
+             document.getElementById('password').value = '';
+         }
+         
+         function handleTabSwitch(tabId) {
+             // Hide all tabs
+             createSyllabusTab.style.display = 'none';
+             viewSyllabusTab.style.display = 'none';
+         
+             // Show the selected tab
+             document.getElementById(tabId).style.display = 'block';
+         
+             // Update nav pills
+             navPills.forEach(pill => {
+                 pill.classList.remove('active');
+                 if (pill.dataset.tab === tabId) {
+                     pill.classList.add('active');
+                 }
+             });
+         }
+         
+         // Add before loadExistingSyllabus function
+         function updateProgressBar() {
+         const percentage = document.getElementById('completion-percentage').value;
+         document.getElementById('completion-percentage-display').value = percentage;
+         document.getElementById('completion-progress-bar').style.width = percentage + '%';
+         
+         // Show/hide expected completion date field based on completion status
+         const expectedCompletionContainer = document.getElementById('expected-completion-container');
+         if (percentage == 100) {
+         expectedCompletionContainer.style.display = 'none';
+         } else {
+         expectedCompletionContainer.style.display = 'block';
+         }
+         }
+         
+         function updateProgressBarFromInput() {
+         const inputValue = document.getElementById('completion-percentage-display').value;
+         // Ensure value is between 0-100
+         const percentage = Math.min(100, Math.max(0, inputValue));
+         document.getElementById('completion-percentage').value = percentage;
+         document.getElementById('completion-progress-bar').style.width = percentage + '%';
+         
+         // Show/hide expected completion date field
+         const expectedCompletionContainer = document.getElementById('expected-completion-container');
+         if (percentage == 100) {
+         expectedCompletionContainer.style.display = 'none';
+         } else {
+         expectedCompletionContainer.style.display = 'block';
+         }
+         }
+         
+         function loadExistingSyllabus() {
+         const subject = subjectSelect.value;
+         const classId = classSelect.value;
+         const exam = examSelect.value;
+         
+         if (subject && classId && exam) {
+         const key = `${classId}_${exam}_${subject}`;
+         if (syllabusData[key]) {
+         // If data exists in the new format (object with syllabus_text property)
+         if (typeof syllabusData[key] === 'object') {
+         syllabusContent.value = syllabusData[key].syllabus_text || '';
+         
+         // Set completion data
+         const completionPercentage = syllabusData[key].completion_percentage || 0;
+         document.getElementById('completion-percentage').value = completionPercentage;
+         document.getElementById('completion-percentage-display').value = completionPercentage;
+         document.getElementById('completion-progress-bar').style.width = completionPercentage + '%';
+         
+         if (syllabusData[key].expected_completion_date) {
+          document.getElementById('expected-completion-date').value = syllabusData[key].expected_completion_date;
+         } else {
+          document.getElementById('expected-completion-date').value = '';
+         }
+         
+         document.getElementById('completion-notes').value = syllabusData[key].completion_notes || '';
+         
+         // Show/hide expected completion date field
+         const expectedCompletionContainer = document.getElementById('expected-completion-container');
+         if (completionPercentage == 100) {
+          expectedCompletionContainer.style.display = 'none';
+         } else {
+          expectedCompletionContainer.style.display = 'block';
+         }
+         } 
+         // Backward compatibility with old data format (just a string)
+         else if (typeof syllabusData[key] === 'string') {
+         syllabusContent.value = syllabusData[key];
+         // Reset completion fields
+         document.getElementById('completion-percentage').value = 0;
+         document.getElementById('completion-percentage-display').value = 0;
+         document.getElementById('completion-progress-bar').style.width = '0%';
+         document.getElementById('expected-completion-date').value = '';
+         document.getElementById('completion-notes').value = '';
+         document.getElementById('expected-completion-container').style.display = 'block';
+         }
+         } else {
+         // No data exists
+         syllabusContent.value = '';
+         // Reset completion fields
+         document.getElementById('completion-percentage').value = 0;
+         document.getElementById('completion-percentage-display').value = 0;
+         document.getElementById('completion-progress-bar').style.width = '0%';
+         document.getElementById('expected-completion-date').value = '';
+         document.getElementById('completion-notes').value = '';
+         document.getElementById('expected-completion-container').style.display = 'block';
+         }
+         }
+         }
+         
+         function saveSyllabus() {
+         const subject = subjectSelect.value;
+         const classId = classSelect.value;
+         const exam = examSelect.value;
+         const content = syllabusContent.value.trim();
+         const completionPercentage = parseInt(document.getElementById('completion-percentage').value);
+         const expectedCompletionDate = document.getElementById('expected-completion-date').value;
+         const completionNotes = document.getElementById('completion-notes').value.trim();
+         
+         if (!subject || !classId || !exam) {
+         showAlert(syllabusAlert, 'Please select subject, class, and exam.', 'error');
+         return;
+         }
+         
+         if (!content) {
+         showAlert(syllabusAlert, 'Please enter syllabus content.', 'error');
+         return;
+         }
+         
+         // Save to data structure
+         const key = `${classId}_${exam}_${subject}`;
+         syllabusData[key] = {
+         syllabus_text: content,
+         completion_percentage: completionPercentage,
+         expected_completion_date: completionPercentage < 100 ? expectedCompletionDate : '',
+         completion_notes: completionNotes,
+         last_updated: new Date().toISOString()
+         };
+         
+         // Save to server
+         saveSyllabusData();
+         showProcessingDialog();
+         }
+         
+         async function deleteSyllabus() {
+             const subject = subjectSelect.value;
+             const classId = classSelect.value;
+             const exam = examSelect.value;
+         
+             if (!subject || !classId || !exam) {
+                 showAlert(syllabusAlert, 'Please select subject, class, and exam.', 'error');
+                 return;
+             }
+         
+             const key = `${classId}_${exam}_${subject}`;
+         
+             if (!syllabusData[key]) {
+                 showAlert(syllabusAlert, 'No syllabus found to delete for the selected subject, class, and exam.', 'error');
+                 return;
+             }
+         
+             // Confirm before deleting
+             const confirmDelete = await showDialog({
+            			         title: 'Confirm Delete',
+           			            message: 'Are you sure you want to delete the syllabus for the selected subject and exam?',
+            			         type: 'confirm'
+         			            });
+             if (!confirmDelete) return;
+         
+             // Show processing dialog
+             showProcessingDialog();
+         
+             // Delete from server
+             deleteSyllabusData(subject, classId, exam, key);
+         
+             // Clear the content field
+             syllabusContent.value = '';
+         }
+         
+         async function deleteSyllabusData(subject, classId, exam, key) {
+               const result = await deleteRow('syllabus', ['class', 'exam', 'subject'], [classId, exam, subject]);
+               if(result) {
+                  // Delete from local data structure also
+                  delete syllabusData[key];
+                  showDialog({
+                   title: 'Success',
+                   message: 'Syllabus deleted successfully!',
+                   type: 'alert'
+                   });
+                  showAlert(syllabusAlert, 'Syllabus deleted successfully.', 'success');
+               } else {
+                  showDialog({
+                   title: 'Error',
+                   message: 'Error deleting the syllabus!',
+                   type: 'alert'
+                   });
+               }
+         }
+         
+         function loadSyllabusView() {
+         const classId = viewClassSelect.value;
+         const exam = viewExamSelect.value;
+         
+         if (!classId || !exam) {
+         alert('Please select both class and exam.');
+         return;
+         }
+         
+         displayClass.textContent = classId;
+         displayExam.textContent = exam;
+         
+         // Clear existing content
+         subjectsContainer.innerHTML = '';
+         
+         // Load syllabus for each subject
+         let hasSyllabus = false;
+         SUBJECTS.forEach(subject => {
+         const key = `${classId}_${exam}_${subject}`;
+         if (syllabusData[key]) {
+         hasSyllabus = true;
+         const subjectCard = document.createElement('div');
+         subjectCard.className = 'subject-card';
+         
+         // Create header with subject name and completion status
+         const subjectHeader = document.createElement('div');
+         subjectHeader.className = 'subject-card-header';
+         
+         const subjectTitle = document.createElement('h3');
+         subjectTitle.textContent = subject;
+         
+         // Add completion badge
+         const completionBadge = document.createElement('div');
+         
+         // Handle both old format (string) and new format (object)
+         let completionPercentage = 0;
+         let completionNotes = '';
+         let expectedDate = '';
+         let syllabusText = '';
+         
+         if (typeof syllabusData[key] === 'object') {
+         completionPercentage = syllabusData[key].completion_percentage || 0;
+         completionNotes = syllabusData[key].completion_notes || '';
+         expectedDate = syllabusData[key].expected_completion_date || '';
+         syllabusText = syllabusData[key].syllabus_text || '';
+         } else {
+         syllabusText = syllabusData[key];
+         }
+         
+         completionBadge.textContent = `${completionPercentage}% Complete`;
+         completionBadge.className = completionPercentage == 100 ? 
+         'completion-badge complete' : 'completion-badge';
+         
+         // Append elements to header
+         subjectHeader.appendChild(subjectTitle);
+         subjectHeader.appendChild(completionBadge);
+         
+         // Create content paragraph
+         const subjectContent = document.createElement('p');
+         subjectContent.textContent = syllabusText;
+         
+         // Build card
+         subjectCard.appendChild(subjectHeader);
+         subjectCard.appendChild(subjectContent);
+         
+         // Add expected completion date if not 100%
+         if (completionPercentage < 100 && expectedDate) {
+         const expectedCompletionInfo = document.createElement('div');
+         expectedCompletionInfo.className = 'completion-info';
+         expectedCompletionInfo.innerHTML = `<i class="material-icons">event</i> Expected completion: ${formatDate(expectedDate)}`;
+         subjectCard.appendChild(expectedCompletionInfo);
+         }
+         
+         // Add completion notes if available
+         if (completionNotes) {
+         const notesElement = document.createElement('div');
+         notesElement.className = 'completion-notes';
+         notesElement.textContent = completionNotes;
+         subjectCard.appendChild(notesElement);
+         }
+         
+         subjectsContainer.appendChild(subjectCard);
+         }
+         });
+         
+         if (!hasSyllabus) {
+         const noDataMsg = document.createElement('div');
+         noDataMsg.className = 'alert alert-error';
+         noDataMsg.textContent = 'No syllabus data available for this class and exam.';
+         subjectsContainer.appendChild(noDataMsg);
+         }
+         }
+         
+         // Helper function to format date
+         function formatDate(dateString) {
+         if (!dateString) return '';
+         const date = new Date(dateString);
+         return date.toLocaleDateString();
+         }
+         
+         function printSyllabus() {
+             const classId = viewClassSelect.value;
+             const exam = viewExamSelect.value;
+         
+             if (!classId || !exam) {
+                 alert('Please select both class and exam before printing.');
+                 return;
+             }
+         
+             window.print();
+         }
+         
+         function showAlert(element, message, type) {
+             element.textContent = message;
+             element.className = `alert alert-${type}`;
+             element.style.display = 'block';
+             
+             setTimeout(() => {
+                 element.style.display = 'none';
+             }, 3000);
+         }
+         
+         function saveSyllabusData() {
+         const syllabusArray = Object.entries(syllabusData).map(([key, data]) => {
+         const [classNum, exam, subject] = key.split('_');
+         
+         // Handle both old format (string) and new format (object)
+         if (typeof data === 'string') {
+         return {
+         class: parseInt(classNum),
+         exam,
+         subject,
+         syllabus_text: data,
+         completion_percentage: 0,
+         expected_completion_date: null,
+         completion_notes: null
+         };
+         } else {
+         return {
+         class: parseInt(classNum),
+         exam,
+         subject,
+         syllabus_text: data.syllabus_text,
+         completion_percentage: data.completion_percentage || 0,
+         expected_completion_date: data.expected_completion_date || null,
+         completion_notes: data.completion_notes || null
+         };
+         }
+         });
+         //document.write(JSON.stringify(syllabusArray));
+         window.upsertData("syllabus", syllabusArray, ["class", "exam", "subject"])
+         .then(result => {
+         if (result) {
+         showDialog({
+         title: 'Success',
+         message: 'Syllabus updated successfully!',
+         type: 'alert'
+         });
+         showAlert(syllabusAlert, 'Syllabus saved successfully!', 'success');
+         reconstructSyllabusObj().then((syllabusObj) => {
+         syllabusData = syllabusObj;
+         });
+         } else {
+         showDialog({
+         title: 'Error',
+         message: 'Error updating syllabus!',
+         type: 'alert'
+         });
+         }
+         });
+         }
+         
+         async function reconstructSyllabusObj() {
+         const syllabusData = await selectData("syllabus");
+         
+         if (!syllabusData) {
+         console.error("No syllabus data found.");
+         return {};
+         }
+         
+         const syllabusObj = {};
+         
+         for (const row of syllabusData) {
+         const key = `${row.class}_${row.exam}_${row.subject}`;
+         syllabusObj[key] = {
+         syllabus_text: row.syllabus_text,
+         completion_percentage: row.completion_percentage || 0,
+         expected_completion_date: row.expected_completion_date || '',
+         completion_notes: row.completion_notes || '',
+         last_updated: row.last_updated || new Date().toISOString()
+         };
+         }
+         
+         return syllabusObj;
+         }
+         
+         // function to handle live updates
+         function handleLiveUpdate(payload) {
+            reconstructSyllabusObj().then((syllabusObj) => {
+                syllabusData = syllabusObj;
+             });
+         }
+                
+         // Handle page load - show login screen initially
+         window.onload = function() {
+             loginScreen.style.display = 'block';
+             dashboard.style.display = 'none';
+             const subscription = subscribeToTable('syllabus', handleLiveUpdate);
+             reconstructSyllabusObj().then((syllabusObj) => {
+                syllabusData = syllabusObj;
+             });
+         };
+      </script>
+   </body>
+</html>
