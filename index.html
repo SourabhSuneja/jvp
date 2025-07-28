@@ -213,13 +213,24 @@
             box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
         }
 
-        .class-selection {
+        .student-access-selection, .class-selection {
             display: none;
             animation: fadeInUp 0.5s ease;
         }
 
-        .class-selection.active {
+        .student-access-selection.active, .class-selection.active {
             display: block;
+        }
+
+        .btn-access {
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+            color: white;
+            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.3);
+        }
+
+        .btn-access:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(159, 122, 234, 0.4);
         }
 
         .btn-class {
@@ -356,16 +367,35 @@
                         <span class="material-icons">school</span>
                         Teacher
                     </button>
-                    <button class="btn btn-secondary" onclick="showClassSelection()">
+                    <button class="btn btn-secondary" onclick="showStudentAccessSelection()">
                         <span class="material-icons">person</span>
                         Student
                     </button>
                 </div>
             </div>
 
+            <!-- Student Access Selection (New section) -->
+            <div class="student-access-selection" id="studentAccessSelection">
+                <button class="btn back-btn" onclick="showUserTypeSelection()">
+                    <span class="material-icons">arrow_back</span>
+                    Back
+                </button>
+                <h3 class="section-title">What do you want to access?</h3>
+                <div class="button-group">
+                    <button class="btn btn-access" onclick="selectResult()">
+                        <span class="material-icons">assessment</span>
+                        Result
+                    </button>
+                    <button class="btn btn-access" onclick="showClassSelection()">
+                        <span class="material-icons">computer</span>
+                        Sourabh Sir's Computer Resources
+                    </button>
+                </div>
+            </div>
+
             <!-- Class Selection (Hidden by default) -->
             <div class="class-selection" id="classSelection">
-                <button class="btn back-btn" onclick="showUserTypeSelection()">
+                <button class="btn back-btn" onclick="showStudentAccessSelection()">
                     <span class="material-icons">arrow_back</span>
                     Back
                 </button>
@@ -412,12 +442,22 @@
             window.location.href = 'https://myjvp.in/teachers/';
         }
 
-        function showClassSelection() {
+        function showStudentAccessSelection() {
             document.getElementById('userTypeSection').style.display = 'none';
+            document.getElementById('studentAccessSelection').classList.add('active');
+        }
+
+        function selectResult() {
+            window.location.href = 'https://sourabhsuneja.github.io/academic-resources/result.html';
+        }
+
+        function showClassSelection() {
+            document.getElementById('studentAccessSelection').classList.remove('active');
             document.getElementById('classSelection').classList.add('active');
         }
 
         function showUserTypeSelection() {
+            document.getElementById('studentAccessSelection').classList.remove('active');
             document.getElementById('classSelection').classList.remove('active');
             document.getElementById('userTypeSection').style.display = 'block';
         }
