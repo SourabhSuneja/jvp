@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="https://myjvp.in/commons/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admins can view syllabus completion status for all subjects and classes.">
+    <title>Jamna Vidyapeeth Syllabus Status Viewer</title>
+    <!-- Supabase CRUD Functions -->
+    <script type="module" src="supabase-crud.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --secondary-light: #fbbf24;
+            --secondary-dark: #d97706;
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --gray: #9ca3af;
+            --gray-light: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-height: 999999999px;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .login-container {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            z-index: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 420px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .login-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 24px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .login-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .login-title {
+            font-size: 28px;
+            margin-bottom: 32px;
+            color: var(--primary-dark);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: var(--light);
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .error-message {
+            color: var(--danger);
+            margin-top: 8px;
+            font-size: 14px;
+            text-align: left;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.25);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(1px);
+        }
+
+        .header {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        }
+
+        .school-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .school-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-right: 16px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .school-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+
+        .dashboard {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-title {
+            font-size: 22px;
+            margin-bottom: 24px;
+            color: var(--dark);
+            font-weight: 700;
+            border-bottom: 2px solid var(--gray-light);
+            padding-bottom: 12px;
+            position: relative;
+        }
+
+        .dashboard-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 220px;
+            background-color: white;
+            border-radius: 14px;
+            box-shadow: var(--shadow-md);
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+        }
+
+        .stat-card.low::before {
+            background: var(--danger);
+        }
+
+        .stat-card.medium::before {
+            background: var(--warning);
+        }
+
+        .stat-card.high::before {
+            background: var(--success);
+        }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 12px 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .stat-card.low .stat-value {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card.medium .stat-value {
+            background: linear-gradient(135deg, var(--warning), #d97706);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card.high .stat-value {
+            background: linear-gradient(135deg, var(--success), #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 15px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .filters {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .filters::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--primary-light));
+            border-top-left-radius: 16px;
+            border-bottom-left-radius: 16px;
+        }
+
+        .filters-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-light);
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: var(--light);
+            transition: all 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .filter-buttons button {
+            padding: 12px 20px;
+            font-size: 15px;
+        }
+
+        .data-table {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            overflow-x: auto;
+        }
+
+        .table-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            transition: all 0.2s;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        #syllabus-table td:nth-child(4),
+        #syllabus-table th:nth-child(4) {
+            min-width: 250px;
+        }
+
+        tr:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .badge-danger {
+            background-color: var(--danger);
+        }
+
+        .badge-warning {
+            background-color: var(--warning);
+        }
+
+        .badge-success {
+            background-color: var(--success);
+        }
+
+        .badge-info {
+            background-color: var(--info);
+        }
+
+        .syllabus-text {
+            white-space: pre-line;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        .syllabus-card {
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary);
+            padding: 12px;
+            background-color: rgba(99, 102, 241, 0.05);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 16px 48px 16px 20px;
+            border: 2px solid var(--gray-light);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-container input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .completion-bar {
+            height: 8px;
+            background-color: rgba(229, 231, 235, 0.5);
+            border-radius: 4px;
+            margin-top: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .completion-progress {
+            height: 100%;
+            border-radius: 4px;
+            position: relative;
+            transition: width 0.5s ease;
+        }
+
+        .completion-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+            border-radius: 4px;
+        }
+
+        .progress-0 {
+            width: 0%;
+            background-color: var(--danger);
+        }
+
+        .progress-25 {
+            width: 25%;
+            background-color: var(--danger);
+        }
+
+        .progress-50 {
+            width: 50%;
+            background-color: var(--warning);
+        }
+
+        .progress-75 {
+            width: 75%;
+            background-color: var(--info);
+        }
+
+        .progress-100 {
+            width: 100%;
+            background-color: var(--success);
+        }
+
+        .subject-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray);
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .stats-container {
+                flex-direction: column;
+            }
+
+            .filter-form {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .school-name {
+                font-size: 18px;
+            }
+            
+            .login-card {
+                padding: 30px 20px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="login-logo">
+            <h1 class="login-title">Syllabus Management System</h1>
+            <div class="input-group">
+                <label for="passkey">Passkey</label>
+                <input type="password" id="passkey" placeholder="Enter passkey">
+                <div class="error-message" id="passkey-error">Invalid passkey. Please try again.</div>
+            </div>
+            <button id="login-btn" class="btn btn-primary">Login</button>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="hidden">
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="school-info">
+                    <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="school-logo">
+                    <h1 class="school-name">Jamna Vidyapeeth Syllabus Management</h1>
+                </div>
+                <button id="logout-btn" class="btn btn-secondary">Logout</button>
+            </div>
+
+            <!-- Search -->
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search syllabus, subjects, topics...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+
+            <!-- Dashboard -->
+            <div class="dashboard">
+                <h2 class="dashboard-title">Dashboard <span id="dashboard-title-filter"></span></h2>
+                <div class="stats-container" id="stats-container">
+                    <!-- Stats will be populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <h3 class="filters-title">Filter Syllabus</h3>
+                <div class="filter-form">
+                    <div class="filter-group">
+                        <label for="filter-class">Class</label>
+                        <select id="filter-class">
+                            <option value="">All Classes</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-exam">Exam</label>
+                        <select id="filter-exam">
+                            <option value="">All Exams</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-subject">Subject</label>
+                        <select id="filter-subject">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-completion">Completion %</label>
+                        <select id="filter-completion">
+                            <option value="">Any</option>
+                            <option value="0">0% (Not Started)</option>
+                            <option value="1-25">1-25% (Just Started)</option>
+                            <option value="26-50">26-50% (In Progress)</option>
+                            <option value="51-75">51-75% (Advanced)</option>
+                            <option value="76-99">76-99% (Almost Complete)</option>
+                            <option value="100">100% (Completed)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="filter-buttons">
+                    <button id="filter-btn" class="btn btn-primary">Apply Filters</button>
+                    <button id="reset-btn" class="btn btn-secondary">Reset Filters</button>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="data-table">
+                <h3 class="table-title">Syllabus Details</h3>
+                <table id="syllabus-table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Exam</th>
+                            <th>Subject</th>
+                            <th>Syllabus</th>
+                            <th>Completion</th>
+                            <th>Expected Completion</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="syllabus-body">
+                        <!-- Data will be populated dynamically -->
+                    </tbody>
+                </table>
+                <div id="no-results" class="no-results hidden">
+                    No syllabus found matching your filters.
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Array that will hold data
+        let syllabus = [];
+
+        // DOM Elements
+        const loginScreen = document.getElementById('login-screen');
+        const app = document.getElementById('app');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const passkeyInput = document.getElementById('passkey');
+        const passkeyError = document.getElementById('passkey-error');
+        const searchInput = document.getElementById('search-input');
+        const filterClass = document.getElementById('filter-class');
+        const filterExam = document.getElementById('filter-exam');
+        const filterSubject = document.getElementById('filter-subject');
+        const filterCompletion = document.getElementById('filter-completion');
+        const filterBtn = document.getElementById('filter-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const syllabusBody = document.getElementById('syllabus-body');
+        const noResults = document.getElementById('no-results');
+        const statsContainer = document.getElementById('stats-container');
+        const dashboardTitleFilter = document.getElementById('dashboard-title-filter');
+
+        // Authentication
+        loginBtn.addEventListener('click', () => {
+            const passkey = passkeyInput.value;
+            if (passkey === 'jvp123') {
+                loginScreen.classList.add('hidden');
+                app.classList.remove('hidden');
+                initializeApp();
+            } else {
+                passkeyError.style.display = 'block';
+                setTimeout(() => {
+                    passkeyError.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            app.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            passkeyInput.value = '';
+        });
+
+        passkeyInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+
+        // Utility Functions
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            
+            const date = new Date(dateString);
+            const day = date.getDate();
+            const month = date.toLocaleString('default', { month: 'long' });
+            const year = date.getFullYear();
+            
+            // Add ordinal suffix to day
+            let suffix = 'th';
+            if (day === 1 || day === 21 || day === 31) suffix = 'st';
+            else if (day === 2 || day === 22) suffix = 'nd';
+            else if (day === 3 || day === 23) suffix = 'rd';
+            
+            return `${day}${suffix} ${month}, ${year}`;
+        }
+
+        function getCompletionClass(percentage) {
+            if (percentage === 0) return 'progress-0';
+            if (percentage <= 25) return 'progress-25';
+            if (percentage <= 50) return 'progress-50';
+            if (percentage <= 75) return 'progress-75';
+            return 'progress-100';
+        }
+
+        function getCompletionBadgeClass(percentage) {
+            if (percentage === 0) return 'badge-danger';
+            if (percentage <= 50) return 'badge-warning';
+            if (percentage <= 99) return 'badge-info';
+            return 'badge-success';
+        }
+
+        // App Initialization
+        function initializeApp() {
+            populateFilters();
+            renderSyllabus(syllabus);
+            updateDashboard(syllabus);
+
+            // Event Listeners
+            searchInput.addEventListener('input', handleSearch);
+            filterBtn.addEventListener('click', applyFilters);
+            resetBtn.addEventListener('click', resetFilters);
+        }
+
+        function populateFilters() {
+            // Get unique values for each filter
+            const classes = [...new Set(syllabus.map(item => item.class))].sort((a, b) => a - b);
+            const exams = [...new Set(syllabus.map(item => item.exam))].sort();
+            const subjects = [...new Set(syllabus.map(item => item.subject))].sort();
+
+            // Populate class filter
+            classes.forEach(classNum => {
+                const option = document.createElement('option');
+                option.value = classNum;
+                option.textContent = `Class ${classNum}`;
+                filterClass.appendChild(option);
+            });
+
+            // Populate exam filter
+            exams.forEach(exam => {
+                const option = document.createElement('option');
+                option.value = exam;
+                option.textContent = exam;
+                filterExam.appendChild(option);
+            });
+
+            // Populate subject filter
+            subjects.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+                filterSubject.appendChild(option);
+            });
+        }
+
+        function renderSyllabus(data) {
+            syllabusBody.innerHTML = '';
+            
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            }
+            
+            noResults.classList.add('hidden');
+            
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>Class ${item.class}</td>
+                    <td>${item.exam}</td>
+                    <td>${item.subject}</td>
+                    <td class="syllabus-text">${item.syllabus_text}</td>
+                    <td>
+                        <span class="badge ${getCompletionBadgeClass(item.completion_percentage)}">${item.completion_percentage}%</span>
+                        <div class="completion-bar">
+                            <div class="completion-progress ${getCompletionClass(item.completion_percentage)}"></div>
+                        </div>
+                    </td>
+                    <td>${formatDate(item.expected_completion_date)}</td>
+                    <td>${item.completion_notes || '-'}</td>
+                `;
+                
+                syllabusBody.appendChild(row);
+            });
+        }
+
+        function updateDashboard(data) {
+            statsContainer.innerHTML = '';
+            
+            // Get filter title
+            let filterTitle = '';
+            if (filterClass.value) filterTitle += ` for Class ${filterClass.value}`;
+            if (filterExam.value) filterTitle += ` in ${filterExam.value}`;
+            if (filterSubject.value) filterTitle += ` for ${filterSubject.value}`;
+            
+            dashboardTitleFilter.textContent = filterTitle;
+            
+            // Calculate statistics
+            const totalSubjects = data.length;
+            const notStarted = data.filter(item => item.completion_percentage === 0).length;
+            const inProgress = data.filter(item => item.completion_percentage > 0 && item.completion_percentage < 100).length;
+            const completed = data.filter(item => item.completion_percentage === 100).length;
+            
+            // Calculate average completion
+            let avgCompletion = 0;
+            if (totalSubjects > 0) {
+                avgCompletion = Math.round(data.reduce((sum, item) => sum + item.completion_percentage, 0) / totalSubjects);
+            }
+            
+            // Create stat cards
+            const statCards = [
+                {
+                    label: 'Total Subjects',
+                    value: totalSubjects,
+                    class: 'primary'
+                },
+                {
+                    label: 'Not Started',
+                    value: notStarted,
+                    class: 'low'
+                },
+                {
+                    label: 'In Progress',
+                    value: inProgress,
+                    class: 'medium'
+                },
+                {
+                    label: 'Completed',
+                    value: completed,
+                    class: 'high'
+                },
+                {
+                    label: 'Average Completion',
+                    value: `${avgCompletion}%`,
+                    class: avgCompletion >= 75 ? 'high' : avgCompletion >= 50 ? 'medium' : 'low'
+                }
+            ];
+            
+            statCards.forEach(stat => {
+                const card = document.createElement('div');
+                card.className = `stat-card ${stat.class}`;
+                card.innerHTML = `
+                    <div class="stat-value">${stat.value}</div>
+                    <div class="stat-label">${stat.label}</div>
+                `;
+                statsContainer.appendChild(card);
+            });
+        }
+
+        function applyFilters() {
+            const classFilter = filterClass.value;
+            const examFilter = filterExam.value;
+            const subjectFilter = filterSubject.value;
+            const completionFilter = filterCompletion.value;
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            let filteredData = syllabus;
+            
+            // Apply class filter
+            if (classFilter) {
+                filteredData = filteredData.filter(item => item.class == classFilter);
+            }
+            
+            // Apply exam filter
+            if (examFilter) {
+                filteredData = filteredData.filter(item => item.exam === examFilter);
+            }
+            
+            // Apply subject filter
+            if (subjectFilter) {
+                filteredData = filteredData.filter(item => item.subject === subjectFilter);
+            }
+            
+            // Apply completion filter
+            if (completionFilter) {
+                if (completionFilter === '0') {
+                    filteredData = filteredData.filter(item => item.completion_percentage === 0);
+                } else if (completionFilter === '100') {
+                    filteredData = filteredData.filter(item => item.completion_percentage === 100);
+                } else {
+                    const [min, max] = completionFilter.split('-').map(Number);
+                    filteredData = filteredData.filter(item => 
+                        item.completion_percentage >= min && item.completion_percentage <= max
+                    );
+                }
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredData = filteredData.filter(item => 
+                    item.subject.toLowerCase().includes(searchTerm) ||
+                    item.syllabus_text.toLowerCase().includes(searchTerm) ||
+                    (item.completion_notes && item.completion_notes.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            renderSyllabus(filteredData);
+            updateDashboard(filteredData);
+        }
+
+        function handleSearch() {
+            applyFilters();
+        }
+
+        function resetFilters() {
+            filterClass.value = '';
+            filterExam.value = '';
+            filterSubject.value = '';
+            filterCompletion.value = '';
+            searchInput.value = '';
+            
+            renderSyllabus(syllabus);
+            updateDashboard(syllabus);
+        }
+
+         function sortByClassAndSubject(data) {
+         return data.sort((a, b) => {
+         if (a.class !== b.class) {
+         return a.class - b.class; // Sort by class first
+         }
+         return a.subject.localeCompare(b.subject); // Then sort by subject alphabetically
+         });
+         }
+
+        window.onload = async function() {
+                const result = await selectData("syllabus");
+                syllabus = sortByClassAndSubject(result);
+        }
+    </script>
+</body>
+</html>
