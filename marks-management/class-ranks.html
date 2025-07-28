@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Jamna Vidyapeeth - Class Ranks</title>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --danger-dark: #c33c3c;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+         max-height: 9999999px;
+         }
+         body {
+         background-color: var(--light);
+         color: var(--text);
+         line-height: 1.6;
+         font-size: 16px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 20px;
+         }
+         header {
+         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+         color: white;
+         padding: 24px 0;
+         text-align: center;
+         box-shadow: var(--shadow);
+         margin-bottom: 2rem;
+         }
+         h1 {
+         margin: 0;
+         font-size: 1.5rem;
+         font-weight: 700;
+         letter-spacing: -0.025em;
+         }
+         h2 {
+         color: var(--dark);
+         font-size: 1.75rem;
+         font-weight: 700;
+         margin-bottom: 1.5rem;
+         letter-spacing: -0.025em;
+         }
+         h3 {
+         color: var(--dark);
+         font-size: 1.25rem;
+         font-weight: 600;
+         margin-bottom: 1rem;
+         letter-spacing: -0.025em;
+         }
+         .login-container, .app-container {
+         background-color: white;
+         border-radius: 12px;
+         box-shadow: var(--shadow-lg);
+         padding: 36px;
+         margin: 30px auto;
+         max-width: 800px;
+         border: 1px solid var(--border);
+         }
+         .login-container {
+         max-width: 440px;
+         } 
+         .form-group {
+         margin-bottom: 24px;
+         }
+         label {
+         display: block;
+         font-weight: 600;
+         margin-bottom: 8px;
+         color: var(--dark);
+         font-size: 0.9rem;
+         }
+         input, select {
+         width: 100%;
+         padding: 12px 16px;
+         border: 1px solid var(--border);
+         border-radius: 8px;
+         font-size: 16px;
+         transition: var(--transition);
+         color: var(--text);
+         background-color: var(--light);
+         box-sizing: border-box;
+         }
+         input:focus, select:focus {
+         outline: none;
+         border-color: var(--primary);
+         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+         }
+         input[type="number"] {
+         width: 80px;
+         }
+         button {
+         background-color: var(--primary);
+         color: white;
+         border: none;
+         border-radius: 8px;
+         padding: 12px 24px;
+         font-size: 16px;
+         cursor: pointer;
+         transition: var(--transition);
+         font-weight: 600;
+         box-shadow: var(--shadow-sm);
+         }
+         button:hover {
+         background-color: var(--primary-dark);
+         transform: translateY(-1px);
+         box-shadow: var(--shadow);
+         }
+         button:active {
+         transform: translateY(0);
+         }
+         .btn-secondary {
+         background-color: var(--secondary);
+         }
+         .btn-secondary:hover {
+         background-color: var(--secondary-dark);
+         }
+         .btn-logout {
+         background-color: var(--danger);
+         padding: 10px 20px;
+         font-size: 14px;
+         }
+         .btn-logout:hover, #delete-btn:hover, #cancelReportDialog:hover {
+         background-color: var(--danger-dark);
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         .hidden {
+         display: none;
+         }
+         @keyframes spin {
+         to { transform: rotate(360deg); }
+         }
+         /* School header styles */
+         .school-header {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 20px;
+         }
+         .school-logo {
+         height: 80px;
+         border-radius: 50%;
+         background-color: white;
+         padding: 5px;
+         box-shadow: var(--shadow);
+         }
+         .school-info {
+         text-align: left;
+         }
+         .school-name {
+         font-size: 2.5rem;
+         margin-bottom: 5px;
+         }
+         .system-name {
+         font-size: 1.5rem;
+         color: rgba(255, 255, 255, 0.9);
+         font-weight: 500;
+         margin: 0;
+         }
+         .user-info {
+         align-items: center;
+         justify-content: center; 
+         margin-top: 16px;
+         }
+         .user-avatar {
+         color: white;        
+         font-size: 36px;
+         }
+         #signed-in-username {
+         margin-left: 6px;
+         color: white;
+         }
+         /* Input group with domain suffix */
+         .input-group {
+         position: relative;
+         }
+         .input-group input {
+         padding-right: 90px; /* space for the suffix */
+         }
+         .domain-suffix {
+         position: absolute;
+         right: 16px;
+         top: 50%;
+         transform: translateY(-50%);
+         color: #888;
+         font-size: 14px;
+         pointer-events: none;
+         user-select: none;
+         }
+         /* Alert styling */
+         .alert {
+         background-color: #fee2e2;
+         color: var(--danger-dark);
+         padding: 12px 16px;
+         border-radius: 8px;
+         margin-bottom: 20px;
+         font-weight: 500;
+         }
+         /* Header with actions */
+         .header-with-actions {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 24px;
+         }
+         .header-actions {
+         display: flex;
+         gap: 12px;
+         }
+         /* Checkbox styles */
+         .checkbox-container {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 12px;
+         margin-top: 16px;
+         margin-bottom: 24px;
+         padding: 16px;
+         background-color: var(--light);
+         border-radius: 8px;
+         border: 1px solid var(--border);
+         }
+         .checkbox-item {
+         display: flex;
+         align-items: center;
+         min-width: 150px;
+         }
+         .checkbox-item input[type="checkbox"] {
+         width: auto;
+         margin-right: 8px;
+         }
+         .checkbox-item label {
+         margin-bottom: 0;
+         font-weight: 500;
+         font-size: 0.85rem;
+         cursor: pointer;
+         }
+         /* Table styles */
+         .results-table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-top: 24px;
+         box-shadow: var(--shadow);
+         border-radius: 8px;
+         overflow: hidden;
+         }
+         .results-table th, .results-table td {
+         padding: 16px;
+         text-align: left;
+         border-bottom: 1px solid var(--border);
+         }
+         .results-table th {
+         background-color: var(--primary);
+         color: white;
+         font-weight: 600;
+         font-size: 0.9rem;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+         }
+         .results-table tbody tr:nth-child(even) {
+         background-color: rgba(79, 70, 229, 0.05);
+         }
+         .results-table tbody tr:hover {
+         background-color: rgba(79, 70, 229, 0.1);
+         }
+         .rank-cell {
+         font-weight: 700;
+         text-align: center;
+         color: var(--primary-dark);
+         font-size: 1.2rem;
+         }
+         .percentage-cell {
+         font-weight: 600;
+         color: var(--secondary-dark);
+         }
+         .centered {
+         text-align: center;
+         }
+         #results-container {
+         margin-top: 32px;
+         }
+         #no-results {
+         text-align: center;
+         padding: 40px;
+         background-color: var(--light);
+         border-radius: 8px;
+         border: 1px dashed var(--border);
+         margin-top: 32px;
+         color: var(--text);
+         font-weight: 500;
+         }
+         /* Responsive styles */
+         @media (max-width: 768px) {
+         .school-header {
+         flex-direction: column;
+         gap: 10px;
+         }
+         .school-info {
+         text-align: center;
+         }
+         .school-name {
+         font-size: 1.8rem;
+         }
+         .system-name {
+         font-size: 1.2rem;
+         }
+         #signed-in-username {
+         margin-left: 3px;
+         }
+         .header-with-actions {
+         flex-direction: column;
+         gap: 16px;
+         align-items: flex-start;
+         }
+         .header-actions {
+         width: 100%;
+         }
+         .checkbox-container {
+         flex-direction: column;
+         }
+         .checkbox-item {
+         min-width: auto;
+         }
+         .results-table {
+         display: block;
+         overflow-x: auto;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <header>
+         <div class="container">
+            <div class="school-header">
+               <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="school-logo">
+               <div class="school-info">
+                  <h1 class="school-name">Jamna Vidyapeeth</h1>
+                  <h2 class="system-name">Student Marks Management System</h2>
+               </div>
+            </div>
+            <div style="display: none" id="user-info" class="user-info">
+               <span class="user-avatar material-icons">account_circle</span>
+               <span id="signed-in-username">Sourabh</span>
+            </div>
+         </div>
+      </header>
+      <div class="container">
+         <!-- Loading Overlay -->
+         <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+         </div>
+         <!-- Login Section -->
+         <div id="login-section" class="login-container">
+            <h2>Teacher Login</h2>
+            <div id="login-error" class="alert hidden"></div>
+            <div class="form-group">
+               <label for="username">Username</label>
+               <div class="input-group">
+                  <input type="text" id="username" placeholder="Enter your username">
+                  <span class="domain-suffix">@jvp.com</span>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="password">Password</label>
+               <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button id="login-btn" class="btn-secondary">Login</button>
+         </div>
+         <!-- App Section (Hidden by default) -->
+         <div id="app-section" class="app-container hidden">
+            <div class="header-with-actions">
+               <h2>Class Ranks & Percentages</h2>
+               <div class="header-actions">
+                  <button id="logout-btn" class="btn-logout">Logout</button>
+               </div>
+            </div>
+            
+            <!-- Exam Selection and Subject Filters -->
+            <div class="form-group">
+               <label for="exam-selection">Select Exam</label>
+               <select id="exam-selection">
+                  <!-- Options will be populated by JavaScript -->
+               </select>
+            </div>
+            
+            <div class="form-group">
+               <label>Select Subjects for Percentage Calculation</label>
+               <div class="checkbox-container">
+                  <div class="checkbox-item">
+                     <input type="checkbox" id="select-all-subjects">
+                     <label for="select-all-subjects"><strong>Select All</strong></label>
+                  </div>
+                  <div id="subjects-container">
+                     <!-- Subject checkboxes will be populated by JavaScript -->
+                  </div>
+               </div>
+            </div>
+            
+            <button id="load-results-btn" class="btn-secondary">Load Results</button>
+            
+            <!-- Results Container -->
+            <div id="results-container">
+               <div id="no-results">
+                  <p>Select an exam and subjects, then click "Load Results" to view class-wise performance.</p>
+               </div>
+               <table id="results-table" class="results-table hidden">
+                  <thead>
+                     <tr>
+                        <th>Rank</th>
+                        <th>Class</th>
+                        <th>Obtained Marks</th>
+                        <th>Total Marks</th>
+                        <th>Percentage</th>
+                     </tr>
+                  </thead>
+                  <tbody id="results-tbody">
+                     <!-- Results will be populated by JavaScript -->
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+      <script>
+         // DOM Elements
+         const loginSection = document.getElementById('login-section');
+         const appSection = document.getElementById('app-section');
+         const usernameInput = document.getElementById('username');
+         const passwordInput = document.getElementById('password');
+         const loginBtn = document.getElementById('login-btn');
+         const loginError = document.getElementById('login-error');
+         const logoutBtn = document.getElementById('logout-btn');
+         const loadingOverlay = document.getElementById('loading-overlay');
+         const userInfo = document.getElementById('user-info');
+         const signedInUsername = document.getElementById('signed-in-username');
+         const examSelection = document.getElementById('exam-selection');
+         const subjectsContainer = document.getElementById('subjects-container');
+         const selectAllSubjects = document.getElementById('select-all-subjects');
+         const loadResultsBtn = document.getElementById('load-results-btn');
+         const resultsTable = document.getElementById('results-table');
+         const resultsTbody = document.getElementById('results-tbody');
+         const noResults = document.getElementById('no-results');
+         
+
+         // Helper functions
+         function showLoading() {
+             loadingOverlay.classList.remove('hidden');
+         }
+         
+         function hideLoading() {
+             loadingOverlay.classList.add('hidden');
+         }
+         
+         // Populate exam dropdown
+         function populateExamDropdown() {
+             examSelection.innerHTML = '';
+             exams.forEach(exam => {
+                 const option = document.createElement('option');
+                 option.value = exam.name;
+                 option.textContent = `${exam.name} (Max Marks: ${exam.mm})`;
+                 examSelection.appendChild(option);
+             });
+         }
+         
+         // Populate subject checkboxes
+         function populateSubjectCheckboxes() {
+             subjectsContainer.innerHTML = '';
+             subjects.forEach(subject => {
+                 const div = document.createElement('div');
+                 div.className = 'checkbox-item';
+                 
+                 const checkbox = document.createElement('input');
+                 checkbox.type = 'checkbox';
+                 checkbox.id = `subject-${subject.replace(/\s+/g, '-').toLowerCase()}`;
+                 checkbox.value = subject;
+                 checkbox.className = 'subject-checkbox';
+                 
+                 const label = document.createElement('label');
+                 label.htmlFor = checkbox.id;
+                 label.textContent = subject;
+                 
+                 div.appendChild(checkbox);
+                 div.appendChild(label);
+                 subjectsContainer.appendChild(div);
+             });
+         }
+         
+         // Handle "Select All" checkbox
+         function handleSelectAll() {
+             selectAllSubjects.addEventListener('change', function() {
+                 const subjectCheckboxes = document.querySelectorAll('.subject-checkbox');
+                 subjectCheckboxes.forEach(checkbox => {
+                     checkbox.checked = this.checked;
+                 });
+             });
+             
+             // Update "Select All" checkbox state when individual checkboxes change
+             document.addEventListener('change', function(e) {
+                 if (e.target.classList.contains('subject-checkbox')) {
+                     const allCheckboxes = document.querySelectorAll('.subject-checkbox');
+                     const checkedCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
+                     
+                     selectAllSubjects.checked = allCheckboxes.length === checkedCheckboxes.length;
+                     selectAllSubjects.indeterminate = checkedCheckboxes.length > 0 && checkedCheckboxes.length < allCheckboxes.length;
+                 }
+             });
+         }
+         
+         // Get selected subjects
+         function getSelectedSubjects() {
+             const selectedSubjects = [];
+             const subjectCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
+             
+             if (subjectCheckboxes.length === 0) {
+                 return ["All"]; // Default if nothing is selected
+             }
+             
+             subjectCheckboxes.forEach(checkbox => {
+                 selectedSubjects.push(checkbox.value);
+             });
+             
+             return selectedSubjects;
+         }
+         
+         // Display results in table
+         function displayResults(results) {
+             if (!results || results.length === 0) {
+                 noResults.classList.remove('hidden');
+                 resultsTable.classList.add('hidden');
+                 noResults.innerHTML = '<p>No results found for the selected criteria.</p>';
+                 return;
+             }
+             
+             resultsTbody.innerHTML = '';
+             
+             results.forEach(result => {
+                 const row = document.createElement('tr');
+                 
+                 // Rank cell
+                 const rankCell = document.createElement('td');
+                 rankCell.className = 'rank-cell';
+                 rankCell.textContent = result.rank;
+                 row.appendChild(rankCell);
+                 
+                 // Class name cell
+                 const classCell = document.createElement('td');
+                 classCell.textContent = result.class_name;
+                 row.appendChild(classCell);
+                 
+                 // Obtained marks cell
+                 const obtainedMarksCell = document.createElement('td');
+                 obtainedMarksCell.className = 'centered';
+                 obtainedMarksCell.textContent = result.obtained_marks;
+                 row.appendChild(obtainedMarksCell);
+                 
+                 // Total marks cell
+                 const totalMarksCell = document.createElement('td');
+                 totalMarksCell.className = 'centered';
+                 totalMarksCell.textContent = result.total_marks;
+                 row.appendChild(totalMarksCell);
+                 
+                 // Percentage cell
+                 const percentageCell = document.createElement('td');
+                 percentageCell.className = 'percentage-cell centered';
+                 percentageCell.textContent = `${result.percentage.toFixed(2)}%`;
+                 row.appendChild(percentageCell);
+                 
+                 resultsTbody.appendChild(row);
+             });
+             
+             noResults.classList.add('hidden');
+             resultsTable.classList.remove('hidden');
+         }
+         
+         // Initialize the application
+         async function initApp() {
+             // Populate exam dropdown and subject checkboxes
+             populateExamDropdown();
+             populateSubjectCheckboxes();
+             handleSelectAll();
+             
+             // Set up event listener for load results button
+             loadResultsBtn.addEventListener('click', async () => {
+                 const selectedExam = examSelection.value;
+                 const selectedSubjects = getSelectedSubjects();
+                 
+                 if (!selectedExam) {
+                     alert('Please select an exam');
+                     return;
+                 }
+                 
+                 showLoading();
+                 
+                 try {
+                     // Call the loadResults function to fetch data
+                     const results = await loadResults(selectedExam, selectedSubjects);
+                     displayResults(results);
+                 } catch (error) {
+                     console.error('Error loading results:', error);
+                     noResults.classList.remove('hidden');
+                     resultsTable.classList.add('hidden');
+                     noResults.innerHTML = '<p>Error loading results. Please try again.</p>';
+                 } finally {
+                     hideLoading();
+                 }
+             });
+             
+             // Show user info
+             userInfo.style.display = 'flex';
+         }
+         
+
+         async function loadResults(exam, subjects) {
+             showLoading();             
+             
+             try {
+                 const result = await invokeFunction(
+  'calculate_class_percentages',
+  {
+    exam_name: exam,
+    aggregate_marks: calculateAggregateMarks(subjects.length),
+    subjects
+  }
+);
+                 return result;
+             } catch (error) {
+                 console.error('Error fetching results:', error);
+                 throw error;
+             }
+             hideLoading();
+         }
+         
+         // Check authentication status when the window loads
+         window.addEventListener('load', async () => {
+             showLoading();
+             
+             try {
+                 const isAuthenticated = await checkAuth();
+                 
+                 if (isAuthenticated) {
+                     // User is authenticated, show the app
+                     
+                     // Fetch teacher's name
+                     const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+                     if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
+                        signedInUsername.innerText = teacherName.name;
+                        userInfo.style.display = "flex";
+                     }
+                     
+                     loginSection.classList.add('hidden');
+                     appSection.classList.remove('hidden');
+                     
+                     // Initialize the app
+                     initApp();
+                 }
+             } catch (error) {
+                 console.error('Auth check error:', error);
+             } finally {
+                 hideLoading();
+             }
+         });
+         
+         
+         // Login functionality
+         loginBtn.addEventListener('click', async () => {
+             const username = usernameInput.value.trim();
+             const email = username.endsWith('@jvp.com') ? username : `${username}@jvp.com`;
+             const password = passwordInput.value.trim();
+             
+             if (!email || !password) {
+                 loginError.textContent = 'Please enter both email and password!';
+                 loginError.classList.remove('hidden');
+                 return;
+             }
+             
+             showLoading();
+             
+             try {
+                 // Use authentication
+                 const data = await signInUser(email, password);
+         
+                 // Store the user ID
+                 window.userId = data.user.id;
+                 
+                 // If we reach here, login was successful
+                 loginSection.classList.add('hidden');
+                 appSection.classList.remove('hidden');
+                 loginError.classList.add('hidden');
+                 
+                 // Set username in the UI
+                 // Fetch teacher's name
+                 const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+                 if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
+                    signedInUsername.innerText = teacherName.name;
+                    userInfo.style.display = "flex";
+                 }
+                 
+                 // Initialize the app
+                 initApp();
+                 
+             } catch (error) {
+                 // Handle login error
+                 loginError.textContent = error.message || 'Invalid email or password!';
+                 loginError.classList.remove('hidden');
+             } finally {
+                 hideLoading();
+             }
+         });
+         
+         // Logout functionality
+         logoutBtn.addEventListener('click', async () => {
+             showLoading();
+             
+             try {
+                 await signOutUser();
+                 
+                 // Clear UI state
+                 loginSection.classList.remove('hidden');
+                 appSection.classList.add('hidden');
+                 usernameInput.value = '';
+                 passwordInput.value = '';
+                 userInfo.style.display = 'none';
+                 
+             } catch (error) {
+                 console.error('Logout error:', error);
+             } finally {
+                 hideLoading();
+             }
+         });
+
+function calculateAggregateMarks(numSubjects) {
+  // Validate input
+  if (!numSubjects || numSubjects <= 0) {
+    throw new Error('Number of subjects must be greater than 0');
+  }
+  
+  // The base structure of the aggregate marks map
+  const marksPerSubject = numSubjects * 20;
+  
+  // Create the aggregate marks map with the calculated values
+  const aggregateMarksMap = {
+    3: {'PT-1': 140, 'PT-2': 140, 'PT-3': 140, 'PT-4': 140},
+    4: {'PT-1': 140, 'PT-2': 140, 'PT-3': 140, 'PT-4': 140},
+    5: {'PT-1': 140, 'PT-2': 140, 'PT-3': 140, 'PT-4': 140},
+    6: {'PT-1': 160, 'PT-2': 160, 'PT-3': 160, 'PT-4': 160},
+    7: {'PT-1': 160, 'PT-2': 160, 'PT-3': 160, 'PT-4': 160},
+    8: {'PT-1': 160, 'PT-2': 160, 'PT-3': 160, 'PT-4': 160},
+    9: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120},
+    10: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120},
+    11: {'PT-1': 100, 'PT-2': 100, 'PT-3': 100, 'PT-4': 100},
+    12: {'PT-1': 100, 'PT-2': 100, 'PT-3': 100, 'PT-4': 100},
+  };
+  
+  // Update each value in the map to be equal to numSubjects * 20
+  for (const grade in aggregateMarksMap) {
+    for (const test in aggregateMarksMap[grade]) {
+      aggregateMarksMap[grade][test] = marksPerSubject;
+    }
+  }
+  
+  return aggregateMarksMap;
+}
+      </script>
+   </body>
+</html>

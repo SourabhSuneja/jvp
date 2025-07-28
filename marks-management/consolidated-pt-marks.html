@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Consolidated PT Marks Statement</title>
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --danger-dark: #c33c3c;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         max-height: 9999999px;
+         }
+         body {
+         font-family: Arial, sans-serif;
+         margin: 0;
+         padding: 20px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         }
+         .header {
+         text-align: center;
+         margin-bottom: 20px;
+         text-transform: uppercase;
+         }
+         .school-name {
+         font-size: 24px;
+         font-weight: bold;
+         margin-bottom: 5px;
+         }
+         .exam-session {
+         font-size: 18px;
+         margin-bottom: 3px;
+         }
+         .class-info {
+         font-size: 16px;
+         margin-bottom: 15px;
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-bottom: 20px;
+         }
+         th, td {
+         border: 1px solid #000;
+         padding: 5px;
+         text-align: center;
+         font-size: 14px;
+         }
+         th {
+         background-color: #f2f2f2;
+         }
+         .roll-col {
+         width: 80px;
+         }
+         .name-col {
+         width: 150px;
+         text-align: left;
+         }
+         .mark-col {
+         width: 40px;
+         }
+         .subject-header {
+         position: relative;
+         }
+         .print-btn {
+         padding: 10px 20px;
+         background-color: #4CAF50;
+         color: white;
+         border: none;
+         cursor: pointer;
+         font-size: 16px;
+         border-radius: 4px;
+         }
+         .print-btn:hover {
+         background-color: #45a049;
+         }
+         @media print {
+         .print-btn {
+         display: none;
+         }
+         body {
+         padding: 0;
+         margin: 0;
+         width: 100%;
+         }
+         .container {
+         width: 100%;
+         max-width: none;
+         }
+         table {
+         /*page-break-inside: avoid;*/
+         width: 100%;
+         table-layout: fixed;
+         font-size: 12px;
+         }
+         th, td {
+         padding: 3px;
+         font-size: 12px;
+         }
+         .roll-col {
+         width: 6%;
+         }
+         .name-col {
+         width: 15%;
+         }
+         .mark-col {
+         width: 3%;
+         }
+         @page {
+         size: A4 landscape;
+         margin: 0.5cm;
+         }
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         @keyframes spin {
+         to {
+         transform: rotate(360deg);
+         }
+         }
+         .hidden {
+         display: none;
+         }
+         .highlight-rank {
+         font-weight: bold;
+         background-color: rgb(230, 230, 230);
+         }
+         @media print {
+         .highlight-rank {
+         font-weight: bold;
+         background-color: rgb(230, 230, 230) !important;
+         -webkit-print-color-adjust: exact; /* For Chrome, Safari */
+         print-color-adjust: exact; /* Standard syntax */
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <!-- Loading Overlay -->
+      <div id="loading-overlay" class="loading-overlay">
+         <div class="spinner"></div>
+      </div>
+      <div class="container">
+         <div class="header">
+            <div class="school-name">Jamna Vidyapeeth</div>
+            <div class="exam-session"><span id="exam-name"></span> (Session 2025-26)</div>
+            <div class="class-info">Class: <span id="class-name"></span></div>
+         </div>
+         <table id="marks-table">
+            <!-- Table will be dynamically generated -->
+         </table>
+         <div style="text-align: center;">
+            <button class="print-btn" onclick="window.print()">Print Marks Statement</button>
+         </div>
+      </div>
+      <script>
+         // DOM elements
+         const loadingOverlay = document.getElementById('loading-overlay');
+         
+         // Marks data (will be loaded from server)
+         let marks = [];
+         
+         let selectedSubjects = [];
+         let selectedExam = '';
+         let selectedClass = '';
+         
+         
+         // Helper function to calculate ranks from an array of values
+         function calculateRanks(values) {
+         // Create a copy of the values with their original indices
+         const indexedValues = values.map((value, index) => ({ value, index }));
+         
+         // Sort in descending order
+         indexedValues.sort((a, b) => b.value - a.value);
+         
+         // Calculate ranks (same value gets same rank)
+         const ranks = new Array(values.length).fill(0);
+         let currentRank = 1;
+         
+         for (let i = 0; i < indexedValues.length; i++) {
+         // If this is not the first element and has same value as previous
+         // assign the same rank, otherwise use currentRank
+         if (i > 0 && indexedValues[i].value === indexedValues[i-1].value) {
+            ranks[indexedValues[i].index] = ranks[indexedValues[i-1].index];
+         } else {
+            ranks[indexedValues[i].index] = currentRank;
+            // Only increment currentRank when we move to a new value
+            // This ensures the next different score gets the next sequential rank
+         }
+         
+         // If we're at the last element or the next element has a different value
+         // then increment the rank for the next different value
+         if (i === indexedValues.length - 1 || 
+            indexedValues[i].value !== indexedValues[i+1].value) {
+            currentRank++;
+         }
+         }
+         
+         return ranks;
+         }
+         
+         async function generateTable() {
+         // Set header information
+         document.getElementById('exam-name').textContent = selectedExam;
+         document.getElementById('class-name').textContent = selectedClass;
+         
+         // Filter marks based on selection
+         const filteredMarks = marks.filter(mark => 
+         mark.exam === selectedExam && 
+         mark.class === selectedClass && 
+         selectedSubjects.includes(mark.subject)
+         );
+         
+         // Get unique students and sort alphabetically
+         const uniqueStudents = [...new Set(filteredMarks.map(mark => mark.student))].sort();
+         
+         // Create roll numbers
+         const classNumber = selectedClass.split('-')[0];
+         const sectionNumber = selectedClass.split('-')[1];
+         const sectionDigit = sectionNumber.charAt(1);
+         
+         // Generate the table
+         const table = document.getElementById('marks-table');
+         table.innerHTML = ''; // Clear existing table
+         
+         // Create header row with subject columns
+         const headerRow1 = document.createElement('tr');
+         const headerRow2 = document.createElement('tr');
+         
+         // Add Roll No and Name headers
+         const rollHeader = document.createElement('th');
+         rollHeader.textContent = 'Roll No.';
+         rollHeader.rowSpan = 2;
+         rollHeader.classList.add('roll-col');
+         headerRow1.appendChild(rollHeader);
+         
+         const nameHeader = document.createElement('th');
+         nameHeader.textContent = 'Student Name';
+         nameHeader.rowSpan = 2;
+         nameHeader.classList.add('name-col');
+         headerRow1.appendChild(nameHeader);
+         
+         // Add subject headers
+         selectedSubjects.forEach(subject => {
+         const subjectHeader = document.createElement('th');
+         subjectHeader.textContent = subject;
+         subjectHeader.colSpan = 2;
+         subjectHeader.classList.add('subject-header');
+         headerRow1.appendChild(subjectHeader);
+         
+         const mark20Header = document.createElement('th');
+         mark20Header.textContent = '20M';
+         mark20Header.classList.add('mark-col');
+         headerRow2.appendChild(mark20Header);
+         
+         const mark10Header = document.createElement('th');
+         mark10Header.textContent = '10M';
+         mark10Header.classList.add('mark-col');
+         headerRow2.appendChild(mark10Header);
+         });
+         
+         // Add Total header
+         const totalHeader = document.createElement('th');
+         totalHeader.textContent = 'Total';
+         totalHeader.colSpan = 2;
+         headerRow1.appendChild(totalHeader);
+
+         const aggregateTotal20 = getAggregateMarks(selectedClass, selectedExam);
+         const aggregateTotal10 = (getAggregateMarks(selectedClass, selectedExam))/2;
+         
+         const total20Header = document.createElement('th');
+         total20Header.textContent = aggregateTotal20 + "M";
+         headerRow2.appendChild(total20Header);
+         
+         const total10Header = document.createElement('th');
+         total10Header.textContent = aggregateTotal10 + "M";
+         headerRow2.appendChild(total10Header);
+         
+         // Add Rank header
+         const rankHeader = document.createElement('th');
+         rankHeader.textContent = 'Rank';
+         rankHeader.colSpan = 2;
+         headerRow1.appendChild(rankHeader);
+         
+         const rank20Header = document.createElement('th');
+         rank20Header.textContent = '20M';
+         headerRow2.appendChild(rank20Header);
+         
+         const rank10Header = document.createElement('th');
+         rank10Header.textContent = '10M';
+         headerRow2.appendChild(rank10Header);
+         
+         table.appendChild(headerRow1);
+         table.appendChild(headerRow2);
+         
+         // Arrays to store the total marks for each student
+         const studentTotals20M = [];
+         const studentTotals10M = [];
+         const studentRows = [];
+         
+         // Create student rows
+         uniqueStudents.forEach((student, idx) => {
+         const row = document.createElement('tr');
+         
+         // Generate roll number
+         const serialNum = (idx + 1).toString().padStart(2, '0');
+         const rollNo = `${classNumber}${sectionDigit}${serialNum}`;
+         
+         // Add roll number cell
+         const rollCell = document.createElement('td');
+         rollCell.textContent = rollNo;
+         row.appendChild(rollCell);
+         
+         // Add name cell
+         const nameCell = document.createElement('td');
+         nameCell.textContent = student.toUpperCase();
+         nameCell.style.textAlign = 'left';
+         row.appendChild(nameCell);
+         
+         // Calculate total marks
+         let total20M = 0;
+         let total10M = 0;
+         
+         // Add subject marks cells
+         selectedSubjects.forEach(subject => {
+            const studentSubjectMark = filteredMarks.find(mark => 
+                mark.student === student && mark.subject === subject
+            );
+            
+            // 20M cell
+            const mark20Cell = document.createElement('td');
+            if (studentSubjectMark) {
+                if (studentSubjectMark.marks === null) {
+                    mark20Cell.textContent = 'Ab';
+                } else {
+                    const mark20 = Math.ceil(studentSubjectMark.marks);
+                    mark20Cell.textContent = mark20;
+                    total20M += mark20;
+                }
+            } else {
+                mark20Cell.textContent = '-';
+            }
+            row.appendChild(mark20Cell);
+            
+            // 10M cell
+            const mark10Cell = document.createElement('td');
+            if (studentSubjectMark) {
+                if (studentSubjectMark.marks === null) {
+                    mark10Cell.textContent = 'Ab';
+                } else {
+                    const mark10 = Math.ceil(studentSubjectMark.marks / 2);
+                    mark10Cell.textContent = mark10;
+                    total10M += mark10;
+                }
+            } else {
+                mark10Cell.textContent = '-';
+            }
+            row.appendChild(mark10Cell);
+         });
+         
+         // Add total cells
+         const total20Cell = document.createElement('td');
+         total20Cell.textContent = total20M;
+         row.appendChild(total20Cell);
+         
+         const total10Cell = document.createElement('td');
+         total10Cell.textContent = total10M;
+         row.appendChild(total10Cell);
+         
+         // Add empty rank cells (to be filled later)
+         const rank20Cell = document.createElement('td');
+         rank20Cell.classList.add('rank-20m-cell');
+         row.appendChild(rank20Cell);
+         
+         const rank10Cell = document.createElement('td');
+         rank10Cell.classList.add('rank-10m-cell');
+         row.appendChild(rank10Cell);
+         
+         // Store the row, total20M, and total10M for later use
+         studentRows.push(row);
+         studentTotals20M.push(total20M);
+         studentTotals10M.push(total10M);
+         
+         table.appendChild(row);
+         });
+         
+         // Calculate ranks for both 20M and 10M totals
+         const ranks20M = calculateRanks(studentTotals20M);
+         const ranks10M = calculateRanks(studentTotals10M);
+         
+         // Fill in the rank cells
+         studentRows.forEach((row, idx) => {
+         const rank20Cell = row.querySelector('.rank-20m-cell');
+         rank20Cell.textContent = ranks20M[idx];
+         // Highlight cell by adding highlight-rank class if rank is 1, 2 or 3
+         if(ranks20M[idx] === 1 || ranks20M[idx] === 2 || ranks20M[idx] === 3) {
+           rank20Cell.classList.add('highlight-rank');
+         }
+         
+         const rank10Cell = row.querySelector('.rank-10m-cell');
+         rank10Cell.textContent = ranks10M[idx];
+         // Highlight cell by adding highlight-rank class if rank is 1, 2 or 3
+         if(ranks10M[idx] === 1 || ranks10M[idx] === 2 || ranks10M[idx] === 3) {
+           rank10Cell.classList.add('highlight-rank');
+         }
+         });
+         }
+         
+          // Check authentication status when the window loads
+          window.addEventListener('load', async () => {
+          showLoading();
+          
+          try {
+             const isAuthenticated = await checkAuth();
+             
+             if (isAuthenticated) {
+                 // Load all marks data for the grade specified in the URL params
+                 await loadMarks();
+                 // Generate marks table
+                 generateTable();
+                 // Hide loading screen
+                 hideLoading();
+             } else {
+                 // User is not logged in, redirect back to dashboard
+                 window.location.href = "https://sourabhsuneja.github.io/redirect/jvp-marks-management/";
+             }
+          } catch (error) {
+             console.error('Auth check error:', error);
+          } finally {
+             
+          }
+          });
+               
+          function showLoading() {
+          loadingOverlay.classList.remove('hidden');
+          }
+          
+          function hideLoading() {
+          loadingOverlay.classList.add('hidden');
+          }
+         
+          async function loadMarks() {
+          // Get the "class" parameter from the URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const classValue = urlParams.get("class");
+          const exam = urlParams.get("exam");
+         
+          // Store in global variables as well
+         selectedExam = exam;
+         selectedClass = classValue;
+
+          // Fetch subject list according to class
+          selectedSubjects = getSubjectsForClass(selectedClass);
+          
+          // If class & exam are present and not falsy
+          if (classValue && exam) {
+          try {
+          // Call selectData to get records from "marks_view"
+          const results = await selectData(
+          "marks_view",            // tableName
+          false,              // fetchSingle
+          "*",                // columns
+          ["class", "exam"],          // matchColumns
+          [classValue, exam],       // matchValues
+          "student",          // orderByColumn
+          "asc"               // orderDirection
+          );
+          marks = results;
+          return true;
+          } catch (error) {
+          console.error("Failed to load marks:", error);
+          return null;
+          }
+          } else {
+          // No class or exam parameters found, redirect user back to dashboard
+          window.location.href = "https://sourabhsuneja.github.io/redirect/jvp-marks-management/";
+          }
+          }
+      </script>
+   </body>
+</html>

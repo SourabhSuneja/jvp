@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>JVP Marks Dashboard</title>
+      <!-- Google Fonts -->
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="dialog.css">
+      <!-- Dialog Box Scripts -->
+      <script src="dialog.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+         max-height: 9999999px;
+         }
+         body {
+         background-color: var(--light);
+         color: var(--text);
+         line-height: 1.6;
+         font-size: 16px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 20px;
+         }
+         header {
+         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+         color: white;
+         padding: 24px 0;
+         text-align: center;
+         box-shadow: var(--shadow);
+         margin-bottom: 2rem;
+         }
+         .header-content {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 20px;
+         }
+         .school-logo {
+         height: 80px;
+         border-radius: 50%;
+         background-color: white;
+         padding: 5px;
+         box-shadow: var(--shadow);
+         }
+         h1 {
+         margin: 0;
+         font-size: 2.25rem;
+         font-weight: 700;
+         letter-spacing: -0.025em;
+         }
+         h2 {
+         color: var(--dark);
+         font-size: 1.75rem;
+         font-weight: 700;
+         margin-bottom: 1.5rem;
+         letter-spacing: -0.025em;
+         }
+         h3 {
+         color: var(--dark);
+         font-size: 1.25rem;
+         font-weight: 600;
+         margin-bottom: 1rem;
+         letter-spacing: -0.025em;
+         }
+         .login-container, .app-container {
+         background-color: white;
+         border-radius: 12px;
+         box-shadow: var(--shadow-lg);
+         padding: 36px;
+         margin: 30px auto;
+         max-width: 800px;
+         border: 1px solid var(--border);
+         }
+         .login-container {
+         max-width: 440px;
+         }
+         .form-group {
+         margin-bottom: 24px;
+         }
+         label {
+         display: block;
+         font-weight: 600;
+         margin-bottom: 8px;
+         color: var(--dark);
+         font-size: 0.9rem;
+         }
+         input, select {
+         width: 100%;
+         padding: 12px 16px;
+         border: 1px solid var(--border);
+         border-radius: 8px;
+         font-size: 16px;
+         transition: var(--transition);
+         color: var(--text);
+         background-color: var(--light);
+         }
+         input:focus, select:focus {
+         outline: none;
+         border-color: var(--primary);
+         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+         }
+         .btn-primary, .btn-secondary {
+         display: inline-block;
+         padding: 12px 24px;
+         border-radius: 8px;
+         font-weight: 600;
+         font-size: 16px;
+         cursor: pointer;
+         transition: var(--transition);
+         border: none;
+         text-align: center;
+         white-space: nowrap;
+         }
+         .btn-primary {
+         background-color: var(--primary);
+         color: white;
+         min-width: 120px;
+         }
+         .btn-primary:hover {
+         background-color: var(--primary-dark);
+         }
+         .btn-secondary {
+         background-color: var(--secondary);
+         color: white;
+         width: 100%;
+         }
+         .btn-secondary:hover {
+         background-color: var(--secondary-dark);
+         }
+         #logout-btn {
+         background-color: var(--danger);
+         }
+         .hidden {
+         display: none !important;
+         }
+         .alert {
+         padding: 16px;
+         margin-bottom: 24px;
+         border-radius: 8px;
+         color: white;
+         background-color: var(--danger);
+         animation: fadeIn 0.3s ease;
+         }
+         @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(-10px); }
+         to { opacity: 1; transform: translateY(0); }
+         }
+         .input-group {
+         position: relative;
+         }
+         .domain-suffix {
+         position: absolute;
+         right: 12px;
+         top: 50%;
+         transform: translateY(-50%);
+         color: #6b7280;
+         background-color: var(--light);
+         padding: 0 8px;
+         pointer-events: none;
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         @keyframes spin {
+         to {
+         transform: rotate(360deg);
+         }
+         }
+         .filters {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 16px;
+         margin-bottom: 24px;
+         }
+         .marks-header {
+         background-color: #f3f4f6;
+         padding: 16px;
+         border-radius: 8px;
+         margin-bottom: 20px;
+         text-align: center;
+         }
+         .marks-header h3 {
+         margin-bottom: 4px;
+         color: var(--primary-dark);
+         }
+         .marks-header p {
+         margin: 0;
+         font-weight: 500;
+         }
+         #marks-container {
+         overflow-x: auto;
+         max-width: 100%;
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-bottom: 24px;
+         table-layout: fixed;
+         min-width: 650px; /* Ensures table doesn't get too narrow */
+         }
+         thead th {
+         background-color: var(--primary);
+         color: white;
+         font-weight: 600;
+         text-align: left;
+         padding: 12px 16px;
+         }
+         thead th:first-child {
+         border-top-left-radius: 8px;
+         }
+         thead th:last-child {
+         border-top-right-radius: 8px;
+         }
+         tbody tr:nth-child(even) {
+         background-color: #f9fafb;
+         }
+         tbody td {
+         padding: 12px 16px;
+         border-bottom: 1px solid var(--border);
+         }
+         th:nth-child(3),
+         th:nth-child(4),
+         td:nth-child(3),
+         td:nth-child(4) {
+         text-align: right;
+         }
+         th:nth-child(2),
+         td:nth-child(2) {
+         width: 200px;
+         }
+         th:first-child,
+         td:first-child {
+         width: 15%;
+         max-width: 15%;
+         overflow: hidden;
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         }
+         .actions {
+         display: flex;
+         justify-content: flex-end;
+         gap: 12px;
+         margin-top: 20px;
+         }
+         .remark-excellent {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-excellent::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #10b981; /* Bright green */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-good {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-good::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #3b82f6; /* Bright blue */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-average {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-average::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #f59e0b; /* Amber/orange */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-poor {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-poor::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #ef4444; /* Bright red */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-absent {
+         color: black;
+         font-style: italic;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-absent::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #6d28d9; /* Purple */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .app-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 24px;
+         }
+         .print-section {
+         display: none;
+         }
+         @media print {
+         body * {
+         visibility: hidden;
+         }
+         .print-section, .print-section * {
+         visibility: visible;
+         }
+         .print-section {
+         display: block;
+         position: absolute;
+         left: 0;
+         top: 0;
+         width: 100%;
+         padding: 20px;
+         }
+         .print-header {
+         text-align: center;
+         margin-bottom: 24px;
+         }
+         .print-header h2 {
+         margin-bottom: 8px;
+         }
+         .print-logo {
+         height: 60px;
+         margin-bottom: 16px;
+         }
+         }
+         @media (max-width: 768px) {
+         .container {
+         padding: 12px;
+         }
+         .login-container, .app-container {
+         padding: 24px;
+         margin: 20px auto;
+         }
+         h1 {
+         font-size: 1.75rem;
+         }
+         h2 {
+         font-size: 1.5rem;
+         }
+         .school-logo {
+         height: 60px;
+         }
+         .header-content {
+         flex-direction: column;
+         gap: 12px;
+         }
+         .actions {
+         flex-direction: column;
+         }
+         }
+         /* Modal Styles */
+         .analysis-modal {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(0, 0, 0, 0.75);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         opacity: 0;
+         visibility: hidden;
+         transition: all 0.3s ease;
+         }
+         .analysis-modal.active {
+         opacity: 1;
+         visibility: visible;
+         }
+         .analysis-content {
+         background-color: white;
+         border-radius: 12px;
+         width: 90%;
+         max-width: 1000px;
+         max-height: 90vh;
+         overflow-y: auto;
+         box-shadow: var(--shadow-lg);
+         padding: 24px;
+         position: relative;
+         animation: modalFadeIn 0.4s ease;
+         }
+         @keyframes modalFadeIn {
+         from { transform: translateY(-20px); opacity: 0; }
+         to { transform: translateY(0); opacity: 1; }
+         }
+         .analysis-close {
+         position: absolute;
+         top: 20px;
+         right: 20px;
+         font-size: 24px;
+         cursor: pointer;
+         width: 36px;
+         height: 36px;
+         background-color: var(--light);
+         border-radius: 50%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         transition: var(--transition);
+         }
+         .analysis-close:hover {
+         background-color: #e5e7eb;
+         }
+         .analysis-header {
+         text-align: center;
+         margin-bottom: 24px;
+         border-bottom: 1px solid var(--border);
+         padding-bottom: 16px;
+         }
+         .analysis-header h2 {
+         margin-bottom: 8px;
+         color: var(--primary);
+         }
+         .stats-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 16px;
+         margin-bottom: 32px;
+         }
+         .stat-card {
+         background-color: white;
+         border-radius: 8px;
+         padding: 16px;
+         box-shadow: var(--shadow);
+         text-align: center;
+         border: 1px solid var(--border);
+         transition: transform 0.2s ease;
+         }
+         .stat-card:hover {
+         transform: translateY(-2px);
+         }
+         .stat-value {
+         font-size: 2rem;
+         font-weight: 700;
+         color: var(--primary);
+         margin-bottom: 8px;
+         }
+         .stat-label {
+         color: var(--text);
+         font-weight: 500;
+         font-size: 0.9rem;
+         }
+         .chart-section {
+         margin-bottom: 32px;
+         border: 1px solid var(--border);
+         border-radius: 8px;
+         padding: 20px;
+         background-color: #f9fafb;
+         min-width: 520px;
+         overflow: auto;
+         }
+         .chart-container {
+         min-height: 300px;
+         height: auto; 
+         width: 100%;
+         max-width: 800px;
+         margin: 0 auto;
+         position: relative;
+         background-color: white;
+         border-radius: 8px;
+         padding: 20px;
+         box-shadow: var(--shadow-sm);
+         overflow: visible; 
+         }
+         .rankings-table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-top: 20px;
+         }
+         .rankings-table th {
+         background-color: var(--primary);
+         color: white;
+         font-weight: 600;
+         text-align: left;
+         padding: 12px 16px;
+         }
+         .rankings-table th:first-child {
+         border-top-left-radius: 8px;
+         }
+         .rankings-table th:last-child {
+         border-top-right-radius: 8px;
+         }
+         .rankings-table tr:nth-child(even) {
+         background-color: #f9fafb;
+         }
+         .rankings-table td {
+         padding: 12px 16px;
+         border-bottom: 1px solid var(--border);
+         }
+         .section-title {
+         margin-top: 32px;
+         margin-bottom: 16px;
+         padding-bottom: 8px;
+         border-bottom: 1px solid var(--border);
+         color: var(--primary-dark);
+         }
+         .rank-badge {
+         display: inline-block;
+         width: 28px;
+         height: 28px;
+         border-radius: 50%;
+         background-color: var(--primary);
+         color: white;
+         text-align: center;
+         line-height: 28px;
+         font-weight: 600;
+         font-size: 0.9rem;
+         }
+         .rank-1 {
+         background-color: gold;
+         color: var(--dark);
+         }
+         .rank-2 {
+         background-color: #f2f2f2;
+         color: var(--dark);
+         }
+         .rank-3 {
+         background-color: #cd7f32; /* bronze */
+         color: white;
+         }
+         /* Optional: Additional styling for D3 chart elements */
+         .arc path {
+         transition: opacity 0.3s;
+         }
+         .arc path:hover {
+         opacity: 0.8;
+         }
+         .legend-item text {
+         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+         }
+      </style>
+   </head>
+   <body>
+      <header>
+         <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="school-logo">
+            <h1>Jamna Vidyapeeth</h1>
+         </div>
+      </header>
+      <div class="container">
+         <!-- Loading Overlay -->
+         <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="spinner"></div>
+         </div>
+         <!-- Login Section -->
+         <div id="login-section" class="login-container">
+            <h2>Teacher Login</h2>
+            <div id="login-error" class="alert hidden"></div>
+            <div class="form-group">
+               <label for="username">Username</label>
+               <div class="input-group">
+                  <input type="text" id="username" placeholder="Enter your username">
+                  <span class="domain-suffix">@jvp.com</span>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="password">Password</label>
+               <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button id="login-btn" class="btn-secondary">Login</button>
+         </div>
+         <!-- App Section -->
+         <div id="app-section" class="app-container hidden">
+            <div class="app-header">
+               <h2>Score Analysis</h2>
+               <button id="logout-btn" class="btn-primary">Logout</button>
+            </div>
+            <div class="filters">
+               <div class="form-group">
+                  <label for="class-select">Class</label>
+                  <select id="class-select">
+                     <option value="">Select Class</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="subject-select">Subject</label>
+                  <select id="subject-select">
+                     <option value="">Select Subject</option>
+                     <option value="Overall Aggregate">Overall Aggregate</option>
+                     <script>
+                       for (var i = 0; i < subjects.length; i++) {
+                           document.write('<option value="' + subjects[i] + '">' + subjects[i] + '</option>');
+                       }
+                     </script>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="exam-select">Exam</label>
+                  <select id="exam-select">
+                     <option value="">Select Exam</option>
+                  </select>
+               </div>
+            </div>
+            <div id="marks-container" class="hidden">
+               <div class="marks-header">
+                  <h3 id="marks-title">Marks Statement</h3>
+                  <p id="marks-subtitle">Class: - | Subject: - | Exam: -</p>
+               </div>
+               <table id="marks-table">
+                  <thead>
+                     <tr>
+                        <th>Sl. No</th>
+                        <th>Student Name</th>
+                        <th>Marks</th>
+                        <th>Percentage</th>
+                        <th>Remark</th>
+                     </tr>
+                  </thead>
+                  <tbody id="marks-body">
+                     <!-- Marks data will be inserted here -->
+                  </tbody>
+               </table>
+               <div class="actions">
+                  <button id="print-btn" class="btn-primary">Print Marks</button>
+                  <button id="download-csv-btn" class="btn-primary">Download CSV</button>
+                  <button id="analyse-btn" class="btn-primary">Analyse</button>
+               </div>
+            </div>
+         </div>
+         <!-- Print Section (Hidden until print is requested) -->
+         <div id="print-section" class="print-section">
+            <div class="print-header">
+               <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="print-logo">
+               <h2>Jamna Vidyapeeth</h2>
+               <p id="print-subtitle">Class: - | Subject: - | Exam: -</p>
+            </div>
+            <table id="print-table">
+               <thead>
+                  <tr>
+                     <th>Sl. No</th>
+                     <th>Student Name</th>
+                     <th>Marks</th>
+                  </tr>
+               </thead>
+               <tbody id="print-body">
+                  <!-- Print data will be inserted here -->
+               </tbody>
+            </table>
+         </div>
+      </div>
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <div id="analysis-modal" class="analysis-modal">
+         <div class="analysis-content">
+            <div class="analysis-close">&times;</div>
+            <div class="analysis-header">
+               <h2>Marks Analysis Dashboard</h2>
+               <p id="analysis-subtitle">Class: - | Subject: - | Exam: -</p>
+            </div>
+            <div class="stats-grid">
+               <div class="stat-card">
+                  <div class="stat-value" id="avg-percentage">-</div>
+                  <div class="stat-label">Average Percentage</div>
+               </div>
+               <div class="stat-card">
+                  <div class="stat-value" id="max-percentage">-</div>
+                  <div class="stat-label">Maximum Percentage</div>
+               </div>
+               <div class="stat-card">
+                  <div class="stat-value" id="min-percentage">-</div>
+                  <div class="stat-label">Minimum Percentage</div>
+               </div>
+               <div class="stat-card">
+                  <div class="stat-value" id="median-percentage">-</div>
+                  <div class="stat-label">Median Percentage</div>
+               </div>
+            </div>
+            <h3 class="section-title">Student Rankings</h3>
+            <div class="table-responsive">
+               <table class="rankings-table">
+                  <thead>
+                     <tr>
+                        <th>Rank</th>
+                        <th>Student Name</th>
+                        <th>Marks</th>
+                        <th>Percentage</th>
+                        <th>Remark</th>
+                     </tr>
+                  </thead>
+                  <tbody id="rankings-body">
+                     <!-- Rankings will be populated here -->
+                  </tbody>
+               </table>
+            </div>
+            <h3 class="section-title">Remarks Distribution</h3>
+            <div class="chart-section">
+               <div class="chart-container" id="remarks-chart"></div>
+            </div>
+         </div>
+      </div>
+      <!-- Add D3 Charts library -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+      <script>
+         // DOM elements
+         const loginSection = document.getElementById('login-section');
+         const appSection = document.getElementById('app-section');
+         const usernameInput = document.getElementById('username');
+         const passwordInput = document.getElementById('password');
+         const loginBtn = document.getElementById('login-btn');
+         const loginError = document.getElementById('login-error');
+         const logoutBtn = document.getElementById('logout-btn');
+         const loadingOverlay = document.getElementById('loading-overlay');
+         const classSelect = document.getElementById('class-select');
+         const subjectSelect = document.getElementById('subject-select');
+         const examSelect = document.getElementById('exam-select');
+         const marksContainer = document.getElementById('marks-container');
+         const marksTitle = document.getElementById('marks-title');
+         const marksSubtitle = document.getElementById('marks-subtitle');
+         const marksBody = document.getElementById('marks-body');
+         const printBtn = document.getElementById('print-btn');
+         const downloadCSVBtn = document.getElementById('download-csv-btn');
+         const printSection = document.getElementById('print-section');
+         const printSubtitle = document.getElementById('print-subtitle');
+         const printBody = document.getElementById('print-body');
+         const analyseBtn = document.getElementById('analyse-btn');
+         const analysisModal = document.getElementById('analysis-modal');
+         const analysisClose = document.querySelector('.analysis-close');
+         const analysisSubtitle = document.getElementById('analysis-subtitle');
+         
+         // Chart variable to store reference
+         let remarksChart = null;
+         
+         // Marks data (will be loaded from the server)
+         let marks = [];
+         
+         // Marks of the selected exam will be stored separately for plotting charts, doing analysis etc
+         let selectedMarks = [];
+         
+         // Global variable to store the exam name (coming from URL, if any)
+         let examParamInURL = null;
+         
+         let customExams = [];
+         
+         // Helper functions
+         function showLoading() {
+             loadingOverlay.classList.remove('hidden');
+         }
+         
+         function hideLoading() {
+             loadingOverlay.classList.add('hidden');
+         }
+         
+         // Function to extract unique values from an array of objects
+         function getUniqueValues(arr, prop) {
+             return [...new Set(arr.map(item => item[prop]))];
+         }
+         
+         // Function to populate a select element with options
+         function populateSelect(selectElement, options) {
+             // Clear existing options except the first one
+             while (selectElement.options.length > 1) {
+                 selectElement.remove(1);
+             }
+             
+             // Add new options
+             options.forEach(option => {
+                 const optionElement = document.createElement('option');
+                 optionElement.value = option;
+                 optionElement.textContent = option;
+                 selectElement.appendChild(optionElement);
+             });
+         }
+                
+         // Initialize the form
+         async function initializeForm() {
+             // Populate class dropdown
+             for (const className of classes) {
+                 const option = document.createElement('option');
+                 option.value = className;
+                 option.textContent = className;
+                 classSelect.appendChild(option);
+             }
+             
+             // Populate exam dropdown
+             exams.forEach(exam => {
+                 const option = document.createElement('option');
+                 option.value = exam.name;
+                 option.textContent = exam.name;
+                 examSelect.appendChild(option);
+             });
+             
+             // Add event listeners for select elements
+             classSelect.addEventListener('change', handleSelectionChange);
+             subjectSelect.addEventListener('change', handleSelectionChange);
+             examSelect.addEventListener('change', handleSelectionChange);
+             
+             // Add event listener for print button
+             printBtn.addEventListener('click', printMarks);
+             downloadCSVBtn.addEventListener('click', downloadCSV);
+         
+          // Apply URL params for a quick marks analysis if class, subject and exam details are present in the URL
+         applyURLParamsToSelects();
+         }
+         
+         // Function to update the marks table based on selected filters
+         function updateMarksTable() {
+             const selectedClass = classSelect.value;
+             const selectedSubject = subjectSelect.value;
+             const selectedExam = examSelect.value;
+             
+             // Check if all filters are selected
+             if (!selectedClass || !selectedSubject || !selectedExam) {
+                 marksContainer.classList.add('hidden');
+                 return;
+             }
+             
+             // Filter marks data based on selections
+             const filteredData = marks.filter(item => 
+                 item.class === selectedClass && 
+                 item.subject === selectedSubject && 
+                 item.exam === selectedExam
+             );
+         
+             // If no records found for the selected class, subject and exam, hide the marks container and return
+              if(filteredData.length === 0) {
+                marksContainer.classList.add('hidden');
+                showDialog({
+                title: 'Error',
+                message: 'No marks records found for the selected exam, class and subject.',
+                type: 'alert'
+            });
+                return;
+            }
+         
+             // Store a copy of filteredData in the global selectedMarks variable for later analysis
+             selectedMarks = JSON.parse(JSON.stringify(filteredData)) || [];
+
+              // Fetch max marks for the selected exam
+              const maxMarks = (selectedSubject === 'Overall Aggregate') ? getAggregateMarks(selectedClass, selectedExam) : getMaxMarks(selectedExam);
+             
+             // Update the marks title and subtitle
+             marksTitle.textContent = `Marks Statement: ${selectedExam}`;
+             marksSubtitle.textContent = `Class: ${selectedClass} | Subject: ${selectedSubject} | Exam: ${selectedExam} | Max. Marks: ${maxMarks}`;
+             
+             // Update the print subtitle
+             printSubtitle.textContent = `Class: ${selectedClass} | Subject: ${selectedSubject} | Exam: ${selectedExam}`;
+             
+             // Clear existing table rows
+             marksBody.innerHTML = '';
+             printBody.innerHTML = '';
+             
+             // Add new rows to the table
+             filteredData.forEach((item, index) => {
+                 const percentage = item.marks !== null ? ((item.marks / maxMarks) * 100).toFixed(2) : '-';
+                 const remark = (selectedSubject === 'Overall Aggregate') ? getPerformanceRemark(item.marks, selectedExam, percentage) : getPerformanceRemark(item.marks, selectedExam);
+                 const remarkClass = getRemarkClass(remark);
+         
+                 // Store the computed percentage and remark in the global selectedMarks as well
+                 const parsedPercentage = parseFloat(percentage)
+                 selectedMarks[index]['percentage'] = isNaN(parsedPercentage) ? null : parsedPercentage;
+                 selectedMarks[index]['remark'] = remark === 'Absent' ? null : remark;
+         
+                 // A small name issue fix
+                 selectedMarks = selectedMarks.map(o => ({name: o.student, ...o, student: undefined}));
+                 
+                 // Create row for marks table
+                 const row = document.createElement('tr');
+                 row.innerHTML = `
+                     <td>${index + 1}</td>
+                     <td>${item.student}</td>
+                     <td>${item.marks !== null ? item.marks : 'Absent'}</td>
+                     <td>${percentage}${percentage !== '-' ? '%' : ''}</td>
+                     <td class="${remarkClass}">${remark}</td>
+                 `;
+                 marksBody.appendChild(row);
+                 
+                 // Create row for print table
+                 const printRow = document.createElement('tr');
+                 printRow.innerHTML = `
+                     <td>${index + 1}</td>
+                     <td>${item.student}</td>
+                     <td>${item.marks !== null ? item.marks : 'Absent'}</td>
+                 `;
+                 printBody.appendChild(printRow);
+             });
+             
+             // Show the marks container
+             marksContainer.classList.remove('hidden');
+         }
+         
+         // Function to print marks
+         function printMarks() {
+             window.print();
+         }
+         
+         // Function to download marks data as CSV
+         function downloadCSV() {
+         const selectedClass = classSelect.value;
+         const selectedSubject = subjectSelect.value;
+         const selectedExam = examSelect.value;
+         
+         if (!selectedClass || !selectedSubject || !selectedExam) {
+         return;
+         }
+         
+         // Filter marks data based on selections
+         const filteredData = marks.filter(item => 
+         item.class === selectedClass && 
+         item.subject === selectedSubject && 
+         item.exam === selectedExam
+         );
+         
+         // Create CSV header
+         let csvContent = "Sl. No,Student Name,Marks,Percentage,Remark\n";
+         
+         // Add data rows
+         filteredData.forEach((item, index) => {
+         const maxMarks = getMaxMarks(selectedExam);
+         const percentage = item.marks !== null ? ((item.marks / maxMarks) * 100).toFixed(2) : '-';
+         const remark = getPerformanceRemark(item.marks, selectedExam);
+         
+         // Format the row
+         const row = [
+             index + 1,
+             item.student,
+             item.marks !== null ? item.marks : 'Absent',
+             percentage !== '-' ? percentage + '%' : percentage,
+             remark
+         ].join(',');
+         
+         csvContent += row + "\n";
+         });
+         
+         // Create a Blob and download link
+         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+         const url = URL.createObjectURL(blob);
+         
+         // Create download link
+         const link = document.createElement('a');
+         link.setAttribute('href', url);
+         link.setAttribute('download', `Marks_${selectedClass}_${selectedSubject}_${selectedExam}.csv`);
+         link.style.visibility = 'hidden';
+         
+         // Append to document, click and remove
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+         }
+                
+         // Check authentication status when the window loads
+         window.addEventListener('DOMContentLoaded', async () => {
+             showLoading();
+             
+             try {
+                 const isAuthenticated = await checkAuth();
+                 
+                 if (isAuthenticated) {
+                     // User is already logged in, show the app
+                     loginSection.classList.add('hidden');
+                     appSection.classList.remove('hidden');
+                     // Get custom exam names
+                     await preloadCustomExams();
+                 } else {
+                     // User is not logged in, show the login form
+                     loginSection.classList.remove('hidden');
+                     appSection.classList.add('hidden');
+                 }
+             } catch (error) {
+                 console.error('Auth check error:', error);
+                 // Show login screen as fallback
+                 loginSection.classList.remove('hidden');
+                 appSection.classList.add('hidden');
+             } finally {
+                 hideLoading();
+             }
+         });
+         
+         // Login functionality
+         loginBtn.addEventListener('click', async () => {
+             const username = usernameInput.value.trim();
+             const email = username.endsWith('@jvp.com') ? username : `${username}@jvp.com`;
+             const password = passwordInput.value.trim();
+             
+             if (!email || !password) {
+                 loginError.textContent = 'Please enter both email and password!';
+                 loginError.classList.remove('hidden');
+                 return;
+             }
+             
+             showLoading();
+             
+             try {
+                 // Use authentication
+                 const data = await signInUser(email, password);
+                 
+                 // If we reach here, login was successful
+                 loginSection.classList.add('hidden');
+                 appSection.classList.remove('hidden');
+                 loginError.classList.add('hidden');
+                 
+                 // Optionally store the user ID or other data
+                 window.userId = data.user.id;
+         
+                 // Get custom exam names
+                 await preloadCustomExams();
+             } catch (error) {
+                 // Handle login error
+                 loginError.textContent = error.message || 'Invalid email or password!';
+                 loginError.classList.remove('hidden');
+             } finally {
+                 hideLoading();
+             }
+         });
+         
+         // Logout functionality
+         logoutBtn.addEventListener('click', async () => {
+             showLoading();
+             
+             try {
+                 await signOutUser();
+                 
+                 // Clear UI state
+                 loginSection.classList.remove('hidden');
+                 appSection.classList.add('hidden');
+                 usernameInput.value = '';
+                 passwordInput.value = '';
+                 marksContainer.classList.add('hidden');
+                 
+                 // Reset selects
+                 classSelect.value = '';
+                 subjectSelect.value = '';
+                 examSelect.value = '';
+                 
+                 // Clear any stored user data
+                 window.userId = null;
+             } catch (error) {
+                 console.error('Logout error:', error);
+                 // Optionally show an error message to the user
+             } finally {
+                 hideLoading();
+             }
+         });
+         
+         async function preloadCustomExams() {
+                     // Pre-load all custom exams
+         customExams = await selectData('custom_exams') || [];
+         // Initialize the form
+         await initializeForm();
+         }
+         
+         // Handle class, subject and exam selection
+         async function handleSelectionChange(event) {
+         const selectedClass = classSelect.value;
+         let selectedSubject = subjectSelect.value;
+         let selectedExam = examSelect.value;
+
+         // Only update the subject dropdown when class changes, not when exam/subject changes
+         if (event.target === classSelect && selectedClass) {
+         selectedSubject = updateSubjectDropdown(selectedClass, true);
+         }
+         
+         // Only update the exam dropdown when class or subject changes, not when exam changes
+         if ((event.target === classSelect || event.target === subjectSelect) && 
+         selectedClass && selectedSubject) {
+         selectedExam = updateExamDropdown(selectedClass, selectedSubject, true);
+         }
+         
+         if (selectedClass && selectedExam && selectedSubject) {
+         showLoading();
+         const syncSuccess = await syncMarksData(selectedClass, selectedExam, selectedSubject);
+         
+         if(syncSuccess) {
+            hideLoading();
+            updateMarksTable();
+         } else {
+            await showDialog({
+                title: 'Error',
+                message: 'Error syncing with database. Please try again.',
+                type: 'alert'
+            });
+            return;
+         }
+         }
+         }
+         
+         // Function to update subject dropdown based on class selection
+         function updateSubjectDropdown(className, preserveSelection = false) {
+         // Store current selection if needed
+         const currentSelection = preserveSelection ? subjectSelect.value : null;
+         
+         // Clear existing options (except the placeholder and Overall Aggregate option)
+         while (subjectSelect.options.length > 2) {
+         subjectSelect.remove(2);
+         }
+         
+         // Get subjects for the chosen class
+         const relevantSubjects = getSubjectsForClass(className);
+         
+         relevantSubjects.forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
+         });
+         
+         
+         // Restore previous selection if it exists in the new options
+         if (preserveSelection && currentSelection) {
+         // Find if the current selection still exists in the options
+         for (let i = 0; i < subjectSelect.options.length; i++) {
+            if (subjectSelect.options[i].value === currentSelection) {
+                subjectSelect.value = currentSelection;
+                return currentSelection;
+            }
+         }
+         } 
+         return null;
+         }
+
+         // Function to update exam dropdown based on class and subject selection
+         function updateExamDropdown(className, subjectName, preserveSelection = false) {
+         // Store current selection if needed
+         const selectedVal = examParamInURL || examSelect.value;
+         const currentSelection = preserveSelection ? selectedVal : null;
+         
+         // Clear existing options (except the placeholder)
+         while (examSelect.options.length > 1) {
+         examSelect.remove(1);
+         }
+         
+         // Add common exams (these are always available)
+         exams.forEach(exam => {
+         const option = document.createElement('option');
+         option.value = exam.name;
+         option.textContent = exam.name;
+         examSelect.appendChild(option);
+         });
+         
+         // Add custom exams for this class and subject
+         if (className && subjectName) {
+         const relevantCustomExams = customExams.filter(
+            exam => exam.class === className && exam.subject === subjectName
+         );
+         
+         relevantCustomExams.forEach(exam => {
+            const option = document.createElement('option');
+            option.value = exam.name;
+            option.textContent = exam.name;
+            option.dataset.custom = 'true'; // Mark as custom exam
+            examSelect.appendChild(option);
+         });
+         }
+         
+         // Restore previous selection if it exists in the new options
+         if (preserveSelection && currentSelection) {
+         // Find if the current selection still exists in the options
+         for (let i = 0; i < examSelect.options.length; i++) {
+            if (examSelect.options[i].value === currentSelection) {
+                examSelect.value = currentSelection;
+                return currentSelection;
+            }
+         }
+         } 
+         return null;
+         }
+         
+          async function syncMarksData(selectedClass, selectedExam, selectedSubject) {
+         try {
+         // Fetch marks data from Supabase for the selected filters
+         let fetchedMarks;
+         // If subject is set to "Overall Aggregate", then fetch data by invoking a function on Supabase to get aggregates
+         if(selectedSubject === 'Overall Aggregate') {
+         fetchedMarks = await invokeFunction('get_total_marks', {'p_exam': selectedExam , 'p_class': selectedClass});
+         } else {
+         fetchedMarks = await selectData(
+         "marks_view",                                   // tableName
+         false,                                     // fetchSingle (we want multiple records)
+         "*",                                       // columns (fetch all columns)
+         ["class", "exam", "subject"],              // matchColumns
+         [selectedClass, selectedExam, selectedSubject], // matchValues
+         "student",                                 // orderByColumn (sort by student name)
+         "asc"                                      // orderDirection
+         );
+         }
+         
+         // If no data fetched or error occurred, resolve with true (nothing to sync)
+         if (!fetchedMarks || fetchedMarks.length === 0) {
+         return true;
+         }
+         
+         // Update global marks array with fetched data
+         fetchedMarks.forEach(fetchedMark => {
+         let existingIndex;
+         const studentName = fetchedMark.student;
+         if(selectedSubject === 'Overall Aggregate') {
+         existingIndex = marks.findIndex(record => 
+                record.class === selectedClass && 
+                record.student === studentName && 
+                record.exam === selectedExam &&
+                record.subject === selectedSubject
+         );
+         } else {
+         existingIndex = marks.findIndex(mark => mark.id === fetchedMark.id);
+         }
+         
+         // Handle null marks by converting to empty string
+         const marksValue = fetchedMark.marks === null ? null : fetchedMark.marks;
+         
+         if (existingIndex !== -1) {
+         // Update existing record
+         marks[existingIndex].marks = marksValue;
+         marks[existingIndex].updated_at = fetchedMark.updated_at || null;
+         } else {
+         // Add new record (with the potentially modified marks value)
+         const newMark = {...fetchedMark, marks: marksValue};
+         marks.push(newMark);
+         }
+         });
+         
+         return true;
+         } catch (error) {
+         console.error("Error syncing marks data:", error.message);
+         return false;
+         }
+         }
+         
+         function applyURLParamsToSelects() {
+         const urlParams = new URLSearchParams(window.location.search);
+         
+         const classVal = urlParams.get('class');
+         const subVal = urlParams.get('sub');
+         const examVal = urlParams.get('exam');
+         
+         if (classVal && subVal && examVal) {
+         classSelect.value = classVal;
+         subjectSelect.value = subVal;
+         examSelect.value = examVal;
+         examParamInURL = examVal;
+         
+         // Dispatch change event
+         const event = new Event('change', { bubbles: true });
+         subjectSelect.dispatchEvent(event);
+         }
+         }
+         
+         // Function to open the analysis modal
+         function openAnalysisModal() {
+         // Show the modal first
+         analysisModal.classList.add('active');
+         document.body.style.overflow = 'hidden';
+         
+         // Set the subtitle
+         const selectedClass = classSelect.options[classSelect.selectedIndex]?.text || '-';
+         const selectedSubject = subjectSelect.options[subjectSelect.selectedIndex]?.text || '-';
+         const selectedExam = examSelect.options[examSelect.selectedIndex]?.text || '-';
+         analysisSubtitle.textContent = `Class: ${selectedClass} | Subject: ${selectedSubject} | Exam: ${selectedExam}`;
+         
+         // First do the calculations
+         calculateStats();
+         calculateRankings();
+         
+         // Then initialize the chart with delay to ensure modal is visible
+         setTimeout(() => {
+         if (typeof d3 === 'undefined') {
+         console.error('D3.js is not loaded!');
+         const scriptElement = document.createElement('script');
+         scriptElement.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+         scriptElement.onload = function() {
+         console.log('D3.js loaded dynamically');
+         generateRemarksChart();
+         };
+         document.body.appendChild(scriptElement);
+         } else {
+         generateRemarksChart();
+         }
+         }, 500);
+         }
+         
+         // Update closeAnalysisModal to handle D3 chart cleanup
+         function closeAnalysisModal() {
+         analysisModal.classList.remove('active');
+         document.body.style.overflow = ''; // Re-enable background scrolling
+         
+         // No need to explicitly destroy D3 charts, just clear the container
+         const chartContainer = document.getElementById('remarks-chart');
+         if (chartContainer) {
+         chartContainer.innerHTML = '';
+         remarksChart = null;
+         }
+         }
+         
+         // Calculate statistics from selectedMarks
+         function calculateStats() {
+         // Filter out entries with null percentages
+         const validMarks = selectedMarks.filter(mark => mark.percentage !== null);
+         
+         if (validMarks.length === 0) {
+         document.getElementById('avg-percentage').textContent = 'N/A';
+         document.getElementById('max-percentage').textContent = 'N/A';
+         document.getElementById('min-percentage').textContent = 'N/A';
+         document.getElementById('median-percentage').textContent = 'N/A';
+         return;
+         }
+         
+         // Calculate average
+         const sum = validMarks.reduce((acc, mark) => acc + mark.percentage, 0);
+         const average = sum / validMarks.length;
+         document.getElementById('avg-percentage').textContent = average.toFixed(2) + '%';
+         
+         // Calculate min and max
+         const percentages = validMarks.map(mark => mark.percentage);
+         const max = Math.max(...percentages);
+         const min = Math.min(...percentages);
+         document.getElementById('max-percentage').textContent = max.toFixed(2) + '%';
+         document.getElementById('min-percentage').textContent = min.toFixed(2) + '%';
+         
+         // Calculate median
+         const sortedPercentages = [...percentages].sort((a, b) => a - b);
+         const midIndex = Math.floor(sortedPercentages.length / 2);
+         let median;
+         
+         if (sortedPercentages.length % 2 === 0) {
+         median = (sortedPercentages[midIndex - 1] + sortedPercentages[midIndex]) / 2;
+         } else {
+         median = sortedPercentages[midIndex];
+         }
+         
+         document.getElementById('median-percentage').textContent = median.toFixed(2) + '%';
+         }
+         
+         // Calculate rankings for all students
+         function calculateRankings() {
+         const rankingsBody = document.getElementById('rankings-body');
+         rankingsBody.innerHTML = '';
+         
+         // Filter out students with null percentages
+         const validMarks = selectedMarks.filter(mark => mark.percentage !== null);
+         
+         if (validMarks.length === 0) {
+         const row = document.createElement('tr');
+         row.innerHTML = '<td colspan="5" style="text-align: center;">No valid data available</td>';
+         rankingsBody.appendChild(row);
+         return;
+         }
+         
+         // Sort by percentage in descending order
+         const sortedMarks = [...validMarks].sort((a, b) => b.percentage - a.percentage);
+         
+         // Assign ranks (same rank for ties)
+         let currentRank = 1;
+         let previousPercentage = null;
+         let rankCounter = 0;
+         
+         sortedMarks.forEach((mark, index) => {
+         // If this percentage is different from the previous one, assign a new rank
+         if (previousPercentage !== mark.percentage) {
+         currentRank = rankCounter + 1;
+         rankCounter++;
+         }
+         
+         // Create the ranking row
+         const row = document.createElement('tr');
+         
+         // Determine badge class for top 3
+         let rankBadgeClass = '';
+         if (currentRank === 1) rankBadgeClass = 'rank-1';
+         else if (currentRank === 2) rankBadgeClass = 'rank-2';
+         else if (currentRank === 3) rankBadgeClass = 'rank-3';
+         
+         row.innerHTML = `
+         <td><span class="rank-badge ${rankBadgeClass}">${currentRank}</span></td>
+         <td>${mark.name}</td>
+         <td>${mark.marks}</td>
+         <td>${mark.percentage ? mark.percentage.toFixed(2) + '%' : '-'}</td>
+         <td>${mark.remark || '-'}</td>
+         `;
+         
+         rankingsBody.appendChild(row);
+         
+         // Update for next iteration
+         previousPercentage = mark.percentage;
+         });
+         
+         // Add rows for students with null percentages (unranked)
+         const nullMarks = selectedMarks.filter(mark => mark.percentage === null);
+         
+         nullMarks.forEach(mark => {
+         const row = document.createElement('tr');
+         row.innerHTML = `
+         <td>-</td>
+         <td>${mark.name}</td>
+         <td>${mark.marks || '-'}</td>
+         <td>-</td>
+         <td>${mark.remark || '-'}</td>
+         `;
+         rankingsBody.appendChild(row);
+         });
+         }
+         
+         // Generate remarks distribution chart using D3.js
+         function generateRemarksChart() {
+         console.log("Starting D3 chart generation");
+         
+         // Get container and ensure it's empty
+         const chartContainer = document.getElementById('remarks-chart');
+         chartContainer.innerHTML = '';
+         
+         // Filter out entries with null remarks
+         const validMarks = selectedMarks.filter(mark => mark.remark !== null);
+         
+         if (validMarks.length === 0) {
+         chartContainer.innerHTML = '<div style="text-align: center; padding: 80px 0;">No valid remarks data available</div>';
+         return;
+         }
+         
+         // Count remarks by category
+         const remarkCounts = {};
+         validMarks.forEach(mark => {
+         if (!remarkCounts[mark.remark]) {
+         remarkCounts[mark.remark] = 0;
+         }
+         remarkCounts[mark.remark]++;
+         });
+         
+         // Prepare data for chart
+         const pieData = Object.keys(remarkCounts).map(remark => {
+         return {
+         label: remark,
+         value: remarkCounts[remark]
+         };
+         });
+         
+         const total = pieData.reduce((sum, item) => sum + item.value, 0);
+                  
+         // Get the container dimensions
+         const containerWidth = chartContainer.clientWidth;
+         const containerHeight = 400; // Default height
+         
+         // Determine if we're on a small screen
+         const isSmallScreen = containerWidth < 500;
+         
+         // Set up dimensions based on screen size
+         const width = containerWidth;
+         // Adjust height to accommodate vertical legend on small screens
+         const height = isSmallScreen ? Math.max(containerHeight, 400 + pieData.length * 25) : containerHeight;
+         
+         // Calculate optimal radius - smaller on small screens
+         const radius = Math.min(width, height) / 2 * (isSmallScreen ? 0.5 : 0.65);
+         
+         // Create SVG element with viewBox for responsiveness
+         const svg = d3.select(chartContainer)
+         .append('svg')
+         .attr('width', '100%')
+         .attr('height', height)
+         .attr('viewBox', `0 0 ${width} ${height}`)
+         .attr('preserveAspectRatio', 'xMidYMid meet')
+         .append('g');
+         
+         // Position the pie chart based on screen size
+         if (isSmallScreen) {
+         // On small screens, move the chart up to make room for legend below
+         svg.attr('transform', `translate(${width / 2}, ${height * 0.3})`);
+         } else {
+         // On larger screens, move chart left to make room for legend on right
+         svg.attr('transform', `translate(${width / 3}, ${height / 2})`);
+         }
+         
+         // Store reference to our chart
+         remarksChart = svg.node();
+         
+         // Generate arc
+         const arc = d3.arc()
+         .innerRadius(0)
+         .outerRadius(radius);
+         
+         // Generate pie layout
+         const pie = d3.pie()
+         .value(d => d.value)
+         .sort(null);
+         
+         // Generate arcs for each data point
+         const arcs = svg.selectAll('.arc')
+         .data(pie(pieData))
+         .enter()
+         .append('g')
+         .attr('class', 'arc');
+         
+         // Add colored segments
+         arcs.append('path')
+         .attr('d', arc)
+         .attr('fill', (d, i) => colorMap[d.data.label] || getRandomColor())
+         .attr('stroke', 'white')
+         .attr('stroke-width', 2)
+         .style('transition', 'opacity 0.3s')
+         .on('mouseover', function() {
+         d3.select(this).style('opacity', 0.8);
+         })
+         .on('mouseout', function() {
+         d3.select(this).style('opacity', 1);
+         });
+         
+         // Add percentage labels inside pie
+         arcs.append('text')
+         .attr('transform', d => {
+         const centroid = arc.centroid(d);
+         return `translate(${centroid[0]}, ${centroid[1]})`;
+         })
+         .attr('text-anchor', 'middle')
+         .attr('font-size', '12px')
+         .attr('fill', 'white')
+         .attr('font-weight', 'bold')
+         .text(d => {
+         const percentage = ((d.data.value / total) * 100).toFixed(1);
+         return percentage > 5 ? `${percentage}%` : '';
+         });
+         
+         // Create legend with responsive positioning
+         const legendGroup = svg.append('g');
+         
+         if (isSmallScreen) {
+         // On small screens, position legend below the chart
+         legendGroup.attr('transform', `translate(${-radius * 0.8}, ${radius * 1.2})`);
+         } else {
+         // On larger screens, position legend to the right
+         legendGroup.attr('transform', `translate(${radius * 1.1}, ${-radius * 0.8})`);
+         }
+         
+         // Create legend items - always stacked vertically
+         const legendItems = legendGroup.selectAll('.legend-item')
+         .data(pieData)
+         .enter()
+         .append('g')
+         .attr('class', 'legend-item')
+         // Always stack legend items vertically on all screen sizes
+         .attr('transform', (d, i) => `translate(0, ${i * 25})`);
+         
+         // Add colored squares
+         legendItems.append('rect')
+         .attr('width', 15)
+         .attr('height', 15)
+         .attr('fill', (d, i) => colorMap[d.label] || getRandomColor());
+         
+         // Add text labels with percentages
+         legendItems.append('text')
+         .attr('x', 20)
+         .attr('y', 12)
+         .text(d => {
+         const percentage = ((d.value / total) * 100).toFixed(1);
+         return `${d.label}: ${percentage}%`;
+         })
+         .attr('font-size', '12px')
+         .style('text-overflow', 'ellipsis')
+         .attr('class', 'legend-text');
+         
+         // Ensure legend text doesn't overflow on small screens
+         if (isSmallScreen) {
+         legendGroup.selectAll('.legend-text')
+         .attr('textLength', null)
+         .each(function() {
+            const textWidth = width * 0.7; // Limit text width on small screens
+            if (this.getComputedTextLength() > textWidth) {
+               d3.select(this).attr('textLength', textWidth);
+            }
+         });
+         }
+         
+         // Handle window resize events
+         const resizeChart = () => {
+         // Redraw chart when window size changes
+         chartContainer.innerHTML = '';
+         generateRemarksChart();
+         };
+         
+         // Remove any existing resize listener to prevent duplicates
+         window.removeEventListener('resize', resizeChart);
+         
+         // Add resize listener with debounce
+         let resizeTimeout;
+         window.addEventListener('resize', () => {
+         clearTimeout(resizeTimeout);
+         resizeTimeout = setTimeout(resizeChart, 250);
+         });
+         
+         console.log("D3 Chart created successfully");
+         }
+         
+         // Check if D3 has loaded
+         function checkD3Loaded() {
+         if (typeof d3 === 'undefined') {
+         console.error('D3.js is not loaded!');
+         const scriptElement = document.createElement('script');
+         scriptElement.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js';
+         scriptElement.onload = function() {
+         console.log('D3.js loaded dynamically');
+         if (analysisModal.classList.contains('active')) {
+         generateRemarksChart();
+         }
+         };
+         document.body.appendChild(scriptElement);
+         return false;
+         }
+         return true;
+         }
+         
+         
+         // Helper function to generate random colors
+         function getRandomColor() {
+         const letters = '0123456789ABCDEF';
+         let color = '#';
+         for (let i = 0; i < 6; i++) {
+         color += letters[Math.floor(Math.random() * 16)];
+         }
+         return color;
+         }
+         
+         // Add event listeners
+         analyseBtn.addEventListener('click', openAnalysisModal);
+         analysisClose.addEventListener('click', closeAnalysisModal);
+         
+         // Close modal when clicking outside the content
+         analysisModal.addEventListener('click', function(e) {
+         if (e.target === analysisModal) {
+         closeAnalysisModal();
+         }
+         });
+         
+         // Close modal with Escape key
+         document.addEventListener('keydown', function(e) {
+         if (e.key === 'Escape' && analysisModal.classList.contains('active')) {
+         closeAnalysisModal();
+         }
+         });
+      </script>
+   </body>
+</html>

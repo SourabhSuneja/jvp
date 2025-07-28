@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html class="light-theme" lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>JVP Teachers</title>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <!-- Link to Material Icons font -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="dialog.css">
+      <!-- Dialog Box Scripts -->
+      <script src="dialog.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --danger-dark: #c33c3c;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+         max-height: 9999999px;
+         }
+         body {
+         background-color: var(--light);
+         color: var(--text);
+         line-height: 1.6;
+         font-size: 16px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 20px;
+         }
+         header {
+         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+         color: white;
+         padding: 24px 0;
+         text-align: center;
+         box-shadow: var(--shadow);
+         margin-bottom: 2rem;
+         }
+         h1 {
+         margin: 0;
+         font-size: 2.25rem;
+         font-weight: 700;
+         letter-spacing: -0.025em;
+         }
+         h2 {
+         color: var(--dark);
+         font-size: 1.75rem;
+         font-weight: 700;
+         margin-bottom: 1.5rem;
+         letter-spacing: -0.025em;
+         }
+         h3 {
+         color: var(--dark);
+         font-size: 1.25rem;
+         font-weight: 600;
+         margin-bottom: 1rem;
+         letter-spacing: -0.025em;
+         }
+         .login-container, .app-container {
+         background-color: white;
+         border-radius: 12px;
+         box-shadow: var(--shadow-lg);
+         padding: 36px;
+         margin: 30px auto;
+         max-width: 800px;
+         border: 1px solid var(--border);
+         }
+         .login-container {
+         max-width: 440px;
+         }
+         .form-group {
+         margin-bottom: 24px;
+         }
+         label {
+         display: block;
+         font-weight: 600;
+         margin-bottom: 8px;
+         color: var(--dark);
+         font-size: 0.9rem;
+         }
+         input, select {
+         width: 100%;
+         padding: 12px 16px;
+         border: 1px solid var(--border);
+         border-radius: 8px;
+         font-size: 16px;
+         transition: var(--transition);
+         color: var(--text);
+         background-color: var(--light);
+         }
+         input:focus, select:focus {
+         outline: none;
+         border-color: var(--primary);
+         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+         }
+         button {
+         background-color: var(--primary);
+         color: white;
+         border: none;
+         border-radius: 8px;
+         padding: 12px 24px;
+         font-size: 16px;
+         cursor: pointer;
+         transition: var(--transition);
+         font-weight: 600;
+         box-shadow: var(--shadow-sm);
+         }
+         button:hover {
+         background-color: var(--primary-dark);
+         transform: translateY(-1px);
+         box-shadow: var(--shadow);
+         }
+         button:active {
+         transform: translateY(0);
+         }
+         .btn-secondary {
+         background-color: var(--secondary);
+         }
+         .btn-secondary:hover {
+         background-color: var(--secondary-dark);
+         }
+         #login-btn {
+         margin-top: 12px;
+         }
+         .btn-logout {
+         background-color: var(--danger);
+         padding: 10px 20px;
+         font-size: 14px;
+         }
+         .btn-logout:hover, #delete-btn:hover, #cancelReportDialog:hover {
+         background-color: var(--danger-dark);
+         }
+         .form-group {
+         flex: 1;
+         min-width: 200px;
+         margin-bottom: 0;
+         }
+         .alert {
+         padding: 16px;
+         margin-bottom: 24px;
+         border-radius: 8px;
+         color: white;
+         background-color: var(--danger);
+         animation: fadeIn 0.3s ease;
+         }
+         .alert-success {
+         background-color: var(--secondary);
+         }
+         .app-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 24px;
+         }
+         .clearfix {
+         clear: both;
+         }
+         @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(-10px); }
+         to { opacity: 1; transform: translateY(0); }
+         }
+         @media (max-width: 768px) {
+         .container {
+         padding: 12px;
+         }
+         .login-container, .app-container {
+         padding: 24px;
+         margin: 16px 8px;
+         border-radius: 10px;
+         }
+         h1 {
+         font-size: 1.75rem;
+         }
+         }
+         .school-header {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 20px;
+         }
+         .school-logo {
+         height: 80px;
+         border-radius: 50%;
+         background-color: white;
+         padding: 5px;
+         box-shadow: var(--shadow);
+         }
+         .school-info {
+         text-align: left;
+         }
+         .school-name {
+         font-size: 2.5rem;
+         margin-bottom: 5px;
+         }
+         .system-name {
+         font-size: 1.5rem;
+         color: rgba(255, 255, 255, 0.9);
+         font-weight: 500;
+         margin: 0;
+         }
+         .user-info {
+         text-align: center;
+         margin-top: 16px;
+         }
+         .user-avatar {
+         color: white;        
+         font-size: 36px;
+         vertical-align: middle;
+         }
+         #signed-in-username {
+         margin-left: 6px;
+         }
+         @media (max-width: 768px) {
+         .school-header {
+         flex-direction: column;
+         gap: 10px;
+         }
+         .school-info {
+         text-align: center;
+         }
+         .school-name {
+         font-size: 1.8rem;
+         }
+         .system-name {
+         font-size: 1.2rem;
+         }
+         #signed-in-username {
+         margin-left: 3px;
+         }
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         .hidden {
+         display: none;
+         }
+         @keyframes spin {
+         to { transform: rotate(360deg); }
+         }
+         .input-group {
+         position: relative;
+         }
+         .input-group input {
+         padding-right: 90px; /* space for the suffix */
+         }
+         .domain-suffix {
+         position: absolute;
+         right: 16px;
+         top: 50%;
+         transform: translateY(-50%);
+         color: #888;
+         font-size: 14px;
+         pointer-events: none;
+         user-select: none;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="loading-overlay" class="loading-overlay hidden">
+         <div class="spinner"></div>
+      </div>
+      <header>
+         <div class="container">
+            <div class="school-header">
+               <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="school-logo">
+               <div class="school-info">
+                  <h1 class="school-name">Jamna Vidyapeeth</h1>
+                  <h2 class="system-name">Teachers Section</h2>
+                  <div style="display: none" id="user-info" class="user-info">
+                     <span class="user-avatar material-icons">account_circle</span>
+                     <span id="signed-in-username">Sourabh</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <!-- Container starts -->
+      <div class="container">
+         <!-- Login Section -->
+         <div id="login-section" class="login-container">
+            <h2>Teacher Login</h2>
+            <div id="login-error" class="alert hidden"></div>
+            <div class="form-group">
+               <label for="username">Username</label>
+               <div class="input-group">
+                  <input type="text" id="username" placeholder="Enter your username">
+                  <span class="domain-suffix">@jvp.com</span>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="password">Password</label>
+               <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button id="login-btn" class="btn-secondary">Login</button>
+         </div>
+         <!-- App Section (Hidden by default) -->
+         <div id="app-section" class="app-container hidden">
+             <button id="logout-btn" class="btn-logout">Logout</button>
+         <!-- Write main content here -->
+         </div>
+         <!-- App section ends -->
+      </div>
+      <!-- Container starts -->
+
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <script>
+         // DOM Elements
+         const loginSection = document.getElementById('login-section');
+         const appSection = document.getElementById('app-section');
+         const loginBtn = document.getElementById('login-btn');
+         const logoutBtn = document.getElementById('logout-btn');
+         const loginError = document.getElementById('login-error');
+         const usernameInput = document.getElementById('username');
+         const passwordInput = document.getElementById('password');
+         const userInfo = document.getElementById('user-info');
+         const signedInUsername = document.getElementById('signed-in-username');
+         const loadingOverlay = document.getElementById('loading-overlay');
+
+         // Check authentication status when the window loads
+         window.addEventListener('DOMContentLoaded', async () => {
+         showLoading();
+         
+         try {
+         const isAuthenticated = await checkAuth(); // Supabase authentication
+         
+         if (isAuthenticated) {
+            // User is already logged in
+         
+            // Fetch teacher's name
+            const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+            if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
+               signedInUsername.innerText = teacherName.name;
+               userInfo.style.display = "block";
+            }
+         
+            // Hide login screen
+            loginSection.classList.add('hidden');
+            // Show main app screen
+            appSection.classList.remove('hidden');
+         } else {
+            // User is not logged in, show the login form
+            loginSection.classList.remove('hidden');
+            appSection.classList.add('hidden');
+         }
+         } catch (error) {
+         console.error('Auth check error:', error);
+         // Show login screen as fallback
+         loginSection.classList.remove('hidden');
+         appSection.classList.add('hidden');
+         } finally {
+         hideLoading();
+         }
+         });
+
+         loginBtn.addEventListener('click', async () => {
+         const username = usernameInput.value.trim();
+         const email = username.endsWith('@jvp.com') ? username : `${username}@jvp.com`;
+         const password = passwordInput.value.trim();
+         
+         if (!email || !password) {
+         loginError.textContent = 'Please enter both email and password!';
+         loginError.classList.remove('hidden');
+         return;
+         }
+         
+         showLoading();
+         
+         try {
+         // Use Supabase auth
+         const data = await signInUser(email, password);
+         
+         // If we reach here, login was successful
+         
+         // Store the user ID
+         window.userId = data.user.id;
+         
+         // Fetch teacher's name
+         const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+         if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
+            signedInUsername.innerText = teacherName.name;
+            userInfo.style.display = "block";
+         }
+         
+         loginSection.classList.add('hidden');
+         appSection.classList.remove('hidden');
+         loginError.classList.add('hidden');
+               
+         } catch (error) {
+         // Handle login error
+         loginError.textContent = error.message || 'Invalid email or password!';
+         loginError.classList.remove('hidden');
+         } finally {
+         hideLoading();
+         }
+         });
+         
+         // Logout functionality using Supabase
+         logoutBtn.addEventListener('click', async () => {
+         showLoading();
+         
+         try {
+         await signOutUser();
+         
+         // Clear UI state
+         loginSection.classList.remove('hidden');
+         appSection.classList.add('hidden');
+         usernameInput.value = '';
+         passwordInput.value = '';
+         userInfo.style.display = "none";
+         
+         // Clear any stored user data
+         window.userId = null;
+         } catch (error) {
+         console.error('Logout error:', error);
+         // Optionally show an error message to the user
+         } finally {
+         hideLoading();
+         }
+         });
+
+         function showLoading() {
+         loadingOverlay.classList.remove('hidden');
+         }
+         
+         function hideLoading() {
+         loadingOverlay.classList.add('hidden');
+         }
+
+      </script>
+   </body>
+</html>

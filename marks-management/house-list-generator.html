@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Jamna Vidyapeeth - House List Generator</title>
+      <meta name="description" content="Generate house-wise student lists by class and gender. Quick, easy, and perfect for teachers.">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         max-height: 9999999999px;
+         }
+         body {
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         min-height: 100vh;
+         padding: 20px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         background: white;
+         border-radius: 15px;
+         box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+         overflow: hidden;
+         }
+         .header {
+         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+         color: white;
+         padding: 30px;
+         text-align: center;
+         position: relative;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         }
+         .header-logo {
+         width: 80px;
+         height: 80px;
+         margin-bottom: 20px;
+         border-radius: 10px;
+         box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+         }
+         .header h1 {
+         font-size: 2.5rem;
+         margin-bottom: 10px;
+         position: relative;
+         }
+         .header p {
+         font-size: 1.1rem;
+         opacity: 0.9;
+         position: relative;
+         }
+         .filters-section {
+         padding: 30px;
+         background: #f8f9fa;
+         border-bottom: 1px solid #e9ecef;
+         }
+         .filters-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+         gap: 20px;
+         margin-bottom: 20px;
+         }
+         .filter-group {
+         background: white;
+         padding: 20px;
+         border-radius: 10px;
+         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+         }
+         .filter-group label {
+         display: block;
+         font-weight: 600;
+         color: #2c3e50;
+         margin-bottom: 10px;
+         font-size: 1rem;
+         }
+         .multi-select {
+         border: 2px solid #e9ecef;
+         border-radius: 8px;
+         padding: 10px;
+         max-height: 120px;
+         overflow-y: auto;
+         background: white;
+         }
+         .checkbox-item {
+         display: flex;
+         align-items: center;
+         padding: 5px 0;
+         border-bottom: 1px solid #f1f3f4;
+         }
+         .checkbox-item:last-child {
+         border-bottom: none;
+         }
+         .checkbox-item input[type="checkbox"] {
+         margin-right: 10px;
+         transform: scale(1.2);
+         accent-color: #667eea;
+         }
+         .select-all-item {
+         background: #f8f9fa;
+         padding: 8px 10px;
+         margin: -10px -10px 8px -10px;
+         border-bottom: 2px solid #e9ecef;
+         font-weight: 600;
+         }
+         .select-all-item input[type="checkbox"] {
+         margin-right: 10px;
+         transform: scale(1.3);
+         accent-color: #28a745;
+         }
+         .checkbox-item label {
+         margin: 0;
+         font-weight: 400;
+         cursor: pointer;
+         flex: 1;
+         }
+         .action-buttons {
+         display: flex;
+         gap: 15px;
+         justify-content: center;
+         flex-wrap: wrap;
+         }
+         .btn {
+         padding: 12px 24px;
+         border: none;
+         border-radius: 8px;
+         font-size: 1rem;
+         font-weight: 600;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         text-decoration: none;
+         display: inline-flex;
+         align-items: center;
+         gap: 8px;
+         }
+         .btn-primary {
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         color: white;
+         }
+         .btn-primary:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+         }
+         .btn-success {
+         background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+         color: white;
+         }
+         .btn-success:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 5px 15px rgba(86, 171, 47, 0.4);
+         }
+         .btn-info {
+         background: linear-gradient(135deg, #3498db 0%, #74b9ff 100%);
+         color: white;
+         }
+         .btn-info:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+         }
+         .results-section {
+         padding: 30px;
+         }
+         .results-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 20px;
+         flex-wrap: wrap;
+         gap: 15px;
+         }
+         .results-title {
+         font-size: 1.5rem;
+         color: #2c3e50;
+         font-weight: 600;
+         }
+         .student-count {
+         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         color: white;
+         padding: 8px 16px;
+         border-radius: 20px;
+         font-weight: 600;
+         }
+         .table-container {
+         overflow-x: auto;
+         border-radius: 10px;
+         box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         background: white;
+         min-width: 600px;
+         }
+         th {
+         background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+         color: white;
+         padding: 15px;
+         text-align: left;
+         font-weight: 600;
+         position: sticky;
+         top: 0;
+         z-index: 10;
+         }
+         td {
+         padding: 12px 15px;
+         border-bottom: 1px solid #e9ecef;
+         }
+         tr:nth-child(even) {
+         background: #f8f9fa;
+         }
+         tr:hover {
+         background: #e3f2fd;
+         transition: all 0.2s ease;
+         }
+         .house-badge {
+         padding: 4px 12px;
+         border-radius: 15px;
+         font-size: 0.85rem;
+         font-weight: 600;
+         text-align: center;
+         display: inline-block;
+         min-width: 70px;
+         }
+         .house-ruby { background: #ffebee; color: #c62828; }
+         .house-emerald { background: #e8f5e8; color: #2e7d32; }
+         .house-sapphire { background: #e3f2fd; color: #1565c0; }
+         .house-topaz { background: #fff3e0; color: #ef6c00; }
+         .gender-badge {
+         padding: 4px 8px;
+         border-radius: 10px;
+         font-size: 0.8rem;
+         font-weight: 600;
+         }
+         .gender-m { background: #e1f5fe; color: #0277bd; }
+         .gender-f { background: #fce4ec; color: #c2185b; }
+         .no-results {
+         text-align: center;
+         padding: 60px 20px;
+         color: #6c757d;
+         }
+         .gender-unknown { 
+         background: #f5f5f5; 
+         color: #666; 
+         }
+         .house-unknown { 
+         background: #f5f5f5; 
+         color: #666; 
+         }
+         .no-results-icon {
+         font-size: 4rem;
+         margin-bottom: 20px;
+         opacity: 0.5;
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(0, 0, 0, 0.7);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 10000;
+         opacity: 0;
+         visibility: hidden;
+         transition: all 0.3s ease;
+         backdrop-filter: blur(5px);
+         }
+         .loading-overlay.active {
+         opacity: 1;
+         visibility: visible;
+         }
+         .loading-content {
+         background: white;
+         padding: 40px;
+         border-radius: 20px;
+         text-align: center;
+         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+         max-width: 300px;
+         width: 90%;
+         }
+         .spinner {
+         width: 50px;
+         height: 50px;
+         border: 4px solid #f3f3f3;
+         border-top: 4px solid #4facfe;
+         border-radius: 50%;
+         animation: spin 1s linear infinite;
+         margin: 0 auto 20px;
+         }
+         @keyframes spin {
+         0% { transform: rotate(0deg); }
+         100% { transform: rotate(360deg); }
+         }
+         .loading-text {
+         font-size: 1.1rem;
+         font-weight: 600;
+         color: #2c3e50;
+         margin-bottom: 10px;
+         }
+         .loading-subtext {
+         font-size: 0.9rem;
+         color: #7f8c8d;
+         }
+         @media (max-width: 768px) {
+         .header h1 {
+         font-size: 2rem;
+         }
+         .filters-grid {
+         grid-template-columns: 1fr;
+         }
+         .action-buttons {
+         flex-direction: column;
+         align-items: center;
+         }
+         .btn {
+         width: 100%;
+         max-width: 300px;
+         justify-content: center;
+         }
+         .results-header {
+         flex-direction: column;
+         text-align: center;
+         }
+         .loading-content {
+         padding: 30px 20px;
+         }
+         }
+         /* Print Styles */
+         @media print {
+         body {
+         background: white;
+         padding: 0;
+         margin: 0;
+         font-size: 10px;
+         line-height: 1.2;
+         }
+         .container {
+         box-shadow: none;
+         border-radius: 0;
+         margin: 0;
+         padding: 0;
+         }
+         .filters-section,
+         .action-buttons {
+         display: none;
+         }
+         .header {
+         background: white;
+         color: black;
+         border-bottom: 2px solid #000;
+         padding: 10px;
+         margin-bottom: 5px;
+         }
+         .header h1 {
+         font-size: 18px;
+         margin-bottom: 5px;
+         }
+         .header p {
+         font-size: 12px;
+         margin-bottom: 0;
+         }
+         .header-logo {
+         width: 50px;
+         height: 50px;
+         margin-bottom: 10px;
+         }
+         .results-section {
+         padding: 5px;
+         }
+         .results-header {
+         margin-bottom: 8px;
+         }
+         .results-title {
+         font-size: 14px;
+         font-weight: bold;
+         margin-bottom: 3px;
+         }
+         .student-count {
+         background: #f0f0f0;
+         color: black;
+         padding: 2px 8px;
+         font-size: 10px;
+         border: 1px solid #ccc;
+         }
+         .table-container {
+         box-shadow: none;
+         margin: 0;
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         font-size: 9px;
+         margin: 0;
+         }
+         th {
+         background: #f0f0f0 !important;
+         color: black !important;
+         padding: 4px 3px;
+         font-size: 9px;
+         font-weight: bold;
+         border: 1px solid #000;
+         text-align: center;
+         }
+         td {
+         padding: 2px 3px;
+         border: 1px solid #ccc;
+         font-size: 8px;
+         text-align: center;
+         }
+         tr:hover {
+         background: transparent !important;
+         transform: none !important;
+         }
+         tr:nth-child(even) {
+         background: #fafafa !important;
+         }
+         th:nth-child(2),
+         td:nth-child(2) {
+         text-align: left;
+         }
+         .house-badge,
+         .gender-badge {
+         background: none !important;
+         color: black !important;
+         padding: 0;
+         font-size: 8px;
+         font-weight: normal;
+         border: none;
+         display: inline;
+         }
+         /* Page break settings for optimal printing */
+         @page {
+         margin: 0.3in;
+         size: A4;
+         }
+         /* Prevent page breaks inside table rows */
+         tr {
+         page-break-inside: avoid;
+         }
+         /* Allow page breaks after every 45 rows for better distribution */
+         tbody tr:nth-child(45n) {
+         page-break-after: auto;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container">
+         <div class="header">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="header-logo">
+            <h1>Jamna Vidyapeeth</h1>
+            <p>Student House List Generator</p>
+         </div>
+         <div class="filters-section">
+            <div class="filters-grid">
+               <div class="filter-group">
+                  <label>Select Classes:</label>
+                  <div class="multi-select" id="classFilter">
+                     <div class="select-all-item">
+                        <input type="checkbox" id="selectAllClasses" onchange="toggleSelectAll('classFilter', 'selectAllClasses')">
+                        <label for="selectAllClasses">Select All Classes</label>
+                     </div>
+                     <!-- Classes will be populated by JavaScript -->
+                  </div>
+               </div>
+               <div class="filter-group">
+                  <label>Select Gender:</label>
+                  <div class="multi-select" id="genderFilter">
+                     <div class="select-all-item">
+                        <input type="checkbox" id="selectAllGenders" onchange="toggleSelectAll('genderFilter', 'selectAllGenders')">
+                        <label for="selectAllGenders">Select All Genders</label>
+                     </div>
+                     <div class="checkbox-item">
+                        <input type="checkbox" id="boys" value="M" onchange="updateSelectAllState('genderFilter', 'selectAllGenders')">
+                        <label for="boys">Boys</label>
+                     </div>
+                     <div class="checkbox-item">
+                        <input type="checkbox" id="girls" value="F" onchange="updateSelectAllState('genderFilter', 'selectAllGenders')">
+                        <label for="girls">Girls</label>
+                     </div>
+                  </div>
+               </div>
+               <div class="filter-group">
+                  <label>Select Houses:</label>
+                  <div class="multi-select" id="houseFilter">
+                     <div class="select-all-item">
+                        <input type="checkbox" id="selectAllHouses" onchange="toggleSelectAll('houseFilter', 'selectAllHouses')">
+                        <label for="selectAllHouses">Select All Houses</label>
+                     </div>
+                     <div class="checkbox-item">
+                        <input type="checkbox" id="ruby" value="Ruby" onchange="updateSelectAllState('houseFilter', 'selectAllHouses')">
+                        <label for="ruby">Ruby</label>
+                     </div>
+                     <div class="checkbox-item">
+                        <input type="checkbox" id="emerald" value="Emerald" onchange="updateSelectAllState('houseFilter', 'selectAllHouses')">
+                        <label for="emerald">Emerald</label>
+                     </div>
+                     <div class="checkbox-item">
+                        <input type="checkbox" id="sapphire" value="Sapphire" onchange="updateSelectAllState('houseFilter', 'selectAllHouses')">
+                        <label for="sapphire">Sapphire</label>
+                     </div>
+                     <div class="checkbox-item">
+                        <input type="checkbox" id="topaz" value="Topaz" onchange="updateSelectAllState('houseFilter', 'selectAllHouses')">
+                        <label for="topaz">Topaz</label>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="action-buttons">
+               <button class="btn btn-primary" onclick="applyFilters()">
+               🔍 Apply Filters
+               </button>
+               <button class="btn btn-success" onclick="printList()">
+               🖨️ Print List
+               </button>
+               <button class="btn btn-info" onclick="downloadCSV()">
+               📥 Download CSV
+               </button>
+            </div>
+         </div>
+         <div class="results-section">
+            <div class="results-header">
+               <div class="results-title" id="resultsTitle">All Students</div>
+               <div class="student-count" id="studentCount">0 Students</div>
+            </div>
+            <div class="table-container">
+               <table id="studentsTable">
+                  <thead>
+                     <tr>
+                        <th>S.No.</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Gender</th>
+                        <th>House</th>
+                     </tr>
+                  </thead>
+                  <tbody id="studentsTableBody">
+                     <!-- Students will be populated by JavaScript -->
+                  </tbody>
+               </table>
+            </div>
+            <div id="noResults" class="no-results" style="display: none;">
+               <div class="no-results-icon">📚</div>
+               <h3>No students found</h3>
+               <p>Try adjusting your filters to see more results.</p>
+            </div>
+         </div>
+      </div>
+      <!-- Loading Overlay -->
+      <div id="loadingOverlay" class="loading-overlay">
+         <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading...</div>
+            <div class="loading-subtext">Please wait a moment.</div>
+         </div>
+      </div>
+      <script>
+         // Global variables
+         let students = [];
+         
+         let filteredStudents = [...students];
+         
+         // Initialize the page
+         function init() {
+             populateClassFilter();
+             displayStudents(students);
+         }
+         
+         // Populate class filter checkboxes
+         function populateClassFilter() {
+             const classFilter = document.getElementById('classFilter');
+             
+             // Add "Select All" checkbox first (it's already in HTML)
+             
+             // Add individual class checkboxes
+             classes.forEach(className => {
+                 const checkboxItem = document.createElement('div');
+                 checkboxItem.className = 'checkbox-item';
+                 checkboxItem.innerHTML = `
+                     <input type="checkbox" id="class_${className}" value="${className}" onchange="updateSelectAllState('classFilter', 'selectAllClasses')">
+                     <label for="class_${className}">${className}</label>
+                 `;
+                 classFilter.appendChild(checkboxItem);
+             });
+         }
+         
+         // Toggle Select All functionality
+         function toggleSelectAll(filterId, selectAllId) {
+             const filterGroup = document.getElementById(filterId);
+             const selectAllCheckbox = document.getElementById(selectAllId);
+             const checkboxes = filterGroup.querySelectorAll('.checkbox-item input[type="checkbox"]');
+             
+             checkboxes.forEach(checkbox => {
+                 checkbox.checked = selectAllCheckbox.checked;
+             });
+         }
+         
+         // Update Select All state based on individual checkboxes
+         function updateSelectAllState(filterId, selectAllId) {
+             const filterGroup = document.getElementById(filterId);
+             const selectAllCheckbox = document.getElementById(selectAllId);
+             const checkboxes = filterGroup.querySelectorAll('.checkbox-item input[type="checkbox"]');
+             const checkedCheckboxes = filterGroup.querySelectorAll('.checkbox-item input[type="checkbox"]:checked');
+             
+             if (checkedCheckboxes.length === 0) {
+                 selectAllCheckbox.checked = false;
+                 selectAllCheckbox.indeterminate = false;
+             } else if (checkedCheckboxes.length === checkboxes.length) {
+                 selectAllCheckbox.checked = true;
+                 selectAllCheckbox.indeterminate = false;
+             } else {
+                 selectAllCheckbox.checked = false;
+                 selectAllCheckbox.indeterminate = true;
+             }
+         }
+         
+         // Apply filters and update the display
+         function applyFilters() {
+         const selectedClasses = getSelectedValues('classFilter');
+         const selectedGenders = getSelectedValues('genderFilter');
+         const selectedHouses = getSelectedValues('houseFilter');
+         
+         filteredStudents = students.filter(student => {
+         const classMatch = selectedClasses.length === 0 || selectedClasses.includes(student.class);
+         
+         // Safe gender check - ignore null/undefined values
+         const genderMatch = selectedGenders.length === 0 || 
+                           (student.gender && selectedGenders.includes(student.gender));
+         
+         // Safe house check - ignore null/undefined values
+         const houseMatch = selectedHouses.length === 0 || 
+                         (student.house && selectedHouses.includes(student.house));
+         
+         return classMatch && genderMatch && houseMatch;
+         });
+         
+         displayStudents(filteredStudents);
+         updateResultsTitle(selectedClasses, selectedGenders, selectedHouses);
+         }
+         
+         // Get selected values from a filter group
+         function getSelectedValues(filterId) {
+             const filterGroup = document.getElementById(filterId);
+             const checkboxes = filterGroup.querySelectorAll('input[type="checkbox"]:checked');
+             return Array.from(checkboxes).map(cb => cb.value);
+         }
+         
+         // Display students in the table
+         function displayStudents(studentsToShow) {
+         const tableBody = document.getElementById('studentsTableBody');
+         const noResults = document.getElementById('noResults');
+         const table = document.getElementById('studentsTable');
+         const studentCount = document.getElementById('studentCount');
+         
+         if (studentsToShow.length === 0) {
+         table.style.display = 'none';
+         noResults.style.display = 'block';
+         studentCount.textContent = '0 Students';
+         return;
+         }
+         
+         table.style.display = 'table';
+         noResults.style.display = 'none';
+         
+         tableBody.innerHTML = '';
+         studentsToShow.forEach((student, index) => {
+         // Safe gender handling
+         const genderDisplay = student.gender ? 
+            (student.gender === 'M' ? 'Boy' : 'Girl') : 
+            'Not Specified';
+         const genderClass = student.gender ? 
+            `gender-${student.gender.toLowerCase()}` : 
+            'gender-unknown';
+         
+         // Safe house handling
+         const houseDisplay = student.house || 'Not Assigned';
+         const houseClass = student.house ? 
+            `house-${student.house.toLowerCase()}` : 
+            'house-unknown';
+         
+         const row = tableBody.insertRow();
+         row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${student.name}</td>
+            <td>${student.class}</td>
+            <td><span class="gender-badge ${genderClass}">${genderDisplay}</span></td>
+            <td><span class="house-badge ${houseClass}">${houseDisplay}</span></td>
+         `;
+         });
+         
+         studentCount.textContent = `${studentsToShow.length} Student${studentsToShow.length !== 1 ? 's' : ''}`;
+         }
+         
+         // Update results title based on filters
+         function updateResultsTitle(classes, genders, houses) {
+         let title = 'List of ';
+         let titleParts = [];
+         
+         // Add house information
+         if (houses.length > 0) {
+         titleParts.push(houses.join(', ') + ' House');
+         }
+         
+         // Add gender information
+         if (genders.length === 1) {
+         titleParts.push(genders[0] === 'M' ? 'Boys' : 'Girls');
+         } else {
+         titleParts.push('Students');
+         }
+         
+         // Combine the parts
+         title += titleParts.join(' ');
+         
+         // Add class information
+         if (classes.length > 0) {
+         title += ` (Classes: ${classes.join(', ')})`;
+         } else {
+         title += ' (All Classes)';
+         }
+         
+         document.getElementById('resultsTitle').textContent = title;
+         }
+         
+         // Print functionality
+         function printList() {
+             const originalTitle = document.title;
+             const resultsTitle = document.getElementById('resultsTitle').textContent;
+             document.title = `${resultsTitle} - Jamna Vidyapeeth`;
+             
+             window.print();
+             
+             setTimeout(() => {
+                 document.title = originalTitle;
+             }, 1000);
+         }
+         
+         // Download CSV functionality
+         function downloadCSV() {
+             const csvContent = convertToCSV(filteredStudents);
+             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+             const link = document.createElement('a');
+             
+             if (link.download !== undefined) {
+                 const url = URL.createObjectURL(blob);
+                 link.setAttribute('href', url);
+                 link.setAttribute('download', 'jamna_vidyapeeth_students.csv');
+                 link.style.visibility = 'hidden';
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+             }
+         }
+         
+         // Convert students array to CSV format
+         function convertToCSV(students) {
+         const headers = ['S.No.', 'Name', 'Class', 'Gender', 'House'];
+         const csvRows = [];
+         
+         // Add header row
+         csvRows.push(headers.join(','));
+         
+         // Add data rows
+         students.forEach((student, index) => {
+         // Safe handling for null values in CSV export
+         const genderDisplay = student.gender ? 
+            (student.gender === 'M' ? 'Boy' : 'Girl') : 
+            'Not Specified';
+         const houseDisplay = student.house || 'Not Assigned';
+         
+         const row = [
+            index + 1,
+            `"${student.name}"`,
+            `"${student.class}"`,
+            `"${genderDisplay}"`,
+            `"${houseDisplay}"`
+         ];
+         csvRows.push(row.join(','));
+         });
+         
+         return csvRows.join('\n');
+         }
+         
+          function showLoadingOverlay() {
+              const overlay = document.getElementById('loadingOverlay');
+              overlay.classList.add('active');
+          }
+          
+          function hideLoadingOverlay() {
+              const overlay = document.getElementById('loadingOverlay');
+              overlay.classList.remove('active');
+          }
+         
+          window.onload = async function() {
+              try {
+                  showLoadingOverlay();
+                  students = await invokeFunction('get_students_sorted');
+                  // Initialize the application
+                  init();
+                  hideLoadingOverlay();
+              } catch (error) {
+                  console.error('Error loading students:', error);
+                  hideLoadingOverlay();
+              }
+          };
+      </script>
+   </body>
+</html>

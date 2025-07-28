@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html class="light-theme" lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>JVP Marks Management</title>
+      <meta name="description" content="Sourabh Sir's Marks Manager is a smart school application to enter and track students' test and exam marks easily, keeping academic records accessible anytime, anywhere.">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <!-- Link to Material Icons font -->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="dialog.css">
+      <!-- Dialog Box Scripts -->
+      <script src="dialog.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --danger-dark: #c33c3c;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+         max-height: 9999999px;
+         }
+         body {
+         background-color: var(--light);
+         color: var(--text);
+         line-height: 1.6;
+         font-size: 16px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 20px;
+         }
+         header {
+         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+         color: white;
+         padding: 24px 0;
+         text-align: center;
+         box-shadow: var(--shadow);
+         margin-bottom: 2rem;
+         }
+         h1 {
+         margin: 0;
+         font-size: 2.25rem;
+         font-weight: 700;
+         letter-spacing: -0.025em;
+         }
+         h2 {
+         color: var(--dark);
+         font-size: 1.75rem;
+         font-weight: 700;
+         margin-bottom: 1.5rem;
+         letter-spacing: -0.025em;
+         }
+         h3 {
+         color: var(--dark);
+         font-size: 1.25rem;
+         font-weight: 600;
+         margin-bottom: 1rem;
+         letter-spacing: -0.025em;
+         }
+         .login-container, .app-container {
+         background-color: white;
+         border-radius: 12px;
+         box-shadow: var(--shadow-lg);
+         padding: 36px;
+         margin: 30px auto;
+         max-width: 800px;
+         border: 1px solid var(--border);
+         }
+         .login-container {
+         max-width: 440px;
+         }
+         .form-group {
+         margin-bottom: 24px;
+         }
+         label {
+         display: block;
+         font-weight: 600;
+         margin-bottom: 8px;
+         color: var(--dark);
+         font-size: 0.9rem;
+         }
+         input, select {
+         width: 100%;
+         padding: 12px 16px;
+         border: 1px solid var(--border);
+         border-radius: 8px;
+         font-size: 16px;
+         transition: var(--transition);
+         color: var(--text);
+         background-color: var(--light);
+         }
+         input:focus, select:focus {
+         outline: none;
+         border-color: var(--primary);
+         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+         }
+         input[type="number"] {
+         width: 80px;
+         }
+         button {
+         background-color: var(--primary);
+         color: white;
+         border: none;
+         border-radius: 8px;
+         padding: 12px 24px;
+         font-size: 16px;
+         cursor: pointer;
+         transition: var(--transition);
+         font-weight: 600;
+         box-shadow: var(--shadow-sm);
+         }
+         button:hover {
+         background-color: var(--primary-dark);
+         transform: translateY(-1px);
+         box-shadow: var(--shadow);
+         }
+         button:active {
+         transform: translateY(0);
+         }
+         .btn-secondary {
+         background-color: var(--secondary);
+         }
+         .btn-secondary:hover {
+         background-color: var(--secondary-dark);
+         }
+         .btn-logout {
+         background-color: var(--danger);
+         padding: 10px 20px;
+         font-size: 14px;
+         }
+         .btn-logout:hover, #delete-btn:hover, #cancelReportDialog:hover {
+         background-color: var(--danger-dark);
+         }
+         #delete-btn {
+         background-color: var(--danger);
+         }
+         .controls {
+         display: flex;
+         gap: 24px;
+         margin-bottom: 36px;
+         flex-wrap: wrap;
+         }
+         .controls .form-group {
+         flex: 1;
+         min-width: 200px;
+         margin-bottom: 0;
+         }
+         .students-table {
+         width: 100%;
+         margin-top: 24px;
+         border-collapse: separate;
+         border-spacing: 0;
+         border-radius: 8px;
+         overflow-x: auto;
+         box-shadow: var(--shadow-sm);
+         border: 1px solid var(--border);
+         display: block;
+         }
+         .students-table th {
+         background-color: #f3f4f6;
+         padding: 16px;
+         text-align: left;
+         font-weight: 600;
+         color: var(--dark);
+         font-size: 0.9rem;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+         border-bottom: 2px solid var(--border);
+         }
+         .students-table td {
+         padding: 16px;
+         text-align: left;
+         border-bottom: 1px solid var(--border);
+         }
+         .students-table tr:last-child td {
+         border-bottom: none;
+         }
+         .student-row {
+         transition: background-color 0.2s;
+         }
+         .students-table tr:hover {
+         background-color: rgba(79, 70, 229, 0.05);
+         }
+         .marks-input {
+         width: 80px;
+         text-align: center;
+         border-radius: 6px;
+         padding: 8px;
+         border: 1px solid var(--border);
+         }
+         .form-actions {
+         margin-top: 36px;
+         display: flex;
+         justify-content: flex-end;
+         gap: 16px;
+         }
+         .stats-container {
+         margin-top: 36px;
+         padding: 28px;
+         background-color: var(--light);
+         border-radius: 12px;
+         box-shadow: var(--shadow);
+         border: 1px solid var(--border);
+         }
+         .stats-grid {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 20px;
+         margin-top: 20px;
+         }
+         .stat-card {
+         background-color: white;
+         padding: 24px;
+         border-radius: 10px;
+         box-shadow: var(--shadow);
+         border: 1px solid var(--border);
+         transition: var(--transition);
+         }
+         .stat-card:hover {
+         transform: translateY(-3px);
+         box-shadow: var(--shadow-lg);
+         }
+         .stat-value {
+         font-size: 2.2rem;
+         font-weight: 700;
+         color: var(--primary);
+         margin: 8px 0;
+         letter-spacing: -0.025em;
+         }
+         .stat-title {
+         font-size: 0.875rem;
+         font-weight: 500;
+         color: #6b7280;
+         text-transform: uppercase;
+         letter-spacing: 0.05em;
+         }
+         .alert {
+         padding: 16px;
+         margin-bottom: 24px;
+         border-radius: 8px;
+         color: white;
+         background-color: var(--danger);
+         animation: fadeIn 0.3s ease;
+         }
+         .alert-success {
+         background-color: var(--secondary);
+         }
+         .app-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 24px;
+         }
+         .clearfix {
+         clear: both;
+         }
+         @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(-10px); }
+         to { opacity: 1; transform: translateY(0); }
+         }
+         @media (max-width: 768px) {
+         .container {
+         padding: 12px;
+         }
+         .login-container, .app-container {
+         padding: 24px;
+         margin: 16px 8px;
+         border-radius: 10px;
+         }
+         .controls {
+         flex-direction: column;
+         gap: 16px;
+         }
+         .controls .form-group {
+         width: 100%;
+         }
+         .students-table th, .students-table td {
+         padding: 12px;
+         }
+         h1 {
+         font-size: 1.75rem;
+         }
+         .stats-grid {
+         grid-template-columns: 1fr;
+         }
+         }
+         .school-header {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 20px;
+         }
+         .school-logo {
+         height: 80px;
+         border-radius: 50%;
+         background-color: white;
+         padding: 5px;
+         box-shadow: var(--shadow);
+         }
+         .school-info {
+         text-align: left;
+         }
+         .school-name {
+         font-size: 2.5rem;
+         margin-bottom: 5px;
+         }
+         .system-name {
+         font-size: 1.5rem;
+         color: rgba(255, 255, 255, 0.9);
+         font-weight: 500;
+         margin: 0;
+         }
+         .user-info {
+         text-align: center;
+         margin-top: 16px;
+         }
+         .user-avatar {
+         color: white;        
+         font-size: 36px;
+         vertical-align: middle;
+         }
+         #signed-in-username {
+         margin-left: 6px;
+         }
+         @media (max-width: 768px) {
+         .school-header {
+         flex-direction: column;
+         gap: 10px;
+         }
+         .school-info {
+         text-align: center;
+         }
+         .school-name {
+         font-size: 1.8rem;
+         }
+         .system-name {
+         font-size: 1.2rem;
+         }
+         #signed-in-username {
+         margin-left: 3px;
+         }
+         }
+         .modal {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(0, 0, 0, 0.5);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 1000;
+         }
+         .modal-content {
+         background-color: white;
+         padding: 30px;
+         border-radius: 12px;
+         box-shadow: var(--shadow-lg);
+         width: 90%;
+         max-width: 500px;
+         animation: fadeIn 0.3s ease;
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         .hidden {
+         display: none;
+         }
+         @keyframes spin {
+         to { transform: rotate(360deg); }
+         }
+         #add-exam-btn, #score-insight-btn, #generate-report-btn {
+         margin-top: 10px;
+         min-width: 180px;
+         display: inline-block;
+         }
+         .input-group {
+         position: relative;
+         }
+         .input-group input {
+         padding-right: 90px; /* space for the suffix */
+         }
+         .domain-suffix {
+         position: absolute;
+         right: 16px;
+         top: 50%;
+         transform: translateY(-50%);
+         color: #888;
+         font-size: 14px;
+         pointer-events: none;
+         user-select: none;
+         }
+         .report-dialog-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(0, 0, 0, 0.5);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         z-index: 1000;
+         opacity: 0;
+         visibility: hidden;
+         transition: var(--transition);
+         }
+         .report-dialog-overlay.active {
+         opacity: 1;
+         visibility: visible;
+         }
+         .report-dialog {
+         background-color: white;
+         border-radius: 8px;
+         box-shadow: var(--shadow-lg);
+         width: 90%;
+         max-width: 500px;
+         overflow: hidden;
+         transform: translateY(-20px);
+         transition: var(--transition);
+         }
+         .report-dialog-overlay.active .report-dialog {
+         transform: translateY(0);
+         }
+         .report-dialog-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         padding: 16px 20px;
+         border-bottom: 1px solid var(--border);
+         }
+         .report-dialog-header h3 {
+         font-size: 18px;
+         color: var(--dark);
+         font-weight: 600;
+         margin: 0;
+         }
+         .close-button {
+         background: none;
+         border: none;
+         font-size: 24px;
+         color: var(--text);
+         cursor: pointer;
+         padding: 0;
+         line-height: 1;
+         transition: var(--transition);
+         }
+         .close-button:hover {
+         color: var(--danger);
+         }
+         #cancelReportDialog {
+         background: var(--danger);
+         }
+         .report-dialog-body {
+         padding: 20px;
+         }
+         .report-dialog-body p {
+         color: var(--text);
+         margin-bottom: 16px;
+         }
+         .report-buttons {
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+         }
+         .report-button {
+         width: 100%;
+         padding: 14px 16px;
+         background-color: white;
+         border: 1px solid var(--border);
+         border-radius: 6px;
+         font-size: 15px;
+         font-weight: 500;
+         color: var(--dark);
+         text-align: left;
+         cursor: pointer;
+         transition: var(--transition);
+         }
+         .report-button:hover {
+         background-color: rgba(79, 70, 229, 0.05);
+         border-color: rgba(79, 70, 229, 0.3);
+         color: var(--primary);
+         }
+         .report-button.selected {
+         background-color: rgba(79, 70, 229, 0.1);
+         border-color: var(--primary);
+         color: var(--primary);
+         }
+         .report-dialog-footer {
+         display: flex;
+         justify-content: flex-end;
+         padding: 16px 20px;
+         border-top: 1px solid var(--border);
+         gap: 12px;
+         }
+      </style>
+   </head>
+   <body>
+      <div id="loading-overlay" class="loading-overlay hidden">
+         <div class="spinner"></div>
+      </div>
+      <header>
+         <div class="container">
+            <div class="school-header">
+               <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="school-logo">
+               <div class="school-info">
+                  <h1 class="school-name">Jamna Vidyapeeth</h1>
+                  <h2 class="system-name">Student Marks Management System</h2>
+                  <div style="display: none" id="user-info" class="user-info">
+                     <span class="user-avatar material-icons">account_circle</span>
+                     <span id="signed-in-username">Sourabh</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <div class="container">
+         <!-- Login Section -->
+         <div id="login-section" class="login-container">
+            <h2>Teacher Login</h2>
+            <div id="login-error" class="alert hidden"></div>
+            <div class="form-group">
+               <label for="username">Username</label>
+               <div class="input-group">
+                  <input type="text" id="username" placeholder="Enter your username">
+                  <span class="domain-suffix">@jvp.com</span>
+               </div>
+            </div>
+            <div class="form-group">
+               <label for="password">Password</label>
+               <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <button id="login-btn" class="btn-secondary">Login</button>
+         </div>
+         <!-- App Section (Hidden by default) -->
+         <div id="app-section" class="app-container hidden">
+            <div class="app-header">
+               <h2>Marks Entry Form</h2>
+               <button id="logout-btn" class="btn-logout">Logout</button>
+            </div>
+            <div id="feedback-message" class="alert hidden"></div>
+            <div class="controls">
+               <div class="form-group">
+                  <label for="class-select">Select Class</label>
+                  <select id="class-select">
+                     <option value="">-- Select Class --</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="subject-select">Select Subject</label>
+                  <select id="subject-select">
+                     <option value="">-- Select Subject --</option>
+                  </select>
+               </div>
+               <div class="form-group">
+                  <label for="exam-select">Select Exam</label>
+                  <select id="exam-select">
+                     <option value="">-- Select Exam --</option>
+                  </select>
+                  <div class="form-group">
+                     <label for="max-marks-input" class="hidden">Maximum Marks</label>
+                     <input type="number" id="max-marks-input" min="1" max="100" value="20" class="hidden">
+                  </div>
+                  <button id="add-exam-btn" class="btn-secondary">Add New Exam</button>
+                  <button id="edit-exam-btn" class="btn-secondary">Edit Exam Details</button>
+                  <button id="score-insight-btn" class="btn-secondary" data-class="" data-exam="" data-sub="" style="display: none">Score Insight</button>
+                  <button id="generate-report-btn" class="btn-secondary" data-class="" style="display: none">Generate Report</button>
+               </div>
+            </div>
+            <div id="marks-form-container" class="hidden">
+               <h3>Enter Student Marks</h3>
+               <p id="max-marks-display"></p>
+               <table class="students-table">
+                  <thead>
+                     <tr>
+                        <th>Roll No.</th>
+                        <th>Student Name</th>
+                        <th id="subject-header">Marks</th>
+                        <th>Remark</th>
+                     </tr>
+                  </thead>
+                  <tbody id="students-list">
+                     <!-- Student rows will be populated here -->
+                  </tbody>
+               </table>
+               <div class="form-actions">
+                  <button id="clear-btn">Clear</button>
+                  <button id="submit-btn" class="btn-secondary">Submit</button>
+                  <button id="delete-btn">Delete</button>
+               </div>
+               <div id="stats-container" class="stats-container hidden">
+                  <h3>Class Statistics</h3>
+                  <div class="stats-grid">
+                     <div class="stat-card">
+                        <div class="stat-title">Average Score</div>
+                        <div id="avg-score" class="stat-value">0</div>
+                     </div>
+                     <div class="stat-card">
+                        <div class="stat-title">Highest Score</div>
+                        <div id="max-score" class="stat-value">0</div>
+                     </div>
+                     <div class="stat-card">
+                        <div class="stat-title">Passing Rate</div>
+                        <div id="pass-rate" class="stat-value">0%</div>
+                     </div>
+                     <div class="stat-card">
+                        <div class="stat-title">Attendance</div>
+                        <div id="attendance-rate" class="stat-value">0%</div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Add/Edit Exam Modal -->
+      <div id="exam-modal" class="modal hidden">
+         <div class="modal-content">
+            <h3 id="exam-modal-heading">Add New Exam</h3>
+            <div class="form-group">
+               <label for="new-exam-name">Exam Name</label>
+               <input type="text" id="new-exam-name" placeholder="e.g. Test 1">
+            </div>
+            <div class="form-group">
+               <label for="new-exam-marks">Maximum Marks</label>
+               <input type="number" id="new-exam-marks" min="1" max="100" value="10">
+            </div>
+            <div class="form-group">
+               <label>This exam will be added for:</label>
+               <p id="exam-class-subject-info">Class: [Selected Class], Subject: [Selected Subject]</p>
+            </div>
+            <div class="form-actions">
+               <button id="cancel-exam-btn">Cancel</button>
+               <button id="save-exam-btn" class="btn-secondary">Save</button>
+               <button id="update-exam-details-btn" class="btn-secondary">Update Details</button>
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <!-- Report Dialog Overlay Starts -->
+      <div id="reportDialogOverlay" class="report-dialog-overlay">
+         <div class="report-dialog">
+            <div class="report-dialog-header">
+               <h3>Select Report Type</h3>
+               <button id="closeReportDialogBtn" class="close-button">&times;</button>
+            </div>
+            <div class="report-dialog-body">
+               <p>Please select the type of report you want to generate:</p>
+               <div class="report-buttons">
+                  <button class="report-button" data-report-type="consolidated">
+                  Consolidated marks report
+                  </button>
+                  <button class="report-button" data-report-type="subjectwise">
+                  Marks Statements for all individual subjects
+                  </button>
+                  <button class="report-button" data-report-type="custom">
+                  Custom marks report
+                  </button>
+               </div>
+            </div>
+            <div class="report-dialog-footer">
+               <button id="cancelReportDialog" class="btn">Cancel</button>
+               <button id="generateSelectedReport" class="btn btn-primary">Generate Report</button>
+            </div>
+         </div>
+      </div>
+      <!-- Report Dialog Overlay Ends -->
+      <script>
+         // Data structures         
+         const students = {};
+         
+         // Array to hold custom class-subject specific exams
+         let customExams = [];
+         
+         // Initialize empty marks array
+         let marks = [];
+
+         // Hold maximum marks for the currently selected exam for validation checks later on
+         let maxMarksForSelectedExam = Infinity;
+         
+         // DOM Elements
+         const loginSection = document.getElementById('login-section');
+         const appSection = document.getElementById('app-section');
+         const loginBtn = document.getElementById('login-btn');
+         const logoutBtn = document.getElementById('logout-btn');
+         const loginError = document.getElementById('login-error');
+         const usernameInput = document.getElementById('username');
+         const passwordInput = document.getElementById('password');
+         const classSelect = document.getElementById('class-select');
+         const examSelect = document.getElementById('exam-select');
+         const marksFormContainer = document.getElementById('marks-form-container');
+         const studentsList = document.getElementById('students-list');
+         const maxMarksDisplay = document.getElementById('max-marks-display');
+         const clearBtn = document.getElementById('clear-btn');
+         const submitBtn = document.getElementById('submit-btn');
+         const deleteBtn = document.getElementById('delete-btn');
+         const feedbackMessage = document.getElementById('feedback-message');
+         const statsContainer = document.getElementById('stats-container');
+         const subjectSelect = document.getElementById('subject-select');
+         const scoreInsightBtn = document.getElementById('score-insight-btn');
+         const generateReportBtn = document.getElementById('generate-report-btn');
+         const userInfo = document.getElementById('user-info');
+         const signedInUsername = document.getElementById('signed-in-username');
+         
+         // Add/Edit exam functionality
+         const addExamBtn = document.getElementById('add-exam-btn');
+         const editExamBtn = document.getElementById('edit-exam-btn');
+         const examModal = document.getElementById('exam-modal');
+         const examModalHeading = document.getElementById('exam-modal-heading');
+         const newExamName = document.getElementById('new-exam-name');
+         const newExamMarks = document.getElementById('new-exam-marks');
+         const saveExamBtn = document.getElementById('save-exam-btn');
+         const updateExamDetailsBtn = document.getElementById('update-exam-details-btn');
+         const cancelExamBtn = document.getElementById('cancel-exam-btn');
+         const maxMarksInput = document.getElementById('max-marks-input');
+         
+         // Report generation overlay elements
+         const reportDialogOverlay = document.getElementById('reportDialogOverlay');
+         const closeReportDialogBtn = document.getElementById('closeReportDialogBtn');
+         const cancelReportDialog = document.getElementById('cancelReportDialog');
+         const generateSelectedReport = document.getElementById('generateSelectedReport');
+         const reportButtons = document.querySelectorAll('.report-button');
+         
+         // Store the selected report type
+         let selectedReportType = 'consolidated'; // Default selection
+         
+         // Show/hide exam modal with class and subject info
+         addExamBtn.addEventListener('click', () => {
+         const selectedClass = classSelect.value;
+         const selectedSubject = subjectSelect.value;
+
+         if (!selectedClass || !selectedSubject) {
+         showDialog({
+            title: 'Warning',
+            message: 'Please select both class and subject before adding a custom exam.',
+            type: 'alert'
+         });
+         return;
+         }
+
+         // Set heading to "Add New Exam"
+         examModalHeading.innerText = 'Add New Exam';
+
+         // Show Save Exam Button
+         saveExamBtn.style.display = 'block';
+
+         // Hide "Update Exam Details" Button
+         updateExamDetailsBtn.style.display = 'none';
+         
+         // Update the modal with selected class and subject
+         document.getElementById('exam-class-subject-info').textContent = 
+         `Class: ${selectedClass}, Subject: ${selectedSubject}`;
+         
+         examModal.classList.remove('hidden');
+         newExamName.focus();
+         });
+         
+         cancelExamBtn.addEventListener('click', () => {
+         examModal.classList.add('hidden');
+         });
+
+         // Edit existing exam button
+         editExamBtn.addEventListener('click', () => {
+         const selectedClass = classSelect.value;
+         const selectedSubject = subjectSelect.value;
+         const selectedExam = examSelect.value;
+
+         // Set heading to "Edit Exam Details"
+         examModalHeading.innerText = 'Edit Exam Details';
+
+         // Hide Save Exam Button
+         saveExamBtn.style.display = 'none';
+
+         // Show "Update Exam Details" Button
+         updateExamDetailsBtn.style.display = 'block';
+         
+         // Update the modal with selected class and subject
+         document.getElementById('exam-class-subject-info').textContent = 
+         `Class: ${selectedClass}, Subject: ${selectedSubject}`;
+         
+         examModal.classList.remove('hidden');
+         newExamName.value = selectedExam;
+         newExamMarks.value = maxMarksForSelectedExam;
+         newExamName.focus();
+         });
+         
+         cancelExamBtn.addEventListener('click', () => {
+         examModal.classList.add('hidden');
+         });
+         
+         // Save new custom exam
+         saveExamBtn.addEventListener('click', async () => {
+         const examName = newExamName.value.trim();
+         const maxMarksInput = newExamMarks.value;
+         const maxMarks = parseInt(maxMarksInput, 10);
+         const selectedClass = classSelect.value;
+         const selectedSubject = subjectSelect.value;
+         
+         if (!examName || isNaN(maxMarks) || maxMarks <= 0 || maxMarksInput.includes('.')) {
+         showDialog({
+         title: 'Warning',
+         message: 'Please enter a valid exam name and maximum marks. The maximum marks must be a positive integer without a decimal part.',
+         type: 'alert'
+         });
+         return;
+         }
+         
+         // Check if exam already exists in common exams
+         if (exams.some(exam => exam.name === examName)) {
+         showDialog({
+         title: 'Error',
+         message: 'An exam with this name already exists in common exams.',
+         type: 'alert'
+         });
+         return;
+         }
+         
+         // Check if custom exam already exists for this class and subject
+         if (customExams.some(exam => 
+         exam.name === examName && 
+         exam.class === selectedClass && 
+         exam.subject === selectedSubject)) {
+         showDialog({
+         title: 'Error',
+         message: 'An exam with this name already exists for the chosen class and subject.',
+         type: 'alert'
+         });
+         return;
+         }
+         
+         showLoading();
+         
+         // Create new custom exam object
+         const newCustomExam = {
+         'name': examName,
+         'mm': maxMarks,
+         'class': selectedClass,
+         'subject': selectedSubject
+         };
+         
+         // Insert data into Supabase
+         const insertedData = await insertData('custom_exams', newCustomExam);
+         
+         // Only proceed if data was successfully inserted
+         if (insertedData) {
+         // Add to customExams array (use the data returned from Supabase which may include IDs)
+         customExams.push(insertedData[0] || newCustomExam);
+         
+         // Add to dropdown
+         const option = document.createElement('option');
+         option.value = examName;
+         option.textContent = examName;
+         option.dataset.custom = 'true'; // Mark as custom exam
+         examSelect.appendChild(option);
+         
+         // Select the new exam
+         examSelect.value = examName;
+         
+         // Update max marks display
+         maxMarksInput.value = maxMarks;
+         
+         // Close modal and clear fields
+         examModal.classList.add('hidden');
+         newExamName.value = '';
+         newExamMarks.value = '20';
+         
+         hideLoading();
+         
+         // Show success message
+         await showDialog({
+         title: 'Success',
+         message: 'Exam added successfully!',
+         type: 'alert'
+         });
+         
+         // Trigger change event to update the form
+         examSelect.dispatchEvent(new Event('change'));
+         } else {
+         // Show error message if data insertion failed
+         showDialog({
+         title: 'Database Error',
+         message: 'Failed to save the custom exam. Please try again later.',
+         type: 'alert'
+         });
+         }
+         });
+
+         // Save changes made to an existing custom exam
+         updateExamDetailsBtn.addEventListener('click', async () => {
+         const examName = newExamName.value.trim();
+         const maxMarksInput = newExamMarks.value;
+         const maxMarks = parseInt(maxMarksInput, 10);
+         const selectedClass = classSelect.value;
+         const selectedSubject = subjectSelect.value;
+         const selectedExam = examSelect.value;
+
+         if(!exams.find(e => e.name === selectedExam)) {
+         return;
+         }
+         
+         if (!examName || isNaN(maxMarks) || maxMarks <= 0 || maxMarksInput.includes('.')) {
+         showDialog({
+         title: 'Warning',
+         message: 'Please enter a valid exam name and maximum marks. The maximum marks must be a positive integer without a decimal part.',
+         type: 'alert'
+         });
+         return;
+         }
+         
+         // Check if exam already exists in common exams
+         if (exams.some(exam => exam.name === examName)) {
+         showDialog({
+         title: 'Error',
+         message: 'An exam with this name already exists in common exams.',
+         type: 'alert'
+         });
+         return;
+         }
+         
+         // Check if custom exam already exists for this class and subject
+         if (customExams.some(exam => 
+         exam.name === examName && 
+         exam.class === selectedClass && 
+         exam.subject === selectedSubject)) {
+         showDialog({
+         title: 'Error',
+         message: 'An exam with this name already exists for the chosen class and subject.',
+         type: 'alert'
+         });
+         return;
+         }
+         
+         showLoading();
+         
+         // Update data on Supabase
+         const updatedData = await updateRow(
+                            'custom_exams',
+                            matchColumns = ['name', 'class', 'subject'],
+                            matchValues = [selectedExam, selectedClass, selectedSubject],
+                            updateColumns = ['name', 'mm'],
+                            updateValues = [examName, maxMarks]
+                            );
+         
+         // Only proceed if data was successfully updated
+         if (updatedData) {
+         // Update the local customExams array
+         const foundExam = customExams.find(item =>
+         item.name === selectedExam &&
+         item.subject === selectedSubject &&
+         item.class === selectedClass
+         );
+
+         if (foundExam) {
+         foundExam.name = examName;
+         foundExam.mm = maxMarks;
+         }
+         
+         // Find the option with value equal to selectedExam in the examSelect
+         const option = Array.from(examSelect.options).find(opt => opt.value === selectedExam);
+
+         if (option) {
+         // Update the option's value and text
+         option.value = examName;
+         option.textContent = examName;
+
+         // Apply custom data attribute
+         option.dataset.custom = 'true';
+
+         // Set the select element's value to the updated one
+         examSelect.value = examName;
+         }
+
+         
+         // Update max marks display
+         maxMarksInput.value = maxMarks;
+         
+         // Close modal and clear fields
+         examModal.classList.add('hidden');
+         newExamName.value = '';
+         newExamMarks.value = '20';
+         
+         hideLoading();
+         
+         // Show success message
+         await showDialog({
+         title: 'Success',
+         message: 'Exam added successfully!',
+         type: 'alert'
+         });
+         
+         // Trigger change event to update the form
+         examSelect.dispatchEvent(new Event('change'));
+         } else {
+         // Show error message if data insertion failed
+         showDialog({
+         title: 'Database Error',
+         message: 'Failed to update the custom exam. Please try again later.',
+         type: 'alert'
+         });
+         }
+         });
+         
+         // Update max marks when exam changes
+         examSelect.addEventListener('change', () => {
+         const selectedExam = examSelect.value;
+         const examObj = exams.find(exam => exam.name === selectedExam);
+         if (examObj) {
+         maxMarksInput.value = examObj.mm;
+         }
+         });
+         
+         // Update max marks for selected exam
+         maxMarksInput.addEventListener('change', () => {
+         const selectedExam = examSelect.value;
+         if (!selectedExam) return;
+         
+         const maxMarks = parseInt(maxMarksInput.value, 10);
+         if (isNaN(maxMarks) || maxMarks <= 0) {
+         maxMarksInput.value = getMaxMarks(selectedExam);
+         return;
+         }
+         
+         // Update exam max marks
+         const examIndex = exams.findIndex(exam => exam.name === selectedExam);
+         if (examIndex !== -1) {
+         exams[examIndex].mm = maxMarks;
+         maxMarksDisplay.textContent = `Maximum Marks: ${maxMarks}`;
+         
+         // Update input max values
+         const inputs = document.querySelectorAll('.marks-input');
+         inputs.forEach(input => {
+             input.max = maxMarks;
+         });
+         }
+         });
+         
+         scoreInsightBtn.addEventListener("click", function () {
+         const classValue = scoreInsightBtn.dataset.class;
+         const examValue = scoreInsightBtn.dataset.exam;
+         const subValue = scoreInsightBtn.dataset.sub;
+         
+         if (classValue && examValue && subValue) {
+         const url = `dashboard.html?class=${encodeURIComponent(classValue)}&sub=${encodeURIComponent(subValue)}&exam=${encodeURIComponent(examValue)}`;
+         window.open(url, "_blank");
+         }
+         
+         });
+         
+         
+         // Initialize the form
+         async function initializeForm() {
+          
+             // Remove all existing options from class, subject and exam selection
+             // Remove all options except the first one
+             while (classSelect.options.length > 1) {
+                classSelect.remove(1);
+             }
+         
+             while (subjectSelect.options.length > 1) {
+                subjectSelect.remove(1);
+             }
+         
+             while (examSelect.options.length > 1) {
+                examSelect.remove(1);
+             }
+         
+             // Populate class dropdown
+             for (const className of filteredClasses) {
+                 const option = document.createElement('option');
+                 option.value = className;
+                 option.textContent = className;
+                 classSelect.appendChild(option);
+             }
+         
+             // Populate subject dropdown
+             for (const subjectName of filteredSubjects) {
+                 const option = document.createElement('option');
+                 option.value = subjectName;
+                 option.textContent = subjectName;
+                 subjectSelect.appendChild(option);
+             }
+             
+             // Populate exam dropdown
+             exams.forEach(exam => {
+                 const option = document.createElement('option');
+                 option.value = exam.name;
+                 option.textContent = exam.name;
+                 examSelect.appendChild(option);
+             });
+         }
+         
+         // Authentication
+         loginBtn.addEventListener('click', async () => {
+         const username = usernameInput.value.trim();
+         const email = username.endsWith('@jvp.com') ? username : `${username}@jvp.com`;
+         const password = passwordInput.value.trim();
+         
+         if (!email || !password) {
+         loginError.textContent = 'Please enter both email and password!';
+         loginError.classList.remove('hidden');
+         return;
+         }
+         
+         showLoading();
+         
+         try {
+         // Use Supabase auth
+         const data = await signInUser(email, password);
+         
+         // If we reach here, login was successful
+         
+         // Store the user ID
+         window.userId = data.user.id;
+         
+         // Fetch teacher's name
+         const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+         if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
+            signedInUsername.innerText = teacherName.name;
+            userInfo.style.display = "block";
+         }
+         
+           // Filter classes and subjects to include only those this teacher is assigned to
+         await filterClassSubjects(window.userId);
+         loginSection.classList.add('hidden');
+         appSection.classList.remove('hidden');
+         loginError.classList.add('hidden');
+         
+         
+         // Pre-load all custom exams
+         await preloadCustomExams();
+         
+           // Initialize the form
+            await initializeForm();
+         
+         } catch (error) {
+         // Handle login error
+         loginError.textContent = error.message || 'Invalid email or password!';
+         loginError.classList.remove('hidden');
+         } finally {
+         hideLoading();
+         }
+         });
+         
+         // Logout functionality using Supabase
+         logoutBtn.addEventListener('click', async () => {
+         showLoading();
+         
+         try {
+         await signOutUser();
+         
+         // Clear UI state
+         loginSection.classList.remove('hidden');
+         appSection.classList.add('hidden');
+         usernameInput.value = '';
+         passwordInput.value = '';
+         userInfo.style.display = "none";
+         
+         // Clear any stored user data
+         window.userId = null;
+         } catch (error) {
+         console.error('Logout error:', error);
+         // Optionally show an error message to the user
+         } finally {
+         hideLoading();
+         }
+         });
+         
+         // Check authentication status when the window loads
+         window.addEventListener('DOMContentLoaded', async () => {
+         showLoading();
+         
+         try {
+         const isAuthenticated = await checkAuth();
+         
+         if (isAuthenticated) {
+            // User is already logged in
+         
+            // Fetch teacher's name
+            const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+            if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
+               signedInUsername.innerText = teacherName.name;
+               userInfo.style.display = "block";
+            }
+         
+            
+           // Filter classes and subjects to include only those this teacher is assigned to
+         await filterClassSubjects(window.userId);
+            
+            // Pre-load custom exams and show the app
+            await preloadCustomExams();
+           // Initialize the form
+            await initializeForm();
+            loginSection.classList.add('hidden');
+            appSection.classList.remove('hidden');
+         } else {
+            // User is not logged in, show the login form
+            loginSection.classList.remove('hidden');
+            appSection.classList.add('hidden');
+         }
+         } catch (error) {
+         console.error('Auth check error:', error);
+         // Show login screen as fallback
+         loginSection.classList.remove('hidden');
+         appSection.classList.add('hidden');
+         } finally {
+         hideLoading();
+         }
+         });
+         
+         // Function to update subject dropdown based on class selection
+         function updateSubjectDropdown(className, preserveSelection = false) {
+         // Store current selection if needed
+         const currentSelection = preserveSelection ? subjectSelect.value : null;
+         
+         // Clear existing options (except the placeholder)
+         while (subjectSelect.options.length > 1) {
+         subjectSelect.remove(1);
+         }
+         
+         // Get subjects for the chosen class
+         const relevantSubjects = getSubjectsForClass(className, true);
+         
+         relevantSubjects.forEach(subject => {
+            const option = document.createElement('option');
+            option.value = subject;
+            option.textContent = subject;
+            subjectSelect.appendChild(option);
+         });
+         
+         
+         // Restore previous selection if it exists in the new options
+         if (preserveSelection && currentSelection) {
+         // Find if the current selection still exists in the options
+         for (let i = 0; i < subjectSelect.options.length; i++) {
+            if (subjectSelect.options[i].value === currentSelection) {
+                subjectSelect.value = currentSelection;
+                return currentSelection;
+            }
+         }
+         } 
+         return null;
+         }
+         
+         // Function to update exam dropdown based on class and subject selection
+         function updateExamDropdown(className, subjectName, preserveSelection = false) {
+         // Store current selection if needed
+         const currentSelection = preserveSelection ? examSelect.value : null;
+         
+         // Clear existing options (except the placeholder)
+         while (examSelect.options.length > 1) {
+         examSelect.remove(1);
+         }
+         
+         // Add common exams (these are always available)
+         exams.forEach(exam => {
+         const option = document.createElement('option');
+         option.value = exam.name;
+         option.textContent = exam.name;
+         examSelect.appendChild(option);
+         });
+         
+         // Add custom exams for this class and subject
+         if (className && subjectName) {
+         const relevantCustomExams = customExams.filter(
+            exam => exam.class === className && exam.subject === subjectName
+         );
+         
+         relevantCustomExams.forEach(exam => {
+            const option = document.createElement('option');
+            option.value = exam.name;
+            option.textContent = exam.name;
+            option.dataset.custom = 'true'; // Mark as custom exam
+            examSelect.appendChild(option);
+         });
+         }
+         
+         // Restore previous selection if it exists in the new options
+         if (preserveSelection && currentSelection) {
+         // Find if the current selection still exists in the options
+         for (let i = 0; i < examSelect.options.length; i++) {
+            if (examSelect.options[i].value === currentSelection) {
+                examSelect.value = currentSelection;
+                return currentSelection;
+            }
+         }
+         } 
+         return null;
+         }
+         
+         // Handle class, subject and exam selection
+         async function handleSelectionChange(event) {
+         const selectedClass = classSelect.value;
+         let selectedSubject = subjectSelect.value;
+         let selectedExam = examSelect.value;
+         
+          // Hide score insight and generate report buttons at first
+         scoreInsightBtn.style.display = 'none';
+         generateReportBtn.style.display = 'none';
+         
+         // Only update the subject dropdown when class changes, not when exam/subject changes, also fetch students list for the selected class
+         if (event.target === classSelect && selectedClass) {
+         selectedSubject = updateSubjectDropdown(selectedClass, true);
+         await fetchStudentList(selectedClass, null);
+         }
+         
+         // Only update the exam dropdown when class or subject changes, not when exam changes
+         if ((event.target === classSelect || event.target === subjectSelect) && 
+         selectedClass && selectedSubject) {
+         selectedExam = updateExamDropdown(selectedClass, selectedSubject, true);
+          // Fetch student list again if selected class is 11 or 12 because subject selection might change the students
+          if(selectedClass.startsWith('11') || selectedClass.startsWith('12')) {
+            await fetchStudentList(selectedClass, selectedSubject);
+          }
+         }
+         
+         
+         if (selectedClass && selectedExam && selectedSubject) {
+         
+         // Make score insight button visible
+         scoreInsightBtn.style.display = 'inline-block';
+         
+         // Make generate report button visible
+         generateReportBtn.style.display = 'inline-block';
+         
+         // Set exam, class & subject as data attributes of the score insight and generate report buttons
+         scoreInsightBtn.dataset.exam = selectedExam;
+         scoreInsightBtn.dataset.sub = selectedSubject;
+         scoreInsightBtn.dataset.class = selectedClass;
+         generateReportBtn.dataset.class = selectedClass;
+         generateReportBtn.dataset.exam = selectedExam;
+         
+         showLoading();
+         const syncSuccess = await syncMarksData(selectedClass, selectedExam, selectedSubject);
+         
+         if(syncSuccess) {
+            hideLoading();
+         } else {
+            await showDialog({
+                title: 'Error',
+                message: 'Error syncing with database. Please try again.',
+                type: 'alert'
+            });
+            return;
+         }
+         renderStudentsList(selectedClass, selectedExam, selectedSubject);
+         marksFormContainer.classList.remove('hidden');
+         
+         // Display maximum marks
+         const maxMarks = getMaxMarks(selectedExam);
+         if (maxMarks) {
+            maxMarksDisplay.textContent = `Maximum Marks: ${maxMarks}`;
+            maxMarksInput.value = maxMarks;
+            // Also store in the global variable for validation checks
+            maxMarksForSelectedExam = Number(maxMarks);
+         }
+         } else {
+         marksFormContainer.classList.add('hidden');
+         }
+         
+         if (selectedSubject) {
+         document.getElementById('subject-header').textContent = `${selectedSubject} Marks`;
+         } else {
+         document.getElementById('subject-header').textContent = 'Marks';
+         }
+         }
+         
+         // Add event listeners with the event object passed to the handler
+         classSelect.addEventListener('change', handleSelectionChange);
+         examSelect.addEventListener('change', handleSelectionChange);
+         subjectSelect.addEventListener('change', handleSelectionChange);
+         
+         // Render students list with input fields
+         function renderStudentsList(className, examName, subjectName) {
+         studentsList.innerHTML = '';
+         
+         if (!students[className]) return;
+         
+         students[className].forEach((studentName, index) => {
+         const row = document.createElement('tr');
+         row.className = 'student-row';
+         
+         // Find existing marks for this student, exam, and subject
+         const existingRecord = marks.find(record => 
+            record.class === className && 
+            record.student === studentName && 
+            record.exam === examName &&
+            record.subject === subjectName
+         );
+         
+         const marksValue = existingRecord ? existingRecord.marks : '';
+         const status = existingRecord === undefined ? '' : 
+         (marksValue === '' ? 'Absent' : 
+         getPerformanceRemark(marksValue, examName));
+         
+         // Roll number cell (index + 1)
+         const rollCell = document.createElement('td');
+         rollCell.textContent = index + 1;
+         
+         // Student name cell
+         const nameCell = document.createElement('td');
+         nameCell.textContent = studentName;
+         
+         // Marks input cell
+         const marksCell = document.createElement('td');
+         const marksInput = document.createElement('input');
+         marksInput.type = 'number';
+         marksInput.className = 'marks-input';
+         marksInput.name = `marks-${studentName}`;
+         marksInput.dataset.student = studentName;
+         marksInput.min = 0;
+         marksInput.max = getMaxMarks(examName);
+         marksInput.step = '0.5'; // Allow decimal values
+         if (marksValue !== '') {
+            marksInput.value = marksValue;
+         }
+         
+         // Add Enter key handler to move to next input
+         marksInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const allInputs = Array.from(document.querySelectorAll('.marks-input'));
+                const currentIndex = allInputs.indexOf(e.target);
+                const nextInput = allInputs[currentIndex + 1];
+                if (nextInput) {
+                    nextInput.focus();
+                } else {
+                    // If last input, focus on submit button
+                    submitBtn.focus();
+                }
+            }
+         });
+         
+         // Status update on input change
+         marksInput.addEventListener('input', (e) => {
+            const selectedExam = examSelect.value;
+            const value = e.target.value.trim();
+            const statusCell = e.target.parentNode.nextSibling;
+            if (value === '') {
+                statusCell.textContent = 'Absent';
+            } else {
+                const mark = parseFloat(value);
+                statusCell.textContent = getPerformanceRemark(mark, selectedExam);
+            }
+         });
+         
+         marksCell.appendChild(marksInput);
+         
+         // Status cell
+         const statusCell = document.createElement('td');
+         statusCell.textContent = status;
+         
+         row.appendChild(rollCell);
+         row.appendChild(nameCell);
+         row.appendChild(marksCell);
+         row.appendChild(statusCell);
+         
+         studentsList.appendChild(row);
+         });
+         
+         // Calculate and display statistics if data exists
+         updateStatistics();
+         }
+         
+         // Add event listener to the delete button
+         deleteBtn.addEventListener('click', async function() {
+         // Get values from the select inputs
+         const selectedClass = classSelect.value;
+         const selectedExam = examSelect.value;
+         const selectedSubject = subjectSelect.value;
+         
+         // Confirm deletion
+         const confirmDelete = await showDialog({
+            	                         title: 'Confirm Delete',
+           	                         message: `Are you sure you want to delete all marks records for class ${selectedClass}, ${selectedSubject}, ${selectedExam}? This action is permanent and can't be undone. Proceed ahead?`,
+            		         type: 'confirm'
+         			            });
+         
+         if (confirmDelete) {
+         
+         try {
+            // Show loading screen
+            showLoading();
+            // 1. Delete records from Supabase 'marks' table by calling a pre-defined function on Supabase
+            const deletedMarks = await invokeFunction('delete_marks_by_exam_subject_class', {'p_exam': selectedExam, 'p_subject': selectedSubject, 'p_class': selectedClass});
+            
+            if (!Number.isInteger(deletedMarks)) {
+                throw new Error("Failed to delete marks records from database");
+            }
+            
+            // 2. Delete exam details from 'custom_exams' table
+            const deletedExam = await deleteRow(
+                'custom_exams',
+                ['name', 'class', 'subject'],
+                [selectedExam, selectedClass, selectedSubject]
+            );
+            
+            if (!deletedExam) {
+                throw new Error("Failed to delete exam details from database");
+            }
+            
+            // 3. Update local marks array (remove matching records)
+            marks = marks.filter(mark => 
+                !(mark.class === selectedClass && 
+                  mark.subject === selectedSubject && 
+                  mark.exam === selectedExam)
+            );
+         
+           // 4. Update customExams array (remove matching records)
+            customExams = customExams.filter(exam => 
+                !(exam.class === selectedClass && 
+                  exam.subject === selectedSubject && 
+                  exam.name === selectedExam)
+            );
+            
+            
+            // 5. Reset all select inputs
+            classSelect.value = "";
+            examSelect.value = "";
+            subjectSelect.value = "";
+            
+            // 5. Dispatch change event on classSelect to trigger UI update
+            classSelect.dispatchEvent(new Event('change'));
+            
+            // Show success message
+            showDialog({
+                title: 'Success',
+                message: 'Marks records for the selected class, subject and exam deleted successfully!',
+                type: 'alert'
+            });
+            
+         } catch (error) {
+            console.error("Error during deletion:", error);
+            
+            // Show error message
+            showDialog({
+                title: 'Database Error',
+                message: 'Failed to delete the records. Please try again later.',
+                type: 'alert'
+            });
+         } finally {
+            hideLoading();
+         }
+         }
+         });
+                        
+         // Submit form
+         submitBtn.addEventListener('click', async () => {
+    const selectedClass = classSelect.value;
+    const selectedExam = examSelect.value;
+    const selectedSubject = subjectSelect.value;
+    
+    if (!selectedClass || !selectedExam || !selectedSubject) return;
+    
+    // Check if any marks value exceeds the maximum allowed for the selected exam
+    const inputs = document.querySelectorAll('.marks-input');
+    for (const input of inputs) {
+        const marksValue = input.value.trim() === '' ? null : parseFloat(input.value);
+        if (marksValue !== null && marksValue > maxMarksForSelectedExam) {
+            await showDialog({
+                title: 'Invalid Marks',
+                message: `Marks cannot exceed the maximum value of ${maxMarksForSelectedExam} for this exam.`,
+                type: 'alert'
+            });
+            return; // Exit the handler without further processing
+        }
+    }
+    
+    showLoading();
+    
+    try {
+        let updatedMarks = false;
+        const marksToSync = [];
+        
+        inputs.forEach(input => {
+            const studentName = input.dataset.student;
+            const marksValue = input.value.trim() === '' ? null : parseFloat(input.value);
+            
+            // Find if record already exists
+            const existingIndex = marks.findIndex(record => 
+                record.class === selectedClass && 
+                record.student === studentName && 
+                record.exam === selectedExam &&
+                record.subject === selectedSubject
+            );
+            
+            // Current timestamp for updated_at field
+            const now = new Date();
+            const options = { timeZone: 'Asia/Kolkata', hour12: false };
+            const formatter = new Intl.DateTimeFormat('en-GB', { 
+                ...options,
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            });
+            const parts = formatter.formatToParts(now);
+            const currentTime = `${parts.find(p => p.type === 'year').value}-${parts.find(p => p.type === 'month').value}-${parts.find(p => p.type === 'day').value}T${parts.find(p => p.type === 'hour').value}:${parts.find(p => p.type === 'minute').value}:${parts.find(p => p.type === 'second').value}`;
+            
+            if (existingIndex !== -1) {
+                // Update existing record in global array
+                marks[existingIndex].marks = marksValue;
+                marks[existingIndex].updated_at = currentTime;
+                
+                // Add to sync array
+                marksToSync.push({
+                    'exam': selectedExam,
+                    'student': studentName,
+                    'class': selectedClass,
+                    'subject': selectedSubject,
+                    'marks': marksValue,
+                    'updated_at': currentTime
+                });
+            } else {
+                // Create new record object
+                const newRecord = {
+                    'exam': selectedExam,
+                    'student': studentName,
+                    'class': selectedClass,
+                    'subject': selectedSubject,
+                    'marks': marksValue,
+                    'updated_at': currentTime
+                };
+                
+                // Add to global array
+                //marks.push(newRecord);
+                
+                // Add to sync array
+                marksToSync.push(newRecord);
+            }
+            
+            updatedMarks = true;
+        });
+        
+        if (updatedMarks) {
+            // Sync with Supabase - using insert to handle both updates and inserts via a trigger on marks_view
+            
+            const syncResult = await insertData(
+                'marks_view', 
+                marksToSync
+            );
+            
+            if (syncResult) {
+                // Show success message
+                await showDialog({
+                    title: 'Success',
+                    message: 'Marks saved successfully!',
+                    type: 'alert'
+                });
+                showFeedback('Marks saved successfully!', 'success');
+                
+                // Update statistics
+                //updateStatistics();
+            } else {
+                await showDialog({
+                    title: 'Error',
+                    message: 'Error syncing with database. Please try again.',
+                    type: 'alert'
+                });
+                showFeedback('Error syncing with database. Please try again.', 'error');
+            }
+        }
+    } catch (error) {
+        console.error('Error saving marks:', error);
+        await showDialog({
+            title: 'Error',
+            message: 'An error occurred while saving marks.',
+            type: 'alert'
+        });
+        showFeedback('An error occurred while saving marks.', 'error');
+    } finally {
+        hideLoading();
+    }
+});
+         
+         // Clear form
+         clearBtn.addEventListener('click', () => {
+             const inputs = document.querySelectorAll('.marks-input');
+             inputs.forEach(input => {
+                 input.value = '';
+                 const statusCell = input.parentNode.nextSibling;
+                 statusCell.textContent = 'Absent';
+             });
+         });
+         
+         // Show feedback message
+         function showFeedback(message, type = 'error') {
+             feedbackMessage.textContent = message;
+             feedbackMessage.classList.remove('hidden', 'alert-success');
+             
+             if (type === 'success') {
+                 feedbackMessage.classList.add('alert-success');
+             }
+             
+             setTimeout(() => {
+                 feedbackMessage.classList.add('hidden');
+             }, 3000);
+         }
+         
+         // Update statistics
+         function updateStatistics() {
+         const selectedClass = classSelect.value;
+         const selectedExam = examSelect.value;
+         const selectedSubject = subjectSelect.value;
+         
+         if (!selectedClass || !selectedExam || !selectedSubject) return;
+         
+         const relevantMarks = marks.filter(record => 
+         record.class === selectedClass && 
+         record.exam === selectedExam && 
+         record.subject === selectedSubject &&
+         record.marks !== ''
+         );
+         
+         if (relevantMarks.length === 0) {
+         statsContainer.classList.add('hidden');
+         return;
+         }
+         
+         // Calculate statistics
+         const totalStudents = students[selectedClass].length;
+         const presentStudents = relevantMarks.length;
+         const marksValues = relevantMarks.map(record => parseFloat(record.marks));
+         const maxScore = Math.max(...marksValues);
+         const avgScore = marksValues.reduce((a, b) => a + b, 0) / presentStudents;
+         const passingCount = marksValues.filter(mark => mark >= getPassingMark(selectedExam)).length;
+         const passingRate = (passingCount / presentStudents) * 100;
+         const attendanceRate = (presentStudents / totalStudents) * 100;
+         
+         // Update DOM
+         document.getElementById('avg-score').textContent = avgScore.toFixed(1);
+         document.getElementById('max-score').textContent = maxScore;
+         document.getElementById('pass-rate').textContent = `${passingRate.toFixed(0)}%`;
+         document.getElementById('attendance-rate').textContent = `${attendanceRate.toFixed(0)}%`;
+         
+         statsContainer.classList.remove('hidden');
+         }
+         
+         
+         // Handle Enter key in login form
+         passwordInput.addEventListener('keydown', (e) => {
+             if (e.key === 'Enter') {
+                 loginBtn.click();
+             }
+         });
+         
+         // Loading overlay functionality
+         const loadingOverlay = document.getElementById('loading-overlay');
+         
+         function showLoading() {
+         loadingOverlay.classList.remove('hidden');
+         }
+         
+         function hideLoading() {
+         loadingOverlay.classList.add('hidden');
+         }
+         
+         async function syncMarksData(selectedClass, selectedExam, selectedSubject) {
+         try {
+         // Fetch marks data from Supabase for the selected filters
+         const fetchedMarks = await selectData(
+         "marks_view",                                   // tableName
+         false,                                     // fetchSingle (we want multiple records)
+         "*",                                       // columns (fetch all columns)
+         ["class", "exam", "subject"],              // matchColumns
+         [selectedClass, selectedExam, selectedSubject], // matchValues
+         "student",                                 // orderByColumn (sort by student name)
+         "asc"                                      // orderDirection
+         );
+         
+         // If no data fetched or error occurred, resolve with true (nothing to sync)
+         if (!fetchedMarks || fetchedMarks.length === 0) {
+         return true;
+         }
+         
+         // Update global marks array with fetched data
+         fetchedMarks.forEach(fetchedMark => {
+         const existingIndex = marks.findIndex(mark => mark.id === fetchedMark.id);
+         
+         // Handle null marks by converting to empty string
+         const marksValue = fetchedMark.marks === null ? "" : fetchedMark.marks;
+         
+         if (existingIndex !== -1) {
+         // Update existing record
+         marks[existingIndex].marks = marksValue;
+         marks[existingIndex].updated_at = fetchedMark.updated_at;
+         } else {
+         // Add new record (with the potentially modified marks value)
+         const newMark = {...fetchedMark, marks: marksValue};
+         marks.push(newMark);
+         }
+         });
+         
+         return true;
+         } catch (error) {
+         console.error("Error syncing marks data:", error.message);
+         return false;
+         }
+         }
+         
+         async function preloadCustomExams() {
+                     // Pre-load all custom exams
+         customExams = await selectData('custom_exams') || [];
+         }
+         
+         async function filterClassSubjects(teacherId) {
+         
+         // Get class-subject assignments for this teacher
+                         const assignments = await selectData(
+                             'class_subject_assignments',
+                             false,
+                             '*',
+                             ['teacher_id'],
+                             [teacherId]
+                         );
+         
+            // Filter the classes to include only classes this teacher is assigned to
+         filteredClasses = classes.filter(c => assignments.some(a => a.class === c));
+         
+           // Filter the subjects to include only classes this teacher is assigned to
+         filteredSubjects = subjects.filter(c => assignments.some(a => a.subject === c));
+         
+         }
+         
+         // Function to open the report dialog
+         function openReportDialog() {
+         reportDialogOverlay.classList.add('active');
+         document.body.style.overflow = 'hidden'; // Prevent scrolling behind the dialog
+         
+         // Reset selection to the first button
+         selectReportButton(reportButtons[0]);
+         }
+         
+         // Function to close the report dialog
+         function closeReportDialog() {
+         reportDialogOverlay.classList.remove('active');
+         document.body.style.overflow = ''; // Restore scrolling
+         }
+         
+         // Function to select a report button
+         function selectReportButton(button) {
+         // Remove selection from all buttons
+         reportButtons.forEach(btn => btn.classList.remove('selected'));
+         
+         // Add selection to the clicked button
+         button.classList.add('selected');
+         
+         // Update the selected report type
+         selectedReportType = button.dataset.reportType;
+         }
+         
+         // Function to generate the selected report
+         function generateReport() {
+         const classValue = generateReportBtn.dataset.class;
+         const exam = generateReportBtn.dataset.exam;
+         
+         let url;
+         switch (selectedReportType) {
+         case 'consolidated':
+         url = `consolidated-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
+         break;
+         case 'subjectwise':
+         url = `subjectwise-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
+         break;
+         case 'custom':
+         url = `custom-marks-report.html?class=${encodeURIComponent(classValue)}`;
+         break;
+         }
+         
+         // Open the URL in a new tab
+         window.open(url, "_blank");
+         
+         // Close the dialog
+         closeReportDialog();
+         }
+         
+         // Set up report button click handlers
+         reportButtons.forEach(button => {
+         button.addEventListener('click', function() {
+         selectReportButton(this);
+         });
+         });
+         
+         // Event Listeners
+         generateReportBtn.addEventListener('click', openReportDialog);
+         closeReportDialogBtn.addEventListener('click', closeReportDialog);
+         cancelReportDialog.addEventListener('click', closeReportDialog);
+         generateSelectedReport.addEventListener('click', generateReport);
+         
+         // Close dialog when clicking outside
+         reportDialogOverlay.addEventListener('click', function(e) {
+         if (e.target === reportDialogOverlay) {
+         closeReportDialog();
+         }
+         });
+         
+         // Close dialog with Escape key
+         document.addEventListener('keydown', function(e) {
+         if (e.key === 'Escape' && reportDialogOverlay.classList.contains('active')) {
+         closeReportDialog();
+         }
+         });
+         
+         async function fetchStudentList(classValue, subjectValue=null) {
+         showLoading();
+         let results = [];
+         let isOptionalSub = (optionalSubjects[classValue] && optionalSubjects[classValue].includes(subjectValue));
+         if(subjectValue && isOptionalSub) {
+             results = await selectData('students', false, 'name', ['class'], [classValue], 'name', 'asc', [
+   { column: "opted_subjects", operator: "ov", value: [subjectValue] } ]);
+         } else {
+             results = await selectData('students', false, 'name', ['class'], [classValue], 'name', 'asc');
+         }
+         students[classValue] = results.map(result => result.name);
+         hideLoading();
+         return true;
+         }
+      </script>
+   </body>
+</html>

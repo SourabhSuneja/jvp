@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Student Marks Display</title>
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="dialog.css">
+      <!-- Dialog Box Scripts -->
+      <script src="dialog.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+         max-height: 9999999px;
+         }
+         body {
+         background-color: var(--light);
+         color: var(--text);
+         line-height: 1.6;
+         font-size: 16px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 20px;
+         }
+         h1, h2 {
+         color: var(--dark);
+         margin-bottom: 16px;
+         }
+         h1 {
+         font-size: 24px;
+         text-align: center;
+         margin-bottom: 8px;
+         }
+         h2 {
+         font-size: 18px;
+         text-align: center;
+         margin-bottom: 24px;
+         color: var(--text);
+         font-weight: 500;
+         }
+         .form-group {
+         margin-bottom: 20px;
+         padding: 16px;
+         background-color: white;
+         border-radius: 8px;
+         box-shadow: var(--shadow-sm);
+         }
+         .form-group h3 {
+         margin-bottom: 12px;
+         font-size: 16px;
+         color: var(--primary-dark);
+         }
+         .checkbox-container {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 12px;
+         margin-bottom: 16px;
+         }
+         .checkbox-item {
+         display: flex;
+         align-items: center;
+         gap: 6px;
+         }
+         .checkbox-item input[type="checkbox"] {
+         width: 18px;
+         height: 18px;
+         cursor: pointer;
+         }
+         .checkbox-item label {
+         font-size: 14px;
+         cursor: pointer;
+         }
+         button {
+         padding: 10px 16px;
+         border: none;
+         border-radius: 4px;
+         cursor: pointer;
+         font-weight: 500;
+         transition: var(--transition);
+         }
+         .btn-primary {
+         background-color: var(--primary);
+         color: white;
+         }
+         .btn-primary:hover {
+         background-color: var(--primary-dark);
+         }
+         .btn-secondary {
+         background-color: var(--secondary);
+         color: white;
+         }
+         .btn-secondary:hover {
+         background-color: var(--secondary-dark);
+         }
+         .btn-outline {
+         background-color: white;
+         color: var(--primary);
+         border: 1px solid var(--primary);
+         }
+         .btn-outline:hover {
+         background-color: var(--light);
+         }
+         .action-buttons {
+         display: flex;
+         gap: 10px;
+         justify-content: center;
+         margin-bottom: 24px;
+         }
+         .table-container {
+         overflow-x: auto;
+         margin-bottom: 24px;
+         box-shadow: var(--shadow);
+         border-radius: 8px;
+         background-color: white;
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-bottom: 0;
+         table-layout: fixed;
+         min-width: 1200px;
+         }
+         thead th {
+         background-color: var(--primary);
+         color: white;
+         font-weight: 600;
+         text-align: left;
+         padding: 12px 16px;
+         position: sticky;
+         top: 0;
+         }
+         tbody tr:nth-child(even) {
+         background-color: #f9fafb;
+         }
+         tbody td {
+         padding: 12px 16px;
+         border-bottom: 1px solid var(--border);
+         }
+         .text-center {
+         text-align: center;
+         }
+         .badge {
+         padding: 4px 8px;
+         border-radius: 9999px;
+         font-size: 12px;
+         font-weight: 500;
+         display: inline-block;
+         }
+         .badge-success {
+         background-color: #dcfce7;
+         color: #166534;
+         }
+         .badge-warning {
+         background-color: #fef3c7;
+         color: #92400e;
+         }
+         .badge-danger {
+         background-color: #fee2e2;
+         color: #b91c1c;
+         }
+         .badge-primary {
+         background-color: #e0e7ff;
+         color: #3730a3;
+         }
+         .remark-excellent {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-excellent::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #10b981; /* Bright green */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-good {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-good::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #3b82f6; /* Bright blue */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-average {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-average::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #f59e0b; /* Amber/orange */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-poor {
+         color: black;
+         font-weight: 600;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-poor::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #ef4444; /* Bright red */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .remark-absent {
+         color: black;
+         font-style: italic;
+         position: relative;
+         padding-left: 18px;
+         }
+         .remark-absent::before {
+         content: "•";
+         position: absolute;
+         left: 5px;
+         color: #6d28d9; /* Purple */
+         font-size: 20px;
+         line-height: 0;
+         top: 50%;
+         }
+         .hide {
+         display: none;
+         }
+         .no-data {
+         text-align: center;
+         padding: 40px 0;
+         color: var(--text);
+         font-style: italic;
+         }
+         .select-all-row {
+         background-color: #f3f4f6;
+         padding: 8px 16px;
+         }
+         .rank-1 {
+         font-weight: 700;
+         color: var(--primary-dark);
+         }
+         @media print {
+         body {
+         background-color: white;
+         color: black;
+         }
+         .form-group, .action-buttons, .no-print {
+         display: none !important;
+         }
+         .container {
+         padding: 0;
+         width: 100%;
+         max-width: 100%;
+         }
+         table {
+         page-break-inside: auto;
+         }
+         tr {
+         page-break-inside: avoid;
+         page-break-after: auto;
+         }
+         thead {
+         display: table-header-group;
+         }
+         tfoot {
+         display: table-footer-group;
+         }
+         h1, h2 {
+         margin-top: 20px;
+         }
+         .table-container {
+         box-shadow: none;
+         overflow-x: visible;
+         }
+         thead th {
+         background-color: #333 !important;
+         color: white !important;
+         -webkit-print-color-adjust: exact;
+         print-color-adjust: exact;
+         }
+         tbody tr:nth-child(even) {
+         background-color: #f9f9f9 !important;
+         -webkit-print-color-adjust: exact;
+         print-color-adjust: exact;
+         }
+         }
+         @media (max-width: 768px) {
+         .action-buttons {
+         flex-direction: column;
+         }
+         .form-group {
+         padding: 12px;
+         }
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         @keyframes spin {
+         to {
+         transform: rotate(360deg);
+         }
+         }
+         .hidden {
+         display: none;
+         }
+      </style>
+   </head>
+   <body>
+      <!-- Loading Overlay -->
+      <div id="loading-overlay" class="loading-overlay">
+         <div class="spinner"></div>
+      </div>
+      <div class="container">
+         <h1>Student Performance Report</h1>
+         <h2>Class <span id="classLabel"></span>Academic Year 2025-26</h2>
+         <div class="form-group">
+            <h3>Select Exams to Display</h3>
+            <div class="select-all-row">
+               <div class="checkbox-item">
+                  <input type="checkbox" id="select-all" checked>
+                  <label for="select-all">Select All Exams</label>
+               </div>
+            </div>
+            <div class="checkbox-container" id="exam-checkboxes">
+               <!-- Exam checkboxes will be generated here -->
+            </div>
+         </div>
+         <div class="form-group">
+            <h3>Select Subjects to Display</h3>
+            <div class="select-all-row">
+               <div class="checkbox-item">
+                  <input type="checkbox" id="select-all-subjects" checked>
+                  <label for="select-all-subjects">Select All Subjects</label>
+               </div>
+            </div>
+            <div class="checkbox-container" id="subject-checkboxes">
+               <!-- Subject checkboxes will be generated here -->
+            </div>
+            <button id="display-btn" class="btn-primary">Display Results</button>
+         </div>
+         <div class="table-container hide" id="results-table-container">
+            <table id="results-table">
+               <thead>
+                  <tr id="table-header">
+                     <th style="width: 60px;">Sl. No</th>
+                     <th>Student Name</th>
+                     <!-- Exam columns will be added dynamically -->
+                     <th style="width: 100px;">Percentage</th>
+                     <th style="width: 80px;">Rank</th>
+                     <th>Remark</th>
+                  </tr>
+               </thead>
+               <tbody id="results-body">
+                  <!-- Results will be added here -->
+               </tbody>
+            </table>
+            <div class="no-data" id="no-data-message">
+               Select exams and click "Display Results" to view the marks table.
+            </div>
+         </div>
+         <div class="action-buttons hide" id="action-buttons">
+            <button id="print-btn" class="btn-outline">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: text-bottom;">
+                  <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                  <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                  <rect x="6" y="14" width="12" height="8"></rect>
+               </svg>
+               Print Report
+            </button>
+            <button id="download-csv-btn" class="btn-secondary">
+               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: text-bottom;">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+               </svg>
+               Download as CSV
+            </button>
+         </div>
+      </div>
+      <script>    
+         // Array for holding marks data
+         let selectedSubMarks = [];
+         
+         // Global helper variables
+         let classSelect = {};
+         let subjectSelect = {};
+         
+         // Global variables
+         let customExams = []
+         
+         function showLoading() {
+         loadingOverlay.classList.remove('hidden');
+         }
+         
+         function hideLoading() {
+         loadingOverlay.classList.add('hidden');
+         }
+         
+         
+         // DOM elements
+         const loadingOverlay = document.getElementById('loading-overlay');
+         const examCheckboxesContainer = document.getElementById('exam-checkboxes');
+         const selectAllCheckbox = document.getElementById('select-all');
+         const displayButton = document.getElementById('display-btn');
+         const resultsTableContainer = document.getElementById('results-table-container');
+         const tableHeader = document.getElementById('table-header');
+         const resultsBody = document.getElementById('results-body');
+         const noDataMessage = document.getElementById('no-data-message');
+         const actionButtons = document.getElementById('action-buttons');
+         const printButton = document.getElementById('print-btn');
+         const downloadCsvButton = document.getElementById('download-csv-btn');
+         
+         
+         // Display results button click event
+         displayButton.addEventListener('click', function() {
+         // Get selected exams
+         const selectedExams = [];
+         document.querySelectorAll('.exam-checkbox:checked').forEach(checkbox => {
+         selectedExams.push(checkbox.value);
+         });
+         
+         // Get selected subjects
+         const selectedSubjects = [];
+         document.querySelectorAll('.subject-checkbox:checked').forEach(checkbox => {
+         selectedSubjects.push(checkbox.value);
+         });
+         
+         if (selectedExams.length === 0) {
+         alert('Please select at least one exam to display results.');
+         return;
+         }
+         
+         if (selectedSubjects.length === 0) {
+         alert('Please select at least one subject to display results.');
+         return;
+         }
+         
+         // Generate table with exams and subjects
+         generateTable(selectedExams, selectedSubjects);
+         
+         // Show table and action buttons
+         resultsTableContainer.classList.remove('hide');
+         actionButtons.classList.remove('hide');
+         noDataMessage.classList.add('hide');
+         });
+         
+         // Generate table based on selected exams
+         function generateTable(selectedExams, selectedSubjects) {
+         // Clear previous table headers and rows
+         while (tableHeader.parentNode.firstChild !== tableHeader) {
+         tableHeader.parentNode.removeChild(tableHeader.parentNode.firstChild);
+         }
+         
+         // Rebuild the table header for student info
+         tableHeader.innerHTML = `
+         <th style="width: 60px;">Sl. No</th>
+         <th>Student Name</th>
+         `;
+         
+         // Add exam-subject columns with grouped headers
+         // First, create an array of all unique exam-subject combinations
+         const examSubjectCombinations = [];
+         selectedExams.forEach(exam => {
+         selectedSubjects.forEach(subject => {
+         examSubjectCombinations.push({ exam, subject });
+         });
+         });
+         
+         // Build the header with exam group spans
+         let currentExam = '';
+         let examColSpan = 0;
+         let examHeaders = '';
+         let subjectHeaders = '';
+         
+         examSubjectCombinations.forEach((combo, index) => {
+         if (currentExam !== combo.exam) {
+         // Add the previous exam header if it exists
+         if (currentExam !== '') {
+           examHeaders += `<th colspan="${examColSpan}" style="text-align: center; border-left: 2px solid #4f46e5; border-right: 2px solid #4f46e5; border-bottom: 1px solid #e5e7eb; ">${currentExam}</th>`;
+         }
+         // Reset for new exam
+         currentExam = combo.exam;
+         examColSpan = 1;
+         } else {
+         examColSpan++;
+         }
+         
+         // Add subject header with border styling
+         let borderStyle = '';
+         if (index === 0 || examSubjectCombinations[index-1].exam !== combo.exam) {
+         borderStyle = 'border-left: 2px solid #4f46e5;';
+         }
+         if (index === examSubjectCombinations.length - 1 || examSubjectCombinations[index+1].exam !== combo.exam) {
+         borderStyle += 'border-right: 2px solid #4f46e5;';
+         }
+         
+         // Add background color to alternate exam groups for better visual separation
+         let bgColor = examSubjectCombinations[index].exam === selectedExams[0] || 
+                 (index > 0 && examSubjectCombinations[index].exam !== selectedExams[0] && 
+                  examSubjectCombinations[index].exam === examSubjectCombinations[index-selectedSubjects.length].exam)
+                 ? '#f3f4f6' : '';
+         bgColor = '';
+         
+         subjectHeaders += `<th style="width: 80px; text-align: center; ${borderStyle} background-color: ${bgColor};">${combo.subject}</th>`;
+         
+         // Handle the last exam group
+         if (index === examSubjectCombinations.length - 1) {
+         examHeaders += `<th colspan="${examColSpan}" style="text-align: center; border-left: 2px solid #4f46e5; border-right: 2px solid #4f46e5; border-bottom: 1px solid #e5e7eb;">${currentExam}</th>`;
+         }
+         });
+         
+         // Create exam row with colspan headers
+         const examRow = document.createElement('tr');
+         examRow.innerHTML = `<th colspan="2" style="border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb;"></th>${examHeaders}<th colspan="3" style="border-left: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb"></th>`;
+         tableHeader.parentNode.insertBefore(examRow, tableHeader);
+         
+         // Add subject headers to the main header row
+         tableHeader.innerHTML = `
+         <th style="width: 60px;">Sl. No</th>
+         <th style="border-right: 1px solid #e5e7eb;">Student Name</th>
+         ${subjectHeaders}
+         <th style="width: 100px; border-left: 1px solid #e5e7eb;">Percentage</th>
+         <th style="width: 80px;">Rank</th>
+         <th>Remark</th>
+         `;
+         
+         // Clear the results body
+         resultsBody.innerHTML = '';
+         
+         // Get unique students and sort alphabetically
+         const uniqueStudents = [...new Set(selectedSubMarks.map(item => item.student))].sort();
+         
+         // Calculate student data
+         const studentData = uniqueStudents.map(student => {
+         const studentMarks = {};
+         let totalMarks = 0;
+         let totalMaxMarks = 0;
+         
+         // Get marks for each selected exam-subject combination
+         examSubjectCombinations.forEach(combo => {
+         const markEntry = selectedSubMarks.find(item => 
+           item.student === student && 
+           item.exam === combo.exam && 
+           item.subject === combo.subject
+         );
+         
+         const key = `${combo.exam}-${combo.subject}`;
+         let mark = markEntry ? markEntry.marks : null;
+         studentMarks[key] = mark;
+         
+         // Calculate total marks if mark is not null
+         if (mark !== null) {
+           subjectSelect.value = combo.subject;
+           const maxMark = getMaxMarks(combo.exam);
+           totalMarks += mark;
+           totalMaxMarks += maxMark;
+         }
+         });
+         
+         // Calculate percentage
+         const percentage = totalMaxMarks > 0 
+         ? ((totalMarks / totalMaxMarks) * 100).toFixed(2) 
+         : 0;
+         
+         return {
+         student,
+         marks: studentMarks,
+         percentage: parseFloat(percentage)
+         };
+         });
+         
+         // Sort by percentage (highest first) for ranking
+         studentData.sort((a, b) => b.percentage - a.percentage);
+         
+         // Assign ranks
+         let currentRank = 1;
+         let currentPercentage = -1;
+         let skipRanks = 0;
+         
+         studentData.forEach((data, index) => {
+         if (data.percentage !== currentPercentage) {
+         currentRank = index + 1 - skipRanks;
+         currentPercentage = data.percentage;
+         } else {
+         skipRanks++;
+         }
+         
+         data.rank = currentRank;
+         });
+         
+         // Sort back to alphabetical order
+         studentData.sort((a, b) => a.student.localeCompare(b.student));
+         
+         // Populate table rows
+         studentData.forEach((data, index) => {
+         const row = document.createElement('tr');
+         
+         // Serial number
+         const tdSl = document.createElement('td');
+         tdSl.textContent = index + 1;
+         tdSl.className = 'text-center';
+         tdSl.style = 'border-right: 1px solid #e5e7eb;';
+         row.appendChild(tdSl);
+         
+         // Student name
+         const tdName = document.createElement('td');
+         tdName.textContent = data.student;
+         tdName.style = 'border-right: 1px solid #e5e7eb;';
+         row.appendChild(tdName);
+         
+         // Marks for each exam-subject combination
+         examSubjectCombinations.forEach((combo, colIndex) => {
+         const key = `${combo.exam}-${combo.subject}`;
+         const tdMark = document.createElement('td');
+         tdMark.className = 'text-center';
+         tdMark.textContent = data.marks[key] !== null ? data.marks[key] : '–';
+         
+         // Add border styling for cells to match headers
+         let borderStyle = '';
+         if (colIndex === 0 || examSubjectCombinations[colIndex-1].exam !== combo.exam) {
+           borderStyle = 'border-left: 2px solid #e5e7eb;';
+         }
+         if (colIndex === examSubjectCombinations.length - 1 || examSubjectCombinations[colIndex+1].exam !== combo.exam) {
+           borderStyle += 'border-right: 2px solid #e5e7eb;';
+         }
+         
+         // Add subtle background color to alternate exam groups
+         const bgColor = combo.exam === selectedExams[0] || 
+                     (colIndex > 0 && combo.exam !== selectedExams[0] && 
+                      combo.exam === examSubjectCombinations[colIndex-selectedSubjects.length].exam)
+                     ? 'rgba(243, 244, 246, 0.5)' : '';
+         
+         tdMark.style = `${borderStyle} background-color: ${bgColor};`;
+         
+         row.appendChild(tdMark);
+         });
+         
+         // Percentage
+         const tdPercentage = document.createElement('td');
+         tdPercentage.className = 'text-center';
+         tdPercentage.textContent = `${data.percentage}%`;
+         tdPercentage.style = 'border-left: 1px solid #e5e7eb;';
+         row.appendChild(tdPercentage);
+         
+         // Rank
+         const tdRank = document.createElement('td');
+         tdRank.className = 'text-center';
+         tdRank.textContent = data.rank;
+         if (data.rank === 1) {
+         tdRank.classList.add('rank-1');
+         }
+         row.appendChild(tdRank);
+         
+         // Remark
+         const tdRemark = document.createElement('td');
+         const remark = getPerformanceRemark('NA', null, data.percentage);
+         const remarkBadge = document.createElement('span');
+         tdRemark.className = `${getRemarkClass(remark)}`;
+         remarkBadge.textContent = remark;
+         tdRemark.appendChild(remarkBadge);
+         row.appendChild(tdRemark);
+         
+         resultsBody.appendChild(row);
+         });
+         }
+         
+         // Print button click event
+         printButton.addEventListener('click', function() {
+         window.print();
+         });
+         
+         // Download CSV button click event
+         downloadCsvButton.addEventListener('click', function() {
+         // Get selected exams and subjects
+         const selectedExams = [];
+         document.querySelectorAll('.exam-checkbox:checked').forEach(checkbox => {
+         selectedExams.push(checkbox.value);
+         });
+         
+         const selectedSubjects = [];
+         document.querySelectorAll('.subject-checkbox:checked').forEach(checkbox => {
+         selectedSubjects.push(checkbox.value);
+         });
+         
+         if (selectedExams.length === 0 || selectedSubjects.length === 0) {
+         alert('Please select at least one exam and one subject to download data.');
+         return;
+         }
+         
+         // Generate CSV content
+         let csvContent = 'Sl. No,Student Name,';
+         
+         // Add exam-subject headers
+         selectedExams.forEach(exam => {
+         selectedSubjects.forEach(subject => {
+         csvContent += `${exam}-${subject},`;
+         });
+         });
+         
+         csvContent += 'Percentage,Rank,Remark\n';
+         
+         // Get rows data
+         const rows = resultsBody.querySelectorAll('tr');
+         rows.forEach((row, index) => {
+         csvContent += `${index + 1},`;
+         
+         // Get all cells
+         const cells = row.querySelectorAll('td');
+         
+         // Student name
+         csvContent += `"${cells[1].textContent}",`;
+         
+         // Marks for each exam-subject
+         const numExamSubjects = selectedExams.length * selectedSubjects.length;
+         for (let i = 2; i < 2 + numExamSubjects; i++) {
+         csvContent += `${cells[i].textContent},`;
+         }
+         
+         // Percentage
+         csvContent += `${cells[cells.length - 3].textContent},`;
+         
+         // Rank
+         csvContent += `${cells[cells.length - 2].textContent},`;
+         
+         // Remark
+         csvContent += `"${cells[cells.length - 1].textContent.trim()}"\n`;
+         });
+         
+         // Create and trigger download
+         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+         const link = document.createElement('a');
+         const url = URL.createObjectURL(blob);
+         
+         link.setAttribute('href', url);
+         link.setAttribute('download', 'Performance_Report.csv');
+         link.style.visibility = 'hidden';
+         
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+         });
+         
+         // Check authentication status when the window loads
+         window.addEventListener('load', async () => {
+         showLoading();
+         
+         try {
+            const isAuthenticated = await checkAuth();
+            
+            if (isAuthenticated) {
+                //Preload details of all custom exams
+                await preloadCustomExams();
+         
+                // Load all marks data for the grade specified in the URL params
+                await loadMarks();
+         
+                // Set up form
+                initializeForm();
+         
+                // Hide loading screen
+                hideLoading();
+            } else {
+                // User is not logged in, redirect back to dashboard
+                 window.location.href = "https://sourabhsuneja.github.io/redirect/jvp-marks-management/";
+            }
+         } catch (error) {
+            console.error('Auth check error:', error);
+         } finally {
+            
+         }
+         });
+         
+         async function preloadCustomExams() {
+                // Pre-load all custom exams
+         customExams = await selectData('custom_exams') || [];
+         }
+         
+         async function loadMarks() {
+         // Get the "class" parameter from the URL
+         const urlParams = new URLSearchParams(window.location.search);
+         const classValue = urlParams.get("class");
+         // Store in global variable as well
+         classSelect.value = classValue;
+         // Upadte the class label in the page header
+         document.getElementById('classLabel').innerText = (classValue + ' - ') || '';
+         
+         // If class is present and not falsy
+         if (classValue) {
+         try {
+         // Call selectData to get records from "marks_view"
+         const results = await selectData(
+         "marks_view",            // tableName
+         false,              // fetchSingle
+         "*",                // columns
+         ["class"],          // matchColumns
+         [classValue],       // matchValues
+         "student",          // orderByColumn
+         "asc"               // orderDirection
+         );
+         
+         selectedSubMarks = results;
+         return true;
+         } catch (error) {
+         console.error("Failed to load marks:", error);
+         return null;
+         }
+         } else {
+         console.warn("No 'class' parameter found in URL.");
+         return null;
+         }
+         }
+         
+         // Function to start setting up checkboxes and form elements
+         function initializeForm() {
+         
+         // Get unique exams from data
+         const uniqueExams = [...new Set(selectedSubMarks.map(item => item.exam))];
+         
+         // Generate exam checkboxes
+         uniqueExams.forEach(exam => {
+         const checkboxItem = document.createElement('div');
+         checkboxItem.className = 'checkbox-item';
+         
+         const checkbox = document.createElement('input');
+         checkbox.type = 'checkbox';
+         checkbox.id = `exam-${exam}`;
+         checkbox.value = exam;
+         checkbox.checked = true;
+         checkbox.className = 'exam-checkbox';
+         
+         const label = document.createElement('label');
+         label.htmlFor = `exam-${exam}`;
+         label.textContent = exam;
+         
+         checkboxItem.appendChild(checkbox);
+         checkboxItem.appendChild(label);
+         examCheckboxesContainer.appendChild(checkboxItem);
+         });
+         
+         // Select all checkbox functionality
+         selectAllCheckbox.addEventListener('change', function() {
+         const examCheckboxes = document.querySelectorAll('.exam-checkbox');
+         examCheckboxes.forEach(checkbox => {
+           checkbox.checked = this.checked;
+         });
+         });
+         
+         // Check if all exam checkboxes are checked
+         document.querySelectorAll('.exam-checkbox').forEach(checkbox => {
+         checkbox.addEventListener('change', function() {
+           const allCheckboxes = document.querySelectorAll('.exam-checkbox');
+           const allChecked = Array.from(allCheckboxes).every(cb => cb.checked);
+           selectAllCheckbox.checked = allChecked;
+         });
+         });
+         
+         // Get unique subjects from data
+         const uniqueSubjects = [...new Set(selectedSubMarks.map(item => item.subject))];
+         
+         // Generate subject checkboxes
+         uniqueSubjects.forEach(subject => {
+         const checkboxItem = document.createElement('div');
+         checkboxItem.className = 'checkbox-item';
+         
+         const checkbox = document.createElement('input');
+         checkbox.type = 'checkbox';
+         checkbox.id = `subject-${subject}`;
+         checkbox.value = subject;
+         checkbox.checked = true;
+         checkbox.className = 'subject-checkbox';
+         
+         const label = document.createElement('label');
+         label.htmlFor = `subject-${subject}`;
+         label.textContent = subject;
+         
+         checkboxItem.appendChild(checkbox);
+         checkboxItem.appendChild(label);
+         document.getElementById('subject-checkboxes').appendChild(checkboxItem);
+         });
+         
+         // Select all subjects checkbox functionality
+         document.getElementById('select-all-subjects').addEventListener('change', function() {
+         const subjectCheckboxes = document.querySelectorAll('.subject-checkbox');
+         subjectCheckboxes.forEach(checkbox => {
+         checkbox.checked = this.checked;
+         });
+         });
+         
+         // Check if all subject checkboxes are checked
+         document.querySelectorAll('.subject-checkbox').forEach(checkbox => {
+         checkbox.addEventListener('change', function() {
+         const allCheckboxes = document.querySelectorAll('.subject-checkbox');
+         const allChecked = Array.from(allCheckboxes).every(cb => cb.checked);
+         document.getElementById('select-all-subjects').checked = allChecked;
+         });
+         });
+         
+         }
+         
+      </script>
+   </body>
+</html>
