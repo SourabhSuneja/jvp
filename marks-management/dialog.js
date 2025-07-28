@@ -89,7 +89,7 @@ window.showDialog = function ({
          const loadingPhrase = showRandomPhrase ? getRandomLoadingPhrase() : 'Processing...';
          dialogBox.classList.add('dialog-minimal-padding');
          dialogMessage.classList.add('dialog-processing');
-         dialogMessage.innerHTML = `<img src="https://sourabhsuneja.github.io/jvp-sports-meet/images/loading.gif" style="height: 30px"> ${loadingPhrase}`;
+         dialogMessage.innerHTML = `<img src="https://myjvp.in/commons/loading.gif" style="height: 30px"> ${loadingPhrase}`;
       }
 
       // Show the dialog
