@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Sourabh Sir's AI-powered Lesson Plan Generator helps teachers create clear, structured, and print-ready lesson plans with objectives, outcomes, activities, and assignments tailored to any date range and grade level.">
+      <title>Teacher Lesson Plan Generator</title>
+      <script type="module" src="ai-prompt.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+      <style>
+         /* Base styling enhancements */
+         * {
+         max-height: 999999999px;
+         box-sizing: border-box;
+         }
+         body {
+         background: linear-gradient(120deg, #f0f4f9, #e6f0ff);
+         font-family: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+         }
+         /* Header styling */
+         header h1 {
+         background: linear-gradient(90deg, #3b82f6, #2563eb);
+         -webkit-background-clip: text;
+         background-clip: text;
+         color: transparent;
+         font-size: 2.25rem;
+         letter-spacing: -0.5px;
+         text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
+         }
+         header p {
+         max-width: 600px;
+         margin: 0 auto;
+         font-style: italic;
+         }
+         /* Form container styling */
+         .bg-white {
+         border-radius: 12px;
+         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+         border: 1px solid rgba(226, 232, 240, 0.8);
+         }
+         /* Form element styling */
+         input, select, textarea {
+         transition: all 0.3s ease;
+         border-width: 1px;
+         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+         }
+         input:focus, select:focus, textarea:focus {
+         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+         border-color: #3b82f6;
+         outline: none;
+         }
+         label {
+         font-weight: 500;
+         color: #374151;
+         margin-bottom: 6px;
+         }
+         /* Button styling */
+         button[type="submit"] {
+         background: linear-gradient(to right, #3b82f6, #2563eb);
+         box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+         font-weight: 600;
+         letter-spacing: 0.3px;
+         padding: 0.75rem 2rem;
+         transform: translateY(0);
+         transition: all 0.2s ease;
+         }
+         button[type="submit"]:hover {
+         transform: translateY(-2px);
+         box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+         }
+         button[type="submit"]:active {
+         transform: translateY(0);
+         }
+         #addHolidayBtn {
+         display: inline-flex;
+         align-items: center;
+         font-weight: 500;
+         transition: all 0.2s ease;
+         }
+         #addHolidayBtn:hover {
+         transform: translateY(-1px);
+         }
+         /* Loading animation enhancement */
+         #loadingContainer .animate-spin {
+         border-top-width: 5px;
+         border-bottom-width: 5px;
+         border-color: #3b82f6;
+         box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+         }
+         /* Fancy section dividers */
+         .border-t {
+         border-image: linear-gradient(to right, transparent, #e5e7eb, transparent) 1;
+         padding-top: 1.5rem;
+         }
+         /* Result container styling */
+         #promptPreview {
+         background-color: #f8fafc;
+         border-radius: 8px;
+         padding: 1rem;
+         font-family: 'Consolas', 'Monaco', monospace;
+         line-height: 1.6;
+         }
+         /* Button effects */
+         #copyPromptBtn, #viewLessonPlanBtn {
+         display: inline-flex;
+         align-items: center;
+         justify-content: center;
+         transition: all 0.2s ease;
+         font-weight: 500;
+         }
+         #copyPromptBtn:hover, #viewLessonPlanBtn:hover {
+         transform: translateY(-2px);
+         }
+         #copyPromptBtn {
+         border: 1px solid #e2e8f0;
+         }
+         #viewLessonPlanBtn {
+         background: linear-gradient(to right, #10b981, #059669);
+         box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+         }
+         #viewLessonPlanBtn:hover {
+         box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+         }
+         /* Modal/overlay styling */
+         #iframeOverlay {
+         backdrop-filter: blur(3px);
+         }
+         #iframeOverlay .bg-white {
+         box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+         }
+         /* Footer styling */
+         footer {
+         background: linear-gradient(to right, #f0f4f9, #e6f0ff);
+         border-top: 1px solid rgba(226, 232, 240, 0.8);
+         padding: 1rem 0;
+         }
+         footer div {
+         font-weight: 500;
+         letter-spacing: 0.5px;
+         }
+         /* Holiday entries styling */
+         .holiday-entry {
+         background-color: #f8fafc;
+         border-radius: 8px;
+         padding: 0.75rem;
+         border: 1px solid #e5e7eb;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+         }
+         .remove-holiday {
+         color: #ef4444;
+         transition: all 0.2s ease;
+         }
+         .remove-holiday:hover {
+         color: #dc2626;
+         transform: scale(1.1);
+         }
+         /* Responsive adjustments */
+         @media (max-width: 768px) {
+         header h1 {
+         font-size: 1.875rem;
+         }
+         .container {
+         padding-left: 1rem;
+         padding-right: 1rem;
+         }
+         }
+      </style>
+   </head>
+   <body class="bg-gray-50 min-h-screen">
+      <div class="container mx-auto px-4 py-8 max-w-4xl">
+         <header class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-blue-600 mb-2">Teacher Lesson Plan Generator</h1>
+            <p class="text-gray-600">Create comprehensive lesson plans with personalized teaching objectives and activities</p>
+         </header>
+         <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <form id="lessonPlanForm" class="space-y-6">
+               <div class="grid md:grid-cols-2 gap-6">
+                  <div class="space-y-4">
+                     <div>
+                        <label for="teacherName" class="block text-sm font-medium text-gray-700 mb-1">Teacher's Name</label>
+                        <input type="text" id="teacherName" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                     </div>
+                     <div>
+                        <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                        <select id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                           <option value="" disabled selected>Select Subject</option>
+                           <option value="English">English</option>
+                           <option value="Hindi">Hindi</option>
+                           <option value="Maths">Maths</option>
+                           <option value="Science">Science</option>
+                           <option value="Social Science">Social Science</option>
+                           <option value="Computer">Computer</option>
+                           <option value="GK">General Knowledge</option>
+                        </select>
+                     </div>
+                     <div>
+                        <label for="class" class="block text-sm font-medium text-gray-700 mb-1">Class</label>
+                        <select id="class" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                           <option value="" disabled selected>Select Class</option>
+                        </select>
+                     </div>
+                  </div>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                        <input type="date" id="startDate" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                     </div>
+                     <div>
+                        <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <input type="date" id="endDate" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" required>
+                     </div>
+                  </div>
+               </div>
+               <div>
+                  <label for="topics" class="block text-sm font-medium text-gray-700 mb-1">Chapters/Topics (one per line)</label>
+                  <textarea id="topics" rows="5" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="Enter chapters or topics to be included in the lesson plan" required></textarea>
+               </div>
+               <!-- Holiday Dates Section -->
+               <div class="border-t pt-4">
+                  <div class="flex justify-between items-center mb-3">
+                     <h3 class="text-md font-medium text-gray-700">Holiday Dates (Optional)</h3>
+                     <button type="button" id="addHolidayBtn" class="text-sm text-blue-600 hover:text-blue-800 focus:outline-none">
+                     <i class="fas fa-plus-circle mr-1"></i>Add Holiday
+                     </button>
+                  </div>
+                  <div id="holidaysContainer" class="space-y-3">
+                     <!-- Holiday date entries will be added here by JavaScript -->
+                  </div>
+                  <p class="text-xs text-gray-500 mt-2">Maximum 4 holidays can be specified</p>
+               </div>
+               <div class="flex justify-center">
+                  <button type="submit" id="generateBtn" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+                  Generate Lesson Plan
+                  </button>
+               </div>
+            </form>
+         </div>
+         <div id="loadingContainer" class="hidden flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 mb-8">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
+            <p class="text-gray-600 text-lg">Generating your lesson plan...</p>
+         </div>
+         <div id="resultContainer" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Your AI Prompt is Ready</h2>
+            <div class="bg-gray-50 p-4 rounded-md mb-6 border border-gray-200">
+               <pre id="promptPreview" class="whitespace-pre-wrap text-sm text-gray-800"></pre>
+            </div>
+            <div class="flex justify-center space-x-4">
+               <button id="copyPromptBtn" class="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition duration-150 ease-in-out">
+               <i class="fas fa-copy mr-2"></i>Copy Prompt
+               </button>
+               <button id="viewLessonPlanBtn" class="hidden px-4 py-2 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out">
+               <i class="fas fa-eye mr-2"></i>View Lesson Plan
+               </button>
+            </div>
+         </div>
+         <div id="iframeOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg shadow-2xl w-11/12 h-11/12 max-w-7xl max-h-screen flex flex-col">
+               <div class="flex justify-between items-center p-2 border-b">
+                  <h3 class="text-lg font-semibold">Lesson Plan Preview</h3>
+                  <button id="closeIframeBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                  <i class="fas fa-times"></i>
+                  </button>
+               </div>
+               <div class="flex-grow overflow-auto">
+                  <iframe id="previewIframe" class="w-full h-full border-0" style="min-height: 85vh;"></iframe>
+               </div>
+            </div>
+         </div>
+      </div>
+      <footer class="bg-gray-100 py-4 mt-8">
+         <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+            Crafted by Sourabh Sir
+         </div>
+      </footer>
+      <script>
+         // Global variables
+         let prompt = '';
+         let response = ''; // This will hold the AI response
+         let holidayCount = 0;
+         const MAX_HOLIDAYS = 4;
+         
+         // Populate class dropdown
+         const classDropdown = document.getElementById('class');
+         for (let i = 1; i <= 12; i++) {
+             const option = document.createElement('option');
+             option.value = i;
+             option.textContent = `Class ${i}`;
+             classDropdown.appendChild(option);
+         }
+         
+         // Add holiday button handler
+         document.getElementById('addHolidayBtn').addEventListener('click', function() {
+             if (holidayCount >= MAX_HOLIDAYS) {
+                 alert(`Maximum ${MAX_HOLIDAYS} holidays can be added.`);
+                 return;
+             }
+             
+             addHolidayField();
+         });
+         
+         // Function to add a holiday date field
+         function addHolidayField() {
+             const holidaysContainer = document.getElementById('holidaysContainer');
+             const holidayId = `holiday-${holidayCount}`;
+             
+             const holidayEntry = document.createElement('div');
+             holidayEntry.id = holidayId;
+             holidayEntry.className = 'flex items-center space-x-2';
+             
+             holidayEntry.innerHTML = `
+                 <div class="flex-grow">
+                     <input type="date" id="date-${holidayId}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                 </div>
+                 <div class="flex-grow">
+                     <input type="text" id="reason-${holidayId}" placeholder="Holiday reason" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                 </div>
+                 <button type="button" class="remove-holiday-btn text-red-500 hover:text-red-700 focus:outline-none" data-holiday-id="${holidayId}">
+                     <i class="fas fa-trash-alt"></i>
+                 </button>
+             `;
+             
+             holidaysContainer.appendChild(holidayEntry);
+             
+             // Add event listener to remove button
+             holidayEntry.querySelector('.remove-holiday-btn').addEventListener('click', function() {
+                 const holidayId = this.getAttribute('data-holiday-id');
+                 document.getElementById(holidayId).remove();
+                 holidayCount--;
+                 document.getElementById('addHolidayBtn').style.display = 'inline-flex';
+             });
+             
+             holidayCount++;
+             
+             // Hide the add button if we've reached the maximum
+             if (holidayCount >= MAX_HOLIDAYS) {
+                 document.getElementById('addHolidayBtn').style.display = 'none';
+             }
+         }
+         
+         // Form submission handler
+         document.getElementById('lessonPlanForm').addEventListener('submit', async function(e) {
+             e.preventDefault();
+             
+             // Show loading indicator
+             document.getElementById('loadingContainer').classList.remove('hidden');
+             document.getElementById('resultContainer').classList.add('hidden');
+             
+             // Get form values
+             const teacherName = document.getElementById('teacherName').value;
+             const subject = document.getElementById('subject').value;
+             const classLevel = document.getElementById('class').value;
+             const startDate = document.getElementById('startDate').value;
+             const endDate = document.getElementById('endDate').value;
+             const topics = document.getElementById('topics').value;
+             
+             // Collect holiday dates
+             const holidays = [];
+             document.querySelectorAll('[id^="holiday-"]').forEach(holidayEntry => {
+                 const id = holidayEntry.id;
+                 const date = document.getElementById(`date-${id}`).value;
+                 const reason = document.getElementById(`reason-${id}`).value;
+                 
+                 if (date) {
+                     holidays.push({ date, reason: reason || 'Holiday' });
+                 }
+             });
+             
+             // Generate the prompt
+             prompt = generateAIPrompt(teacherName, subject, classLevel, startDate, endDate, topics, holidays);
+             
+             // Fetch a response from AI
+             response = await window.fetchResponse(prompt);
+         
+         
+                 // Hide loading, show result
+                 document.getElementById('loadingContainer').classList.add('hidden');
+                 document.getElementById('resultContainer').classList.remove('hidden');
+                 
+                 // Display the prompt
+                 document.getElementById('promptPreview').textContent = prompt;
+                 
+                 // Show view button since we have a response
+                 document.getElementById('viewLessonPlanBtn').classList.remove('hidden');
+         
+         });
+         
+         // Copy prompt button handler
+         document.getElementById('copyPromptBtn').addEventListener('click', function() {
+             navigator.clipboard.writeText(prompt).then(() => {
+                 const originalText = this.innerHTML;
+                 this.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+                 setTimeout(() => {
+                     this.innerHTML = originalText;
+                 }, 2000);
+             });
+         });
+         
+         // View lesson plan button handler
+         document.getElementById('viewLessonPlanBtn').addEventListener('click', function() {
+             const iframe = document.getElementById('previewIframe');
+             document.getElementById('iframeOverlay').classList.remove('hidden');
+             
+             // Extract HTML from response
+             let extractedHTML = extractHTMLFromResponse(response);
+         
+             // Modify the HTML to make body contenteditable
+             extractedHTML = extractedHTML.replace('<body', '<body contenteditable="true"');
+             
+             // Set iframe content with extracted HTML
+             const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+             iframeDoc.open();
+             iframeDoc.write(extractedHTML);
+             iframeDoc.close();
+         });
+         
+         // Close iframe button handler
+         document.getElementById('closeIframeBtn').addEventListener('click', function() {
+             document.getElementById('iframeOverlay').classList.add('hidden');
+         });
+         
+         // Function to extract HTML from AI response
+         function extractHTMLFromResponse(response) {
+             // Look for HTML content between <!DOCTYPE html> and </html>
+             const htmlMatch = response.match(/<!DOCTYPE html>[\s\S]*?<\/html>/i);
+             
+             if (htmlMatch && htmlMatch[0]) {
+                 return htmlMatch[0];
+             }
+             
+             // Alternative method - look for content between <html> and </html> tags
+             const alternativeMatch = response.match(/<html>[\s\S]*?<\/html>/i);
+             if (alternativeMatch && alternativeMatch[0]) {
+                 return '<!DOCTYPE html>' + alternativeMatch[0];
+             }
+             
+             // If no HTML found, return a formatted error message
+             return `<!DOCTYPE html>
+         <html>
+         <head>
+         <title>Error</title>
+         <style>
+         body { font-family: Arial, sans-serif; padding: 20px; }
+         .error { color: red; }
+         </style>
+         </head>
+         <body>
+         <h1 class="error">Error: No valid HTML found in the AI response</h1>
+         <p>Please try again or check the response format.</p>
+         </body>
+         </html>`;
+         }
+         
+         // Function to generate AI prompt
+         function generateAIPrompt(teacherName, subject, classLevel, startDate, endDate, topics, holidays) {
+             // Format dates for better readability
+             const formattedStartDate = new Date(startDate).toLocaleDateString('en-US', {
+                 year: 'numeric', month: 'long', day: 'numeric'
+             });
+             const formattedEndDate = new Date(endDate).toLocaleDateString('en-US', {
+                 year: 'numeric', month: 'long', day: 'numeric'
+             });
+             
+             // Format topics list
+             const topicsList = topics.split('\n')
+                 .filter(topic => topic.trim() !== '')
+                 .map(topic => topic.trim());
+             
+             // Format holidays information
+             let holidaysText = '';
+             if (holidays.length > 0) {
+                 const formattedHolidays = holidays.map(h => {
+                     const formattedDate = new Date(h.date).toLocaleDateString('en-US', {
+                         year: 'numeric', month: 'long', day: 'numeric'
+                     });
+                     return `${formattedDate} (${h.reason})`;
+                 }).join(', ');
+                 
+                 holidaysText = ` Consider these holidays in your planning: ${formattedHolidays}.`;
+             }
+             
+             // Create the prompt
+             return `Create a well-styled, print-friendly, responsive HTML lesson plan for ${teacherName}, teaching ${subject} to Class ${classLevel}, from ${formattedStartDate} to ${formattedEndDate}. Cover these topics: ${topicsList.join(', ')}.${holidaysText} Include teaching objectives, ice-breaking activities, learning outcomes, art-integrated activities, and relevant assignments appropriate for the subject, grade level, and topics. Add a print button. Keep the plan brief and concise.`;
+         }
+         
+         // Add an initial holiday field if needed
+         // Uncomment to add a default holiday field when page loads
+         // addHolidayField();
+      </script>
+   </body>
+</html>
