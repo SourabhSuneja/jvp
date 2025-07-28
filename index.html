@@ -1,771 +1,454 @@
 <!DOCTYPE html>
-<html class="light-theme" lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>JVP Teachers</title>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-      <!-- Link to Material Icons font -->
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-      <!-- Supabase CRUD Functions -->
-      <script type="module" src="supabase-crud.js"></script>
-      <!-- Dialog Box Styles -->
-      <link rel="stylesheet" href="dialog.css">
-      <!-- Dialog Box Scripts -->
-      <script src="dialog.js"></script>
-      <!-- Common JS Functions -->
-      <script src="common.js"></script>
-      <style>
-         :root {
-         --primary: #4f46e5;
-         --primary-dark: #4338ca;
-         --secondary: #10b981;
-         --secondary-dark: #059669;
-         --danger: #ef4444;
-         --danger-dark: #c33c3c;
-         --light: #f9fafb;
-         --dark: #1f2937;
-         --text: #374151;
-         --border: #e5e7eb;
-         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-         --transition: all 0.2s ease;
-         }
-         * {
-         margin: 0;
-         padding: 0;
-         box-sizing: border-box;
-         font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-         max-height: 9999999px;
-         }
-         body {
-         background-color: var(--light);
-         color: var(--text);
-         line-height: 1.6;
-         font-size: 16px;
-         }
-         .container {
-         max-width: 1200px;
-         margin: 0 auto;
-         padding: 20px;
-         }
-         header {
-         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-         color: white;
-         padding: 24px 0;
-         text-align: center;
-         box-shadow: var(--shadow);
-         margin-bottom: 2rem;
-         position: relative;
-         }
-         h1 {
-         margin: 0;
-         font-size: 2.25rem;
-         font-weight: 700;
-         letter-spacing: -0.025em;
-         }
-         h2 {
-         color: var(--dark);
-         font-size: 1.75rem;
-         font-weight: 700;
-         margin-bottom: 1.5rem;
-         letter-spacing: -0.025em;
-         }
-         h3 {
-         color: var(--dark);
-         font-size: 1.25rem;
-         font-weight: 600;
-         margin-bottom: 1rem;
-         letter-spacing: -0.025em;
-         }
-         .login-container, .app-container {
-         background-color: white;
-         border-radius: 12px;
-         box-shadow: var(--shadow-lg);
-         padding: 36px;
-         margin: 30px auto;
-         max-width: 800px;
-         border: 1px solid var(--border);
-         }
-         .login-container {
-         max-width: 440px;
-         }
-         .form-group {
-         margin-bottom: 24px;
-         }
-         label {
-         display: block;
-         font-weight: 600;
-         margin-bottom: 8px;
-         color: var(--dark);
-         font-size: 0.9rem;
-         }
-         input, select {
-         width: 100%;
-         padding: 12px 16px;
-         border: 1px solid var(--border);
-         border-radius: 8px;
-         font-size: 16px;
-         transition: var(--transition);
-         color: var(--text);
-         background-color: var(--light);
-         }
-         input:focus, select:focus {
-         outline: none;
-         border-color: var(--primary);
-         box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-         }
-         button {
-         background-color: var(--primary);
-         color: white;
-         border: none;
-         border-radius: 8px;
-         padding: 12px 24px;
-         font-size: 16px;
-         cursor: pointer;
-         transition: var(--transition);
-         font-weight: 600;
-         box-shadow: var(--shadow-sm);
-         }
-         button:hover {
-         background-color: var(--primary-dark);
-         transform: translateY(-1px);
-         box-shadow: var(--shadow);
-         }
-         button:active {
-         transform: translateY(0);
-         }
-         .btn-secondary {
-         background-color: var(--secondary);
-         }
-         .btn-secondary:hover {
-         background-color: var(--secondary-dark);
-         }
-         #login-btn {
-         margin-top: 12px;
-         }
-         .btn-logout {
-         background-color: rgba(255, 255, 255, 0.2);
-         color: white;
-         padding: 10px 20px;
-         font-size: 14px;
-         position: absolute;
-         top: 24px;
-         right: 24px;
-         border-radius: 25px;
-         border: 1px solid rgba(255, 255, 255, 0.3);
-         backdrop-filter: blur(10px);
-         font-weight: 500;
-         display: flex;
-         align-items: center;
-         gap: 6px;
-         transition: all 0.3s ease;
-         }
-         .btn-logout:hover, #delete-btn:hover, #cancelReportDialog:hover {
-         background-color: rgba(255, 255, 255, 0.3);
-         transform: translateY(-1px);
-         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-         }
-         .form-group {
-         flex: 1;
-         min-width: 200px;
-         margin-bottom: 0;
-         }
-         .alert {
-         padding: 16px;
-         margin-bottom: 24px;
-         border-radius: 8px;
-         color: white;
-         background-color: var(--danger);
-         animation: fadeIn 0.3s ease;
-         }
-         .alert-success {
-         background-color: var(--secondary);
-         }
-         .app-header {
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         margin-bottom: 32px;
-         }
-         .clearfix {
-         clear: both;
-         }
-         
-         /* Dashboard Tiles Styles */
-         .dashboard-container {
-         max-width: 1200px;
-         margin: 0 auto;
-         padding: 0;
-         }
-         
-         .dashboard-grid {
-         display: grid;
-         grid-template-columns: repeat(2, 1fr);
-         gap: 20px;
-         margin-top: 24px;
-         }
-         
-         @media (min-width: 768px) {
-         .dashboard-grid {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-         }
-         }
-         
-         .dashboard-tile {
-         background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-         border: 1px solid var(--border);
-         border-radius: 16px;
-         padding: 24px 20px;
-         text-align: center;
-         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-         cursor: pointer;
-         position: relative;
-         overflow: hidden;
-         min-height: 140px;
-         display: flex;
-         flex-direction: column;
-         justify-content: center;
-         align-items: center;
-         text-decoration: none;
-         color: inherit;
-         box-shadow: var(--shadow-sm);
-         }
-         
-         .dashboard-tile::before {
-         content: '';
-         position: absolute;
-         top: 0;
-         left: 0;
-         right: 0;
-         height: 4px;
-         background: linear-gradient(90deg, var(--primary), var(--secondary));
-         transform: scaleX(0);
-         transition: transform 0.3s ease;
-         }
-         
-         .dashboard-tile:hover {
-         transform: translateY(-4px);
-         box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
-         border-color: var(--primary);
-         }
-         
-         .dashboard-tile:hover::before {
-         transform: scaleX(1);
-         }
-         
-         .dashboard-tile:active {
-         transform: translateY(-2px);
-         }
-         
-         .tile-icon {
-         font-size: 2.5rem;
-         margin-bottom: 12px;
-         background: linear-gradient(135deg, var(--primary), var(--secondary));
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-         transition: all 0.3s ease;
-         }
-         
-         .dashboard-tile:hover .tile-icon {
-         transform: scale(1.1);
-         }
-         
-         .tile-title {
-         font-size: 0.95rem;
-         font-weight: 600;
-         color: var(--dark);
-         line-height: 1.3;
-         margin: 0;
-         }
-         
-         .dashboard-welcome {
-         text-align: center;
-         margin-bottom: 8px;
-         }
-         
-         .welcome-title {
-         color: var(--dark);
-         font-size: 1.5rem;
-         font-weight: 700;
-         margin-bottom: 8px;
-         }
-         
-         .welcome-subtitle {
-         color: var(--text);
-         font-size: 1rem;
-         font-weight: 400;
-         opacity: 0.8;
-         }
-         
-         /* Special tile colors */
-         .dashboard-tile[data-category="academic"] .tile-icon {
-         background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-         }
-         
-         .dashboard-tile[data-category="management"] .tile-icon {
-         background: linear-gradient(135deg, #10b981, #047857);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-         }
-         
-         .dashboard-tile[data-category="activities"] .tile-icon {
-         background: linear-gradient(135deg, #f59e0b, #d97706);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-         }
-         
-         .dashboard-tile[data-category="settings"] .tile-icon {
-         background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-         }
-         
-         @keyframes fadeIn {
-         from { opacity: 0; transform: translateY(-10px); }
-         to { opacity: 1; transform: translateY(0); }
-         }
-         @media (max-width: 768px) {
-         .container {
-         padding: 12px;
-         }
-         .login-container, .app-container {
-         padding: 24px;
-         margin: 16px 8px;
-         border-radius: 10px;
-         }
-         h1 {
-         font-size: 1.75rem;
-         }
-         .btn-logout {
-         top: 16px;
-         right: 16px;
-         padding: 8px 16px;
-         font-size: 13px;
-         }
-         .dashboard-grid {
-         gap: 16px;
-         }
-         .dashboard-tile {
-         min-height: 120px;
-         padding: 20px 16px;
-         }
-         .tile-icon {
-         font-size: 2.2rem;
-         margin-bottom: 10px;
-         }
-         .tile-title {
-         font-size: 0.9rem;
-         }
-         }
-         
-         /* Footer Styles */
-         .footer {
-         background: linear-gradient(135deg, var(--dark) 0%, #374151 100%);
-         color: rgba(255, 255, 255, 0.9);
-         text-align: center;
-         padding: 24px 0;
-         margin-top: 60px;
-         position: relative;
-         overflow: hidden;
-         }
-         
-         .footer::before {
-         content: '';
-         position: absolute;
-         top: 0;
-         left: 0;
-         right: 0;
-         height: 1px;
-         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-         }
-         
-         .footer-content {
-         position: relative;
-         z-index: 2;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         gap: 8px;
-         font-size: 16px;
-         font-weight: 500;
-         }
-         
-         .footer-text {
-         background: linear-gradient(135deg, #f59e0b, #d97706);
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
-         font-weight: 600;
-         }
-         
-         @media (max-width: 768px) {
-         .footer {
-         margin-top: 40px;
-         padding: 20px 0;
-         }
-         
-         .footer-content {
-         font-size: 16px;
-         }
-         }
-         .school-header {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         gap: 20px;
-         }
-         .school-logo {
-         height: 80px;
-         border-radius: 50%;
-         background-color: white;
-         padding: 5px;
-         box-shadow: var(--shadow);
-         }
-         .school-info {
-         text-align: left;
-         }
-         .school-name {
-         font-size: 2.5rem;
-         margin-bottom: 5px;
-         }
-         .system-name {
-         font-size: 1.5rem;
-         color: rgba(255, 255, 255, 0.9);
-         font-weight: 500;
-         margin: 0;
-         }
-         .user-info {
-         text-align: center;
-         margin-top: 16px;
-         }
-         .user-avatar {
-         color: white;        
-         font-size: 36px;
-         vertical-align: middle;
-         }
-         #signed-in-username {
-         margin-left: 6px;
-         }
-         @media (max-width: 768px) {
-         .school-header {
-         flex-direction: column;
-         gap: 10px;
-         }
-         .school-info {
-         text-align: center;
-         }
-         .school-name {
-         font-size: 1.8rem;
-         }
-         .system-name {
-         font-size: 1.2rem;
-         }
-         #signed-in-username {
-         margin-left: 3px;
-         }
-         }
-         .loading-overlay {
-         position: fixed;
-         top: 0;
-         left: 0;
-         width: 100%;
-         height: 100%;
-         background-color: rgba(255, 255, 255, 0.8);
-         backdrop-filter: blur(4px);
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         z-index: 9999;
-         }
-         .spinner {
-         width: 60px;
-         height: 60px;
-         border: 6px solid rgba(79, 70, 229, 0.3);
-         border-radius: 50%;
-         border-top-color: var(--primary);
-         animation: spin 1s ease-in-out infinite;
-         }
-         .hidden {
-         display: none;
-         }
-         @keyframes spin {
-         to { transform: rotate(360deg); }
-         }
-         .input-group {
-         position: relative;
-         }
-         .input-group input {
-         padding-right: 90px; /* space for the suffix */
-         }
-         .domain-suffix {
-         position: absolute;
-         right: 16px;
-         top: 50%;
-         transform: translateY(-50%);
-         color: #888;
-         font-size: 14px;
-         pointer-events: none;
-         user-select: none;
-         }
-      </style>
-   </head>
-   <body>
-      <div id="loading-overlay" class="loading-overlay hidden">
-         <div class="spinner"></div>
-      </div>
-      <header>
-         <button id="logout-btn" class="btn-logout hidden">
-            <span class="material-icons" style="font-size: 18px;">logout</span>
-            Logout
-         </button>
-         <div class="container">
-            <div class="school-header">
-               <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="school-logo">
-               <div class="school-info">
-                  <h1 class="school-name">Jamna Vidyapeeth</h1>
-                  <h2 class="system-name">Teachers Section</h2>
-                  <div style="display: none" id="user-info" class="user-info">
-                     <span class="user-avatar material-icons">account_circle</span>
-                     <span id="signed-in-username">Sourabh</span>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </header>
-      <!-- Container starts -->
-      <div class="container">
-         <!-- Login Section -->
-         <div id="login-section" class="login-container">
-            <h2>Teacher Login</h2>
-            <div id="login-error" class="alert hidden"></div>
-            <div class="form-group">
-               <label for="username">Username</label>
-               <div class="input-group">
-                  <input type="text" id="username" placeholder="Enter your username">
-                  <span class="domain-suffix">@jvp.com</span>
-               </div>
-            </div>
-            <div class="form-group">
-               <label for="password">Password</label>
-               <input type="password" id="password" placeholder="Enter your password">
-            </div>
-            <button id="login-btn" class="btn-secondary">Login</button>
-         </div>
-         <!-- App Section (Hidden by default) -->
-         <div id="app-section" class="app-container hidden">
-            <div class="dashboard-container">
-               <div class="dashboard-welcome">
-                  <h2 class="welcome-title">Welcome Back!</h2>
-                  <p class="welcome-subtitle">Choose a section to get started</p>
-               </div>
-               
-               <div class="dashboard-grid">
-                  <!-- Academic Section -->
-                  <a href="#" class="dashboard-tile" data-category="academic">
-                     <span class="material-icons tile-icon">grade</span>
-                     <h3 class="tile-title">Marks Entry</h3>
-                  </a>
-                  
-                  <a href="#" class="dashboard-tile" data-category="academic">
-                     <span class="material-icons tile-icon">menu_book</span>
-                     <h3 class="tile-title">Lesson Plan Generator</h3>
-                  </a>
-                  
-                  <!-- Management Section -->
-                  <a href="#" class="dashboard-tile" data-category="management">
-                     <span class="material-icons tile-icon">class</span>
-                     <h3 class="tile-title">Manage My Class</h3>
-                  </a>
-                  
-                  <a href="#" class="dashboard-tile" data-category="management">
-                     <span class="material-icons tile-icon">list_alt</span>
-                     <h3 class="tile-title">House List Generator</h3>
-                  </a>
-                  
-                  <!-- Activities Section -->
-                  <a href="#" class="dashboard-tile" data-category="activities">
-                     <span class="material-icons tile-icon">campaign</span>
-                     <h3 class="tile-title">Morning Assembly Scheduler</h3>
-                  </a>
-                  
-                  <a href="#" class="dashboard-tile" data-category="activities">
-                     <span class="material-icons tile-icon">event</span>
-                     <h3 class="tile-title">Activity Scheduler</h3>
-                  </a>
-                  
-                  <a href="#" class="dashboard-tile" data-category="activities">
-                     <span class="material-icons tile-icon">sports</span>
-                     <h3 class="tile-title">Sports Meet</h3>
-                  </a>
-                  
-                  <!-- Settings Section -->
-                  <a href="#" class="dashboard-tile" data-category="settings">
-                     <span class="material-icons tile-icon">lock</span>
-                     <h3 class="tile-title">Change Password</h3>
-                  </a>
-               </div>
-            </div>
-         </div>
-         <!-- App section ends -->
-      </div>
-      <!-- Container ends -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My JVP Portal</title>
+    <meta name="description" content="Jamna Vidyapeeth – A one-stop hub where students access academic resources and teachers find smart tools for daily tasks." >
 
-      <!-- Footer -->
-      <footer class="footer">
-         <div class="footer-content">
-            <span>Crafted by <span class="footer-text">Sourabh Sir</span></span>
-         </div>
-      </footer>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      <!-- Dialog Overlay Starts -->
-      <div id="dialog-overlay" class="dialog-overlay">
-         <div class="dialog-box" id="dialog-box">
-            <div class="dialog-header" id="dialog-header">Title</div>
-            <div class="dialog-message" id="dialog-message">Message goes here</div>
-            <div class="dialog-buttons" id="dialog-buttons">
-               <!-- Buttons will be added dynamically -->
-            </div>
-         </div>
-      </div>
-      <!-- Dialog Overlay Ends -->
-      <script>
-         // DOM Elements
-         const loginSection = document.getElementById('login-section');
-         const appSection = document.getElementById('app-section');
-         const loginBtn = document.getElementById('login-btn');
-         const logoutBtn = document.getElementById('logout-btn');
-         const loginError = document.getElementById('login-error');
-         const usernameInput = document.getElementById('username');
-         const passwordInput = document.getElementById('password');
-         const userInfo = document.getElementById('user-info');
-         const signedInUsername = document.getElementById('signed-in-username');
-         const loadingOverlay = document.getElementById('loading-overlay');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
 
-         // Check authentication status when the window loads
-         window.addEventListener('DOMContentLoaded', async () => {
-         showLoading();
-         
-         try {
-         const isAuthenticated = await checkAuth(); // Supabase authentication
-         
-         if (isAuthenticated) {
-            // User is already logged in
-         
-            // Fetch teacher's name
-            const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
-            if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
-               signedInUsername.innerText = teacherName.name;
-               userInfo.style.display = "block";
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3; }
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .school-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .welcome-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+
+        .user-type-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+        }
+
+        .class-selection {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .class-selection.active {
+            display: block;
+        }
+
+        .btn-class {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+            color: white;
+            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+        }
+
+        .btn-class:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(237, 137, 54, 0.4);
+        }
+
+        .back-btn {
+            background: rgba(113, 128, 150, 0.1);
+            color: #718096;
+            border: 2px solid rgba(113, 128, 150, 0.2);
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(113, 128, 150, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-text {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 400;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
             }
-         
-            // Hide login screen
-            loginSection.classList.add('hidden');
-            // Show main app screen
-            appSection.classList.remove('hidden');
-            logoutBtn.classList.remove('hidden');
-         } else {
-            // User is not logged in, show the login form
-            loginSection.classList.remove('hidden');
-            appSection.classList.add('hidden');
-            logoutBtn.classList.add('hidden');
-         }
-         } catch (error) {
-         console.error('Auth check error:', error);
-         // Show login screen as fallback
-         loginSection.classList.remove('hidden');
-         appSection.classList.add('hidden');
-         logoutBtn.classList.add('hidden');
-         } finally {
-         hideLoading();
-         }
-         });
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-         loginBtn.addEventListener('click', async () => {
-         const username = usernameInput.value.trim();
-         const email = username.endsWith('@jvp.com') ? username : `${username}@jvp.com`;
-         const password = passwordInput.value.trim();
-         
-         if (!email || !password) {
-         loginError.textContent = 'Please enter both email and password!';
-         loginError.classList.remove('hidden');
-         return;
-         }
-         
-         showLoading();
-         
-         try {
-         // Use Supabase auth
-         const data = await signInUser(email, password);
-         
-         // If we reach here, login was successful
-         
-         // Store the user ID
-         window.userId = data.user.id;
-         
-         // Fetch teacher's name
-         const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
-         if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
-            signedInUsername.innerText = teacherName.name;
-            userInfo.style.display = "block";
-         }
-         
-         loginSection.classList.add('hidden');
-         appSection.classList.remove('hidden');
-         logoutBtn.classList.remove('hidden');
-         loginError.classList.add('hidden');
-               
-         } catch (error) {
-         // Handle login error
-         loginError.textContent = error.message || 'Invalid email or password!';
-         loginError.classList.remove('hidden');
-         } finally {
-         hideLoading();
-         }
-         });
-         
-         // Logout functionality using Supabase
-         logoutBtn.addEventListener('click', async () => {
-         showLoading();
-         
-         try {
-         await signOutUser();
-         
-         // Clear UI state
-         loginSection.classList.remove('hidden');
-         appSection.classList.add('hidden');
-         logoutBtn.classList.add('hidden');
-         usernameInput.value = '';
-         passwordInput.value = '';
-         userInfo.style.display = "none";
-         
-         // Clear any stored user data
-         window.userId = null;
-         } catch (error) {
-         console.error('Logout error:', error);
-         // Optionally show an error message to the user
-         } finally {
-         hideLoading();
-         }
-         });
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease;
+        }
 
-         function showLoading() {
-         loadingOverlay.classList.remove('hidden');
-         }
-         
-         function hideLoading() {
-         loadingOverlay.classList.add('hidden');
-         }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .school-name {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .welcome-text {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 0.875rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
 
-      </script>
-   </body>
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .school-name {
+                font-size: 1.3rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="School Logo" class="logo">
+            <h1 class="school-name">My JVP</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container fade-in-up">
+            <h2 class="welcome-text">Welcome!</h2>
+            <p class="subtitle">Please select your role to continue</p>
+            
+            <!-- User Type Selection -->
+            <div class="user-type-section" id="userTypeSection">
+                <h3 class="section-title">I am a...</h3>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="selectTeacher()">
+                        <span class="material-icons">school</span>
+                        Teacher
+                    </button>
+                    <button class="btn btn-secondary" onclick="showClassSelection()">
+                        <span class="material-icons">person</span>
+                        Student
+                    </button>
+                </div>
+            </div>
+
+            <!-- Class Selection (Hidden by default) -->
+            <div class="class-selection" id="classSelection">
+                <button class="btn back-btn" onclick="showUserTypeSelection()">
+                    <span class="material-icons">arrow_back</span>
+                    Back
+                </button>
+                <h3 class="section-title">Select your class</h3>
+                <div class="button-group">
+                    <button class="btn btn-class" onclick="selectClass(6)">
+                        Class 6
+                    </button>
+                    <button class="btn btn-class" onclick="selectClass(7)">
+                        Class 7
+                    </button>
+                    <button class="btn btn-class" onclick="selectClass(9)">
+                        Class 9
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">Crafted by Sourabh Sir</p>
+    </footer>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Navigation functions
+        function selectTeacher() {
+            window.location.href = 'https://myjvp.in/teachers/';
+        }
+
+        function showClassSelection() {
+            document.getElementById('userTypeSection').style.display = 'none';
+            document.getElementById('classSelection').classList.add('active');
+        }
+
+        function showUserTypeSelection() {
+            document.getElementById('classSelection').classList.remove('active');
+            document.getElementById('userTypeSection').style.display = 'block';
+        }
+
+        function selectClass(classNumber) {
+            if (classNumber === 6) {
+                window.location.href = 'https://myjvp.in/students/?grade=6';
+            } else if (classNumber === 7) {
+                window.location.href = 'https://myjvp.in/students/?grade=7';
+            } else if (classNumber === 9) {
+                window.location.href = 'https://myjvp.in/students/class-9/';
+            }
+        }
+
+        // Initialize particles on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+        });
+
+        // Add some interactive effects
+        document.addEventListener('mousemove', function(e) {
+            const particles = document.querySelectorAll('.particle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            particles.forEach((particle, index) => {
+                const speed = (index % 5 + 1) * 0.5;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                particle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+    </script>
+</body>
 </html>
