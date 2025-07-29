@@ -1,0 +1,16 @@
+CREATE TABLE assemblies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    date DATE NOT NULL,
+    theme TEXT NOT NULL,
+    conducting_class TEXT,
+    anchoring_by TEXT,
+    thought_by TEXT,
+    thought TEXT,
+    word_student TEXT,
+    word_of_the_day TEXT,
+    news_by TEXT,
+    additional_roles JSONB,  -- stores an array of { role, student } objects
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+ALTER TABLE assemblies ADD CONSTRAINT unique_date UNIQUE (date);
