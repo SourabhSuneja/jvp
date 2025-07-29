@@ -23,6 +23,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- Enable RLS
 ALTER TABLE syllabus ENABLE ROW LEVEL SECURITY;
 
+-- Allow teachers to read data
+CREATE POLICY select_syllabus_policy ON syllabus
+FOR SELECT
+TO authenticated
+USING (true);
+
 -- INSERT Policy (uses WITH CHECK)
 CREATE POLICY insert_syllabus_policy ON syllabus
 FOR INSERT
