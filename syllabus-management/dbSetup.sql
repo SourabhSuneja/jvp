@@ -1,3 +1,8 @@
+DROP POLICY IF EXISTS select_syllabus_policy ON syllabus;
+DROP POLICY IF EXISTS insert_syllabus_policy ON syllabus;
+DROP POLICY IF EXISTS update_syllabus_policy ON syllabus;
+DROP POLICY IF EXISTS delete_syllabus_policy ON syllabus;
+
 create table syllabus (
     id uuid not null default gen_random_uuid(),
     class smallint not null,
