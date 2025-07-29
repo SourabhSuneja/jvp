@@ -20,13 +20,14 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-
+-- Enable RLS
 ALTER TABLE syllabus ENABLE ROW LEVEL SECURITY;
 
+-- INSERT Policy (uses WITH CHECK)
 CREATE POLICY insert_syllabus_policy ON syllabus
 FOR INSERT
 TO authenticated
-USING (
+WITH CHECK (
   EXISTS (
     SELECT 1
     FROM class_subject_assignments
@@ -35,6 +36,7 @@ USING (
   )
 );
 
+-- UPDATE Policy
 CREATE POLICY update_syllabus_policy ON syllabus
 FOR UPDATE
 TO authenticated
@@ -47,6 +49,7 @@ USING (
   )
 );
 
+-- DELETE Policy
 CREATE POLICY delete_syllabus_policy ON syllabus
 FOR DELETE
 TO authenticated
