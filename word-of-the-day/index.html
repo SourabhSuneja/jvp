@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="description" content="Generate a daily dose of linguistic brilliance with our Word of the Day Generator app! Share a beautifully crafted word of the day in image form with students. Elevate vocabulary effortlessly and make each day a journey into the beauty of words.">
+<meta property="og:image" content="template.jpg">
+<title>Word of the Day Generator</title>
+
+<link rel="stylesheet" href="background-effect.css">
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+
+<script>
+
+function cap(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+} 
+
+// Function to set a random image source
+    function setRandomImage() {
+        var randomIndex = getRandomIndex();
+        var randomImage = images[randomIndex];
+        document.getElementById('template').src = randomImage;
+    }
+
+</script>
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+.adjustable {
+  font-size: 16px;
+  user-select: none;
+}
+
+button {
+  background: #3498db;
+  color: #fff;
+  padding: 12px;
+  border: 0;
+  margin-left: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* Style for input text */
+input[type="text"] {
+  padding: 12px;
+  border: 3px solid #3498db;
+  border-radius: 8px;
+  outline: none;
+  font-size: 18px;
+  transition: 0.7s all;
+  color: #000;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border: 3px solid #4CAF50; /* Green color for the border */
+  box-shadow: 0 0 5px #4CAF50; /* Glowing effect */
+}
+
+/* Style for checkboxes */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #3498db;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #3498db;
+  border-color: #3498db;
+}
+
+/* Optional: Style the label for checkboxes */
+label {
+  font-size: 18px;
+  margin-left: 8px;
+}
+
+/* Optional: Style checked state for checkboxes */
+input[type="checkbox"]:checked + label {
+  color: #3498db;
+}
+
+input[type="checkbox"]:checked::before {
+    content: '\2713'; /* Unicode character for a checkmark */
+    color: white;
+    font-size: 16px; /* Adjust the font size as needed */
+    font-weight: bold;
+    position: relative;
+    top: -3px;
+    left: 2px;
+}
+
+/* Style for h1 */
+h1 {
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  padding-top: 24px;
+}
+
+/* Style for h2 */
+h2 {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 15px;
+  transition: 0.7s all;
+  font-weight: normal;
+  margin-top: 0;
+  padding-top: 2px;
+}
+
+/* Optional: Add hover effect for h2 */
+h2:hover {
+  color: #e74c3c; /* Change color on hover */
+}
+
+/* Optional: Style labels for required fields */
+label.required::after {
+  content: '*';
+  color: #e74c3c; /* Change color to your preference */
+  margin-left: 4px;
+}
+
+/* Optional: Add a subtle transition on hover for labels */
+label:hover {
+  color: #3498db; /* Change color on hover */
+}
+
+h2, label {
+  color: #fff;
+}
+
+h1 {
+  color: #4fa3e0;
+}
+
+#reloadIcon {
+  transition: transform 0.5s ease;
+  position: relative;
+  left: 24px;
+  top: 3px;
+  color: #4CAF50;
+    }
+
+#innerDiv {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 100%; 
+  max-width: 360px;
+}
+
+
+
+#overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: white;
+            display: flex;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #passwordPrompt {
+            text-align: center;
+        }
+        #passwordInput {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        #submitBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+
+
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&family=Open+Sans:wght@400&display=swap">
+  <style>
+    /* Apply Roboto font to elements with class "roboto" */
+    .roboto {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    /* Apply Open Sans font to elements with class "os" */
+    .os {
+      font-family: 'Open Sans', sans-serif;
+    }
+  </style>
+
+
+
+</head>
+<body class="roboto">
+
+
+
+<div id="overlay">
+        <div id="passwordPrompt">
+            <h2>Enter Password to Access the Page</h2>
+            <input type="password" id="passwordInput" placeholder="Enter password" />
+            <button id="submitBtn">Submit</button>
+        </div>
+    </div>
+
+
+
+
+<div id = "form" style= "position: absolute; top: 0; height: 100%; width: 100%; padding-left: 8px; display: none;">
+
+<h1 class="os">Word of the Day Generator</h1>
+<h2>Powered by Sourabh Suneja</h2>
+  <label for="word">Enter a word:</label>
+  <br>
+  <input type="text" id="word" name="word" >
+  <i data-feather="rotate-cw" id="reloadIcon"></i>
+  <br><br>
+<label for="pronunciation">Enter the pronunciation:</label><br>
+  <input type="text" id="pronunciation" name="pronunciation" ><br><br>
+<label for="meaning">Enter the word's meaning:</label><br>
+  <input type="text" id="meaning" name="meaning"><br><br>
+<label for="synonym">Enter the synonym:</label><br>
+  <input type="text" id="synonym" name="synonym"><br><br>
+<label for="antonym">Enter the antonym:</label><br>
+  <input type="text" id="antonym" name="antonym"><br><br>
+<label for="sentence">Enter the sentence:</label><br>
+  <input type="text" id="sentence" name="sentence"><br><br>
+<label>
+<input type="checkbox" id="checkbox" checked> Include Today's Date
+</label>
+<br><br>
+<label>
+<input type="checkbox" id="useJsonData" checked> Use pre-loaded JSON data
+</label>
+<br><br>
+<button id="loadFromJson">Load new word</button> &nbsp; &nbsp;
+<button id = "submit">Create image</button>
+</div> 
+
+<div id = "final" style="position: fixed; overflow: scroll; top: 0; left: 0; height: 100%; width: 100%; z-index: 100; background: rgba(0,0,0,0.85); display: none; transition: all 0.5s ease;">
+
+<div id="innerDiv">
+
+<img id="template" style=" width: 100%; position: absolute; top: 0; left: 0;" src="">
+<div class="draggable adjustable os" style="color: #004AAD; font-weight: bold; position: absolute; top: 110px; left: 96px; font-size: 20px; width: 170px; text-align: center">
+<p id ="sword" ></p>
+</div>
+
+<div class="draggable adjustable roboto" style="color: RGB(25,25,25); position: absolute; top: 148px; left: 96px; font-size: 16px; width: 170px; text-align: center">
+<p id ="spron" ></p>
+</div>
+
+<p class="draggable adjustable" id ="smean" style="color: black; position: absolute; top: 196px; left: 98px; font-size: 12px; max-width: 175px;" ></p>
+
+
+
+<p class="draggable adjustable" id ="sdate" style="color: black; position: absolute; top: 94px; left: 141px; font-size: 14px; max-width: 175px;" ></p>
+
+
+<p class="draggable adjustable" id ="ssynonym" style="color: #267449; font-weight: bold; position: absolute; top: 246px; left: 98px; font-size: 12px; max-width: 175px;" >Synonym : <span id = "ss"></span></p>
+
+<p class="draggable adjustable" id ="santonym" style="color: #C53534; font-weight: bold; position: absolute; top: 264px; left: 98px; font-size: 12px; max-width: 175px;" >Antonym : <span id = "sa"></span></p>
+
+<p class="draggable adjustable" id ="ssentence" style="color: #004AAD; font-weight: bold; position: absolute; top: 284px; left: 98px; font-size: 12px; max-width: 175px;" >Sentence :<br> <span id = "sse"></span></p>
+
+
+<button class="draggable" style="position: absolute; top: 500px; left: 70px; border: 0;" id="hideButton">Go back</button>
+
+<button class="draggable" style="position: absolute; top: 500px; left: 190px; border: 0;" id="screenshotButton">Download</button>
+
+<label class="draggable" style="position: absolute; top: 560px; left: 70px;">
+<input type="checkbox" id="aspectRatio"> Maintain aspect ratio<br>while resizing the background image
+</label>
+
+</div>
+
+</div>
+
+
+<script>
+
+const xhttp = new XMLHttpRequest();
+
+xhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+        const data = JSON.parse(this.responseText);
+        if (data && data[0]) {
+            const word = data[0];
+            console.log("Word of the day: " + word);
+           
+        var useJsonDataCheckbox = document.getElementById('useJsonData');
+           if (!useJsonDataCheckbox.checked) {
+document.getElementById("word").value = cap(word); 
+        
+
+// Assuming you have an input element with id "word"
+const inputElement = document.getElementById("word");
+
+// Create and dispatch the blur event
+const blurEvent = new Event('blur');
+inputElement.dispatchEvent(blurEvent);
+
+           }
+
+        } else {
+            console.log("Word of the day not found.");
+        }
+    }
+};
+
+const randomNumber = Math.floor(Math.random() * (5)) + 4;
+
+xhttp.open("GET", "https://random-word-api.herokuapp.com/word?lang=en&length="+randomNumber, true);
+xhttp.send();
+
+</script>
+
+
+
+
+<script>
+
+
+function fetchInfo() {
+  let inputValue = document.getElementById("word").value;
+  
+
+
+document.getElementById("meaning").value = "No meaning found";
+document.getElementById("synonym").value = "No synonym found";
+document.getElementById("antonym").value = "No antonym found";
+document.getElementById("pronunciation").value = "";
+document.getElementById("sentence").value = "";
+
+let link = 'https://api.datamuse.com/words?ml='+inputValue;
+let xhr = new XMLHttpRequest();
+xhr.open('GET', link, true);
+xhr.onload = function() {
+  if (xhr.status >= 200 && xhr.status < 400) {
+    let response = xhr.responseText;
+    let jsonArray = JSON.parse(response);
+    document.getElementById("synonym").value =cap(jsonArray[0].word);
+  } else {
+    console.error('Request failed');
+  }
+};
+xhr.send();
+
+
+
+
+
+
+// antonym fetch
+
+
+let link2 = 'https://api.datamuse.com/words?rel_ant='+inputValue;
+let xhr2 = new XMLHttpRequest();
+xhr2.open('GET', link2, true);
+xhr2.onload = function() {
+  if (xhr2.status >= 200 && xhr2.status < 400) {
+    let response2 = xhr2.responseText;
+    let jsonArray2 = JSON.parse(response2);
+    document.getElementById("antonym").value =cap(jsonArray2[0].word);
+  } else {
+    console.error('Request failed'); 
+  }
+};
+xhr2.send();
+
+
+
+
+
+
+//meaning fetch
+
+
+const word = inputValue; 
+const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+
+fetch(apiUrl)
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    const shortDefinition = data[0].meanings[0].definitions[0].definition;
+    
+    document.getElementById("meaning").value =`${shortDefinition}`;
+  })
+  .catch(error => {
+    document.getElementById("meaning").value = "No meaning found";
+  });
+
+
+}
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+<script>
+
+document.getElementById("submit").addEventListener("click", function() {
+    
+    var wordValue = document.getElementById("word").value;
+    var meaningValue = document.getElementById("meaning").value;
+    var synonymValue = document.getElementById("synonym").value;
+var antonymValue = document.getElementById("antonym").value;
+    var sentenceValue = document.getElementById("sentence").value;
+
+var pronValue = document.getElementById("pronunciation").value;
+
+    document.getElementById("sword").innerText = wordValue;
+
+if(pronValue != '') {
+document.getElementById("spron").innerText = "/ " + pronValue + " /";
+}
+else {
+document.getElementById("spron").innerText = '';
+}
+    document.getElementById("smean").innerText = "Meaning : "+ " "+ meaningValue;
+    document.getElementById("ss").innerText = synonymValue;
+
+document.getElementById("sa").innerText = antonymValue;
+
+    document.getElementById("sse").innerText = sentenceValue;
+
+    document.getElementById("final").style.display = "block";
+
+// Get the checkbox and date element
+const dateCheckbox = document.getElementById("checkbox");
+const dateElementPara = document.getElementById("sdate");
+
+ // Check if the checkbox is checked
+  if (dateCheckbox.checked) {
+    // Set today's date in the specified format
+    dateElementPara.innerText = '(' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +')';
+  } else {
+    // If the checkbox is unchecked, clear the date
+    dateElementPara.innerText = "";
+  }
+
+setRandomImage();
+
+});
+
+
+</script>
+
+
+
+
+<script>
+var elements = document.getElementsByClassName("draggable");
+
+for (var i = 0; i < elements.length; i++) {
+  makeDraggable(elements[i]);
+}
+
+function makeDraggable(el) {
+  var x0, y0, offsetX, offsetY;
+
+  el.addEventListener('touchstart', function(e) {
+    var touch = e.targetTouches[0];
+    x0 = touch.clientX;
+    y0 = touch.clientY;
+    offsetX = parseFloat(getComputedStyle(el).left);
+    offsetY = parseFloat(getComputedStyle(el).top);
+  }, false);
+
+  el.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    var touch = e.targetTouches[0];
+    el.style.left = offsetX + touch.clientX - x0 + 'px'; 
+    el.style.top = offsetY + touch.clientY - y0 + 'px'; 
+  }, false);
+}
+</script>
+
+
+<script>
+var adjustables = document.querySelectorAll('.adjustable');
+var fontSizes = [12, 13, 14, 15, 16, 18, 20, 24];
+var currentIndex = 0;
+
+adjustables.forEach(function(element) {
+  element.addEventListener('click', function() {
+    currentIndex = (currentIndex + 1) % fontSizes.length;
+    element.style.fontSize = fontSizes[currentIndex] + 'px';
+  });
+});
+</script>
+
+
+
+<script>
+    document.getElementById('hideButton').addEventListener('click', function() {
+      var finalDiv = document.getElementById('final');
+      finalDiv.style.display = 'none'; 
+document.getElementById("form").style.display = "block";
+    });
+  </script>
+
+
+
+
+
+
+<script>
+    
+ 
+document.getElementById('screenshotButton').addEventListener('click', function() {
+    // Specify the image element
+    var imageElement = document.getElementById('template');
+
+    // Get the current position and dimensions of the image
+    var imageRect = imageElement.getBoundingClientRect();
+
+    // Use html2canvas to capture the screenshot with high quality
+    html2canvas(document.body, {
+      x: imageRect.left + window.scrollX,
+      y: imageRect.top + window.scrollY,
+      width: imageRect.width,
+      height: imageRect.height,
+      scale: 3 // Adjust the scale for HD quality (e.g., 2 for 2x scale)
+    }).then(function(canvas) {
+      // Convert the canvas to a data URL
+      var screenshotDataUrl = canvas.toDataURL();
+
+      // Create a link and trigger a download with a dynamic file name
+      var downloadLink = document.createElement('a');
+      downloadLink.href = screenshotDataUrl;
+
+      // Generate a file name with "word-of-the-day" + today's date (DD-MM-YY) format
+      var today = new Date();
+      var formattedDate = ('0' + today.getDate()).slice(-2) + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + today.getFullYear().toString().slice(-2);
+      downloadLink.download = 'word-of-the-day_' + formattedDate + '_HD.png';
+
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    });
+  });
+     
+
+        
+</script>
+
+
+
+
+<script>
+
+
+// Get the checkbox and date element
+const checkbox = document.getElementById("checkbox");
+const dateElementP = document.getElementById("sdate");
+
+// Add an event listener to the checkbox
+checkbox.addEventListener("change", function() {
+  // Check if the checkbox is checked
+  if (checkbox.checked) {
+    // Set today's date in the specified format
+    dateElementP.innerText = '(' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +')';
+  } else {
+    // If the checkbox is unchecked, clear the date
+    dateElementP.innerText = "";
+  }
+});
+
+
+
+
+</script>
+
+
+
+
+<script>
+    const wordInput = document.getElementById('word');
+    wordInput.addEventListener('input', function() {
+      var useJsonDataCheckbox = document.getElementById('useJsonData');
+            if (!useJsonDataCheckbox.checked) {
+                  fetchInfo();
+}
+    });
+
+    wordInput.addEventListener('blur', function() {
+      var useJsonDataCheckbox = document.getElementById('useJsonData');
+            if (!useJsonDataCheckbox.checked) {
+                  fetchInfo();
+}
+    });
+    
+
+</script>
+
+
+
+<script src="fetch-json.js"></script>
+
+<script src="background-effect.js"></script>
+
+
+<script>
+    // Array of image sources
+    var images = [
+        'template.jpg',
+        'template2.jpg',
+        'template3.jpg',
+        'template4.jpg',
+        'template5.jpg',
+        'template6.jpg',
+        'template7.jpg',
+        'template8.jpg',
+        'template9.jpg'
+    ];
+
+    // Preload images into the browser's cache
+    function preloadTemplates() {
+        for (var i = 0; i < images.length; i++) {
+            var img = new Image();
+            img.src = images[i];
+        }
+    }
+
+
+    // Function to get a random index from the images array
+    function getRandomIndex() {
+        return Math.floor(Math.random() * images.length);
+    }
+
+    // Call the function to preload images when the page loads
+    preloadTemplates();
+
+    // Call the function to set a random image when the page loads
+    setRandomImage();
+</script>
+
+<script>
+    feather.replace();
+
+    var reloadIcon = document.getElementById('reloadIcon');
+
+    reloadIcon.addEventListener('click', function() {
+      document.getElementById('loadFromJson').click();
+      reloadIcon.style.transform = 'rotate(360deg)';
+      setTimeout(function() {
+        reloadIcon.style.transform = 'rotate(0deg)';
+      }, 500);
+    });
+  </script>
+
+
+
+<script>
+  let isDraggingTemplate = false;
+  let startYTemplate, startHeightTemplate, startWidthTemplate;
+
+  const template = document.getElementById('template');
+  // let changeWidthTemplate = document.getElementById("aspectRatio").checked; 
+// Set to true if you want to change width proportionately
+
+  const startDragTemplate = function(e) {
+    isDraggingTemplate = true;
+    startYTemplate = e.clientY || e.touches[0].clientY;
+    startHeightTemplate = template.offsetHeight;
+    startWidthTemplate = template.offsetWidth;
+
+    // Change cursor style
+    template.style.cursor = 'grabbing';
+
+    // Prevent text selection during drag
+    document.body.style.userSelect = 'none';
+  };
+
+  const endDragTemplate = function() {
+    if (isDraggingTemplate) {
+      isDraggingTemplate = false;
+
+      // Reset cursor style
+      template.style.cursor = 'grab';
+
+      // Reset text selection
+      document.body.style.userSelect = 'auto';
+    }
+  };
+
+  const dragTemplate = function(e) {
+    if (isDraggingTemplate) {
+      let newHeightTemplate = startHeightTemplate + ((e.clientY || e.touches[0].clientY) - startYTemplate);
+
+      // Set minimum height to prevent negative values
+      newHeightTemplate = Math.max(newHeightTemplate, 150);
+
+      // Update the element's height
+      template.style.height = newHeightTemplate + 'px';
+
+      if (document.getElementById('aspectRatio').checked) {
+        // Adjust width proportionately
+        let newWidthTemplate = (newHeightTemplate / startHeightTemplate) * startWidthTemplate;
+        template.style.width = newWidthTemplate + 'px';
+      }
+    }
+  };
+
+  template.addEventListener('mousedown', startDragTemplate);
+  document.addEventListener('mouseup', endDragTemplate);
+  document.addEventListener('mousemove', dragTemplate);
+
+  template.addEventListener('touchstart', startDragTemplate);
+  document.addEventListener('touchend', endDragTemplate);
+  document.addEventListener('touchmove', dragTemplate);
+</script>
+
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const overlay = document.getElementById("overlay");
+        const form = document.getElementById("form");
+        const passwordInput = document.getElementById("passwordInput");
+        const submitBtn = document.getElementById("submitBtn");
+        const correctPassword = "hrxtr";
+
+        submitBtn.addEventListener("click", function() {
+            if (passwordInput.value === correctPassword) {
+                overlay.style.display = "none";
+form.style.display = "block";
+            } else {
+                alert("Incorrect password. Please try again.");
+            }
+        });
+
+        passwordInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                submitBtn.click();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
