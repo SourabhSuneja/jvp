@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Sourabh Sir's AI-powered School Assembly Scheduler suggests inspiring thoughts, creative ideas, and even writes complete assembly scripts to make mornings smarter and smoother.">
+      <title>Jamna Vidyapeeth - Assembly Scheduler</title>
+      <script type="module" src="ai-prompt.js"></script>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+      <!-- Dialog Box Scripts -->
+      <script src="https://myjvp.in/commons/dialog.js"></script>
+      <style>
+         :root {
+         --primary: #1e3a8a;
+         --primary-light: #3b82f6;
+         --secondary: #f59e0b;
+         --success: #10b981;
+         --danger: #ef4444;
+         --light: #f3f4f6;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #d1d5db;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         max-height: 99999999px;
+         }
+         body {
+         background-color: #f8fafc;
+         color: var(--text);
+         line-height: 1.6;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         padding: 0 20px;
+         }
+         header {
+         background-color: var(--primary);
+         color: white;
+         padding: 1rem 0;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+         }
+         .header-content {
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         }
+         .school-info {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         }
+         .logo {
+         width: 60px;
+         height: 60px;
+         border-radius: 50%;
+         object-fit: cover;
+         border: 2px solid white;
+         }
+         .school-name {
+         font-size: 1.5rem;
+         font-weight: 700;
+         }
+         main {
+         padding: 2rem 0;
+         }
+         .card {
+         background-color: white;
+         border-radius: 8px;
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+         padding: 1.5rem;
+         margin-bottom: 2rem;
+         }
+         h2 {
+         color: var(--primary);
+         margin-bottom: 1.5rem;
+         font-size: 1.5rem;
+         border-bottom: 2px solid var(--light);
+         padding-bottom: 0.5rem;
+         }
+         .auth-form {
+         max-width: 400px;
+         margin: 3rem auto;
+         }
+         .form-group {
+         margin-bottom: 1.25rem;
+         }
+         label {
+         display: block;
+         margin-bottom: 0.5rem;
+         font-weight: 500;
+         color: var(--dark);
+         }
+         input, select, textarea {
+         width: 100%;
+         padding: 0.75rem;
+         border: 1px solid var(--border);
+         border-radius: 4px;
+         font-size: 1rem;
+         color: var(--text);
+         transition: border-color 0.3s;
+         }
+         input:focus, select:focus, textarea:focus {
+         outline: none;
+         border-color: var(--primary-light);
+         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+         }
+         .btn {
+         display: inline-block;
+         padding: 0.75rem 1.5rem;
+         border: none;
+         border-radius: 4px;
+         font-size: 1rem;
+         font-weight: 500;
+         cursor: pointer;
+         transition: all 0.3s;
+         text-align: center;
+         }
+         .btn-primary {
+         background-color: var(--primary);
+         color: white;
+         }
+         .btn-primary:hover {
+         background-color: #1e40af;
+         }
+         .btn-secondary {
+         background-color: var(--secondary);
+         color: white;
+         }
+         .btn-secondary:hover {
+         background-color: #d97706;
+         }
+         .btn-success {
+         background-color: var(--success);
+         color: white;
+         }
+         .btn-success:hover {
+         background-color: #059669;
+         }
+         .btn-danger {
+         background-color: var(--danger);
+         color: white;
+         }
+         .btn-danger:hover {
+         background-color: #dc2626;
+         }
+         .btn-block {
+         display: block;
+         width: 100%;
+         }
+         .form-grid {
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 1.25rem;
+         }
+         @media (min-width: 768px) {
+         .form-grid {
+         grid-template-columns: 1fr 1fr;
+         }
+         }
+         .form-group.full-width {
+         grid-column: 1 / -1;
+         }
+         .separator {
+         text-align: center;
+         margin: 1.5rem 0;
+         position: relative;
+         }
+         .separator::before {
+         content: "";
+         position: absolute;
+         top: 50%;
+         left: 0;
+         right: 0;
+         height: 1px;
+         background-color: var(--border);
+         z-index: 1;
+         }
+         .separator span {
+         position: relative;
+         z-index: 2;
+         background-color: white;
+         padding: 0 1rem;
+         color: var(--text);
+         font-size: 0.875rem;
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-top: 1.5rem;
+         overflow-x: auto;
+         }
+         th, td {
+         padding: 0.75rem;
+         text-align: left;
+         border-bottom: 1px solid var(--border);
+         min-width: 120px;
+         }
+         th {
+         background-color: var(--light);
+         font-weight: 600;
+         color: var(--dark);
+         }
+         tbody tr:hover {
+         background-color: #f9fafb;
+         }
+         .table-responsive {
+         overflow-x: auto;
+         }
+         .badge {
+         display: inline-block;
+         padding: 0.25rem 0.5rem;
+         border-radius: 9999px;
+         font-size: 0.75rem;
+         font-weight: 500;
+         text-align: center;
+         }
+         .badge-primary {
+         background-color: #dbeafe;
+         color: var(--primary);
+         }
+         .badge-secondary {
+         background-color: #fef3c7;
+         color: #92400e;
+         }
+         .flex {
+         display: flex;
+         }
+         .items-center {
+         align-items: center;
+         }
+         .justify-between {
+         justify-content: space-between;
+         }
+         .gap-2 {
+         gap: 0.5rem;
+         }
+         .gap-4 {
+         gap: 1rem;
+         }
+         .mt-4 {
+         margin-top: 1rem;
+         }
+         .mb-2 {
+         margin-bottom: 0.5rem;
+         }
+         .hidden {
+         display: none;
+         }
+         .ai-suggestion {
+         background-color: #f0f9ff;
+         border-left: 4px solid var(--primary-light);
+         padding: 1rem;
+         margin: 1rem 0;
+         border-radius: 4px;
+         }
+         .additional-roles {
+         margin-top: 1rem;
+         padding: 1rem;
+         background-color: #f9fafb;
+         border-radius: 4px;
+         border: 1px dashed var(--border);
+         }
+         .role-entry {
+         display: flex;
+         gap: 1rem;
+         margin-bottom: 0.75rem;
+         align-items: center;
+         }
+         .role-entry input {
+         flex: 1;
+         }
+         .role-remove {
+         color: var(--danger);
+         cursor: pointer;
+         font-size: 1.25rem;
+         }
+         footer {
+         background-color: var(--dark);
+         color: white;
+         padding: 1.5rem 0;
+         margin-top: 3rem;
+         text-align: center;
+         }
+         .modal {
+         display: none;
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(0, 0, 0, 0.5);
+         z-index: 100;
+         align-items: center;
+         justify-content: center;
+         }
+         .modal-content {
+         background-color: white;
+         padding: 2rem;
+         border-radius: 8px;
+         max-width: 500px;
+         max-height: 85%;
+         overflow-y: auto;
+         width: 100%;
+         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+         position: relative;
+         }
+         .modal-close {
+         position: absolute;
+         top: 1rem;
+         right: 1rem;
+         font-size: 1.5rem;
+         cursor: pointer;
+         color: var(--text);
+         }
+         .ai-options {
+         display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         margin-top: 1.5rem;
+         }
+         .ai-option {
+         padding: 1rem;
+         border-radius: 6px;
+         border: 1px solid var(--border);
+         cursor: pointer;
+         transition: all 0.2s;
+         }
+         .ai-option:hover {
+         border-color: var(--primary-light);
+         background-color: #f0f9ff;
+         }
+         .toast {
+         position: fixed;
+         bottom: 1.8rem;
+         right: 1rem;
+         padding: 1rem 1.5rem;
+         background-color: var(--success);
+         color: white;
+         border-radius: 4px;
+         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+         z-index: 1000;
+         opacity: 0;
+         transition: opacity 0.3s ease-in-out;
+         }
+         .toast.show {
+         opacity: 1;
+         }
+         .toast-error {
+         background-color: var(--danger);
+         }
+         .text-center {
+         text-align: center;
+         }
+         /* Empty state styles */
+         .empty-state {
+         text-align: center;
+         padding: 2rem;
+         background-color: #f9fafb;
+         border-radius: 8px;
+         border: 1px dashed var(--border);
+         }
+         .empty-state i {
+         font-size: 3rem;
+         color: var(--border);
+         margin-bottom: 1rem;
+         }
+         .empty-state h3 {
+         color: var(--dark);
+         margin-bottom: 0.5rem;
+         }
+         .empty-state p {
+         color: var(--text);
+         }
+         /* Add these styles to your existing CSS */
+         .modal-lg {
+         max-width: 800px;
+         width: 90%;
+         max-height: 90vh;
+         display: flex;
+         flex-direction: column;
+         }
+         .response-content {
+         background-color: #f9fafb;
+         border: 1px solid var(--border);
+         border-radius: 6px;
+         padding: 1.5rem;
+         margin-top: 1rem;
+         max-height: 60vh;
+         overflow-y: auto;
+         white-space: pre-wrap;
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         line-height: 1.6;
+         }
+         .response-actions {
+         display: flex;
+         justify-content: flex-end;
+         margin-top: 1rem;
+         }
+         /* For the copy button feedback */
+         .copy-feedback {
+         color: var(--success);
+         margin-left: 0.5rem;
+         opacity: 0;
+         transition: opacity 0.3s ease-in-out;
+         }
+         .copy-feedback.show {
+         opacity: 1;
+         }
+         /* Subtitle for response context */
+         .response-subtitle {
+         font-size: 0.9rem;
+         color: var(--text);
+         opacity: 0.8;
+         margin-top: 0.25rem;
+         }
+         /* Loading spinner for waiting for AI response */
+         .spinner {
+         display: inline-block;
+         width: 50px;
+         height: 50px;
+         border: 3px solid rgba(0, 0, 0, 0.1);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         margin: 2rem auto;
+         }
+         @keyframes spin {
+         to { transform: rotate(360deg); }
+         }
+         .loading-container {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         padding: 2rem;
+         text-align: center;
+         }
+         .loading-text {
+         margin-top: 1rem;
+         color: var(--text);
+         }
+         #closeAiResponseModal, #closeAiAssistantModal {
+         z-index: 20000;
+         }
+      </style>
+   </head>
+   <body class="light-theme">
+      <header>
+         <div class="container header-content">
+            <div class="school-info">
+               <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="Jamna Vidyapeeth Logo" class="logo">
+               <div>
+                  <div class="school-name">Jamna Vidyapeeth</div>
+                  <div>Assembly Scheduler</div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <main>
+         <div class="container">
+            <div class="auth-form card" id="authForm">
+               <h2 class="text-center">Teacher Authentication</h2>
+               <div class="form-group">
+                  <label for="passkey">Enter Passkey</label>
+                  <input type="password" id="passkey" placeholder="Enter your passkey">
+               </div>
+               <button class="btn btn-primary btn-block" id="authenticateBtn">Authenticate</button>
+            </div>
+            <div class="card hidden" id="schedulerForm">
+               <h2>Schedule Morning Assembly</h2>
+               <form id="assemblyForm">
+                  <div class="form-grid">
+                     <div class="form-group">
+                        <label for="assemblyDate">Assembly Date</label>
+                        <input type="date" id="assemblyDate" required>
+                     </div>
+                     <div class="form-group">
+                        <label for="theme">Theme/Topic</label>
+                        <input type="text" id="theme" placeholder="Enter assembly theme/topic" required>
+                        <button type="button" class="btn btn-secondary mt-4" id="suggestThemeBtn">
+                        <i class="fas fa-lightbulb"></i> Get AI Suggestions
+                        </button>
+                     </div>
+                     <div class="form-group">
+                        <label for="conductingClass">Conducting Class</label>
+                        <select id="conductingClass" required>
+                           <option value="">-- Select Class --</option>
+                           <option value="Joint Assembly">Joint Assembly</option>
+                        </select>
+                     </div>
+                     <div class="form-group">
+                        <label for="anchorStudent">Anchoring By</label>
+                        <input type="text" id="anchorStudent" placeholder="Student Name">
+                     </div>
+                     <div class="form-group">
+                        <label for="thoughtStudent">Thought of the Day By</label>
+                        <input type="text" id="thoughtStudent" placeholder="Student Name">
+                     </div>
+                     <div class="form-group">
+                        <label for="thought">Thought of the Day</label>
+                        <input type="text" id="thought" placeholder="Enter thought of the day">
+                        <button type="button" class="btn btn-secondary mt-4" id="suggestThoughtBtn">
+                        <i class="fas fa-lightbulb"></i> Get AI Suggestions
+                        </button>
+                     </div>
+                     <div class="form-group">
+                        <label for="wordStudent">Word of the Day By</label>
+                        <input type="text" id="wordStudent" placeholder="Student Name">
+                     </div>
+                     <div class="form-group">
+                        <label for="word">Word of the Day</label>
+                        <input type="text" id="word" placeholder="Enter word of the day">
+                        <button type="button" class="btn btn-secondary mt-4" id="suggestWordBtn">
+                        <i class="fas fa-lightbulb"></i> Get AI Suggestions
+                        </button>
+                     </div>
+                     <div class="form-group">
+                        <label for="newsStudent">News Reading By</label>
+                        <input type="text" id="newsStudent" placeholder="Student Name">
+                     </div>
+                  </div>
+                  <div class="form-group full-width">
+                     <div class="flex justify-between items-center">
+                        <label>Additional Roles (Optional)</label>
+                        <button type="button" class="btn btn-primary" id="addRoleBtn">
+                        <i class="fas fa-plus"></i> Add Role
+                        </button>
+                     </div>
+                     <div id="additionalRoles" class="additional-roles hidden">
+                     </div>
+                  </div>
+                  <div class="form-group full-width">
+                     <button type="submit" class="btn btn-success btn-block">
+                     <i class="fas fa-calendar-check"></i> Schedule Assembly
+                     </button>
+                  </div>
+               </form>
+            </div>
+            <div class="card hidden" id="upcomingAssemblies">
+               <h2>Upcoming Assemblies</h2>
+               <div class="print-button-container" style="margin-bottom: 1rem; text-align: right;">
+                  <button class="btn btn-secondary" id="printAssemblyBtn">
+                  <i class="fas fa-print"></i> Print Assembly Plan
+                  </button>
+               </div>
+               <div class="table-responsive">
+                  <table id="assembliesTable">
+                     <thead>
+                        <tr>
+                           <th>Date</th>
+                           <th>Theme</th>
+                           <th>Class</th>
+                           <th>Anchoring By</th>
+                           <th>Thought of the Day</th>
+                           <th>Thought of the Day By</th>
+                           <th>Word of the Day</th>
+                           <th>Word of the Day By</th>
+                           <th>News By</th>
+                           <th>Additional Roles</th>
+                           <th>Actions</th>
+                        </tr>
+                     </thead>
+                     <tbody id="assembliesTableBody">
+                     </tbody>
+                  </table>
+                  <div class="empty-state" id="emptyState">
+                     <i class="fas fa-calendar-day"></i>
+                     <h3>No Assemblies Scheduled Yet</h3>
+                     <p>Start by scheduling your first assembly above.</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </main>
+      <footer>
+         <div class="container">
+            <p>Crafted by Sourabh Sir with ♥️</p>
+         </div>
+      </footer>
+      <div class="modal" id="aiModal">
+         <div class="modal-content">
+            <span class="modal-close" id="closeAiModal">&times;</span>
+            <h2 id="aiModalTitle">AI Assistance</h2>
+            <p id="aiModalDescription">Select one of the suggestions below:</p>
+            <div class="ai-options" id="aiOptions">
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="aiAssistantModal">
+         <div class="modal-content">
+            <span class="modal-close" id="closeAiAssistantModal">&times;</span>
+            <h2>AI Assistant</h2>
+            <p>How would you like me to help with this assembly?</p>
+            <div class="ai-options">
+               <div class="ai-option" id="scriptOption">
+                  <h3><i class="fas fa-microphone"></i> Help with Anchoring Script</h3>
+                  <p>Get assistance drafting an anchoring script for this assembly.</p>
+               </div>
+               <div class="ai-option" id="skitOption">
+                  <h3><i class="fas fa-theater-masks"></i> Help with Skit</h3>
+                  <p>Get ideas and script for a skit related to the assembly theme.</p>
+               </div>
+               <div class="ai-option" id="suggestionOption">
+                  <h3><i class="fas fa-lightbulb"></i> Assembly Enhancement Suggestions</h3>
+                  <p>Get suggestions to make this assembly more engaging and exciting.</p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="modal" id="aiResponseModal">
+         <div class="modal-content modal-lg">
+            <span class="modal-close" id="closeAiResponseModal">&times;</span>
+            <h2 id="aiResponseTitle">AI Response</h2>
+            <div class="response-actions">
+               <button class="btn btn-secondary" id="copyResponseBtn">
+               <i class="fas fa-copy"></i> Copy to Clipboard
+               </button>
+            </div>
+            <div class="response-content" id="aiResponseContent">
+               <!-- AI response will be displayed here -->
+            </div>
+         </div>
+      </div>
+      <div class="toast" id="toast"></div>
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <!-- Reference the main script -->
+      <script src="script.js"></script>
+      <script>
+         // Print Assembly Plan functionality
+         document.addEventListener('DOMContentLoaded', function() {
+             const printBtn = document.getElementById('printAssemblyBtn');
+             
+             if (printBtn) {
+                 printBtn.addEventListener('click', function() {
+                     printAssemblySchedule();
+                 });
+             }
+         });
+         
+         function printAssemblySchedule() {
+             const assembliesTableBody = document.getElementById('assembliesTableBody');
+             
+             // Check if there are any assemblies
+             if (!assembliesTableBody || assembliesTableBody.children.length === 0) {
+                 alert('No assemblies scheduled to print.');
+                 return;
+             }
+             
+             // Create the print content
+             const printContent = generatePrintableContent();
+             
+             // Create a new window for printing
+             const printWindow = window.open('', '_blank', 'width=800,height=600');
+             
+             // Write the content to the new window
+             printWindow.document.write(printContent);
+             printWindow.document.close();
+             
+             // Wait for content to load, then print
+             printWindow.onload = function() {
+                 printWindow.focus();
+                 printWindow.print();
+                 printWindow.close();
+             };
+         }
+         
+         function generatePrintableContent() {
+             const assembliesTableBody = document.getElementById('assembliesTableBody');
+             const rows = assembliesTableBody.querySelectorAll('tr');
+             
+             let tableRows = '';
+             
+             rows.forEach(row => {
+                 const cells = row.querySelectorAll('td');
+                 if (cells.length >= 10) {
+                     const date = cells[0].textContent.trim();
+                     const theme = cells[1].textContent.trim();
+                     const className = cells[2].textContent.trim();
+                     const anchor = cells[3].textContent.trim();
+                     const thought = cells[4].textContent.trim();
+                     const thoughtBy = cells[5].textContent.trim();
+                     const word = cells[6].textContent.trim();
+                     const wordBy = cells[7].textContent.trim();
+                     const newsBy = cells[8].textContent.trim();
+                     const additionalRoles = cells[9].textContent.trim();
+                     
+                     tableRows += `
+                         <tr>
+                             <td>${formatDateForPrint(date)}</td>
+                             <td>${theme}</td>
+                             <td>${className}</td>
+                             <td>${anchor}</td>
+                             <td>
+                                 <strong>${thought}</strong><br>
+                                 <small style="color: #666;">By: ${thoughtBy}</small>
+                             </td>
+                             <td>
+                                 <strong>${word}</strong><br>
+                                 <small style="color: #666;">By: ${wordBy}</small>
+                             </td>
+                             <td>${newsBy}</td>
+                             <td>${additionalRoles}</td>
+                         </tr>
+                     `;
+                 }
+             });
+             
+             const currentDate = new Date().toLocaleDateString('en-IN', {
+                 weekday: 'long',
+                 year: 'numeric',
+                 month: 'long',
+                 day: 'numeric'
+             });
+             
+             return `
+                 <!DOCTYPE html>
+                 <html>
+                 <head>
+                     <title>Assembly Schedule - Jamna Vidyapeeth</title>
+                     <style>
+                         body {
+                             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                             margin: 20px;
+                             background: white;
+                             color: #000;
+                             line-height: 1.4;
+                         }
+                         
+                         .header {
+                             text-align: center;
+                             margin-bottom: 30px;
+                             border-bottom: 3px solid #1e3a8a;
+                             padding-bottom: 20px;
+                         }
+                         
+                         .header h1 {
+                             font-size: 28px;
+                             color: #1e3a8a;
+                             margin: 0;
+                             font-weight: bold;
+                         }
+                         
+                         .header h2 {
+                             font-size: 18px;
+                             color: #374151;
+                             margin: 10px 0 5px 0;
+                             font-weight: normal;
+                         }
+                         
+                         .print-date {
+                             font-size: 12px;
+                             color: #666;
+                             margin-top: 10px;
+                         }
+                         
+                         table {
+                             width: 100%;
+                             border-collapse: collapse;
+                             margin: 20px 0;
+                             font-size: 11px;
+                         }
+                         
+                         th, td {
+                             border: 1px solid #ddd;
+                             padding: 8px;
+                             text-align: left;
+                             vertical-align: top;
+                             word-wrap: break-word;
+                         }
+                         
+                         th {
+                             background-color: #f8f9fa;
+                             font-weight: bold;
+                             color: #1e3a8a;
+                             font-size: 12px;
+                         }
+                         
+                         tr:nth-child(even) {
+                             background-color: #f9f9f9;
+                         }
+                         
+                         .footer {
+                             margin-top: 40px;
+                             text-align: center;
+                             font-size: 10px;
+                             color: #666;
+                             border-top: 1px solid #ddd;
+                             padding-top: 15px;
+                         }
+                         
+                         /* Column widths */
+                         .col-date { width: 10%; }
+                         .col-theme { width: 16%; }
+                         .col-class { width: 8%; }
+                         .col-anchor { width: 12%; }
+                         .col-thought { width: 22%; }
+                         .col-word { width: 15%; }
+                         .col-news { width: 10%; }
+                         .col-roles { width: 7%; }
+                         
+                         @media print {
+                             body { margin: 15px; }
+                             table { font-size: 10px; }
+                             th, td { padding: 6px; }
+                         }
+                     </style>
+                 </head>
+                 <body>
+                     <div class="header">
+                         <h1>JAMNA VIDYAPEETH</h1>
+                         <h2>Morning Assembly Schedule</h2>
+                         <div class="print-date">Generated on: ${currentDate}</div>
+                     </div>
+                     
+                     <table>
+                         <thead>
+                             <tr>
+                                 <th class="col-date">Date</th>
+                                 <th class="col-theme">Theme/Topic</th>
+                                 <th class="col-class">Class</th>
+                                 <th class="col-anchor">Anchoring By</th>
+                                 <th class="col-thought">Thought of the Day</th>
+                                 <th class="col-word">Word of the Day</th>
+                                 <th class="col-news">News By</th>
+                                 <th class="col-roles">Other Roles</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             ${tableRows}
+                         </tbody>
+                     </table>
+                     
+                     <div class="footer">
+                         <p><strong>Jamna Vidyapeeth - Assembly Scheduler</strong></p>
+                         <p>For any changes or updates, please contact the assembly in-charge.</p>
+                         <p>Crafted by Sourabh Sir</p>
+                     </div>
+                 </body>
+                 </html>
+             `;
+         }
+         
+         function formatDateForPrint(dateString) {
+             try {
+                 const date = new Date(dateString);
+                 return date.toLocaleDateString('en-IN', {
+                     weekday: 'short',
+                     day: '2-digit',
+                     month: 'short',
+                     year: '2-digit'
+                 });
+             } catch (e) {
+                 return dateString;
+             }
+         }
+      </script>
+   </body>
+</html>
