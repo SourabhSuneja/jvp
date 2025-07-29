@@ -673,7 +673,7 @@
             const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
             if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
                signedInUsername.innerText = teacherName.name;
-               welcomeTitle = 'Welcome, ' + teacherName.name.split(" ")[0];
+               welcomeTitle.innerText = 'Welcome, ' + teacherName.name.split(" ")[0];
                userInfo.style.display = "block";
             }
          
@@ -725,7 +725,7 @@
          const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
          if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
             signedInUsername.innerText = teacherName.name;
-            welcomeTitle = 'Welcome, ' + teacherName.name.split(" ")[0];
+            welcomeTitle.innerText = 'Welcome, ' + teacherName.name.split(" ")[0];
             userInfo.style.display = "block";
          }
          
