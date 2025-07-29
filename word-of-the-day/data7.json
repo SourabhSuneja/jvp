@@ -1,0 +1,340 @@
+{
+  "words": [
+    {
+      "word": "Unabated",
+      "meaning": "Without any reduction in intensity or strength; continuing at full strength or force.",
+      "synonym": "Unrelenting",
+      "antonym": "Abated",
+      "sentence": "The storm continued unabated throughout the night.",
+      "pronunciation": "uhn-uh-bey-tid"
+    },
+    {
+      "word": "Denial",
+      "meaning": "The action of declaring something to be untrue; the refusal of something requested or desired.",
+      "synonym": "Rejection",
+      "antonym": "Acceptance",
+      "sentence": "Her denial of the accusations only fueled further suspicion.",
+      "pronunciation": "dih-nahy-uhl"
+    },
+    {
+      "word": "Refugee",
+      "meaning": "A person who has been forced to leave their country in order to escape war, persecution, or natural disaster.",
+      "synonym": "Displaced person",
+      "antonym": "Citizen",
+      "sentence": "The refugee camp provided shelter for those fleeing the war-torn region.",
+      "pronunciation": "ref-yuh-jee"
+    },
+    {
+      "word": "Sunrise",
+      "meaning": "The time in the morning when the sun appears or full daylight begins.",
+      "synonym": "Dawn",
+      "antonym": "Sunset",
+      "sentence": "She woke up early to watch the sunrise over the mountains.",
+      "pronunciation": "suhn-rahyz"
+    },
+    {
+      "word": "Sunset",
+      "meaning": "The time in the evening when the sun disappears or daylight fades.",
+      "synonym": "Dusk",
+      "antonym": "Sunrise",
+      "sentence": "They enjoyed the dinner while watching the sunset over the ocean.",
+      "pronunciation": "suhn-set"
+    },
+    {
+      "word": "Fair",
+      "meaning": "In accordance with the rules or standards; free from bias, dishonesty, or injustice; treating people equally without favoritism or discrimination.",
+      "synonym": "Just",
+      "antonym": "Unfair",
+      "sentence": "The judge ensured a fair trial for both parties.",
+      "pronunciation": "fair"
+    },
+    {
+      "word": "Fare",
+      "meaning": "The money a passenger on public transportation has to pay.",
+      "synonym": "Price",
+      "antonym": "Free",
+      "sentence": "She paid her fare and took a seat on the train.",
+      "pronunciation": "fair"
+    },
+    {
+      "word": "Traitor",
+      "meaning": "A person who betrays a friend, country, principle, etc.; a person who acts disloyally to one's own country by aiding an invading enemy.",
+      "synonym": "Betrayer",
+      "antonym": "Loyalist",
+      "sentence": "He was labeled a traitor for leaking confidential information to the enemy.",
+      "pronunciation": "trey-ter"
+    },
+    {
+      "word": "Evergreen",
+      "meaning": "Having foliage that persists and remains green throughout the year; something that is enduring or continually popular.",
+      "synonym": "Perennial",
+      "antonym": "Deciduous",
+      "sentence": "Pine trees are known for being evergreen, retaining their needles year-round.",
+      "pronunciation": "ev-er-green"
+    },
+    {
+      "word": "Lushgreen",
+      "meaning": "Abundantly covered or filled with vegetation, especially of a rich, green color.",
+      "synonym": "Luxuriant",
+      "antonym": "Barren",
+      "sentence": "The lush green forest was a haven for wildlife.",
+      "pronunciation": "luhsh-green"
+    },
+    {
+      "word": "Deploy",
+      "meaning": "To strategically position or arrange for action, especially military forces or resources.",
+      "synonym": "Position",
+      "antonym": "Withdraw",
+      "sentence": "The army was deployed to the border in response to escalating tensions.",
+      "pronunciation": "dih-ploy"
+    },
+    {
+      "word": "Employee",
+      "meaning": "A person hired to work for another in return for payment, especially under a contract of employment.",
+      "synonym": "Worker",
+      "antonym": "Employer",
+      "sentence": "The company hired several new employees to handle the increased workload.",
+      "pronunciation": "em-ploi-ee"
+    },
+    {
+      "word": "Mock",
+      "meaning": "To tease or laugh at in a scornful or contemptuous manner; to mimic or imitate, especially in order to ridicule.",
+      "synonym": "Taunt",
+      "antonym": "Praise",
+      "sentence": "Her friends mocked at her strange English accent.",
+      "pronunciation": "mahk"
+    },
+    {
+      "word": "Foster",
+      "meaning": "To promote the growth or development of; to nurture or encourage.",
+      "synonym": "Encourage",
+      "antonym": "Hinder",
+      "sentence": "The organization works to foster a sense of community among its members.",
+      "pronunciation": "faw-ster"
+    },
+    {
+      "word": "Rattle",
+      "meaning": "To make a rapid succession of short, sharp noises; to cause someone to feel nervous, worried, or irritated.",
+      "synonym": "Clatter",
+      "antonym": "Calm",
+      "sentence": "The noise from the construction site rattled her concentration.",
+      "pronunciation": "rat-l"
+    },
+    {
+      "word": "Nostalgia",
+      "meaning": "A sentimental longing or affection for the past; a bittersweet yearning for moments, experiences, or places that are no longer present.",
+      "synonym": "Reminiscence",
+      "antonym": "Foresight",
+      "sentence": "Listening to old songs fills him with nostalgia for his youth.",
+      "pronunciation": "no-stal-juh"
+    },
+    {
+      "word": "Embrace",
+      "meaning": "To hold someone closely in one's arms, especially as a sign of affection; to accept or support willingly and enthusiastically.",
+      "synonym": "Hug",
+      "antonym": "Reject",
+      "sentence": "She embraced the opportunity to learn new skills.",
+      "pronunciation": "em-breys"
+    },
+    {
+      "word": "Distant",
+      "meaning": "Far away in space or time; remote; not intimate or closely connected.",
+      "synonym": "Remote",
+      "antonym": "Close",
+      "sentence": "They could see a distant mountain range on the horizon.",
+      "pronunciation": "dis-tuhnt"
+    },
+    {
+      "word": "Contentment",
+      "meaning": "A state of happiness and satisfaction; the feeling of being happy and satisfied with one's life or situation.",
+      "synonym": "Satisfaction",
+      "antonym": "Discontent",
+      "sentence": "She found contentment in the simple pleasures of life.",
+      "pronunciation": "kuhn-tent-muhnt"
+    },
+    {
+      "word": "Refreshing",
+      "meaning": "Reviving or stimulating; giving new energy or vigor; pleasantly new or different.",
+      "synonym": "Invigorating",
+      "antonym": "Stale",
+      "sentence": "The cool breeze was refreshing on a hot summer day.",
+      "pronunciation": "ri-fresh-ing"
+    },
+    {
+      "word": "Crackle",
+      "meaning": "To make a series of slight cracking noises; to emit sharp, snapping sounds.",
+      "synonym": "Snap",
+      "antonym": "Silence",
+      "sentence": "The fire crackled in the fireplace, creating a cozy atmosphere.",
+      "pronunciation": "krak-uhl"
+    },
+    {
+      "word": "Rustle",
+      "meaning": "To make a soft, muffled, stirring sound, like that of the movement of silk or leaves; to move or act with energetic activity.",
+      "synonym": "Swish",
+      "antonym": "Stillness",
+      "sentence": "The leaves rustled in the breeze as she walked through the forest.",
+      "pronunciation": "ruhs-uhl"
+    },
+    {
+      "word": "Adventure",
+      "meaning": "An exciting or unusual experience; a daring journey or undertaking; an activity involving risk or excitement.",
+      "synonym": "Journey",
+      "antonym": "Monotony",
+      "sentence": "They embarked on an adventure to explore the remote wilderness.",
+      "pronunciation": "ad-ven-chur"
+    },
+    {
+      "word": "Trend",
+      "meaning": "A general direction in which something is developing or changing; a fashion or style that is currently popular.",
+      "synonym": "Pattern",
+      "antonym": "Obsolete",
+      "sentence": "Wearing traditional clothes has become a popular trend among young people.",
+      "pronunciation": "trend"
+    },
+    {
+      "word": "Frenzy",
+      "meaning": "A state of wild excitement or uncontrollable emotion; a temporary madness or mania.",
+      "synonym": "Hysteria",
+      "antonym": "Calm",
+      "sentence": "The crowd worked themselves into a frenzy at the rock concert.",
+      "pronunciation": "fren-zee"
+    },  
+    {
+      "word": "Hegemony",
+      "meaning": "Leadership or dominance, especially by one country or social group over others; preponderant influence or authority over others.",
+      "synonym": "Dominance",
+      "antonym": "Subordination",
+      "sentence": "The empire sought to establish hegemony over neighboring kingdoms.",
+      "pronunciation": "hi-jem-uh-nee"
+    },
+    {
+      "word": "Ethereal",
+      "meaning": "Extremely delicate and light in a way that seems too perfect for this world; characterized by a light, airy, or heavenly quality.",
+      "synonym": "Delicate",
+      "antonym": "Earthly",
+      "sentence": "The dancer moved across the stage with an ethereal grace.",
+      "pronunciation": "ih-theer-ee-uhl"
+    },
+    {
+      "word": "Allergy",
+      "meaning": "A damaging immune response by the body to a substance, especially pollen, fur, a particular food, or dust, to which it has become hypersensitive.",
+      "synonym": "Sensitivity",
+      "antonym": "Tolerance",
+      "sentence": "He developed an allergy to peanuts, so he has to be careful about what he eats.",
+      "pronunciation": "al-er-jee"
+    },
+    {
+      "word": "Tumultuous",
+      "meaning": "Making a loud, confused noise; uproarious; excited, confused, or disorderly.",
+      "synonym": "Turmoil",
+      "antonym": "Calm",
+      "sentence": "The tumultuous protests in the streets demanded immediate attention from the government.",
+      "pronunciation": "too-muhl-choo-uhs"
+    },
+    {
+      "word": "Endurance",
+      "meaning": "The ability to withstand hardship or adversity; the ability to sustain a prolonged stressful activity.",
+      "synonym": "Stamina",
+      "antonym": "Weakness",
+      "sentence": "Long-distance runners need great endurance to complete marathons.",
+      "pronunciation": "en-doo-runs"
+    },
+    {
+      "word": "Luminous",
+      "meaning": "Radiating or reflecting light; bright or shining, especially in the dark.",
+      "synonym": "Radiant",
+      "antonym": "Dim",
+      "sentence": "The moon cast a luminous glow over the landscape.",
+      "pronunciation": "loo-muh-nuhs"
+    },
+    {
+      "word": "Orchard",
+      "meaning": "A piece of land planted with fruit trees; a grove of fruit trees.",
+      "synonym": "Grove",
+      "antonym": "Desert",
+      "sentence": "The apple orchard was filled with ripe fruit ready for harvest.",
+      "pronunciation": "awr-cherd"
+    },
+    {
+      "word": "Endearing",
+      "meaning": "Inspiring affection or warm sympathy; lovable; charming.",
+      "synonym": "Charming",
+      "antonym": "Off-putting",
+      "sentence": "Her endearing smile won over even the most skeptical audience.",
+      "pronunciation": "en-deer-ing"
+    },
+    {
+      "word": "Winsome",
+      "meaning": "Attractive or appealing in appearance or character; charming; engaging.",
+      "synonym": "Charming",
+      "antonym": "Unattractive",
+      "sentence": "The winsome puppy wagged its tail eagerly as it approached.",
+      "pronunciation": "win-suhm"
+    },
+    {
+      "word": "Gracious",
+      "meaning": "Courteous, kind, and pleasant, especially towards someone of lower social status; marked by kindness and warm courtesy.",
+      "synonym": "Courteous",
+      "antonym": "Rude",
+      "sentence": "She was a gracious host, welcoming all her guests with a smile.",
+      "pronunciation": "grey-shuhs"
+    },
+    {
+      "word": "Candid",
+      "meaning": "Truthful and straightforward; frank; not posed or rehearsed.",
+      "synonym": "Honest",
+      "antonym": "Dishonest",
+      "sentence": "The manager gave us a candid assessment of the company's financial situation.",
+      "pronunciation": "kan-did"
+    },
+    {
+      "word": "Patriotic",
+      "meaning": "Having or expressing devotion to and vigorous support for one's country; characterized by love of one's country.",
+      "synonym": "Nationalistic",
+      "antonym": "Unpatriotic",
+      "sentence": "She wore a patriotic flag pin on her lapel to show her love for her country.",
+      "pronunciation": "pey-tree-ot-ik"
+    },
+    {
+      "word": "Nestled",
+      "meaning": "Settled or comfortably situated in a sheltered position; to be tucked away or snuggled in a cozy or protected place.",
+      "synonym": "Snuggled",
+      "antonym": "Exposed",
+      "sentence": "The cottage nestled among the trees, surrounded by lush greenery.",
+      "pronunciation": "nes-uhld"
+    },
+    {
+      "word": "Anticipate",
+      "meaning": "Regard as probable; expect or predict; look forward to; be excited or anxious about.",
+      "synonym": "Expect",
+      "antonym": "Surprise",
+      "sentence": "She eagerly anticipated her vacation to the tropical island.",
+      "pronunciation": "an-tis-uh-peyt"
+    },
+    {
+      "word": "Supper",
+      "meaning": "An evening meal, typically a light or informal one.",
+      "synonym": "Dinner",
+      "antonym": "Breakfast",
+      "sentence": "The family gathered around the table for a hearty supper after a long day.",
+      "pronunciation": "suhp-er"
+    },
+    {
+      "word": "Terrain",
+      "meaning": "A stretch of land, especially with regard to its physical features; a region or tract of land.",
+      "synonym": "Landscape",
+      "antonym": "Sea",
+      "sentence": "The hikers navigated through rugged terrain on their mountain expedition.",
+      "pronunciation": "ter-eyn"
+    },
+    {
+      "word": "Ailment",
+      "meaning": "An illness, typically a minor one; a bodily disorder or disease, especially one that is not serious.",
+      "synonym": "Illness",
+      "antonym": "Health",
+      "sentence": "The doctor prescribed medication to treat his stomach ailment.",
+      "pronunciation": "eyl-muhnt"
+    }
+  ]
+}

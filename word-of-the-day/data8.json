@@ -1,0 +1,660 @@
+{
+    "words": [
+        {
+            "word": "Prey",
+            "meaning": "An animal that is hunted or killed by another for food.",
+            "synonym": "Victim",
+            "antonym": "Predator",
+            "sentence": "The hawk swooped down to catch its prey.",
+            "pronunciation": "pray"
+        },
+        {
+            "word": "Berth",
+            "meaning": "A designated space for a ship to dock or a place to sleep.",
+            "synonym": "Dock",
+            "antonym": "Depart",
+            "sentence": "The captain secured the vessel in its berth.",
+            "pronunciation": "burth"
+        },
+        {
+            "word": "Knight",
+            "meaning": "A man who served his sovereign or lord as a mounted soldier in armor.",
+            "synonym": "Champion",
+            "antonym": "Coward",
+            "sentence": "The knight bravely defended the castle.",
+            "pronunciation": "nait"
+        },
+        {
+            "word": "Tale",
+            "meaning": "A story, especially one that might be imagined or told to amuse.",
+            "synonym": "Story",
+            "antonym": "Truth",
+            "sentence": "She told a fascinating tale of her adventures.",
+            "pronunciation": "teyl"
+        },
+        {
+            "word": "Bare",
+            "meaning": "Lacking covering; exposed.",
+            "synonym": "Naked",
+            "antonym": "Covered",
+            "sentence": "The tree stood bare in the winter wind.",
+            "pronunciation": "behr"
+        },
+        {
+            "word": "Maid",
+            "meaning": "A female servant or an unmarried girl or woman.",
+            "synonym": "Servant",
+            "antonym": "Mistress",
+            "sentence": "The maid cleaned the room every morning.",
+            "pronunciation": "meɪd"
+        },
+        {
+            "word": "Wit",
+            "meaning": "The ability to use words and ideas in a quick and inventive way.",
+            "synonym": "Intelligence",
+            "antonym": "Dullness",
+            "sentence": "His wit always made the conversation lively.",
+            "pronunciation": "wit"
+        },
+        {
+            "word": "Stare",
+            "meaning": "To look fixedly or vacantly at someone or something.",
+            "synonym": "Gaze",
+            "antonym": "Glance",
+            "sentence": "She couldn't help but stare at the beautiful painting.",
+            "pronunciation": "stehr"
+        },
+        {
+            "word": "Anger",
+            "meaning": "A strong feeling of annoyance or displeasure.",
+            "synonym": "Fury",
+            "antonym": "Calm",
+            "sentence": "His anger was evident when he heard the news.",
+            "pronunciation": "ang-ger"
+        },
+        {
+            "word": "Launch",
+            "meaning": "To set a boat or ship in motion; to introduce or start something.",
+            "synonym": "Initiate",
+            "antonym": "Halt",
+            "sentence": "They plan to launch the new product next month.",
+            "pronunciation": "lawnch"
+        },
+        {
+            "word": "Blend",
+            "meaning": "To mix two or more substances together.",
+            "synonym": "Combine",
+            "antonym": "Separate",
+            "sentence": "She decided to blend the ingredients to make a smoothie.",
+            "pronunciation": "blɛnd"
+        },
+        {
+            "word": "Stir",
+            "meaning": "To mix a substance by moving it around with a tool.",
+            "synonym": "Mix",
+            "antonym": "Leave",
+            "sentence": "He used a spoon to stir the soup.",
+            "pronunciation": "stər"
+        },
+        {
+            "word": "Bulk",
+            "meaning": "The mass or size of something; to make something larger or bulkier.",
+            "synonym": "Volume",
+            "antonym": "Diminution",
+            "sentence": "The bulk of the package made it difficult to carry.",
+            "pronunciation": "buhlk"
+        },
+        {
+            "word": "Coward",
+            "meaning": "A person who lacks the courage to face danger or difficulty.",
+            "synonym": "Timid",
+            "antonym": "Brave",
+            "sentence": "He was called a coward for not standing up for himself.",
+            "pronunciation": "kou-erd"
+        },
+        {
+            "word": "Grab",
+            "meaning": "To take or seize suddenly or roughly.",
+            "synonym": "Snatch",
+            "antonym": "Release",
+            "sentence": "She decided to grab a quick snack before leaving.",
+            "pronunciation": "grab"
+        },
+        {
+            "word": "Generous",
+            "meaning": "Willing to give and share unstintingly.",
+            "synonym": "Benevolent",
+            "antonym": "Selfish",
+            "sentence": "His generous nature made him beloved by all.",
+            "pronunciation": "jen-er-uhs"
+        },
+        {
+            "word": "Empower",
+            "meaning": "To give someone the authority or power to do something.",
+            "synonym": "Enable",
+            "antonym": "Restrict",
+            "sentence": "The program aims to empower women in the workplace.",
+            "pronunciation": "em-pou-er"
+        },
+        {
+            "word": "Union",
+            "meaning": "The action of joining together or the state of being united.",
+            "synonym": "Alliance",
+            "antonym": "Division",
+            "sentence": "The union of the two companies created a stronger entity.",
+            "pronunciation": "yoon-yuhn"
+        },
+        {
+            "word": "Crew",
+            "meaning": "A group of people who work together, especially on a ship or aircraft.",
+            "synonym": "Team",
+            "antonym": "Individual",
+            "sentence": "The crew worked tirelessly to prepare for the flight.",
+            "pronunciation": "kroo"
+        },
+        {
+            "word": "Nibble",
+            "meaning": "To take small bites or to eat in small amounts.",
+            "synonym": "Snack",
+            "antonym": "Devour",
+            "sentence": "She decided to nibble on some carrots while watching TV.",
+            "pronunciation": "nib-uhl"
+        },
+        {
+            "word": "Focus",
+            "meaning": "To concentrate attention or effort on something.",
+            "synonym": "Concentrate",
+            "antonym": "Disperse",
+            "sentence": "It's important to focus on your goals.",
+            "pronunciation": "foh-kus"
+        },
+        {
+            "word": "Gloomy",
+            "meaning": "Dark or poorly lit, especially in a way that makes one feel sad.",
+            "synonym": "Dismal",
+            "antonym": "Bright",
+            "sentence": "The weather was gloomy, matching her mood.",
+            "pronunciation": "gloom-ee"
+        },
+        {
+            "word": "Destroy",
+            "meaning": "To put an end to the existence of something by damaging or attacking it.",
+            "synonym": "Demolish",
+            "antonym": "Create",
+            "sentence": "The storm threatened to destroy the fragile buildings.",
+            "pronunciation": "dih-stroi"
+        },
+        {
+            "word": "Stress",
+            "meaning": "A state of mental or emotional strain or tension.",
+            "synonym": "Pressure",
+            "antonym": "Relaxation",
+            "sentence": "She often experiences stress during exam season.",
+            "pronunciation": "stres"
+        },
+        {
+            "word": "Aim",
+            "meaning": "To direct a goal or purpose; to intend.",
+            "synonym": "Target",
+            "antonym": "Miss",
+            "sentence": "He aims to complete his project by the end of the week.",
+            "pronunciation": "eɪm"
+        },
+        {
+            "word": "Fame",
+            "meaning": "The state of being known or recognized by many people.",
+            "synonym": "Renown",
+            "antonym": "Obscurity",
+            "sentence": "Her fame grew after her performance went viral.",
+            "pronunciation": "feɪm"
+        },
+        {
+            "word": "Brief",
+            "meaning": "Short in duration, extent, or length.",
+            "synonym": "Concise",
+            "antonym": "Lengthy",
+            "sentence": "She gave a brief summary of the meeting.",
+            "pronunciation": "brif"
+        },
+        {
+            "word": "Evade",
+            "meaning": "To escape or avoid, especially by cleverness or trickery.",
+            "synonym": "Dodge",
+            "antonym": "Confront",
+            "sentence": "He tried to evade the question during the interview.",
+            "pronunciation": "ih-veyd"
+        },
+        {
+            "word": "Voyage",
+            "meaning": "A long journey involving travel by sea or in space.",
+            "synonym": "Journey",
+            "antonym": "Stagnation",
+            "sentence": "They embarked on a voyage across the Atlantic Ocean.",
+            "pronunciation": "voi-ij"
+        },
+        {
+            "word": "Treat",
+            "meaning": "To provide someone with something enjoyable or to behave toward someone in a specified way.",
+            "synonym": "Gift",
+            "antonym": "Neglect",
+            "sentence": "She decided to treat herself to a spa day.",
+            "pronunciation": "treet"
+        },
+        {
+            "word": "Snatch",
+            "meaning": "To seize or grab suddenly and forcibly.",
+            "synonym": "Grab",
+            "antonym": "Release",
+            "sentence": "She managed to snatch the toy from his hands.",
+            "pronunciation": "snatch"
+        },
+        {
+            "word": "Content",
+            "meaning": "In a state of peaceful happiness; the items or topics that are included.",
+            "synonym": "Satisfaction",
+            "antonym": "Discontent",
+            "sentence": "He was content with his simple lifestyle.",
+            "pronunciation": "kən-ˈtɛnt"
+        },
+        {
+            "word": "Abroad",
+            "meaning": "In or to a foreign country or countries.",
+            "synonym": "Overseas",
+            "antonym": "Domestic",
+            "sentence": "She studied abroad during her college years.",
+            "pronunciation": "ə-ˈbrɔːd"
+        },
+        {
+            "word": "Knot",
+            "meaning": "A fastening made by tying a piece of string, rope, or something similar.",
+            "synonym": "Tie",
+            "antonym": "Untie",
+            "sentence": "He learned how to tie a knot while sailing.",
+            "pronunciation": "nɒt"
+        },
+        {
+            "word": "Horror",
+            "meaning": "An intense feeling of fear, shock, or disgust.",
+            "synonym": "Terror",
+            "antonym": "Calm",
+            "sentence": "The horror movie left the audience in suspense.",
+            "pronunciation": "ˈhɔːr.ər"
+        },
+        {
+            "word": "Bid",
+            "meaning": "To offer a certain price for something, especially at an auction.",
+            "synonym": "Offer",
+            "antonym": "Withdraw",
+            "sentence": "He decided to bid on the painting at the auction.",
+            "pronunciation": "bɪd"
+        },
+        {
+            "word": "Crown",
+            "meaning": "A circular ornamental headdress worn by a monarch as a symbol of authority.",
+            "synonym": "Tiara",
+            "antonym": "N/A",
+            "sentence": "The queen wore a magnificent crown during the ceremony.",
+            "pronunciation": "kraʊn"
+        },
+        {
+            "word": "Faint",
+            "meaning": "To lose consciousness for a short time.",
+            "synonym": "Swoon",
+            "antonym": "Awake",
+            "sentence": "She felt faint from the heat and had to sit down.",
+            "pronunciation": "feɪnt"
+        },
+        {
+            "word": "Tumble",
+            "meaning": "To fall suddenly, clumsily, or headlong.",
+            "synonym": "Fall",
+            "antonym": "Stabilize",
+            "sentence": "He took a tumble while trying to skate.",
+            "pronunciation": "ˈtʌm.bəl"
+        },
+        {
+            "word": "Cot",
+            "meaning": "A small bed, often for a child or for temporary use.",
+            "synonym": "Crib",
+            "antonym": "N/A",
+            "sentence": "The baby slept peacefully in her cot.",
+            "pronunciation": "kɒt"
+        },
+        {
+            "word": "Pail",
+            "meaning": "A bucket, especially one used for carrying liquids.",
+            "synonym": "Bucket",
+            "antonym": "N/A",
+            "sentence": "He filled the pail with water from the well.",
+            "pronunciation": "peɪl"
+        },
+        {
+            "word": "Auspicious",
+            "meaning": "Conducive to success; favorable.",
+            "synonym": "Promising",
+            "antonym": "Unlucky",
+            "sentence": "The sunny weather was an auspicious sign for the wedding.",
+            "pronunciation": "ɔːˈspɪʃ.əs"
+        },
+        {
+            "word": "Languor",
+            "meaning": "A state of tiredness or inertia, often pleasurable.",
+            "synonym": "Fatigue",
+            "antonym": "Energy",
+            "sentence": "The languor of the afternoon made him want to nap.",
+            "pronunciation": "ˈlæŋɡər"
+        },
+        {
+            "word": "Autophile",
+            "meaning": "A person who loves cars.",
+            "synonym": "Car enthusiast",
+            "antonym": "N/A",
+            "sentence": "As an autophile, he spent every weekend working on his classic car.",
+            "pronunciation": "ˈɔː.tə.faɪl"
+        },
+        {
+            "word": "Fraught",
+            "meaning": "Filled with or destined to result in something undesirable.",
+            "synonym": "Teeming",
+            "antonym": "Devoid",
+            "sentence": "The situation was fraught with tension.",
+            "pronunciation": "frɔːt"
+        },
+        {
+            "word": "Luscious",
+            "meaning": "Having a pleasingly rich, sweet taste or smell.",
+            "synonym": "Delicious",
+            "antonym": "Unappetizing",
+            "sentence": "The luscious fruit was a delight to eat.",
+            "pronunciation": "ˈlʌʃ.əs"
+        },
+        {
+            "word": "Enigmatic",
+            "meaning": "Difficult to interpret or understand; mysterious.",
+            "synonym": "Puzzling",
+            "antonym": "Clear",
+            "sentence": "Her enigmatic smile left everyone curious.",
+            "pronunciation": "ˌɛnɪɡˈmætɪk"
+        },
+        {
+            "word": "Impetuous",
+            "meaning": "Acting or done quickly and without thought or care.",
+            "synonym": "Rash",
+            "antonym": "Cautious",
+            "sentence": "His impetuous decision surprised everyone.",
+            "pronunciation": "ɪmˈpɛtʃuəs"
+        },
+        {
+            "word": "Permissible",
+            "meaning": "Allowed or permitted.",
+            "synonym": "Allowed",
+            "antonym": "Prohibited",
+            "sentence": "It is permissible to use the facilities during the event.",
+            "pronunciation": "pərˈmɪs.ə.bəl"
+        },
+        {
+            "word": "Reshuffle",
+            "meaning": "To change the order or arrangement of something.",
+            "synonym": "Reorganize",
+            "antonym": "Stabilize",
+            "sentence": "The manager decided to reshuffle the team for better efficiency.",
+            "pronunciation": "ˈriːˌʃʌf.əl"
+        },
+        {
+            "word": "Denunciation",
+            "meaning": "The act of publicly declaring something to be wrong.",
+            "synonym": "Condemnation",
+            "antonym": "Praise",
+            "sentence": "Her denunciation of the unfair rules was clear.",
+            "pronunciation": "dɪˌnʌn.siˈeɪ.ʃən"
+        },
+        {
+            "word": "Disport",
+            "meaning": "To enjoy oneself; to play.",
+            "synonym": "Play",
+            "antonym": "Work",
+            "sentence": "The children went to the park to disport themselves.",
+            "pronunciation": "dɪsˈpɔrt"
+        },
+        {
+            "word": "Vapid",
+            "meaning": "Lacking flavor or interest.",
+            "synonym": "Dull",
+            "antonym": "Exciting",
+            "sentence": "The movie was so vapid that I almost fell asleep.",
+            "pronunciation": "ˈvæp.ɪd"
+        },
+        {
+            "word": "Peckish",
+            "meaning": "Slightly hungry.",
+            "synonym": "Hungry",
+            "antonym": "Full",
+            "sentence": "I'm feeling a bit peckish; I need a snack.",
+            "pronunciation": "ˈpɛk.ɪʃ"
+        },
+        {
+            "word": "Flunk",
+            "meaning": "To fail a test or course.",
+            "synonym": "Fail",
+            "antonym": "Pass",
+            "sentence": "If you don’t study, you might flunk the exam.",
+            "pronunciation": "flʌŋk"
+        },
+        {
+            "word": "Haughty",
+            "meaning": "Arrogantly superior and disdainful.",
+            "synonym": "Proud",
+            "antonym": "Humble",
+            "sentence": "Her haughty attitude made it hard to befriend her.",
+            "pronunciation": "ˈhɔː.ti"
+        },
+        {
+            "word": "Meticulous",
+            "meaning": "Showing great attention to detail.",
+            "synonym": "Careful",
+            "antonym": "Careless",
+            "sentence": "She is meticulous when it comes to her artwork.",
+            "pronunciation": "məˈtɪk.jə.ləs"
+        },
+        {
+            "word": "Incisive",
+            "meaning": "Clear and sharp in thought or expression.",
+            "synonym": "Keen",
+            "antonym": "Dull",
+            "sentence": "His incisive comments helped clarify the issue.",
+            "pronunciation": "ɪnˈsaɪ.sɪv"
+        },
+        {
+            "word": "Intact",
+            "meaning": "Not damaged or broken.",
+            "synonym": "Whole",
+            "antonym": "Damaged",
+            "sentence": "The package arrived intact, with no signs of damage.",
+            "pronunciation": "ɪnˈtækt"
+        },
+        {
+            "word": "Vindicate",
+            "meaning": "To clear someone of blame or suspicion.",
+            "synonym": "Clear",
+            "antonym": "Blame",
+            "sentence": "The evidence will vindicate his innocence.",
+            "pronunciation": "ˈvɪn.dɪ.keɪt"
+        },
+        {
+            "word": "Infuse",
+            "meaning": "To fill or soak something with a quality or feeling.",
+            "synonym": "Instill",
+            "antonym": "Remove",
+            "sentence": "They infused the tea with lemon for extra flavor.",
+            "pronunciation": "ɪnˈfjuːz"
+        },
+        {
+            "word": "Abdication",
+            "meaning": "The act of giving up a position of power.",
+            "synonym": "Resignation",
+            "antonym": "Acceptance",
+            "sentence": "The king's abdication shocked the country.",
+            "pronunciation": "ˌæb.dɪˈkeɪ.ʃən"
+        },
+        {
+            "word": "Tactile",
+            "meaning": "Related to the sense of touch.",
+            "synonym": "Touching",
+            "antonym": "Untouchable",
+            "sentence": "Tactile books help children learn through touch.",
+            "pronunciation": "ˈtæk.taɪl"
+        },
+        {
+            "word": "Contiguous",
+            "meaning": "Sharing a common border; touching.",
+            "synonym": "Adjacent",
+            "antonym": "Separate",
+            "sentence": "The two countries are contiguous and share a long border.",
+            "pronunciation": "kənˈtɪɡ.ju.əs"
+        },
+        {
+            "word": "Façade",
+            "meaning": "The front of a building; a deceptive appearance.",
+            "synonym": "Front",
+            "antonym": "Reality",
+            "sentence": "The building's façade was beautifully designed.",
+            "pronunciation": "fəˈsɑːd"
+        },
+        {
+            "word": "Solicitude",
+            "meaning": "Care or concern for someone.",
+            "synonym": "Concern",
+            "antonym": "Indifference",
+            "sentence": "She showed great solicitude for her friend's well-being.",
+            "pronunciation": "səˈlɪs.ɪ.tuːd"
+        },
+        {
+            "word": "Statutory",
+            "meaning": "Related to laws or statutes.",
+            "synonym": "Legal",
+            "antonym": "Illegal",
+            "sentence": "The statutory requirements must be followed.",
+            "pronunciation": "ˈstætʃ.ə.tɔːr.i"
+        },
+        {
+            "word": "Nuance",
+            "meaning": "A subtle difference or distinction.",
+            "synonym": "Shade",
+            "antonym": "Obviousness",
+            "sentence": "Understanding the nuances of the language is important.",
+            "pronunciation": "ˈnjuː.ɑːns"
+        },
+        {
+            "word": "Relinquish",
+            "meaning": "To give up or let go of something.",
+            "synonym": "Surrender",
+            "antonym": "Keep",
+            "sentence": "He had to relinquish his claim to the property.",
+            "pronunciation": "rɪˈlɪŋ.kwɪʃ"
+        },
+        {
+            "word": "Alleviate",
+            "meaning": "To make something less severe or serious.",
+            "synonym": "Ease",
+            "antonym": "Aggravate",
+            "sentence": "The medicine helped to alleviate her pain.",
+            "pronunciation": "əˈliː.vi.eɪt"
+        },
+        {
+            "word": "Exonerate",
+            "meaning": "To free someone from blame or guilt.",
+            "synonym": "Clear",
+            "antonym": "Accuse",
+            "sentence": "New evidence helped to exonerate the accused.",
+            "pronunciation": "ɪɡˈzɒn.ə.reɪt"
+        },
+        {
+            "word": "Ludicrous",
+            "meaning": "So foolish or unreasonable that it is amusing.",
+            "synonym": "Ridiculous",
+            "antonym": "Serious",
+            "sentence": "The idea was so ludicrous that everyone laughed.",
+            "pronunciation": "ˈluː.dɪ.krəs"
+        },
+        {
+            "word": "Bounteous",
+            "meaning": "Generous; abundant.",
+            "synonym": "Generous",
+            "antonym": "Scarce",
+            "sentence": "The garden was bounteous with flowers in spring.",
+            "pronunciation": "ˈbaʊn.ti.əs"
+        },
+        {
+            "word": "Obdurate",
+            "meaning": "Stubbornly refusing to change one's opinion.",
+            "synonym": "Stubborn",
+            "antonym": "Flexible",
+            "sentence": "His obdurate refusal to listen caused problems.",
+            "pronunciation": "ˈɒb.dʒər.ət"
+        },
+        {
+            "word": "Alliance",
+            "meaning": "A union or association formed for mutual benefit.",
+            "synonym": "Partnership",
+            "antonym": "Division",
+            "sentence": "The two countries formed an alliance for peace.",
+            "pronunciation": "əˈlaɪ.əns"
+        },
+        {
+            "word": "Torment",
+            "meaning": "Severe physical or mental suffering.",
+            "synonym": "Anguish",
+            "antonym": "Comfort",
+            "sentence": "The torment of waiting made him anxious.",
+            "pronunciation": "ˈtɔːr.mɛnt"
+        },
+        {
+            "word": "Coax",
+            "meaning": "To persuade someone gently to do something.",
+            "synonym": "Persuade",
+            "antonym": "Force",
+            "sentence": "She tried to coax the kitten out from under the bed.",
+            "pronunciation": "koʊks"
+        },
+        {
+            "word": "Wary",
+            "meaning": "Feeling cautious about possible dangers.",
+            "synonym": "Cautious",
+            "antonym": "Trusting",
+            "sentence": "He was wary of strangers in the park.",
+            "pronunciation": "ˈwɛr.i"
+        },
+        {
+            "word": "Eulogize",
+            "meaning": "To praise someone highly in speech or writing.",
+            "synonym": "Praise",
+            "antonym": "Criticize",
+            "sentence": "They will eulogize the hero at the ceremony.",
+            "pronunciation": "ˈjuː.ləˌdʒaɪz"
+        },
+        {
+            "word": "Strenuous",
+            "meaning": "Requiring great effort and energy.",
+            "synonym": "Difficult",
+            "antonym": "Easy",
+            "sentence": "The hike was strenuous but rewarding.",
+            "pronunciation": "ˈstren.ju.əs"
+        },
+        {
+            "word": "Acrimony",
+            "meaning": "Bitterness or ill feeling.",
+            "synonym": "Bitterness",
+            "antonym": "Harmony",
+            "sentence": "The acrimony between them was hard to ignore.",
+            "pronunciation": "ˈæk.rɪ.mə.ni"
+        },
+        {
+            "word": "Barbaric",
+            "meaning": "Savage or cruel; primitive.",
+            "synonym": "Savage",
+            "antonym": "Civilized",
+            "sentence": "The barbaric treatment of prisoners was condemned.",
+            "pronunciation": "bɑːrˈbær.ɪk"
+        }
+    ]
+}

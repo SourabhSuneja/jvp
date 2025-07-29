@@ -1,0 +1,564 @@
+{
+  "words": [
+    {
+      "word": "Hurry",
+      "meaning": "To move or act with haste; to rush or speed up.",
+      "synonym": "Rush",
+      "antonym": "Delay",
+      "sentence": "We need to hurry if we want to catch the train.",
+      "pronunciation": "hur-ee"
+    },
+    {
+      "word": "Gut",
+      "meaning": "The stomach or belly; the digestive tract; to remove the intestines or internal organs from a carcass.",
+      "synonym": "Stomach",
+      "antonym": "Interior",
+      "sentence": "He had a strange feeling in his gut that something was wrong.",
+      "pronunciation": "guht"
+    },
+    {
+      "word": "Ardour",
+      "meaning": "Great enthusiasm or passion; intense emotion or fervor.",
+      "synonym": "Passion",
+      "antonym": "Apathy",
+      "sentence": "She pursued her career with ardour and determination.",
+      "pronunciation": "ahr-der"
+    },
+    {
+      "word": "Identical",
+      "meaning": "Exactly the same; alike in every detail.",
+      "synonym": "Same",
+      "antonym": "Different",
+      "sentence": "The twins looked almost identical, making it difficult to tell them apart.",
+      "pronunciation": "ahy-den-ti-kuhl"
+    },
+    {
+      "word": "Immodest",
+      "meaning": "Lacking humility or decency; not modest; indecent or bold in behavior.",
+      "synonym": "Indecent",
+      "antonym": "Modest",
+      "sentence": "Her immodest attire drew unwanted attention at the party.",
+      "pronunciation": "ih-mod-ist"
+    },
+    {
+      "word": "Achieve",
+      "meaning": "To successfully reach or accomplish a goal, target, or desired result; to carry out successfully.",
+      "synonym": "Accomplish",
+      "antonym": "Fail",
+      "sentence": "With hard work and dedication, she was able to achieve her dream of becoming a doctor.",
+      "pronunciation": "uh-cheev"
+    },
+    {
+      "word": "Annoy",
+      "meaning": "To irritate or provoke someone; to cause mild anger or displeasure.",
+      "synonym": "Irritate",
+      "antonym": "Pleased",
+      "sentence": "The constant buzzing of the fly annoyed him while he was trying to work.",
+      "pronunciation": "uh-noi"
+    },
+    {
+      "word": "Awkward",
+      "meaning": "Causing difficulty; hard to do or deal with; lacking skill or dexterity; causing embarrassment or inconvenience.",
+      "synonym": "Clumsy",
+      "antonym": "Graceful",
+      "sentence": "He felt awkward at the party because he didn't know anyone.",
+      "pronunciation": "awk-werd"
+    },
+    {
+      "word": "Contaminated",
+      "meaning": "Made impure by exposure to or addition of a poisonous or polluting substance.",
+      "synonym": "Polluted",
+      "antonym": "Pure",
+      "sentence": "The water supply was contaminated by industrial waste.",
+      "pronunciation": "kuhn-tam-uh-ney-tid"
+    },
+    {
+      "word": "Consolation",
+      "meaning": "Comfort received by a person after a loss or disappointment; the act of comforting someone.",
+      "synonym": "Comfort",
+      "antonym": "Desolation",
+      "sentence": "Her friends offered words of consolation after her pet died.",
+      "pronunciation": "kon-suh-ley-shuhn"
+    },
+    {
+      "word": "Hostile",
+      "meaning": "Unfriendly; antagonistic; showing or feeling opposition or dislike; characterized by aggression.",
+      "synonym": "Aggressive",
+      "antonym": "Friendly",
+      "sentence": "The two nations had a long history of hostile relations.",
+      "pronunciation": "hos-tl"
+    },
+    {
+      "word": "Spoken",
+      "meaning": "Uttered or expressed by speaking; verbal; communicated orally.",
+      "synonym": "Verbal",
+      "antonym": "Written",
+      "sentence": "The instructions were spoken rather than written down.",
+      "pronunciation": "spoh-kuhn"
+    },
+    {
+      "word": "Lousy",
+      "meaning": "Very poor or bad; of inferior quality; extremely unpleasant.",
+      "synonym": "Poor",
+      "antonym": "Excellent",
+      "sentence": "The food at the restaurant was lousy, so we left without finishing our meal.",
+      "pronunciation": "lou-zee"
+    },
+    {
+      "word": "Consult",
+      "meaning": "Seek information or advice from; refer to for information.",
+      "synonym": "Seek advice",
+      "antonym": "Ignore",
+      "sentence": "He consulted his lawyer before signing the contract.",
+      "pronunciation": "kuhn-suhlt"
+    },
+    {
+      "word": "Mediocre",
+      "meaning": "Of only moderate quality; not very good.",
+      "synonym": "Average",
+      "antonym": "Excellent",
+      "sentence": "The movie received mediocre reviews from critics.",
+      "pronunciation": "mee-dee-oh-ker"
+    },
+    {
+      "word": "Aromatic",
+      "meaning": "Having a pleasant and distinctive smell; fragrant.",
+      "synonym": "Fragrant",
+      "antonym": "Odorless",
+      "sentence": "The aromatic scent of flowers filled the room.",
+      "pronunciation": "ar-uh-mat-ik"
+    },
+    {
+      "word": "Cope",
+      "meaning": "Deal effectively with something difficult; to handle or manage successfully despite challenges.",
+      "synonym": "Manage",
+      "antonym": "Succumb",
+      "sentence": "She struggled to cope with the stress of her new job.",
+      "pronunciation": "kohp"
+    },
+    {
+      "word": "Disagreeable",
+      "meaning": "Not pleasant or enjoyable; causing discomfort or annoyance.",
+      "synonym": "Unpleasant",
+      "antonym": "Pleasant",
+      "sentence": "The weather turned disagreeable, with cold winds and rain.",
+      "pronunciation": "dis-uh-gree-uh-buhl"
+    },
+    {
+      "word": "Ambitious",
+      "meaning": "Having or showing a strong desire and determination to succeed; aspiring to achieve a particular goal.",
+      "synonym": "Driven",
+      "antonym": "Lazy",
+      "sentence": "She had ambitious plans to start her own business.",
+      "pronunciation": "am-bish-uhs"
+    },
+    {
+      "word": "Misfortune",
+      "meaning": "Bad luck or unfortunate circumstances; an unlucky event or condition.",
+      "synonym": "Hardship",
+      "antonym": "Fortune",
+      "sentence": "Despite his misfortune, he remained optimistic about the future.",
+      "pronunciation": "mis-fawr-chuhn"
+    },
+    {
+      "word": "Envious",
+      "meaning": "Feeling or showing jealousy; covetous; feeling discontented or resentful because of someone else's possessions, qualities, or luck.",
+      "synonym": "Jealous",
+      "antonym": "Content",
+      "sentence": "She couldn't help but feel envious of her friend's success.",
+      "pronunciation": "en-vee-uhs"
+    },
+    {
+      "word": "Superb",
+      "meaning": "Excellent; of the highest quality; splendid or magnificent.",
+      "synonym": "Excellent",
+      "antonym": "Poor",
+      "sentence": "The chef prepared a superb meal that left everyone impressed.",
+      "pronunciation": "soo-purb"
+    },
+    {
+      "word": "Turbulent",
+      "meaning": "Characterized by conflict, disorder, or confusion; stormy; characterized by sudden and unpredictable changes.",
+      "synonym": "Chaotic",
+      "antonym": "Calm",
+      "sentence": "The country experienced a turbulent period of political unrest.",
+      "pronunciation": "tur-byuh-luhnt"
+    },
+    {
+      "word": "Oblique",
+      "meaning": "Slanting or inclined in direction or course; not explicit or straightforward in addressing a point.",
+      "synonym": "Slanting",
+      "antonym": "Direct",
+      "sentence": "She gave him an oblique glance, unsure of what he meant.",
+      "pronunciation": "uh-bleek"
+    },
+    {
+      "word": "Dormant",
+      "meaning": "Inactive; not active or growing but capable of becoming active.",
+      "synonym": "Inactive",
+      "antonym": "Active",
+      "sentence": "The volcano had been dormant for centuries before erupting unexpectedly.",
+      "pronunciation": "dawr-muhnt"
+    },
+    {
+      "word": "Isolated",
+      "meaning": "Separated from others; remote or secluded; feeling alone or lonely.",
+      "synonym": "Secluded",
+      "antonym": "Connected",
+      "sentence": "The small village was isolated from the rest of the world.",
+      "pronunciation": "ahy-suh-ley-tid"
+    },
+    {
+      "word": "Disadvantaged",
+      "meaning": "Deprived of basic advantages; lacking the necessities or opportunities enjoyed by others; having less than what is considered necessary for a comfortable life.",
+      "synonym": "Underprivileged",
+      "antonym": "Advantaged",
+      "sentence": "The program aimed to help disadvantaged children in the community.",
+      "pronunciation": "dis-uhd-van-tijd"
+    },
+    {
+      "word": "Misconceive",
+      "meaning": "To interpret or understand incorrectly; to have a mistaken idea or belief about something.",
+      "synonym": "Misunderstand",
+      "antonym": "Understand",
+      "sentence": "He misconceived her intentions and ended up offending her.",
+      "pronunciation": "mis-kuhn-seev"
+    },
+    {
+      "word": "Crusade",
+      "meaning": "A vigorous campaign for political, social, or religious change; a medieval military expedition, one of a series made by Europeans to recover the Holy Land from the Muslims in the 11th, 12th, and 13th centuries.",
+      "synonym": "Campaign",
+      "antonym": "Surrender",
+      "sentence": "She led a crusade against corruption in the government.",
+      "pronunciation": "kroo-seyd"
+    },
+    {
+      "word": "Perception",
+      "meaning": "The ability to see, hear, or become aware of something through the senses; the way in which something is regarded, understood, or interpreted.",
+      "synonym": "Awareness",
+      "antonym": "Ignorance",
+      "sentence": "His perception of the situation differed from hers.",
+      "pronunciation": "per-sep-shuhn"
+    },
+    {
+      "word": "Immediate",
+      "meaning": "Occurring or done at once; instant or without delay; happening or existing now.",
+      "synonym": "Instant",
+      "antonym": "Delayed",
+      "sentence": "We need to take immediate action to address the problem.",
+      "pronunciation": "ih-mee-dee-it"
+    },
+    {
+      "word": "Highbrow",
+      "meaning": "Intellectually or culturally sophisticated; elite or refined in taste, manners, or culture.",
+      "synonym": "Intellectual",
+      "antonym": "Lowbrow",
+      "sentence": "The highbrow literature club discussed classic novels and philosophical works.",
+      "pronunciation": "hahy-brou"
+    },
+    {
+      "word": "Insight",
+      "meaning": "The capacity to gain an accurate and deep understanding of someone or something; the act or result of understanding the inner nature of things or of seeing intuitively.",
+      "synonym": "Understanding",
+      "antonym": "Ignorance",
+      "sentence": "His insights into human behavior were invaluable in solving the case.",
+      "pronunciation": "in-sahyt"
+    },
+    {
+      "word": "Cozy",
+      "meaning": "Warm, comfortable, and snug; giving a feeling of comfort, warmth, and relaxation.",
+      "synonym": "Comfortable",
+      "antonym": "Uncomfortable",
+      "sentence": "She loved curling up with a book in her cozy armchair.",
+      "pronunciation": "koh-zee"
+    },
+    {
+      "word": "Noteworthy",
+      "meaning": "Deserving attention or notice; remarkable or significant.",
+      "synonym": "Remarkable",
+      "antonym": "Insignificant",
+      "sentence": "The artist's latest exhibition was noteworthy for its creativity and originality.",
+      "pronunciation": "noht-wur-thee"
+    },
+    {
+      "word": "Dreadful",
+      "meaning": "Extremely bad, unpleasant, or serious; causing fear or dread; inspiring dread or horror.",
+      "synonym": "Horrible",
+      "antonym": "Wonderful",
+      "sentence": "The movie was so dreadful that many people walked out of the theater.",
+      "pronunciation": "dred-fuhl"
+    },
+    {
+      "word": "Ample",
+      "meaning": "Plentiful or more than enough; abundant; large in size, scope, or quantity.",
+      "synonym": "Plentiful",
+      "antonym": "Scant",
+      "sentence": "There's ample evidence to support his claims.",
+      "pronunciation": "am-puhl"
+    },
+    {
+      "word": "Ecstasy",
+      "meaning": "An overwhelming feeling of great happiness or joyful excitement; intense pleasure or bliss.",
+      "synonym": "Bliss",
+      "antonym": "Misery",
+      "sentence": "Winning the championship filled her with ecstasy.",
+      "pronunciation": "ek-stuh-see"
+    },
+    {
+      "word": "Establish",
+      "meaning": "To set up on a firm or permanent basis; to found or create an organization, institution, or system.",
+      "synonym": "Found",
+      "antonym": "Dissolve",
+      "sentence": "They plan to establish a new business in the city.",
+      "pronunciation": "ih-stab-lish"
+    },
+    {
+      "word": "Neutral",
+      "meaning": "Not favoring either side in a conflict, dispute, or controversy; unbiased or impartial; having no strongly marked or positive characteristics or features.",
+      "synonym": "Unbiased",
+      "antonym": "Biased",
+      "sentence": "The mediator remained neutral during the negotiations.",
+      "pronunciation": "noo-truhl"
+    },
+    {
+      "word": "Exhibition",
+      "meaning": "A public display of works of art or items of interest, held in an art gallery or museum or at a trade fair.",
+      "synonym": "Display",
+      "antonym": "Concealment",
+      "sentence": "The museum hosted an exhibition of contemporary sculpture.",
+      "pronunciation": "ek-suh-bish-uhn"
+    },
+    {
+      "word": "Manufacture",
+      "meaning": "To make or produce something, especially on a large scale using machinery; to process raw materials into finished goods, especially on a large scale.",
+      "synonym": "Produce",
+      "antonym": "Destroy",
+      "sentence": "The company manufactures cars at its factory in Detroit.",
+      "pronunciation": "man-yuh-fak-cher"
+    },
+    {
+      "word": "Handy",
+      "meaning": "Convenient to handle or use; useful; easily accessible when needed.",
+      "synonym": "Convenient",
+      "antonym": "Inconvenient",
+      "sentence": "Having a toolkit at home is handy for small repairs.",
+      "pronunciation": "han-dee"
+    },
+    {
+      "word": "Superstition",
+      "meaning": "A belief or notion, not based on reason or knowledge, in or of the ominous significance of a particular thing, circumstance, occurrence, proceeding, or the like.",
+      "synonym": "Belief",
+      "antonym": "Logic",
+      "sentence": "Some people have a superstition about breaking mirrors bringing bad luck.",
+      "pronunciation": "soo-per-stish-uhn"
+    },
+    {
+      "word": "Aghast",
+      "meaning": "Filled with horror or shock; struck with overwhelming shock or amazement; filled with sudden fright or horror.",
+      "synonym": "Shocked",
+      "antonym": "Unfazed",
+      "sentence": "She was aghast at the news of the accident.",
+      "pronunciation": "uh-gast"
+    },
+    {
+      "word": "Ferocious",
+      "meaning": "Fierce and violent; savagely fierce, as a wild beast, person, action, or aspect; violently agitated or turbulent.",
+      "synonym": "Fierce",
+      "antonym": "Gentle",
+      "sentence": "The ferocious lion roared loudly in the jungle.",
+      "pronunciation": "fuh-roh-shuhs"
+    },
+    {
+      "word": "Interact",
+      "meaning": "To communicate or work together; to act on or in close relation with each other.",
+      "synonym": "Communicate",
+      "antonym": "Ignore",
+      "sentence": "Students are encouraged to interact with each other during group projects.",
+      "pronunciation": "in-ter-akt"
+    },
+    {
+      "word": "Loiter",
+      "meaning": "To linger aimlessly or as if aimless in or about a place; to move in a slow, idle manner, making purposeless stops in a leisurely journey.",
+      "synonym": "Linger",
+      "antonym": "Hurry",
+      "sentence": "They were warned not to loiter outside the store.",
+      "pronunciation": "loi-ter"
+    },
+    {
+      "word": "Accomplish",
+      "meaning": "To achieve or complete successfully; to bring about a successful result; to carry out; to fulfill.",
+      "synonym": "Achieve",
+      "antonym": "Fail",
+      "sentence": "She accomplished her goal of running a marathon.",
+      "pronunciation": "uh-kom-plish"
+    },
+    {
+      "word": "Hearsay",
+      "meaning": "Information received from other people that one cannot adequately substantiate; rumor; gossip.",
+      "synonym": "Rumor",
+      "antonym": "Evidence",
+      "sentence": "The decision was based on hearsay rather than concrete evidence.",
+      "pronunciation": "heer-sey"
+    },
+    {
+      "word": "Abject",
+      "meaning": "Experienced or present to the maximum degree; utterly hopeless, miserable, humiliating, or wretched; lacking pride or dignity; sunk to a low condition; degraded.",
+      "synonym": "Miserable",
+      "antonym": "Triumphant",
+      "sentence": "He lived in abject poverty, unable to afford even basic necessities.",
+      "pronunciation": "ab-jekt"
+    },
+    {
+      "word": "Alias",
+      "meaning": "An assumed name; a false name used to conceal one's identity; an alternative name that a person adopts or is known by.",
+      "synonym": "Pseudonym",
+      "antonym": "Real name",
+      "sentence": "The fugitive was known by his alias, which he used to evade authorities.",
+      "pronunciation": "ey-lee-uhs"
+    },
+    {
+      "word": "Eclectic",
+      "meaning": "Deriving ideas, style, or taste from a broad and diverse range of sources; selecting or choosing from various sources.",
+      "synonym": "Diverse",
+      "antonym": "Homogeneous",
+      "sentence": "Her eclectic taste in music ranged from classical to punk rock.",
+      "pronunciation": "ih-klek-tik"
+    },
+    {
+      "word": "Advocate",
+      "meaning": "A person who publicly supports or recommends a particular cause or policy; a person who pleads for or in behalf of another; a person who speaks or writes in support or defense of a person, cause, etc.",
+      "synonym": "Supporter",
+      "antonym": "Opponent",
+      "sentence": "She was a passionate advocate for animal rights.",
+      "pronunciation": "ad-vuh-kit"
+    },
+    {
+      "word": "Affluent",
+      "meaning": "Having a great deal of money; wealthy; abundant or plentiful.",
+      "synonym": "Wealthy",
+      "antonym": "Poor",
+      "sentence": "The neighborhood is known for its affluent residents and luxurious homes.",
+      "pronunciation": "af-loo-uhnt"
+    },
+    {
+      "word": "Ascetic",
+      "meaning": "Characterized by or suggesting the practice of severe self-discipline and abstention from all forms of indulgence, typically for religious reasons; a person who practices severe self-discipline and abstention.",
+      "synonym": "Austere",
+      "antonym": "Indulgent",
+      "sentence": "The ascetic monk lived a simple life devoted to prayer and meditation.",
+      "pronunciation": "uh-set-ik"
+    },
+    {
+      "word": "Shatter",
+      "meaning": "To break or smash into pieces violently; to damage or destroy something, especially a belief or illusion.",
+      "synonym": "Break",
+      "antonym": "Mend",
+      "sentence": "The glass shattered when it hit the floor.",
+      "pronunciation": "shat-er"
+    },
+    {
+      "word": "Camaraderie",
+      "meaning": "Mutual trust and friendship among people who spend a lot of time together; a feeling of good friendship among the people in a group.",
+      "synonym": "Fellowship",
+      "antonym": "Estrangement",
+      "sentence": "The team's camaraderie helped them achieve success.",
+      "pronunciation": "kah-muh-rah-duh-ree"
+    },
+    {
+      "word": "Cleave",
+      "meaning": "To split or sever something, especially along a natural line or grain; to adhere firmly and closely or loyally and unwaveringly.",
+      "synonym": "Split",
+      "antonym": "Join",
+      "sentence": "The lumberjack used an axe to cleave the log in two.",
+      "pronunciation": "kleev"
+    },
+    {
+      "word": "Cobbler",
+      "meaning": "A person who mends shoes as a job; a deep-dish fruit pie with a rich biscuit crust, usually only on top.",
+      "synonym": "Shoemaker",
+      "antonym": "Customer",
+      "sentence": "The cobbler repaired my favorite pair of boots.",
+      "pronunciation": "kob-ler"
+    },
+    {
+      "word": "Commensurate",
+      "meaning": "Corresponding in size or degree; in proportion; equal in measure or extent.",
+      "synonym": "Proportionate",
+      "antonym": "Disproportionate",
+      "sentence": "His salary was commensurate with his level of experience.",
+      "pronunciation": "kuh-men-ser-it"
+    },
+    {
+      "word": "Powerless",
+      "meaning": "Without power, strength, or influence; lacking the ability, capacity, or authority to act.",
+      "synonym": "Weak",
+      "antonym": "Empowered",
+      "sentence": "Feeling powerless to change the situation, she became despondent.",
+      "pronunciation": "pou-er-lis"
+    },
+    {
+      "word": "Dutiful",
+      "meaning": "Conscientiously or obediently fulfilling one's duty; characterized by or resulting from a sense of duty.",
+      "synonym": "Obedient",
+      "antonym": "Negligent",
+      "sentence": "She was a dutiful daughter, always helping her elderly parents.",
+      "pronunciation": "doo-tuh-fuhl"
+    },
+    {
+      "word": "Contravene",
+      "meaning": "To violate or act against (a law, rule, principle, or practice); to fail to comply with a regulation or law.",
+      "synonym": "Violate",
+      "antonym": "Comply",
+      "sentence": "The company's actions contravene environmental regulations.",
+      "pronunciation": "kon-truh-veen"
+    },
+    {
+      "word": "Debunk",
+      "meaning": "To expose the falseness or hollowness of (a myth, idea, or belief); to reduce the inflated reputation of (someone), especially by ridicule.",
+      "synonym": "Expose",
+      "antonym": "Validate",
+      "sentence": "The scientist sought to debunk the pseudoscience theories circulating online.",
+      "pronunciation": "dee-buhngk"
+    },
+    {
+      "word": "Disparate",
+      "meaning": "Essentially different in kind; not allowing comparison; essentially different; unrelated.",
+      "synonym": "Distinct",
+      "antonym": "Similar",
+      "sentence": "The two cultures had disparate views on family structure.",
+      "pronunciation": "dis-puh-rit"
+    },
+    {
+      "word": "Equivocal",
+      "meaning": "Open to more than one interpretation; ambiguous; uncertain or questionable in nature.",
+      "synonym": "Ambiguous",
+      "antonym": "Clear",
+      "sentence": "His equivocal response did little to clarify the situation.",
+      "pronunciation": "ih-kwiv-uh-kuhl"
+    },
+    {
+      "word": "Landlord",
+      "meaning": "A person who owns and leases property to others; a person or organization that owns and leases out buildings or land.",
+      "synonym": "Property owner",
+      "antonym": "Tenant",
+      "sentence": "The landlord raised the rent on the apartment.",
+      "pronunciation": "land-lawrd"
+    },
+    {
+      "word": "Tenant",
+      "meaning": "A person who occupies land or property rented from a landlord; a person who holds the right to live in a property.",
+      "synonym": "Renter",
+      "antonym": "Landlord",
+      "sentence": "The tenant complained about the leaky faucet to the landlord.",
+      "pronunciation": "ten-uhnt"
+    },
+    {
+      "word": "Revolutionary",
+      "meaning": "Involving or causing a complete or dramatic change; relating to or characteristic of a revolution.",
+      "synonym": "Innovative",
+      "antonym": "Conservative",
+      "sentence": "The invention of the smartphone was revolutionary, changing how people communicate.",
+      "pronunciation": "rev-uh-loo-shuh-ner-ee"
+    }
+  ]
+}

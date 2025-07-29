@@ -1,0 +1,517 @@
+{
+  "words": [
+    {
+      "word": "Enthrall",
+      "meaning": "To captivate or charm someone thoroughly; to hold someone's attention completely.",
+      "synonym": "Captivate",
+      "antonym": "Bore",
+      "sentence": "The magician's performance managed to enthrall the entire audience.",
+      "pronunciation": "en-thrawl"
+    },
+    {
+      "word": "Egress",
+      "meaning": "An exit or the action of leaving a place; the act of going out or departing.",
+      "synonym": "Exit",
+      "antonym": "Entrance",
+      "sentence": "The emergency egress in the building was clearly marked for safety purposes.",
+      "pronunciation": "ee-gres"
+    },
+    {
+      "word": "Spellbound",
+      "meaning": "Completely fascinated or enchanted by something; held as if under a spell.",
+      "synonym": "Enchanted",
+      "antonym": "Bored",
+      "sentence": "The children were spellbound by the storytelling at the library.",
+      "pronunciation": "spel-bound"
+    },
+    {
+      "word": "Stroll",
+      "meaning": "To walk in a leisurely or relaxed manner, typically for pleasure or exercise.",
+      "synonym": "Walk",
+      "antonym": "Rush",
+      "sentence": "They decided to stroll through the park on a sunny afternoon.",
+      "pronunciation": "strohl"
+    },
+    {
+      "word": "Stumble",
+      "meaning": "To trip or miss a step while walking or running, often nearly falling.",
+      "synonym": "Trip",
+      "antonym": "Stride",
+      "sentence": "She stumbled on the uneven pavement and almost fell.",
+      "pronunciation": "stuhm-buhl"
+    },
+    {
+      "word": "Limp",
+      "meaning": "To walk with difficulty, typically due to injury or weakness; lacking strength or firmness.",
+      "synonym": "Hobble",
+      "antonym": "Stride",
+      "sentence": "He limped after spraining his ankle during the soccer game.",
+      "pronunciation": "limp"
+    },
+    {
+      "word": "Staggering",
+      "meaning": "Astounding, astonishing, or overwhelming in magnitude or shock.",
+      "synonym": "Astounding",
+      "antonym": "Underwhelming",
+      "sentence": "The staggering number of applicants for the job position surprised the hiring team.",
+      "pronunciation": "stag-er-ing"
+    },
+    {
+      "word": "Troll",
+      "meaning": "To post inflammatory or irrelevant content online to provoke others; a mythical creature or a person who does so.",
+      "synonym": "Bait",
+      "antonym": "Respectful",
+      "sentence": "The forum moderator banned the troll for spreading misinformation.",
+      "pronunciation": "trol"
+    },
+    {
+      "word": "Intriguing",
+      "meaning": "Fascinating, interesting, or arousing curiosity.",
+      "synonym": "Captivating",
+      "antonym": "Uninteresting",
+      "sentence": "The novel had an intriguing plot that kept readers engaged till the end.",
+      "pronunciation": "in-tree-ging"
+    },
+    {
+      "word": "Stirring",
+      "meaning": "Emotionally moving or exciting; causing strong feelings or emotions.",
+      "synonym": "Touching",
+      "antonym": "Unmoving",
+      "sentence": "The stirring speech motivated everyone to take action for change.",
+      "pronunciation": "stur-ing"
+    },
+    {
+      "word": "Thought-provoking",
+      "meaning": "Challenging or inspiring deep thoughts or contemplation.",
+      "synonym": "Intellectual",
+      "antonym": "Uninspiring",
+      "sentence": "The documentary was thought-provoking and encouraged reflection on societal issues.",
+      "pronunciation": "thawt-proh-voh-king"
+    },
+    {
+      "word": "Morbid",
+      "meaning": "Characterized by an unhealthy or unhealthy interest in disturbing subjects, especially death or disease.",
+      "synonym": "Gloomy",
+      "antonym": "Cheerful",
+      "sentence": "Her morbid fascination with crime stories concerned her friends.",
+      "pronunciation": "mawr-bid"
+    },
+    {
+      "word": "Mourn",
+      "meaning": "To feel or express sorrow or grief over a loss or someone's death.",
+      "synonym": "Grieve",
+      "antonym": "Celebrate",
+      "sentence": "The family gathered to mourn the passing of their beloved pet.",
+      "pronunciation": "mawrn"
+    },
+    {
+      "word": "Oppressive",
+      "meaning": "Causing distress or difficulty, especially due to excessive power or authority.",
+      "synonym": "Tyrannical",
+      "antonym": "Liberating",
+      "sentence": "The oppressive regime restricted freedom of speech in the country.",
+      "pronunciation": "uh-pres-iv"
+    },
+    {
+      "word": "Dejected",
+      "meaning": "Feeling sad, disheartened, or depressed.",
+      "synonym": "Downcast",
+      "antonym": "Elated",
+      "sentence": "After losing the game, the team was dejected but vowed to do better next time.",
+      "pronunciation": "dih-jek-tid"
+    },
+    {
+      "word": "Provoke",
+      "meaning": "To stimulate or incite someone to take action, often intentionally causing a reaction.",
+      "synonym": "Stir up",
+      "antonym": "Calm",
+      "sentence": "His remarks were intended to provoke a heated debate among the group.",
+      "pronunciation": "pruh-vohk"
+    },
+    {
+      "word": "Brisk",
+      "meaning": "Quick, active, or energetic; characterized by a swift pace.",
+      "synonym": "Lively",
+      "antonym": "Slow",
+      "sentence": "They took a brisk walk in the morning to invigorate themselves for the day.",
+      "pronunciation": "brisk"
+    },
+    {
+      "word": "Quick-witted",
+      "meaning": "Having a sharp intellect or ability to think and respond rapidly.",
+      "synonym": "Sharp-minded",
+      "antonym": "Slow-witted",
+      "sentence": "His quick-witted responses made him popular in the comedy club.",
+      "pronunciation": "kwik-wit-id"
+    },
+    {
+      "word": "Swift",
+      "meaning": "Moving or acting with great speed or velocity; rapid or fast.",
+      "synonym": "Speedy",
+      "antonym": "Slow",
+      "sentence": "The swift river made it difficult to cross during heavy rains.",
+      "pronunciation": "swift"
+    },
+    {
+      "word": "Autumn",
+      "meaning": "The season between summer and winter, characterized by cooler temperatures and falling leaves.",
+      "synonym": "Fall",
+      "antonym": "Spring",
+      "sentence": "Autumn is known for its colorful foliage and harvest festivals.",
+      "pronunciation": "aw-tuhm"
+    },
+    {
+      "word": "Guest",
+      "meaning": "A person who is invited to visit or stay in someone's home, residence, or event.",
+      "synonym": "Visitor",
+      "antonym": "Host",
+      "sentence": "They welcomed the guest with warm hospitality.",
+      "pronunciation": "gest"
+    },
+    {
+      "word": "Certain",
+      "meaning": "Sure or confident without doubt; being specific or particular.",
+      "synonym": "Sure",
+      "antonym": "Uncertain",
+      "sentence": "She was certain that she locked the door before leaving.",
+      "pronunciation": "sur-tn"
+    },
+    {
+      "word": "Rejection",
+      "meaning": "The act of refusing or dismissing something, especially a proposal, idea, or request.",
+      "synonym": "Refusal",
+      "antonym": "Acceptance",
+      "sentence": "The rejection of his manuscript was disappointing.",
+      "pronunciation": "ri-jek-shuhn"
+    },
+    {
+      "word": "Dilemma",
+      "meaning": "A difficult situation or problem with two equally undesirable options.",
+      "synonym": "Quandary",
+      "antonym": "Solution",
+      "sentence": "She faced a dilemma choosing between two job offers.",
+      "pronunciation": "dih-lem-uh"
+    },
+    {
+      "word": "Suspense",
+      "meaning": "A feeling of excitement, uncertainty, or anticipation about what may happen.",
+      "synonym": "Tension",
+      "antonym": "Certainty",
+      "sentence": "The suspense in the movie kept the audience on the edge of their seats.",
+      "pronunciation": "suh-spens"
+    },
+    {
+      "word": "Indecisive",
+      "meaning": "Unable to make decisions quickly or effectively; hesitant or vacillating.",
+      "synonym": "Undecided",
+      "antonym": "Decisive",
+      "sentence": "His indecisive nature made it challenging to plan the event.",
+      "pronunciation": "in-di-sahy-siv"
+    },
+    {
+      "word": "Confidence",
+      "meaning": "A feeling of self-assurance arising from one's abilities, qualities, or trust in someone or something.",
+      "synonym": "Assurance",
+      "antonym": "Doubt",
+      "sentence": "Her confidence helped her succeed in challenging situations.",
+      "pronunciation": "kon-fi-duhns"
+    },
+    {
+      "word": "Paw",
+      "meaning": "The foot of an animal that has claws or nails; often used to refer to an animal's hand-like foot.",
+      "synonym": "Foot",
+      "antonym": "Human hand",
+      "sentence": "The cat used its paw to bat at the toy.",
+      "pronunciation": "paw"
+    },
+    {
+      "word": "Jab",
+      "meaning": "A quick, sharp punch or blow with the fist or elbow.",
+      "synonym": "Punch",
+      "antonym": "Retreat",
+      "sentence": "He delivered a jab to his opponent in the boxing match.",
+      "pronunciation": "jab"
+    },
+    {
+      "word": "Zap",
+      "meaning": "To strike or hit with sudden energy or force; to move or do something quickly.",
+      "synonym": "Strike",
+      "antonym": "Ease",
+      "sentence": "She used a remote control to zap through the channels on the TV.",
+      "pronunciation": "zap"
+    },
+    {
+      "word": "Bake",
+      "meaning": "To cook food using dry heat, typically in an oven.",
+      "synonym": "Cook",
+      "antonym": "Freeze",
+      "sentence": "She likes to bake cookies on the weekends.",
+      "pronunciation": "beyk"
+    },
+    {
+      "word": "Tide",
+      "meaning": "The regular rise and fall of the sea caused by the gravitational pull of the moon and sun.",
+      "synonym": "Ocean motion",
+      "antonym": "Stillness",
+      "sentence": "The tide was high, and the waves crashed against the shore.",
+      "pronunciation": "tahyd"
+    },
+    {
+      "word": "Audit",
+      "meaning": "An official inspection or examination of financial accounts or records.",
+      "synonym": "Examination",
+      "antonym": "Ignore",
+      "sentence": "The company conducts an annual audit to ensure financial accuracy.",
+      "pronunciation": "aw-dit"
+    },
+    {
+      "word": "Drown",
+      "meaning": "To die through submersion in and inhalation of water or another liquid.",
+      "synonym": "Suffocate",
+      "antonym": "Float",
+      "sentence": "Swimmers should be cautious not to drown in deep water.",
+      "pronunciation": "droun"
+    },
+    {
+      "word": "Giant",
+      "meaning": "A person, animal, or thing of unusually great size; often used to refer to a mythical creature or powerful entity.",
+      "synonym": "Colossal",
+      "antonym": "Tiny",
+      "sentence": "The giant in the story lived at the top of the beanstalk.",
+      "pronunciation": "jahy-uhnt"
+    },
+    {
+      "word": "Visionary",
+      "meaning": "A person who has original and innovative ideas about the future; characterized by foresight or imagination.",
+      "synonym": "Innovator",
+      "antonym": "Shortsighted",
+      "sentence": "He was considered a visionary for his groundbreaking inventions.",
+      "pronunciation": "vizh-uh-ner-ee"
+    },
+    {
+      "word": "Avarice",
+      "meaning": "Extreme greed for wealth or material gain.",
+      "synonym": "Greed",
+      "antonym": "Generosity",
+      "sentence": "His avarice led him to pursue money at the expense of personal relationships.",
+      "pronunciation": "av-er-is"
+    },
+    {
+      "word": "Unfathomable",
+      "meaning": "Impossible to understand or comprehend; extremely deep or incomprehensible.",
+      "synonym": "Incomprehensible",
+      "antonym": "Understandable",
+      "sentence": "The depth of the ocean is unfathomable to most people.",
+      "pronunciation": "uhn-fath-uh-muh-buhl"
+    },
+    {
+      "word": "Harbinger",
+      "meaning": "A person or thing that signals the approach of another; a forerunner or indicator.",
+      "synonym": "Sign",
+      "antonym": "Result",
+      "sentence": "The sudden cold weather was a harbinger of the impending winter.",
+      "pronunciation": "hahr-bin-jer"
+    },
+    {
+      "word": "Recommend",
+      "meaning": "To suggest or endorse something as being desirable or worthy; to advise or suggest as the best option.",
+      "synonym": "Suggest",
+      "antonym": "Discourage",
+      "sentence": "I would recommend this book for anyone interested in history.",
+      "pronunciation": "rek-uh-men"
+    },
+    {
+      "word": "Contagious",
+      "meaning": "Capable of being transmitted or spread from one person, organism, or thing to another by direct or indirect contact.",
+      "synonym": "Infectious",
+      "antonym": "Harmless",
+      "sentence": "The flu is highly contagious, so it's important to take precautions.",
+      "pronunciation": "kuhn-tey-juhs"
+    },
+    {
+      "word": "Grasp",
+      "meaning": "To hold onto something firmly; to understand or comprehend something.",
+      "synonym": "Grip",
+      "antonym": "Release",
+      "sentence": "He couldn't grasp the complexity of the math problem.",
+      "pronunciation": "grasp"
+    },
+    {
+      "word": "Impede",
+      "meaning": "To delay, obstruct, or hinder the progress or movement of something or someone.",
+      "synonym": "Hinder",
+      "antonym": "Assist",
+      "sentence": "The heavy traffic will impede our arrival at the airport.",
+      "pronunciation": "im-peed"
+    },
+    {
+      "word": "Plum",
+      "meaning": "A fruit with juicy flesh and a smooth skin, typically red, purple, or yellow when ripe.",
+      "synonym": "Fruit",
+      "antonym": "Vegetable",
+      "sentence": "She enjoyed the sweetness of the ripe plum.",
+      "pronunciation": "pluhm"
+    },
+    {
+      "word": "Spot",
+      "meaning": "A small mark or stain, a particular place, or a brief period of an activity or event.",
+      "synonym": "Mark",
+      "antonym": "Whole",
+      "sentence": "There was a spot of paint on his shirt.",
+      "pronunciation": "spot"
+    },
+    {
+      "word": "Drip",
+      "meaning": "To fall or let fall in small drops; a small drop of liquid.",
+      "synonym": "Drop",
+      "antonym": "Dry",
+      "sentence": "The faucet continued to drip, wasting water.",
+      "pronunciation": "drip"
+    },
+    {
+      "word": "Slide",
+      "meaning": "To move smoothly along a surface; a smooth, sloping structure for children to play on.",
+      "synonym": "Glide",
+      "antonym": "Climb",
+      "sentence": "The children had fun on the slide at the park.",
+      "pronunciation": "slahyd"
+    },
+    {
+      "word": "Scribble",
+      "meaning": "To write or draw hastily or carelessly; a piece of writing or a drawing done quickly and carelessly.",
+      "synonym": "Scrawl",
+      "antonym": "Write neatly",
+      "sentence": "He scribbled a note before rushing out the door.",
+      "pronunciation": "skrib-uhl"
+    },
+    {
+      "word": "Doodle",
+      "meaning": "A simple drawing made absentmindedly or while preoccupied; to scribble absentmindedly.",
+      "synonym": "Sketch",
+      "antonym": "Concentrate",
+      "sentence": "She doodled in the margins of her notebook during the meeting.",
+      "pronunciation": "dood-l"
+    },
+    {
+      "word": "Mania",
+      "meaning": "An excessively intense enthusiasm, interest, or desire for something; a craze or frenzy.",
+      "synonym": "Frenzy",
+      "antonym": "Apathy",
+      "sentence": "The new game created a mania among teenagers.",
+      "pronunciation": "mey-nee-uh"
+    },
+    {
+      "word": "Flaw",
+      "meaning": "A mark, fault, or imperfection that impairs the value or usefulness of something.",
+      "synonym": "Defect",
+      "antonym": "Perfection",
+      "sentence": "The painting was beautiful but had a small flaw in the corner.",
+      "pronunciation": "flaw"
+    },
+    {
+      "word": "Transmit",
+      "meaning": "To send or convey something from one place, person, or thing to another.",
+      "synonym": "Send",
+      "antonym": "Receive",
+      "sentence": "Radios transmit signals over long distances.",
+      "pronunciation": "trans-mit"
+    },
+    {
+      "word": "Lean",
+      "meaning": "To incline or bend from a vertical position; to rely or be dependent on someone or something.",
+      "synonym": "Incline",
+      "antonym": "Straighten",
+      "sentence": "He decided to lean against the wall while waiting.",
+      "pronunciation": "leen"
+    },
+    {
+      "word": "Mast",
+      "meaning": "A tall upright pole on a ship that supports sails or rigging; also used in reference to structures like radio masts.",
+      "synonym": "Pole",
+      "antonym": "Flat",
+      "sentence": "The sailors climbed the mast to adjust the sails.",
+      "pronunciation": "mast"
+    },
+    {
+      "word": "Picturesque",
+      "meaning": "Visually attractive, especially in a quaint or charming way; like a picturesque painting or scene.",
+      "synonym": "Scenic",
+      "antonym": "Unattractive",
+      "sentence": "The small village was picturesque with its colorful houses and winding streets.",
+      "pronunciation": "pik-chuh-resk"
+    },
+    {
+      "word": "Resistance",
+      "meaning": "The refusal to accept or comply with something; the ability to withstand or recover from something.",
+      "synonym": "Opposition",
+      "antonym": "Compliance",
+      "sentence": "The resistance to change hindered progress in the organization.",
+      "pronunciation": "ri-zis-tuhns"
+    },
+    {
+      "word": "Notable",
+      "meaning": "Worthy of attention or notice; remarkable or significant.",
+      "synonym": "Remarkable",
+      "antonym": "Insignificant",
+      "sentence": "The artist's notable works were displayed in the museum.",
+      "pronunciation": "noh-tuh-buhl"
+    },
+    {
+      "word": "Vandalise",
+      "meaning": "To deliberately destroy or damage public or private property.",
+      "synonym": "Deface",
+      "antonym": "Preserve",
+      "sentence": "The vandals vandalized the walls with graffiti.",
+      "pronunciation": "van-dl-ahyz"
+    },
+    {
+      "word": "Peril",
+      "meaning": "Serious and immediate danger or risk.",
+      "synonym": "Risk",
+      "antonym": "Safety",
+      "sentence": "The storm put the sailors in peril on the open sea.",
+      "pronunciation": "per-uhl"
+    },
+    {
+      "word": "Tamper",
+      "meaning": "To interfere with something in a way that causes damage or changes its original state without permission.",
+      "synonym": "Meddle",
+      "antonym": "Leave unchanged",
+      "sentence": "It's illegal to tamper with evidence in a crime scene.",
+      "pronunciation": "tam-per"
+    },
+    {
+      "word": "Jostle",
+      "meaning": "To push, elbow, or bump against someone in a crowd; to compete for space or attention.",
+      "synonym": "Shove",
+      "antonym": "Retreat",
+      "sentence": "Passengers jostled each other to get on the crowded train.",
+      "pronunciation": "jos-uhl"
+    },
+    {
+      "word": "Virulent",
+      "meaning": "Extremely severe or harmful in its effects; bitterly hostile or antagonistic.",
+      "synonym": "Venomous",
+      "antonym": "Benign",
+      "sentence": "The virus became more virulent, causing widespread illness.",
+      "pronunciation": "vir-yuh-luhnt"
+    },
+    {
+      "word": "Tangled",
+      "meaning": "Twisted together in a confused mass; complicated or involved in a confusing way.",
+      "synonym": "Entangled",
+      "antonym": "Untangled",
+      "sentence": "The wires were tangled and difficult to sort out.",
+      "pronunciation": "tang-guhld"
+    },
+    {
+      "word": "Scanty",
+      "meaning": "Small or insufficient in quantity or amount; barely sufficient.",
+      "synonym": "Sparse",
+      "antonym": "Abundant",
+      "sentence": "Some parts of Rajasthan are extremely dry as they receive scanty rainfall.",
+      "pronunciation": "skan-tee"
+    }
+
+  ]
+}

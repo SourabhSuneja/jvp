@@ -1,0 +1,1590 @@
+{
+  "words": [
+    {
+      "word": "Ambiguous",
+      "meaning": "Having more than one possible interpretation.",
+      "synonym": "Uncertain",
+      "antonym": "Clear",
+      "sentence": "The instructions were ambiguous, leaving the students confused about the assignment.",
+      "pronunciation": "am-big-yoo-uhs"
+    },
+    {
+      "word": "Cacophony",
+      "meaning": "A harsh, discordant mixture of sounds.",
+      "synonym": "Noise",
+      "antonym": "Harmony",
+      "sentence": "The cacophony of honking horns made it hard to concentrate in the busy city.",
+      "pronunciation": "kuh-kaw-fuh-nee"
+    },
+    {
+      "word": "Debilitate",
+      "meaning": "To make weak or feeble.",
+      "synonym": "Weaken",
+      "antonym": "Strengthen",
+      "sentence": "The illness debilitated her to the point that she couldn't get out of bed.",
+      "pronunciation": "dih-bil-i-teyt"
+    },
+    {
+      "word": "Eloquent",
+      "meaning": "Fluent or persuasive in speaking or writing.",
+      "synonym": "Articulate",
+      "antonym": "Inarticulate",
+      "sentence": "The president gave an eloquent speech that moved the audience.",
+      "pronunciation": "el-uh-kwuhnt"
+    },
+    {
+      "word": "Facetious",
+      "meaning": "Treating serious issues with inappropriate humor.",
+      "synonym": "Witty",
+      "antonym": "Serious",
+      "sentence": "His facetious remarks during the meeting were not well-received.",
+      "pronunciation": "fuh-see-shuhs"
+    },
+    {
+      "word": "Galvanize",
+      "meaning": "To shock or excite someone, typically into taking action.",
+      "synonym": "Stimulate",
+      "antonym": "Deter",
+      "sentence": "The inspiring speech galvanized the community to work together for a common goal.",
+      "pronunciation": "gal-vuh-nahyz"
+    },
+    {
+      "word": "Harangue",
+      "meaning": "A lengthy and aggressive speech.",
+      "synonym": "Tirade",
+      "antonym": "Praise",
+      "sentence": "The teacher delivered a harangue about the importance of studying for exams.",
+      "pronunciation": "huh-rang"
+    },
+    {
+      "word": "Ineffable",
+      "meaning": "Too great or extreme to be expressed in words.",
+      "synonym": "Indescribable",
+      "antonym": "Expressible",
+      "sentence": "The beauty of the sunset was ineffable, leaving everyone in awe.",
+      "pronunciation": "in-ef-uh-buhl"
+    },
+    {
+      "word": "Juxtapose",
+      "meaning": "To place or deal with close together for contrasting effect.",
+      "synonym": "Contrast",
+      "antonym": "Separate",
+      "sentence": "The artist chose to juxtapose light and dark colors in the painting.",
+      "pronunciation": "juhk-stuh-pohz"
+    },
+    {
+      "word": "Kaleidoscope",
+      "meaning": "A constantly changing pattern or sequence of elements.",
+      "synonym": "Array",
+      "antonym": "Monotony",
+      "sentence": "The city at night was a kaleidoscope of lights and sounds.",
+      "pronunciation": "kuh-lahy-duh-skohp"
+    },
+    {
+      "word": "Lethargic",
+      "meaning": "Sluggish and apathetic.",
+      "synonym": "Drowsy",
+      "antonym": "Energetic",
+      "sentence": "After a big meal, the students felt lethargic and struggled to focus.",
+      "pronunciation": "luh-thahr-jik"
+    },
+    {
+      "word": "Malleable",
+      "meaning": "Capable of being shaped or molded.",
+      "synonym": "Pliable",
+      "antonym": "Rigid",
+      "sentence": "Clay is a malleable material that artists use to create various sculptures.",
+      "pronunciation": "mal-ee-uh-buhl"
+    },
+    {
+      "word": "Nefarious",
+      "meaning": "Wicked, villainous, or criminal.",
+      "synonym": "Evil",
+      "antonym": "Virtuous",
+      "sentence": "The nefarious plot of the villain was finally exposed and thwarted.",
+      "pronunciation": "ni-fair-ee-uhs"
+    },
+    {
+      "word": "Obliterate",
+      "meaning": "To destroy utterly; wipe out.",
+      "synonym": "Annihilate",
+      "antonym": "Preserve",
+      "sentence": "The powerful storm threatened to obliterate the small village.",
+      "pronunciation": "uh-blit-uh-reyt"
+    },
+    {
+      "word": "Pernicious",
+      "meaning": "Having a harmful effect, especially in a gradual or subtle way.",
+      "synonym": "Destructive",
+      "antonym": "Beneficial",
+      "sentence": "Gossip can have a pernicious impact on relationships.",
+      "pronunciation": "per-nish-uhs"
+    },
+    {
+      "word": "Quell",
+      "meaning": "To suppress or extinguish something.",
+      "synonym": "Subdue",
+      "antonym": "Incite",
+      "sentence": "The principal worked to quell the rumors circulating in the school.",
+      "pronunciation": "kwel"
+    },
+    {
+      "word": "Ratify",
+      "meaning": "To formally approve or accept.",
+      "synonym": "Confirm",
+      "antonym": "Reject",
+      "sentence": "The countries agreed to ratify the treaty, promoting peace.",
+      "pronunciation": "rat-uh-fahy"
+    },
+    {
+      "word": "Sycophant",
+      "meaning": "A person who acts obsequiously toward someone important to gain advantage.",
+      "synonym": "Flatterer",
+      "antonym": "Rebel",
+      "sentence": "The sycophant constantly praised the boss to win favor.",
+      "pronunciation": "sik-uh-fuhnt"
+    },
+    {
+      "word": "Trepidation",
+      "meaning": "A feeling of fear or agitation about something that may happen.",
+      "synonym": "Apprehension",
+      "antonym": "Confidence",
+      "sentence": "With trepidation, he approached the haunted house on Halloween night.",
+      "pronunciation": "trep-i-dey-shuhn"
+    },
+    {
+      "word": "Ubiquitous",
+      "meaning": "Present, appearing, or found everywhere.",
+      "synonym": "Pervasive",
+      "antonym": "Rare",
+      "sentence": "In the modern world, smartphones are ubiquitous.",
+      "pronunciation": "yoo-bi-kwuh-tuhs"
+    },
+    {
+      "word": "Voracious",
+      "meaning": "Wanting or devouring great quantities of food.",
+      "synonym": "Insatiable",
+      "antonym": "Moderate",
+      "sentence": "After the hike, they had a voracious appetite and finished the entire pizza.",
+      "pronunciation": "vuh-rey-shuhs"
+    },
+    {
+      "word": "Whimsical",
+      "meaning": "Playfully quaint or fanciful, especially in an appealing and amusing way.",
+      "synonym": "Playful",
+      "antonym": "Serious",
+      "sentence": "The whimsical design of the amusement park attracted visitors of all ages.",
+      "pronunciation": "hwim-si-kuhl"
+    },
+    {
+      "word": "Xenophobia",
+      "meaning": "Dislike or prejudice against people from other countries.",
+      "synonym": "Nativism",
+      "antonym": "Open-mindedness",
+      "sentence": "Xenophobia can hinder cultural understanding and harmony.",
+      "pronunciation": "zen-uh-foh-bee-uh"
+    },
+    {
+      "word": "Yearn",
+      "meaning": "To have an intense feeling of longing for something.",
+      "synonym": "Crave",
+      "antonym": "Abandon",
+      "sentence": "The explorer yearned to discover new lands and cultures.",
+      "pronunciation": "yurn"
+    },
+    {
+      "word": "Zealot",
+      "meaning": "A person who is fanatical and uncompromising in pursuit of their religious, political, or other ideals.",
+      "synonym": "Fanatic",
+      "antonym": "Moderate",
+      "sentence": "The political zealot passionately campaigned for his candidate.",
+      "pronunciation": "zel-uht"
+    },
+    {
+      "word": "Amicable",
+      "meaning": "Characterized by friendliness and a lack of hostility.",
+      "synonym": "Friendly",
+      "antonym": "Hostile",
+      "sentence": "Despite their differences, they managed to reach an amicable agreement.",
+      "pronunciation": "am-i-kuh-buhl"
+    },
+    {
+      "word": "Benevolent",
+      "meaning": "Showing kindness and goodwill.",
+      "synonym": "Kind",
+      "antonym": "Malevolent",
+      "sentence": "The benevolent leader worked tirelessly for the welfare of his people.",
+      "pronunciation": "buh-nev-uh-luhnt"
+    },
+    {
+      "word": "Credulous",
+      "meaning": "Willing to believe or trust too readily, especially without proper evidence.",
+      "synonym": "Gullible",
+      "antonym": "Skeptical",
+      "sentence": "His credulous nature made him susceptible to scams.",
+      "pronunciation": "kred-yuh-luhs"
+    },
+    {
+      "word": "Disparate",
+      "meaning": "Essentially different; distinct in quality or character.",
+      "synonym": "Diverse",
+      "antonym": "Similar",
+      "sentence": "The team had disparate opinions on how to approach the project.",
+      "pronunciation": "dis-puh-rit"
+    },
+    {
+      "word": "Ephemeral",
+      "meaning": "Lasting for a very short time.",
+      "synonym": "Transient",
+      "antonym": "Permanent",
+      "sentence": "The beauty of the cherry blossoms is ephemeral, lasting only a few days.",
+      "pronunciation": "ih-fem-er-uhl"
+    },
+    {
+      "word": "Fervent",
+      "meaning": "Having or displaying a passionate intensity.",
+      "synonym": "Zealous",
+      "antonym": "Indifferent",
+      "sentence": "Her fervent dedication to the cause inspired others to join.",
+      "pronunciation": "fur-vuhnt"
+    },
+    {
+      "word": "Garrulous",
+      "meaning": "Excessively talkative, especially on trivial matters.",
+      "synonym": "Chatty",
+      "antonym": "Reserved",
+      "sentence": "The garrulous old man enjoyed sharing stories with anyone who would listen.",
+      "pronunciation": "gar-uh-luhs"
+    },
+    {
+      "word": "Hapless",
+      "meaning": "Unfortunate or unlucky.",
+      "synonym": "Unlucky",
+      "antonym": "Fortunate",
+      "sentence": "The hapless traveler got caught in a sudden rainstorm without an umbrella.",
+      "pronunciation": "hap-lis"
+    },
+    {
+      "word": "Iconoclast",
+      "meaning": "A person who attacks or criticizes traditional or popular beliefs.",
+      "synonym": "Rebel",
+      "antonym": "Conformist",
+      "sentence": "The artist was considered an iconoclast for challenging artistic norms.",
+      "pronunciation": "ahy-kon-uh-klast"
+    },
+    {
+      "word": "Jubilant",
+      "meaning": "Feeling or expressing great joy and triumph.",
+      "synonym": "Joyful",
+      "antonym": "Mournful",
+      "sentence": "The team was jubilant after winning the championship.",
+      "pronunciation": "joo-buh-luhnt"
+    },
+    {
+      "word": "Kowtow",
+      "meaning": "To act in an excessively subservient manner.",
+      "synonym": "Submit",
+      "antonym": "Defy",
+      "sentence": "He refused to kowtow to the unreasonable demands of his boss.",
+      "pronunciation": "kou-tou"
+    },
+    {
+      "word": "Languish",
+      "meaning": "To become feeble or weak, especially from lack of attention.",
+      "synonym": "Droop",
+      "antonym": "Thrive",
+      "sentence": "Without sunlight, the plants began to languish in the dark corner.",
+      "pronunciation": "lang-gwish"
+    },
+    {
+      "word": "Mirth",
+      "meaning": "Amusement, especially as expressed in laughter.",
+      "synonym": "Joy",
+      "antonym": "Sorrow",
+      "sentence": "The comedian's performance filled the room with infectious mirth.",
+      "pronunciation": "mərθ"
+    },
+    {
+      "word": "Nascent",
+      "meaning": "Just beginning to exist or develop.",
+      "synonym": "Emerging",
+      "antonym": "Mature",
+      "sentence": "The company was in its nascent stage, with promising ideas for growth.",
+      "pronunciation": "nas-uhnt"
+    },
+    {
+      "word": "Obfuscate",
+      "meaning": "To deliberately make something unclear or difficult to understand.",
+      "synonym": "Confuse",
+      "antonym": "Clarify",
+      "sentence": "The politician tried to obfuscate the issue with complex explanations.",
+      "pronunciation": "ob-fuh-skeyt"
+    },
+    {
+      "word": "Pellucid",
+      "meaning": "Translucently clear; easily understandable.",
+      "synonym": "Clear",
+      "antonym": "Opaque",
+      "sentence": "The pellucid water allowed us to see the colorful fish swimming below.",
+      "pronunciation": "puh-loo-sid"
+    },
+    {
+      "word": "Quixotic",
+      "meaning": "Exceedingly idealistic, unrealistic, and impractical.",
+      "synonym": "Idealistic",
+      "antonym": "Pragmatic",
+      "sentence": "His quixotic dreams of changing the world faced harsh realities.",
+      "pronunciation": "kwik-sot-ik"
+    },
+    {
+      "word": "Reticent",
+      "meaning": "Not revealing one's thoughts or feelings readily.",
+      "synonym": "Reserved",
+      "antonym": "Talkative",
+      "sentence": "The usually reticent girl surprised everyone by speaking passionately about her beliefs.",
+      "pronunciation": "ret-uh-suhnt"
+    },
+    {
+      "word": "Serendipity",
+      "meaning": "The occurrence and development of events by chance in a happy or beneficial way.",
+      "synonym": "Fortuity",
+      "antonym": "Misfortune",
+      "sentence": "Their meeting was a serendipity that led to a lifelong friendship.",
+      "pronunciation": "ser-uhn-dip-i-tee"
+    },
+    {
+      "word": "Tantamount",
+      "meaning": "Equivalent in seriousness to; virtually the same as.",
+      "synonym": "Equal",
+      "antonym": "Different",
+      "sentence": "His actions were tantamount to admitting guilt in the eyes of the law.",
+      "pronunciation": "tan-tuh-mount"
+    },
+    {
+      "word": "Ubiquitous",
+      "meaning": "Present, appearing, or found everywhere.",
+      "synonym": "Pervasive",
+      "antonym": "Rare",
+      "sentence": "In the modern world, smartphones are ubiquitous.",
+      "pronunciation": "yoo-bi-kwuh-tuhs"
+    },
+    {
+      "word": "Voracious",
+      "meaning": "Wanting or devouring great quantities of food.",
+      "synonym": "Insatiable",
+      "antonym": "Moderate",
+      "sentence": "After the hike, they had a voracious appetite and finished the entire pizza.",
+      "pronunciation": "vuh-rey-shuhs"
+    },
+    {
+      "word": "Whimsical",
+      "meaning": "Playfully quaint or fanciful, especially in an appealing and amusing way.",
+      "synonym": "Playful",
+      "antonym": "Serious",
+      "sentence": "The whimsical design of the amusement park attracted visitors of all ages.",
+      "pronunciation": "hwim-si-kuhl"
+    },
+    {
+      "word": "Xenophobia",
+      "meaning": "Dislike or prejudice against people from other countries.",
+      "synonym": "Nativism",
+      "antonym": "Open-mindedness",
+      "sentence": "Xenophobia can hinder cultural understanding and harmony.",
+      "pronunciation": "zen-uh-foh-bee-uh"
+    },
+    {
+      "word": "Yearn",
+      "meaning": "To have an intense feeling of longing for something.",
+      "synonym": "Crave",
+      "antonym": "Abandon",
+      "sentence": "The explorer yearned to discover new lands and cultures.",
+      "pronunciation": "yurn"
+    },
+    {
+      "word": "Effervescent",
+      "meaning": "Bubbling, lively, and enthusiastic.",
+      "synonym": "Vivacious",
+      "antonym": "Serene",
+      "sentence": "Her effervescent personality brought joy to everyone around her.",
+      "pronunciation": "ef-er-ves-uhnt"
+    },
+    {
+      "word": "Mellifluous",
+      "meaning": "Flowing with a smooth, rich, and sweet sound.",
+      "synonym": "Harmonious",
+      "antonym": "Discordant",
+      "sentence": "The mellifluous melody of the song enchanted the audience.",
+      "pronunciation": "muh-lif-loo-uhs"
+    },
+    {
+      "word": "Surreptitious",
+      "meaning": "Kept secret, especially because it would not be approved of.",
+      "synonym": "Covert",
+      "antonym": "Open",
+      "sentence": "He made a surreptitious entrance to the party, avoiding attention.",
+      "pronunciation": "sur-uhp-tish-uhs"
+    },
+    {
+      "word": "Ephemeralize",
+      "meaning": "To make things more temporary or transitory.",
+      "synonym": "Transcend",
+      "antonym": "Perpetuate",
+      "sentence": "The artist sought to ephemeralize the beauty of the moment in her painting.",
+      "pronunciation": "ih-fem-er-uh-lahyz"
+    },
+    {
+      "word": "Quintessence",
+      "meaning": "The most perfect or typical example of a quality or class.",
+      "synonym": "Epitome",
+      "antonym": "Anomaly",
+      "sentence": "His exquisite poem was considered the quintessence of romantic literature.",
+      "pronunciation": "kwin-tuh-sens"
+    },
+    {
+      "word": "Luminescence",
+      "meaning": "Emission of light not caused by heat; fluorescence or phosphorescence.",
+      "synonym": "Radiance",
+      "antonym": "Dullness",
+      "sentence": "The forest had an enchanting luminescence as fireflies danced in the night.",
+      "pronunciation": "loo-muh-nes-uhns"
+    },
+    {
+      "word": "Symbiosis",
+      "meaning": "A mutually beneficial relationship between different species.",
+      "synonym": "Mutualism",
+      "antonym": "Parasitism",
+      "sentence": "The coral and the algae share a symbiosis, each benefiting from the other.",
+      "pronunciation": "sim-bye-oh-sis"
+    },
+    {
+      "word": "Halcyon",
+      "meaning": "Denoting a period of time in the past that was idyllically happy and peaceful.",
+      "synonym": "Tranquil",
+      "antonym": "Chaotic",
+      "sentence": "The novelist nostalgically described the halcyon days of her childhood.",
+      "pronunciation": "hal-see-uhn"
+    },
+    {
+      "word": "Panacea",
+      "meaning": "A solution or remedy for all difficulties or diseases.",
+      "synonym": "Cure-all",
+      "antonym": "Problem",
+      "sentence": "Some saw the new technology as a panacea for societal challenges.",
+      "pronunciation": "pan-uh-see-uh"
+    },
+    {
+      "word": "Serendipitous",
+      "meaning": "Occurring or discovered by chance in a happy or beneficial way.",
+      "synonym": "Fortuitous",
+      "antonym": "Intentional",
+      "sentence": "Their serendipitous encounter led to a collaborative artistic project.",
+      "pronunciation": "ser-uhn-dip-i-tuhs"
+    },
+    {
+      "word": "Pinnacle",
+      "meaning": "The highest point or peak.",
+      "synonym": "Summit",
+      "antonym": "Nadir",
+      "sentence": "Reaching the pinnacle of success requires dedication and hard work.",
+      "pronunciation": "pin-uh-kuhl"
+    },
+    {
+      "word": "Ubiquity",
+      "meaning": "The state of being everywhere, especially at the same time.",
+      "synonym": "Omnipresence",
+      "antonym": "Absence",
+      "sentence": "The ubiquity of smartphones has transformed how we communicate.",
+      "pronunciation": "yoo-bi-kwuh-tee"
+    },
+    {
+      "word": "Vivacious",
+      "meaning": "Lively and animated in character.",
+      "synonym": "Energetic",
+      "antonym": "Dull",
+      "sentence": "Her vivacious personality brightened up the room.",
+      "pronunciation": "vi-vey-shuhs"
+    },
+    {
+      "word": "Zenith",
+      "meaning": "The highest point reached in the heavens or celestial sphere.",
+      "synonym": "Apex",
+      "antonym": "Nadir",
+      "sentence": "The sun was at its zenith, casting a warm glow across the landscape.",
+      "pronunciation": "zee-nith"
+    },
+    {
+      "word": "Effulgent",
+      "meaning": "Shining brightly; radiant.",
+      "synonym": "Dazzling",
+      "antonym": "Dim",
+      "sentence": "The effulgent stars illuminated the night sky with their brilliance.",
+      "pronunciation": "ih-ful-jent"
+    },
+    {
+      "word": "Zephyr",
+      "meaning": "A gentle, mild breeze.",
+      "synonym": "Breeze",
+      "antonym": "Gale",
+      "sentence": "The zephyr rustled the leaves, creating a soothing melody.",
+      "pronunciation": "zef-er"
+    },
+    {
+      "word": "Obfuscate",
+      "meaning": "To deliberately make something unclear or difficult to understand.",
+      "synonym": "Confuse",
+      "antonym": "Clarify",
+      "sentence": "The politician tried to obfuscate the issue with complex explanations.",
+      "pronunciation": "ob-fuh-skeyt"
+    },
+    {
+      "word": "Rhapsody",
+      "meaning": "An ecstatic expression of feeling or enthusiasm.",
+      "synonym": "Ecstasy",
+      "antonym": "Apathy",
+      "sentence": "Her performance was a rhapsody of emotion that moved the audience.",
+      "pronunciation": "rap-suh-dee"
+    },
+    {
+      "word": "Aureate",
+      "meaning": "Marked by grandiloquent and rhetorical style.",
+      "synonym": "Ornate",
+      "antonym": "Simple",
+      "sentence": "The poet's aureate language painted vivid images in the reader's mind.",
+      "pronunciation": "aw-ree-eyt"
+    },
+    {
+      "word": "Ephemeralize",
+      "meaning": "To make things more temporary or transitory.",
+      "synonym": "Transcend",
+      "antonym": "Perpetuate",
+      "sentence": "The artist sought to ephemeralize the beauty of the moment in her painting.",
+      "pronunciation": "ih-fem-er-uh-lahyz"
+    },
+    {
+      "word": "Innovate",
+      "meaning": "To introduce new ideas, methods, or products.",
+      "synonym": "Revolutionize",
+      "antonym": "Maintain",
+      "sentence": "Companies strive to innovate in order to stay competitive in the market.",
+      "pronunciation": "in-uh-veyt"
+    },
+    {
+      "word": "Cybersecurity",
+      "meaning": "The practice of protecting systems, networks, and programs from digital attacks.",
+      "synonym": "Information security",
+      "antonym": "Vulnerability",
+      "sentence": "Cybersecurity is crucial to safeguarding sensitive information from cyber threats.",
+      "pronunciation": "sahy-ber-se-kyoor-i-tee"
+    },
+    {
+      "word": "Artificial Intelligence",
+      "meaning": "The simulation of human intelligence in machines that are programmed to think and learn.",
+      "synonym": "AI",
+      "antonym": "Natural Intelligence",
+      "sentence": "Artificial Intelligence is transforming various industries with its advanced capabilities.",
+      "pronunciation": "ahr-tuh-fish-uhl in-tuh-li-juhns"
+    },
+    {
+      "word": "Algorithm",
+      "meaning": "A set of rules or steps for performing a task, especially in a computer program.",
+      "synonym": "Procedure",
+      "antonym": "Randomness",
+      "sentence": "Search engines use complex algorithms to provide relevant search results.",
+      "pronunciation": "al-guh-rith-uhm"
+    },
+    {
+      "word": "Virtual Reality",
+      "meaning": "A computer-generated simulation of a three-dimensional environment.",
+      "synonym": "VR",
+      "antonym": "Reality",
+      "sentence": "Virtual Reality is used in gaming and simulations to create immersive experiences.",
+      "pronunciation": "vur-choo-uhl ree-al-i-tee"
+    },
+    {
+      "word": "Cloud Computing",
+      "meaning": "The delivery of computing services, including storage and processing power, over the internet.",
+      "synonym": "Cloud services",
+      "antonym": "On-premises",
+      "sentence": "Many businesses adopt cloud computing to enhance scalability and efficiency.",
+      "pronunciation": "kloud kuhm-pyoo-ting"
+    },
+    {
+      "word": "Automation",
+      "meaning": "The use of largely automatic equipment in an operation, process, or system.",
+      "synonym": "Mechanization",
+      "antonym": "Manual labor",
+      "sentence": "Automation in manufacturing increases efficiency and reduces human error.",
+      "pronunciation": "aw-tuh-mey-shuhn"
+    },
+    {
+      "word": "Blockchain",
+      "meaning": "A decentralized and distributed digital ledger for recording transactions across multiple computers.",
+      "synonym": "Distributed ledger",
+      "antonym": "Centralized database",
+      "sentence": "Blockchain technology ensures secure and transparent transactions in cryptocurrencies.",
+      "pronunciation": "blok-cheyn"
+    },
+    {
+      "word": "Augmented Reality",
+      "meaning": "A technology that superimposes computer-generated information on a user's view of the real world.",
+      "synonym": "AR",
+      "antonym": "Unaltered reality",
+      "sentence": "Augmented Reality enhances the user's perception by overlaying digital elements.",
+      "pronunciation": "awg-men-ted ree-al-i-tee"
+    },
+    {
+      "word": "Biometrics",
+      "meaning": "Measurement and statistical analysis of people's unique physical and behavioral characteristics.",
+      "synonym": "Biometric authentication",
+      "antonym": "Password",
+      "sentence": "Biometrics, such as fingerprint recognition, provides secure access to devices.",
+      "pronunciation": "bahy-oh-met-riks"
+    },
+    {
+      "word": "Suffrage",
+      "meaning": "The right to vote in political elections.",
+      "synonym": "Franchise",
+      "antonym": "Disenfranchise",
+      "sentence": "Women fought for suffrage during the suffragette movement.",
+      "pronunciation": "suhf-rij"
+    },
+    {
+      "word": "Economic Inequality",
+      "meaning": "The unequal distribution of wealth and resources in a society.",
+      "synonym": "Income disparity",
+      "antonym": "Economic equity",
+      "sentence": "Addressing economic inequality is a key goal for social justice.",
+      "pronunciation": "ek-uh-nom-ik in-i-kwol-i-tee"
+    },
+    {
+      "word": "Cultural Diversity",
+      "meaning": "The existence of a variety of cultural groups and their unique traditions.",
+      "synonym": "Multiculturalism",
+      "antonym": "Cultural homogeneity",
+      "sentence": "Countries celebrate cultural diversity through festivals and events.",
+      "pronunciation": "kuhl-chuh-rul dih-vur-si-tee"
+    },
+    {
+      "word": "Civil Liberties",
+      "meaning": "Individual freedoms and legal protections against government actions.",
+      "synonym": "Constitutional rights",
+      "antonym": "Civil restrictions",
+      "sentence": "The Bill of Rights safeguards civil liberties in the United States.",
+      "pronunciation": "siv-uhl lib-er-tees"
+    },
+    {
+      "word": "Social Justice",
+      "meaning": "The fair distribution of resources and opportunities in a society.",
+      "synonym": "Equity",
+      "antonym": "Injustice",
+      "sentence": "Advocates work towards achieving social justice for marginalized communities.",
+      "pronunciation": "soh-shuhl juhs-tis"
+    },
+    {
+      "word": "Civic Responsibility",
+      "meaning": "The duty of citizens to participate in the democratic process and contribute to society.",
+      "synonym": "Citizenship duty",
+      "antonym": "Apathy",
+      "sentence": "Voting and community service are examples of civic responsibility.",
+      "pronunciation": "siv-ik ri-spon-suh-bil-i-tee"
+    },
+    {
+      "word": "Prejudice",
+      "meaning": "Preconceived opinions or attitudes not based on reason or actual experience.",
+      "synonym": "Bias",
+      "antonym": "Open-mindedness",
+      "sentence": "Education is essential in combating prejudice and promoting tolerance.",
+      "pronunciation": "prej-uh-dis"
+    },
+    {
+      "word": "Globalization",
+      "meaning": "The interconnectedness and interdependence of economies and cultures worldwide.",
+      "synonym": "Worldwide integration",
+      "antonym": "Isolationism",
+      "sentence": "Technological advances have accelerated the process of globalization.",
+      "pronunciation": "gloh-buh-luh-zey-shuhn"
+    },
+    {
+      "word": "Rule of Law",
+      "meaning": "The principle that everyone, including leaders, is subject to the law.",
+      "synonym": "Legal equality",
+      "antonym": "Lawlessness",
+      "sentence": "A strong democracy upholds the rule of law as a foundation for justice.",
+      "pronunciation": "rool uhv law"
+    },
+    {
+      "word": "Cultural Appropriation",
+      "meaning": "The adoption of elements from one culture by members of another culture.",
+      "synonym": "Cultural borrowing",
+      "antonym": "Cultural appreciation",
+      "sentence": "Cultural appropriation raises concerns about respect and understanding.",
+      "pronunciation": "kuhl-chuh-rul uh-proh-pree-ey-shuhn"
+    },
+    {
+      "word": "Entrepreneurship",
+      "meaning": "The activity of setting up and running a business, taking on financial risks in the hope of profit.",
+      "synonym": "Business ownership",
+      "antonym": "Employment",
+      "sentence": "Successful entrepreneurship often involves innovation and a strong work ethic.",
+      "pronunciation": "ahn-truh-pruh-nur-ship"
+    },
+    {
+      "word": "Marketing",
+      "meaning": "The process of promoting, selling, and distributing a product or service.",
+      "synonym": "Promotion",
+      "antonym": "Undermarketing",
+      "sentence": "Effective marketing strategies are crucial for product visibility and sales.",
+      "pronunciation": "mahr-ki-ting"
+    },
+    {
+      "word": "Supply Chain",
+      "meaning": "The sequence of processes involved in the production and distribution of goods.",
+      "synonym": "Distribution network",
+      "antonym": "Isolated production",
+      "sentence": "Efficient supply chain management enhances product availability and reduces costs.",
+      "pronunciation": "suh-plahy cheyn"
+    },
+    {
+      "word": "Finance",
+      "meaning": "The management of money, including investments, banking, and budgeting.",
+      "synonym": "Financial management",
+      "antonym": "Financial mismanagement",
+      "sentence": "A solid understanding of finance is essential for sound business decisions.",
+      "pronunciation": "fahy-nans"
+    },
+    {
+      "word": "Branding",
+      "meaning": "The process of creating and establishing a recognizable identity for a product or company.",
+      "synonym": "Brand development",
+      "antonym": "Generic representation",
+      "sentence": "Effective branding builds trust and recognition in the market.",
+      "pronunciation": "brand-ing"
+    },
+    {
+      "word": "Logistics",
+      "meaning": "The detailed coordination of a complex operation involving many people, facilities, or supplies.",
+      "synonym": "Supply chain management",
+      "antonym": "Disorganization",
+      "sentence": "Efficient logistics ensure timely and cost-effective delivery of goods.",
+      "pronunciation": "loh-jis-tiks"
+    },
+    {
+      "word": "Strategic Planning",
+      "meaning": "The process of defining an organization's direction and making decisions on allocating its resources.",
+      "synonym": "Long-term planning",
+      "antonym": "Ad hoc decision-making",
+      "sentence": "Strategic planning is crucial for achieving organizational goals.",
+      "pronunciation": "struh-tee-jik plan-ing"
+    },
+    {
+      "word": "Profit Margin",
+      "meaning": "The percentage of profit a company earns from its total revenue.",
+      "synonym": "Profit percentage",
+      "antonym": "Loss margin",
+      "sentence": "Monitoring profit margins is vital for assessing business profitability.",
+      "pronunciation": "prof-it mahr-jin"
+    },
+    {
+      "word": "Negotiation",
+      "meaning": "The process of reaching an agreement through discussion and compromise.",
+      "synonym": "Bargaining",
+      "antonym": "Standoff",
+      "sentence": "Effective negotiation skills are valuable in business deal-making.",
+      "pronunciation": "ni-goh-shee-ey-shuhn"
+    },
+    {
+      "word": "Innovation",
+      "meaning": "The introduction of something new or significantly improved, often related to products or processes.",
+      "synonym": "Creativity",
+      "antonym": "Stagnation",
+      "sentence": "Businesses thrive when they encourage and embrace innovation.",
+      "pronunciation": "in-uh-vey-shuhn"
+    },
+    {
+      "word": "Steadfast",
+      "meaning": "Resolutely or dutifully firm and unwavering.",
+      "synonym": "Staunch",
+      "antonym": "Unsteady",
+      "sentence": "His steadfast commitment to his goals fueled his success.",
+      "pronunciation": "sted-fast"
+    },
+    {
+      "word": "Banish",
+      "meaning": "To send away, prohibit, or exile, typically as a punishment.",
+      "synonym": "Exile",
+      "antonym": "Welcome",
+      "sentence": "The king decided to banish the traitor from the kingdom.",
+      "pronunciation": "ban-ish"
+    },
+    {
+      "word": "Bluff",
+      "meaning": "To deceive or mislead, especially by a show of strength or confidence.",
+      "synonym": "Deceive",
+      "antonym": "Honest",
+      "sentence": "He tried to bluff his way through the difficult conversation.",
+      "pronunciation": "bluhf"
+    },
+    {
+      "word": "Concoction",
+      "meaning": "A mixture of various ingredients or elements.",
+      "synonym": "Brew",
+      "antonym": "Simplicity",
+      "sentence": "The chef's special concoction of spices created a unique flavor.",
+      "pronunciation": "kuhn-kok-shuhn"
+    },
+    {
+      "word": "Aptitude",
+      "meaning": "Natural ability or talent for a specific activity.",
+      "synonym": "Skill",
+      "antonym": "Ineptitude",
+      "sentence": "Her aptitude for mathematics made her excel in the subject.",
+      "pronunciation": "ap-ti-tood"
+    },
+    {
+      "word": "Defiance",
+      "meaning": "Open resistance or bold disobedience.",
+      "synonym": "Resistance",
+      "antonym": "Submission",
+      "sentence": "The protest was an act of defiance against the unjust laws.",
+      "pronunciation": "di-fahy-uhns"
+    },
+    {
+      "word": "Disdain",
+      "meaning": "The feeling that someone or something is unworthy of one's consideration or respect.",
+      "synonym": "Contempt",
+      "antonym": "Respect",
+      "sentence": "She couldn't hide her disdain for the dishonest behavior.",
+      "pronunciation": "dis-deyn"
+    },
+    {
+      "word": "Falter",
+      "meaning": "To hesitate or waver in action, belief, or purpose.",
+      "synonym": "Stumble",
+      "antonym": "Persist",
+      "sentence": "His confidence began to falter as the challenges intensified.",
+      "pronunciation": "fawl-ter"
+    },
+    {
+      "word": "Grueling",
+      "meaning": "Exhausting and demanding, requiring a lot of effort and hard work.",
+      "synonym": "Exhaustive",
+      "antonym": "Easy",
+      "sentence": "The marathon was a grueling test of endurance.",
+      "pronunciation": "groo-uh-ling"
+    },
+    {
+      "word": "Meander",
+      "meaning": "To follow a winding or intricate course.",
+      "synonym": "Wander",
+      "antonym": "Straighten",
+      "sentence": "The river continued to meander through the picturesque landscape.",
+      "pronunciation": "mee-an-der"
+    },
+    {
+      "word": "Monotonous",
+      "meaning": "Lacking in variety and interest, often repetitious and tedious.",
+      "synonym": "Tedious",
+      "antonym": "Varied",
+      "sentence": "The monotonous sound of the dripping water echoed in the cave.",
+      "pronunciation": "muh-not-nuhs"
+    },
+    {
+      "word": "Muster",
+      "meaning": "To assemble or gather, especially for inspection or preparation.",
+      "synonym": "Gather",
+      "antonym": "Disperse",
+      "sentence": "The soldiers had to muster for the morning drill.",
+      "pronunciation": "muhs-ter"
+    },
+    {
+      "word": "Obscure",
+      "meaning": "Not clear or easily understood, not well-known or prominent.",
+      "synonym": "Uncertain",
+      "antonym": "Clear",
+      "sentence": "The ancient manuscript contained obscure symbols and writings.",
+      "pronunciation": "uhb-skyoor"
+    },
+    {
+      "word": "Pristine",
+      "meaning": "In its original condition; unspoiled.",
+      "synonym": "Untouched",
+      "antonym": "Tarnished",
+      "sentence": "The hikers discovered a pristine lake hidden in the remote mountains.",
+      "pronunciation": "pris-teen"
+    },
+    {
+      "word": "Replenish",
+      "meaning": "To fill or restore a supply or stock to its former level.",
+      "synonym": "Refill",
+      "antonym": "Deplete",
+      "sentence": "The store needed to replenish its shelves after a busy weekend.",
+      "pronunciation": "ri-plen-ish"
+    },
+    {
+      "word": "Serenity",
+      "meaning": "The state of being calm, peaceful, and untroubled.",
+      "synonym": "Tranquility",
+      "antonym": "Chaos",
+      "sentence": "The garden exuded an air of serenity, providing a peaceful escape.",
+      "pronunciation": "suh-ren-i-tee"
+    },
+    {
+      "word": "Vigilant",
+      "meaning": "Watchful and alert to detect danger or threats.",
+      "synonym": "Alert",
+      "antonym": "Careless",
+      "sentence": "The security guard remained vigilant throughout the night shift.",
+      "pronunciation": "vij-uh-luhnt"
+    },
+    {
+      "word": "Encounter",
+      "meaning": "A meeting, especially one that is unexpected or brief.",
+      "synonym": "Meeting",
+      "antonym": "Avoidance",
+      "sentence": "Their chance encounter at the café led to a meaningful conversation.",
+      "pronunciation": "en-koun-ter"
+    },
+    {
+      "word": "Diminish",
+      "meaning": "To make or become less in size, importance, or intensity.",
+      "synonym": "Decrease",
+      "antonym": "Increase",
+      "sentence": "The artist decided not to diminish the impact of the vibrant colors in the painting.",
+      "pronunciation": "di-min-ish"
+    },
+    {
+      "word": "Dismal",
+      "meaning": "Depressing, dreary, or gloomy.",
+      "synonym": "Sorrowful",
+      "antonym": "Bright",
+      "sentence": "The abandoned house had a dismal appearance in the fading light.",
+      "pronunciation": "diz-muhl"
+    },
+    {
+      "word": "Engrossed",
+      "meaning": "Having all one's attention or interest absorbed by someone or something.",
+      "synonym": "Absorbed",
+      "antonym": "Distracted",
+      "sentence": "She was so engrossed in the novel that she lost track of time.",
+      "pronunciation": "en-grohst"
+    },
+    {
+      "word": "Foresight",
+      "meaning": "The ability to predict or the action of predicting what will happen or be needed in the future.",
+      "synonym": "Anticipation",
+      "antonym": "Hindsight",
+      "sentence": "His foresight in planning the project helped avoid potential problems.",
+      "pronunciation": "fawr-sahyt"
+    },
+    {
+      "word": "Gusto",
+      "meaning": "Enthusiastic and vigorous enjoyment or appreciation.",
+      "synonym": "Zeal",
+      "antonym": "Apathy",
+      "sentence": "He ate his meal with gusto, savoring every bite.",
+      "pronunciation": "guhs-toh"
+    },
+    {
+      "word": "Ignite",
+      "meaning": "To catch fire or cause to catch fire.",
+      "synonym": "Kindle",
+      "antonym": "Extinguish",
+      "sentence": "He used a match to ignite the candles in the dark room.",
+      "pronunciation": "ig-nahyt"
+    },
+    {
+      "word": "Hasten",
+      "meaning": "To be quick to do something or cause something to happen sooner than expected.",
+      "synonym": "Accelerate",
+      "antonym": "Delay",
+      "sentence": "They decided to hasten the completion of the construction project.",
+      "pronunciation": "hey-suhn"
+    },
+    {
+      "word": "Impending",
+      "meaning": "About to happen; imminent.",
+      "synonym": "Approaching",
+      "antonym": "Distant",
+      "sentence": "The dark clouds signaled the impending storm.",
+      "pronunciation": "im-pen-ding"
+    },
+    {
+      "word": "Jostle",
+      "meaning": "To push, elbow, or bump against someone roughly, typically in a crowd.",
+      "synonym": "Bump",
+      "antonym": "Avoid",
+      "sentence": "In the crowded subway, people had to jostle to find space.",
+      "pronunciation": "joss-el"
+    },
+    {
+      "word": "Kindle",
+      "meaning": "To ignite or light something, or to arouse a feeling or emotion.",
+      "synonym": "Ignite",
+      "antonym": "Extinguish",
+      "sentence": "The storyteller's words were sure to kindle the children's imagination.",
+      "pronunciation": "kin-dl"
+    },
+    {
+      "word": "Recuperate",
+      "meaning": "To recover from illness or exertion.",
+      "synonym": "Recover",
+      "antonym": "Deteriorate",
+      "sentence": "After the surgery, he needed time to rest and recuperate.",
+      "pronunciation": "ri-koo-puh-reyt"
+    },
+    {
+      "word": "Scurry",
+      "meaning": "To move hurriedly with short, quick steps.",
+      "synonym": "Hurry",
+      "antonym": "Saunter",
+      "sentence": "The mice began to scurry away as soon as they sensed danger.",
+      "pronunciation": "skur-ee"
+    },
+    {
+      "word": "Repugnant",
+      "meaning": "Extremely distasteful; unacceptable.",
+      "synonym": "Offensive",
+      "antonym": "Appealing",
+      "sentence": "The idea of harming innocent creatures was repugnant to her.",
+      "pronunciation": "ri-puhg-nuhnt"
+    },
+    {
+      "word": "Versatile",
+      "meaning": "Able to adapt or be adapted to many different functions or activities.",
+      "synonym": "Adaptable",
+      "antonym": "Limited",
+      "sentence": "Her versatile skills made her an asset in various roles.",
+      "pronunciation": "vur-suh-tl"
+    },
+    {
+      "word": "Waver",
+      "meaning": "To shake with a quivering motion; to be undecided between two opinions or courses of action.",
+      "synonym": "Vacillate",
+      "antonym": "Persist",
+      "sentence": "She couldn't help but waver in her decision as the choices became more complex.",
+      "pronunciation": "wey-ver"
+    },
+    {
+      "word": "Heir",
+      "meaning": "A person legally entitled to the property or rank of another on that person's death.",
+      "synonym": "Successor",
+      "antonym": "Ancestor",
+      "sentence": "The eldest son was the heir to the family fortune.",
+      "pronunciation": "air"
+    },
+    {
+      "word": "Admirable",
+      "meaning": "Deserving respect and approval; worthy of admiration.",
+      "synonym": "Praiseworthy",
+      "antonym": "Disgraceful",
+      "sentence": "Her admirable efforts in charity work made a positive impact.",
+      "pronunciation": "ad-muh-ruh-buhl"
+    },
+    {
+      "word": "Drought",
+      "meaning": "A prolonged period of abnormally low rainfall, leading to a shortage of water.",
+      "synonym": "Dry spell",
+      "antonym": "Flood",
+      "sentence": "The farmers faced significant challenges during the severe drought.",
+      "pronunciation": "draut"
+    },
+    {
+      "word": "Cruise",
+      "meaning": "To sail about on a pleasure trip.",
+      "synonym": "Voyage",
+      "antonym": "Anchor",
+      "sentence": "They decided to cruise along the coast during their vacation.",
+      "pronunciation": "krooz"
+    },
+    {
+      "word": "Compel",
+      "meaning": "To force or oblige someone to do something.",
+      "synonym": "Force",
+      "antonym": "Allow",
+      "sentence": "The evidence will compel them to reconsider their decision.",
+      "pronunciation": "kuhm-pel"
+    },
+    {
+      "word": "Agitation",
+      "meaning": "A state of nervousness or unrest.",
+      "synonym": "Disturbance",
+      "antonym": "Calm",
+      "sentence": "The political unrest caused a significant level of agitation among the citizens.",
+      "pronunciation": "aj-i-tey-shuhn"
+    },
+    {
+      "word": "Condemn",
+      "meaning": "To express strong disapproval or censure.",
+      "synonym": "Criticize",
+      "antonym": "Praise",
+      "sentence": "The community came together to condemn the act of vandalism.",
+      "pronunciation": "kuhn-dem"
+    },
+    {
+      "word": "Harass",
+      "meaning": "To persistently annoy or torment someone.",
+      "synonym": "Molest",
+      "antonym": "Assist",
+      "sentence": "It's essential to address workplace harassment and create a safe environment.",
+      "pronunciation": "huh-ras"
+    },
+    {
+      "word": "Initiate",
+      "meaning": "To begin or introduce something.",
+      "synonym": "Commence",
+      "antonym": "Conclude",
+      "sentence": "The new employee was eager to initiate positive changes in the company.",
+      "pronunciation": "ih-nish-ee-eyt"
+    },
+    {
+      "word": "Frighten",
+      "meaning": "To cause fear or terror in someone.",
+      "synonym": "Terrify",
+      "antonym": "Reassure",
+      "sentence": "The unexpected noise in the dark alley could frighten anyone.",
+      "pronunciation": "fryt-n"
+    },
+    {
+      "word": "Novice",
+      "meaning": "A person new to or inexperienced in a field or situation.",
+      "synonym": "Beginner",
+      "antonym": "Expert",
+      "sentence": "As a novice gardener, she was excited to learn about plant care.",
+      "pronunciation": "nov-is"
+    },
+    {
+      "word": "Tactic",
+      "meaning": "An action or strategy carefully planned to achieve a specific end.",
+      "synonym": "Strategy",
+      "antonym": "Random move",
+      "sentence": "The team discussed the best tactic to win the upcoming match.",
+      "pronunciation": "tak-tik"
+    },
+    {
+      "word": "Accident",
+      "meaning": "An unfortunate incident that happens unexpectedly and unintentionally.",
+      "synonym": "Mishap",
+      "antonym": "Intentional act",
+      "sentence": "The car crash was a tragic accident that resulted in injuries.",
+      "pronunciation": "ak-si-duhnt"
+    },
+    {
+      "word": "Arrive",
+      "meaning": "To reach a destination or a certain point in a journey.",
+      "synonym": "Reach",
+      "antonym": "Depart",
+      "sentence": "They planned to arrive at the airport well before the departure time.",
+      "pronunciation": "uh-rahyv"
+    },
+    {
+      "word": "Atlas",
+      "meaning": "A collection of maps in a book or a bound set of maps.",
+      "synonym": "Map book",
+      "antonym": "Individual map",
+      "sentence": "He consulted the atlas to find the route to their destination.",
+      "pronunciation": "at-luhs"
+    },
+    {
+      "word": "Award",
+      "meaning": "A prize or other mark of recognition given in honor of an achievement.",
+      "synonym": "Prize",
+      "antonym": "Penalty",
+      "sentence": "She received an award for her outstanding contributions to the community.",
+      "pronunciation": "uh-wawrd"
+    },
+    {
+      "word": "Balance",
+      "meaning": "A state of equilibrium or stability; the ability to maintain control or stability.",
+      "synonym": "Equilibrium",
+      "antonym": "Imbalance",
+      "sentence": "Finding the right balance between work and personal life is essential.",
+      "pronunciation": "bal-uhns"
+    },
+    {
+      "word": "Bounce",
+      "meaning": "To spring back after hitting a surface; to move energetically.",
+      "synonym": "Rebound",
+      "antonym": "Limp",
+      "sentence": "The basketball had a good bounce on the court.",
+      "pronunciation": "bouns"
+    },
+    {
+      "word": "Brave",
+      "meaning": "Courageous and willing to face danger or challenges.",
+      "synonym": "Courageous",
+      "antonym": "Timid",
+      "sentence": "The firefighters exhibited brave acts during the rescue mission.",
+      "pronunciation": "breyv"
+    },
+    {
+      "word": "Bright",
+      "meaning": "Full of light or shining; intelligent and quick-witted.",
+      "synonym": "Radiant",
+      "antonym": "Dim",
+      "sentence": "The bright stars illuminated the night sky, creating a magical scene.",
+      "pronunciation": "brahyt"
+    },
+    {
+      "word": "Cage",
+      "meaning": "A structure with bars or wire for confining and containing animals.",
+      "synonym": "Enclosure",
+      "antonym": "Release",
+      "sentence": "The zoo implemented a new cage design for the exotic birds.",
+      "pronunciation": "keyj"
+    },
+    {
+      "word": "Calm",
+      "meaning": "Peaceful, free from disturbance or agitation.",
+      "synonym": "Tranquil",
+      "antonym": "Agitated",
+      "sentence": "The gentle waves and clear sky created a calm atmosphere at the beach.",
+      "pronunciation": "kahm"
+    },
+    {
+      "word": "Cheer",
+      "meaning": "Shout for joy or in praise; express happiness or approval.",
+      "synonym": "Applaud",
+      "antonym": "Boo",
+      "sentence": "The fans gathered to cheer for their favorite sports team.",
+      "pronunciation": "cheer"
+    },
+    {
+      "word": "Couple",
+      "meaning": "Two individuals considered together; a pair.",
+      "synonym": "Pair",
+      "antonym": "Single",
+      "sentence": "The couple enjoyed a romantic evening by the lakeside.",
+      "pronunciation": "kuhpl"
+    },
+    {
+      "word": "Crowd",
+      "meaning": "A large number of people gathered together, typically in a disorganized or unruly way.",
+      "synonym": "Throng",
+      "antonym": "Sparse group",
+      "sentence": "The concert drew a massive crowd of enthusiastic fans.",
+      "pronunciation": "kroud"
+    },
+    {
+      "word": "Damp",
+      "meaning": "Slightly wet, moist, or humid.",
+      "synonym": "Wet",
+      "antonym": "Dry",
+      "sentence": "The clothes left outside overnight felt damp in the morning dew.",
+      "pronunciation": "damp"
+    },
+    {
+      "word": "Dangerous",
+      "meaning": "Likely to cause harm or injury; risky.",
+      "synonym": "Hazardous",
+      "antonym": "Safe",
+      "sentence": "Swimming in the deep sea can be dangerous without proper precautions.",
+      "pronunciation": "deyn-jer-uhs"
+    },
+    {
+      "word": "Dawn",
+      "meaning": "The first appearance of light in the sky before sunrise; the beginning of a phenomenon or period.",
+      "synonym": "Sunrise",
+      "antonym": "Dusk",
+      "sentence": "They witnessed the beauty of dawn as the sun gradually rose.",
+      "pronunciation": "dawn"
+    },
+    {
+      "word": "Demolish",
+      "meaning": "To completely destroy or ruin a building or structure.",
+      "synonym": "Destroy",
+      "antonym": "Construct",
+      "sentence": "The old factory was scheduled for demolition to make way for new development.",
+      "pronunciation": "dih-mol-ish"
+    },
+    {
+      "word": "Discard",
+      "meaning": "To get rid of or throw away as no longer useful or needed.",
+      "synonym": "Dispose of",
+      "antonym": "Keep",
+      "sentence": "They decided to discard old furniture to make room for the new ones.",
+      "pronunciation": "dih-skahrd"
+    },
+    {
+      "word": "Doubt",
+      "meaning": "A feeling of uncertainty or lack of conviction; to be uncertain about.",
+      "synonym": "Uncertainty",
+      "antonym": "Certainty",
+      "sentence": "She had a lingering doubt about the accuracy of the information.",
+      "pronunciation": "dout"
+    },
+    {
+      "word": "Dozen",
+      "meaning": "A group of twelve; twelve items considered as a unit.",
+      "synonym": "Twelve",
+      "antonym": "Single",
+      "sentence": "He bought a dozen roses for their anniversary.",
+      "pronunciation": "duh-zuhn"
+    },
+    {
+      "word": "Enemy",
+      "meaning": "A person who is actively opposed or hostile to someone or something.",
+      "synonym": "Adversary",
+      "antonym": "Ally",
+      "sentence": "In times of war, distinguishing between friend and enemy becomes crucial.",
+      "pronunciation": "en-uh-mee"
+    },
+    {
+      "word": "Excess",
+      "meaning": "An amount of something that is more than necessary, permitted, or desirable.",
+      "synonym": "Surplus",
+      "antonym": "Shortage",
+      "sentence": "The buffet offered an excess of delicious dishes for the guests.",
+      "pronunciation": "ik-ses"
+    },
+    {
+      "word": "Feast",
+      "meaning": "A large and elaborate meal, usually for a celebration.",
+      "synonym": "Banquet",
+      "antonym": "Famine",
+      "sentence": "They prepared a feast to celebrate their team's victory.",
+      "pronunciation": "feest"
+    },
+    {
+      "word": "Flap",
+      "meaning": "To move up and down or back and forth quickly; a thin piece of material attached on one side.",
+      "synonym": "Flutter",
+      "antonym": "Stillness",
+      "sentence": "The bird's wings began to flap as it took off into the sky.",
+      "pronunciation": "flap"
+    },
+    {
+      "word": "Abolish",
+      "meaning": "To formally put an end to a system, practice, or institution.",
+      "synonym": "Eliminate",
+      "antonym": "Establish",
+      "sentence": "The government decided to abolish outdated laws to promote justice.",
+      "pronunciation": "uh-bol-ish"
+    },
+    {
+      "word": "Acumen",
+      "meaning": "The ability to make good judgments and quick decisions, typically in a particular domain.",
+      "synonym": "Keen insight",
+      "antonym": "Ignorance",
+      "sentence": "Her business acumen played a crucial role in the company's success.",
+      "pronunciation": "uh-kyoo-muhn"
+    },
+    {
+      "word": "Adamant",
+      "meaning": "Refusing to be persuaded or to change one's mind.",
+      "synonym": "Unyielding",
+      "antonym": "Flexible",
+      "sentence": "Despite the challenges, she remained adamant about her decision.",
+      "pronunciation": "ad-uh-muhnt"
+    },
+    {
+      "word": "Backbite",
+      "meaning": "To speak negatively about someone when they are not present.",
+      "synonym": "Gossip",
+      "antonym": "Praise",
+      "sentence": "It's important not to backbite, but rather address concerns directly.",
+      "pronunciation": "bak-bahyt"
+    },
+    {
+      "word": "Barren",
+      "meaning": "Lacking vegetation, unproductive, or unable to produce offspring.",
+      "synonym": "Desolate",
+      "antonym": "Fertile",
+      "sentence": "The barren land struggled to support any form of life.",
+      "pronunciation": "bar-uhn"
+    },
+    {
+      "word": "Charisma",
+      "meaning": "Compelling attractiveness or charm that inspires devotion in others.",
+      "synonym": "Charm",
+      "antonym": "Aloofness",
+      "sentence": "The leader's charisma united the team and motivated them to achieve goals.",
+      "pronunciation": "kuh-riz-muh"
+    },
+    {
+      "word": "Dauntless",
+      "meaning": "Fearless and determined, not intimidated by difficulty or danger.",
+      "synonym": "Courageous",
+      "antonym": "Timid",
+      "sentence": "Her dauntless spirit led her to face challenges head-on.",
+      "pronunciation": "dawnt-lis"
+    },
+    {
+      "word": "Delicate",
+      "meaning": "Easily broken, fragile, or requiring gentle handling.",
+      "synonym": "Fragile",
+      "antonym": "Robust",
+      "sentence": "The delicate vase needed to be handled with care to avoid damage.",
+      "pronunciation": "del-i-kit"
+    },
+    {
+      "word": "Endure",
+      "meaning": "To suffer patiently; to tolerate or withstand hardships.",
+      "synonym": "Persist",
+      "antonym": "Surrender",
+      "sentence": "They had to endure the challenging conditions during their expedition.",
+      "pronunciation": "en-dyoor"
+    },
+    {
+      "word": "Gaze",
+      "meaning": "To look steadily and intently, especially in admiration, surprise, or thought.",
+      "synonym": "Stare",
+      "antonym": "Glance",
+      "sentence": "They sat by the lake and gazed at the mesmerizing sunset.",
+      "pronunciation": "geyz"
+    },
+    {
+      "word": "Gibberish",
+      "meaning": "Unintelligible or nonsensical language; speech or writing that is difficult to understand.",
+      "synonym": "Nonsense",
+      "antonym": "Coherent speech",
+      "sentence": "The toddler spoke in gibberish, creating amusement for the family.",
+      "pronunciation": "jib-er-ish"
+    },
+    {
+      "word": "Havoc",
+      "meaning": "Widespread destruction or chaos.",
+      "synonym": "Chaos",
+      "antonym": "Order",
+      "sentence": "The hurricane wreaked havoc, leaving a trail of destruction in its path.",
+      "pronunciation": "hav-uhk"
+    },
+    {
+      "word": "Idle",
+      "meaning": "Not active or in use; doing nothing.",
+      "synonym": "Inactive",
+      "antonym": "Active",
+      "sentence": "The machine remained idle until someone started using it again.",
+      "pronunciation": "ahyd-l"
+    },
+    {
+      "word": "Inevitable",
+      "meaning": "Certain to happen; unavoidable.",
+      "synonym": "Unavoidable",
+      "antonym": "Preventable",
+      "sentence": "Change is often inevitable, and adapting becomes essential.",
+      "pronunciation": "in-ev-i-tuh-buhl"
+    },
+    {
+      "word": "Jolly",
+      "meaning": "Happy, cheerful, and lively in a festive or playful way.",
+      "synonym": "Joyful",
+      "antonym": "Gloomy",
+      "sentence": "The jolly atmosphere during the holiday season lifted everyone's spirits.",
+      "pronunciation": "jol-ee"
+    },
+    {
+      "word": "Junk",
+      "meaning": "Discarded or useless objects; trash or debris.",
+      "synonym": "Debris",
+      "antonym": "Valuables",
+      "sentence": "The backyard was cluttered with old junk that needed to be cleared.",
+      "pronunciation": "juhngk"
+    },
+    {
+      "word": "Keen",
+      "meaning": "Having a sharp or eager interest; intense or enthusiastic.",
+      "synonym": "Eager",
+      "antonym": "Apathetic",
+      "sentence": "She has a keen interest in astronomy and stargazing.",
+      "pronunciation": "keen"
+    },
+    {
+      "word": "Kudos",
+      "meaning": "Praise and admiration for an achievement or accomplishment.",
+      "synonym": "Acclaim",
+      "antonym": "Criticism",
+      "sentence": "The team received kudos for their outstanding performance in the competition.",
+      "pronunciation": "koo-dohz"
+    },
+    {
+      "word": "Mundane",
+      "meaning": "Lacking interest or excitement; dull and ordinary.",
+      "synonym": "Boring",
+      "antonym": "Exciting",
+      "sentence": "The routine tasks at the office were quite mundane.",
+      "pronunciation": "muhn-deyn"
+    },
+    {
+      "word": "Mediocre",
+      "meaning": "Of only average quality; not very good.",
+      "synonym": "Average",
+      "antonym": "Excellent",
+      "sentence": "The film received mediocre reviews for its predictable plot.",
+      "pronunciation": "mee-dee-oh-ker"
+    },
+    {
+      "word": "Nocturnal",
+      "meaning": "Active or occurring during the night.",
+      "synonym": "Nighttime",
+      "antonym": "Diurnal (Daytime)",
+      "sentence": "Owls are nocturnal birds, hunting for prey in the darkness.",
+      "pronunciation": "nok-turn-l"
+    },
+    {
+      "word": "Odour",
+      "meaning": "A distinctive smell, especially an unpleasant one.",
+      "synonym": "Scent",
+      "antonym": "Fragrance",
+      "sentence": "The kitchen was filled with the delightful odour of freshly baked bread.",
+      "pronunciation": "oh-der"
+    },
+    {
+      "word": "Overwhelm",
+      "meaning": "To overcome or bury beneath a huge mass; to be overpowered with a strong emotional effect.",
+      "synonym": "Bury",
+      "antonym": "Underwhelm",
+      "sentence": "The sheer number of tasks can sometimes overwhelm even the most organized individuals.",
+      "pronunciation": "oh-ver-hwelm"
+    },
+    {
+      "word": "Perplex",
+      "meaning": "To cause confusion or puzzlement.",
+      "synonym": "Baffle",
+      "antonym": "Clarify",
+      "sentence": "The complex riddle continued to perplex even the brightest minds.",
+      "pronunciation": "per-pleks"
+    },
+    {
+      "word": "Quench",
+      "meaning": "To satisfy one's thirst; to extinguish or suppress something.",
+      "synonym": "Satisfy",
+      "antonym": "Ignite",
+      "sentence": "Drinking water helped to quench their thirst after the intense workout.",
+      "pronunciation": "kwench"
+    },
+    {
+      "word": "Rampant",
+      "meaning": "Widespread and uncontrollable; flourishing or spreading unchecked.",
+      "synonym": "Unbridled",
+      "antonym": "Contained",
+      "sentence": "The disease became rampant, affecting communities across the region.",
+      "pronunciation": "ram-puhnt"
+    },
+    {
+      "word": "Rebuke",
+      "meaning": "To express sharp disapproval or criticism; reprimand.",
+      "synonym": "Reprimand",
+      "antonym": "Praise",
+      "sentence": "The teacher had to rebuke the student for disruptive behavior in class.",
+      "pronunciation": "ri-byook"
+    },
+    {
+      "word": "Remorse",
+      "meaning": "Deep regret or guilt for a wrong committed.",
+      "synonym": "Regret",
+      "antonym": "Indifference",
+      "sentence": "He felt a sense of remorse after realizing the impact of his actions.",
+      "pronunciation": "ri-mors"
+    },
+    {
+      "word": "Satire",
+      "meaning": "The use of humor, irony, or exaggeration to criticize or mock people's vices or shortcomings.",
+      "synonym": "Mockery",
+      "antonym": "Praise",
+      "sentence": "The satirical cartoon cleverly highlighted social issues through humor.",
+      "pronunciation": "sat-ahyuh"
+    }
+   
+
+  ]
+}

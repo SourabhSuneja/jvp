@@ -1,0 +1,414 @@
+{
+  "words": [
+    {
+      "word": "Feast",
+      "meaning": "A large, elaborate meal, usually prepared for a special occasion or celebration.",
+      "synonym": "Banquet",
+      "antonym": "Famine",
+      "sentence": "The family gathered for a feast during the holiday.",
+      "pronunciation": "feest"
+    },
+    {
+      "word": "Tortuous",
+      "meaning": "Twisting, complex, or full of twists and turns; excessively lengthy or complex.",
+      "synonym": "Winding",
+      "antonym": "Straightforward",
+      "sentence": "The hike followed a tortuous path through the mountains.",
+      "pronunciation": "tawr-choo-uhs"
+    },
+    {
+      "word": "Prominent",
+      "meaning": "Standing out; easily noticeable; important or well-known.",
+      "synonym": "Eminent",
+      "antonym": "Inconspicuous",
+      "sentence": "The prominent building in the city center is a landmark.",
+      "pronunciation": "prom-uh-nuhnt"
+    },
+    {
+      "word": "Melodious",
+      "meaning": "Having a pleasant tune or melody; musical and tuneful.",
+      "synonym": "Harmonious",
+      "antonym": "Discordant",
+      "sentence": "She had a melodious voice that captivated the audience.",
+      "pronunciation": "muh-loh-dee-uhs"
+    },
+    {
+      "word": "Boom",
+      "meaning": "A loud, deep, resonant sound; a rapid increase or growth.",
+      "synonym": "Blast",
+      "antonym": "Silence",
+      "sentence": "The thunder made a loud boom during the storm.",
+      "pronunciation": "boom"
+    },
+    {
+      "word": "Forged",
+      "meaning": "Created or produced fraudulently or illegally; to create or produce something falsely.",
+      "synonym": "Counterfeit",
+      "antonym": "Authentic",
+      "sentence": "He was caught with forged documents.",
+      "pronunciation": "fawrjd"
+    },
+    {
+      "word": "Illegible",
+      "meaning": "Not clear enough to be read or deciphered; difficult or impossible to read.",
+      "synonym": "Unreadable",
+      "antonym": "Legible",
+      "sentence": "His handwriting was so messy that it became illegible.",
+      "pronunciation": "ih-lej-uh-buhl"
+    },
+    {
+      "word": "Pensive",
+      "meaning": "Engaged in deep or serious thought; thoughtful or reflective.",
+      "synonym": "Thoughtful",
+      "antonym": "Carefree",
+      "sentence": "She sat by the window, looking pensive and lost in thought.",
+      "pronunciation": "pen-siv"
+    },
+    {
+      "word": "Penance",
+      "meaning": "Voluntary self-punishment inflicted as an outward expression of repentance for having done wrong.",
+      "synonym": "Atonement",
+      "antonym": "Reward",
+      "sentence": "He performed acts of penance to seek forgiveness.",
+      "pronunciation": "pen-uhns"
+    },
+    {
+      "word": "Attire",
+      "meaning": "Clothing or apparel; the clothes a person wears.",
+      "synonym": "Garments",
+      "antonym": "Nudity",
+      "sentence": "The dress code required formal attire for the event.",
+      "pronunciation": "uh-tahyuh r"
+    },
+    {
+      "word": "Sober",
+      "meaning": "Not intoxicated or drunk; serious, sensible, and solemn.",
+      "synonym": "Clear-headed",
+      "antonym": "Intoxicated",
+      "sentence": "He stayed sober throughout the party and drove everyone home safely.",
+      "pronunciation": "soh-ber"
+    },
+    {
+      "word": "Tangent",
+      "meaning": "A completely different line of thought or action; diverging from the main subject.",
+      "synonym": "Digression",
+      "antonym": "Relevant",
+      "sentence": "He went off on a tangent while discussing the main topic.",
+      "pronunciation": "tan-juhnt"
+    },
+    {
+      "word": "Confiscate",
+      "meaning": "To take or seize something with authority, often as a penalty or punishment.",
+      "synonym": "Seize",
+      "antonym": "Return",
+      "sentence": "The authorities confiscated the illegal goods at the border.",
+      "pronunciation": "kon-fis-keyt"
+    },
+    {
+      "word": "Void",
+      "meaning": "Completely empty; not valid or legally binding; without legal force.",
+      "synonym": "Empty",
+      "antonym": "Valid",
+      "sentence": "The contract became void after both parties agreed to cancel it.",
+      "pronunciation": "void"
+    },
+    {
+      "word": "Priority",
+      "meaning": "Something given special attention as more important than others; the condition of being regarded or treated as more important.",
+      "synonym": "Precedence",
+      "antonym": "Unimportant",
+      "sentence": "Safety is our top priority when conducting experiments.",
+      "pronunciation": "prahy-awr-i-tee"
+    },
+    {
+      "word": "Sponsor",
+      "meaning": "A person or organization that supports or finances a project, activity, or person.",
+      "synonym": "Supporter",
+      "antonym": "Opponent",
+      "sentence": "The company agreed to sponsor the local charity event.",
+      "pronunciation": "spon-ser"
+    },
+    {
+      "word": "Converge",
+      "meaning": "To come together from different directions and meet at a common point; to tend toward one point.",
+      "synonym": "Merge",
+      "antonym": "Diverge",
+      "sentence": "The two roads converge at the town center.",
+      "pronunciation": "kuhn-vurj"
+    },
+    {
+      "word": "Divulge",
+      "meaning": "To disclose or reveal something secret or private.",
+      "synonym": "Reveal",
+      "antonym": "Conceal",
+      "sentence": "He refused to divulge the source of the information.",
+      "pronunciation": "dih-vuhlj"
+    },
+    {
+      "word": "Alluring",
+      "meaning": "Highly attractive or tempting; capable of enticing someone.",
+      "synonym": "Appealing",
+      "antonym": "Repellent",
+      "sentence": "The advertisement featured an alluring fragrance.",
+      "pronunciation": "uh-loo-ring"
+    },
+    {
+      "word": "Redtapism",
+      "meaning": "Excessive bureaucratic rules, procedures, and formalities that hinder efficiency.",
+      "synonym": "Bureaucracy",
+      "antonym": "Efficiency",
+      "sentence": "The company's growth was hampered by red tape and redtapism.",
+      "pronunciation": "red-teyp-iz-uhm"
+    },
+    {
+      "word": "Recede",
+      "meaning": "To move back or retreat; to gradually diminish or decrease.",
+      "synonym": "Retreat",
+      "antonym": "Advance",
+      "sentence": "The floodwaters began to recede after days of heavy rain.",
+      "pronunciation": "ri-seed"
+    },
+    {
+      "word": "Icy",
+      "meaning": "Covered in or consisting of ice; extremely cold or unfriendly in manner.",
+      "synonym": "Frigid",
+      "antonym": "Warm",
+      "sentence": "The road became icy after the freezing rain.",
+      "pronunciation": "ahy-see"
+    },
+    {
+      "word": "Cart",
+      "meaning": "A vehicle with wheels, typically used for transporting goods; a shallow open container.",
+      "synonym": "Trolley",
+      "antonym": "Unload",
+      "sentence": "The cart was filled with fresh fruits and vegetables.",
+      "pronunciation": "kahrt"
+    },
+    {
+      "word": "Hover",
+      "meaning": "To remain suspended in the air, typically by means of rapid, unsteady movements.",
+      "synonym": "Float",
+      "antonym": "Land",
+      "sentence": "The helicopter could hover in one spot for a long time.",
+      "pronunciation": "huhv-er"
+    },
+    {
+      "word": "Navigation",
+      "meaning": "The process or activity of accurately finding one's way to a destination or through an unfamiliar area.",
+      "synonym": "Guidance",
+      "antonym": "Misdirection",
+      "sentence": "Modern cars have GPS systems for navigation.",
+      "pronunciation": "nav-i-gey-shuhn"
+    },
+    {
+      "word": "Apathetic",
+      "meaning": "Showing or feeling little or no emotion; indifferent or unresponsive.",
+      "synonym": "Indifferent",
+      "antonym": "Passionate",
+      "sentence": "He seemed apathetic towards the outcome of the game.",
+      "pronunciation": "ap-uh-thet-ik"
+    },
+    {
+      "word": "Quadruple",
+      "meaning": "To multiply something by four; consisting of or involving four parts or elements.",
+      "synonym": "Multiply by four",
+      "antonym": "Single",
+      "sentence": "The company aimed to quadruple its profits by the end of the year.",
+      "pronunciation": "kwod-roo-puhl"
+    },
+    {
+      "word": "Decode",
+      "meaning": "To convert a coded message into intelligible language; to analyze or understand the meaning of something.",
+      "synonym": "Decipher",
+      "antonym": "Encode",
+      "sentence": "She tried to decode the secret message hidden in the letter.",
+      "pronunciation": "dee-kohd"
+    },
+    {
+      "word": "Pearl",
+      "meaning": "A hard, lustrous spherical object produced within the shell of a pearl oyster; a precious or valuable thing.",
+      "synonym": "Gem",
+      "antonym": "Ordinary",
+      "sentence": "She wore a necklace adorned with a beautiful pearl.",
+      "pronunciation": "purl"
+    },
+    {
+      "word": "Wishlist",
+      "meaning": "A list of desired or sought-after items; a collection of things a person wants to have or achieve.",
+      "synonym": "Desired list",
+      "antonym": "Ignore list",
+      "sentence": "She made a wishlist of books she wanted to read.",
+      "pronunciation": "wish-list"
+    },
+    {
+      "word": "Toddler",
+      "meaning": "A young child who has started walking but is not yet fully able to speak.",
+      "synonym": "Little one",
+      "antonym": "Adult",
+      "sentence": "Toddlers often explore their surroundings with curiosity.",
+      "pronunciation": "tod-ler"
+    },
+    {
+      "word": "Meme",
+      "meaning": "A humorous image, video, piece of text, etc., that is copied and spread rapidly by internet users.",
+      "synonym": "Internet joke",
+      "antonym": "Serious content",
+      "sentence": "The meme went viral on social media platforms.",
+      "pronunciation": "meem"
+    },
+    {
+      "word": "Stellar",
+      "meaning": "Relating to stars; exceptionally good or outstanding.",
+      "synonym": "Excellent",
+      "antonym": "Mediocre",
+      "sentence": "The team delivered a stellar performance in the competition.",
+      "pronunciation": "stel-er"
+    },
+    {
+      "word": "Reminder",
+      "meaning": "A message or notification that prompts someone to remember something.",
+      "synonym": "Memory aid",
+      "antonym": "Forgetfulness",
+      "sentence": "He set a reminder on his phone for the meeting.",
+      "pronunciation": "ri-mahyn-der"
+    },
+    {
+      "word": "Authentic",
+      "meaning": "Genuine; not fake or counterfeit; based on facts and reliable information.",
+      "synonym": "Genuine",
+      "antonym": "Fake",
+      "sentence": "The antique shop sold authentic artifacts from the 18th century.",
+      "pronunciation": "aw-then-tik"
+    },
+    {
+      "word": "Droop",
+      "meaning": "To bend or hang downward heavily; to lose strength or become weak.",
+      "synonym": "Sag",
+      "antonym": "Upright",
+      "sentence": "The flowers began to droop after not being watered for days.",
+      "pronunciation": "droop"
+    },
+    {
+      "word": "Troop",
+      "meaning": "A group of soldiers or armed forces; a group of people, animals, or things.",
+      "synonym": "Crew",
+      "antonym": "Individual",
+      "sentence": "The troop marched in formation during the parade.",
+      "pronunciation": "troop"
+    },
+    {
+      "word": "Pungent",
+      "meaning": "Having a strong, sharp, or penetrating smell or taste.",
+      "synonym": "Strong-smelling",
+      "antonym": "Mild",
+      "sentence": "The pungent aroma of spices filled the kitchen.",
+      "pronunciation": "puhn-juhnt"
+    },
+    {
+      "word": "Beckon",
+      "meaning": "To make a gesture with the hand, arm, or head to encourage someone to come nearer or follow.",
+      "synonym": "Signal",
+      "antonym": "Repel",
+      "sentence": "She beckoned to her friend to join her at the table.",
+      "pronunciation": "bek-uhn"
+    },
+    {
+      "word": "Afloat",
+      "meaning": "Floating or staying on the surface of a liquid; financially solvent or surviving.",
+      "synonym": "Floating",
+      "antonym": "Sinking",
+      "sentence": "The boat remained afloat despite the stormy weather.",
+      "pronunciation": "uh-floht"
+    },
+    {
+      "word": "Sideways",
+      "meaning": "To or toward one side; in a lateral direction or movement.",
+      "synonym": "Laterally",
+      "antonym": "Straight",
+      "sentence": "She glanced sideways at her friend during the presentation.",
+      "pronunciation": "sahyd-weyz"
+    },
+    {
+      "word": "Unification",
+      "meaning": "The process of uniting or making things one; the act of bringing separate parts together into a single whole.",
+      "synonym": "Integration",
+      "antonym": "Division",
+      "sentence": "The country aimed for the unification of its different regions.",
+      "pronunciation": "yoo-nuh-fi-key-shuhn"
+    },
+    {
+      "word": "Pivotal",
+      "meaning": "Of crucial importance in relation to the development or success of something else; central; crucial.",
+      "synonym": "Critical",
+      "antonym": "Insignificant",
+      "sentence": "His pivotal discovery changed the course of scientific research.",
+      "pronunciation": "piv-uh-tl"
+    },
+    {
+      "word": "Prevalence",
+      "meaning": "The fact or condition of being widespread or common; the frequency with which something occurs.",
+      "synonym": "Ubiquity",
+      "antonym": "Rareness",
+      "sentence": "The prevalence of smartphones has transformed the way we communicate.",
+      "pronunciation": "prev-uh-luhns"
+    },
+    {
+      "word": "Insatiable",
+      "meaning": "Incapable of being satisfied or appeased; constantly wanting more; voracious.",
+      "synonym": "Unquenchable",
+      "antonym": "Satisfied",
+      "sentence": "His insatiable hunger for knowledge drove him to pursue multiple degrees.",
+      "pronunciation": "in-sey-shuh-buhl"
+    },
+    {
+      "word": "Churn",
+      "meaning": "To stir or agitate violently; to move about restlessly; to produce by agitation or commotion.",
+      "synonym": "Agitate",
+      "antonym": "Calm",
+      "sentence": "The storm churned the sea into a frothy mass of waves.",
+      "pronunciation": "churn"
+    },
+    {
+      "word": "Eternal",
+      "meaning": "Lasting or existing forever; without end or beginning; timeless.",
+      "synonym": "Everlasting",
+      "antonym": "Temporary",
+      "sentence": "Their love was eternal, transcending time and space.",
+      "pronunciation": "ih-tur-nl"
+    },
+    {
+      "word": "Rugged",
+      "meaning": "Having a rough, uneven, or jagged surface; not smooth or polished; sturdy and strong in character or construction.",
+      "synonym": "Rough",
+      "antonym": "Smooth",
+      "sentence": "The rugged terrain challenged even the most experienced hikers.",
+      "pronunciation": "ruhg-id"
+    },
+    {
+      "word": "Jagged",
+      "meaning": "Having rough, sharp points protruding irregularly; uneven or irregular in shape; notched or serrated.",
+      "synonym": "Pointed",
+      "antonym": "Smooth",
+      "sentence": "The jagged cliffs rose sharply from the turbulent sea below.",
+      "pronunciation": "jag-id"
+    },
+    {
+      "word": "Halt",
+      "meaning": "To bring or come to an abrupt stop; to cease or discontinue; a temporary stop or interruption.",
+      "synonym": "Stop",
+      "antonym": "Continue",
+      "sentence": "The train came to a halt as it reached the end of the line.",
+      "pronunciation": "hawlt"
+    },
+    {
+      "word": "Tattered",
+      "meaning": "Torn or ragged; in poor condition; worn-out or dilapidated.",
+      "synonym": "Shabby",
+      "antonym": "New",
+      "sentence": "He wore a tattered old coat that had seen better days.",
+      "pronunciation": "tat-erd"
+    }
+    
+
+  ]
+}

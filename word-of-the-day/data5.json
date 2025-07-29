@@ -1,0 +1,444 @@
+{
+  "words": [
+    {
+      "word": "Backside",
+      "meaning": "The rear surface or part of something; the side or surface of an object that is opposite its front.",
+      "synonym": "Rear",
+      "antonym": "Front",
+      "sentence": "He sat on the backside of the bench to get a better view of the field.",
+      "pronunciation": "bak-sahyd"
+    },
+    {
+      "word": "Correct",
+      "meaning": "Free from error; true, accurate, or right in every detail; to make right, accurate, or true; to rectify.",
+      "synonym": "Accurate",
+      "antonym": "Incorrect",
+      "sentence": "She corrected her mistake on the test before turning it in.",
+      "pronunciation": "kuh-rekt"
+    },
+    {
+      "word": "Brow",
+      "meaning": "The ridge over the eye; the forehead; the peak or highest part of something.",
+      "synonym": "Forehead",
+      "antonym": "Chin",
+      "sentence": "He wiped the sweat from his brow after working in the hot sun.",
+      "pronunciation": "brou"
+    },
+    {
+      "word": "Hermetic",
+      "meaning": "Airtight; sealed so that no air can enter or escape; completely closed or isolated from external influences.",
+      "synonym": "Airtight",
+      "antonym": "Open",
+      "sentence": "The hermetic seal on the container kept the food fresh for a long time.",
+      "pronunciation": "hur-met-ik"
+    },
+    {
+      "word": "Urgent",
+      "meaning": "Requiring immediate action or attention; pressing; important.",
+      "synonym": "Critical",
+      "antonym": "Non-urgent",
+      "sentence": "She received an urgent message asking her to come to the hospital immediately.",
+      "pronunciation": "ur-juhnt"
+    },
+    {
+      "word": "Silly",
+      "meaning": "Lacking in seriousness or sense; foolish; absurd.",
+      "synonym": "Foolish",
+      "antonym": "Serious",
+      "sentence": "The children giggled at their silly jokes.",
+      "pronunciation": "sil-ee"
+    },
+    {
+      "word": "Imperative",
+      "meaning": "Of vital importance; crucial; giving an authoritative command; necessary or required.",
+      "synonym": "Essential",
+      "antonym": "Optional",
+      "sentence": "It is imperative that we arrive on time for the meeting.",
+      "pronunciation": "im-per-uh-tiv"
+    },
+    {
+      "word": "Dilute",
+      "meaning": "To make something weaker in force, content, or value by adding water or another solvent.",
+      "synonym": "Weaken",
+      "antonym": "Concentrate",
+      "sentence": "The chef had to dilute the sauce because it was too strong.",
+      "pronunciation": "dih-loot"
+    },
+    {
+      "word": "Prosperous",
+      "meaning": "Successful or flourishing, especially financially; bringing wealth, success, or good fortune.",
+      "synonym": "Successful",
+      "antonym": "Unsuccessful",
+      "sentence": "The city experienced a prosperous period of economic growth.",
+      "pronunciation": "pros-per-uhs"
+    },
+    {
+      "word": "Fabricate",
+      "meaning": "To invent or concoct something, typically with deceitful intent; to construct or manufacture something, especially from prepared components.",
+      "synonym": "Invent",
+      "antonym": "Genuine",
+      "sentence": "The witness admitted to fabricating the story to avoid punishment.",
+      "pronunciation": "fab-ri-keyt"
+    },
+    {
+      "word": "Reasonable",
+      "meaning": "Fair and sensible; based on good sense or sound judgment; not excessive or extreme.",
+      "synonym": "Sensible",
+      "antonym": "Unreasonable",
+      "sentence": "She offered a reasonable explanation for being late.",
+      "pronunciation": "ree-zuh-nuh-buhl"
+    },
+    {
+      "word": "Mandatory",
+      "meaning": "Required by law or rule; compulsory; obligatory.",
+      "synonym": "Compulsory",
+      "antonym": "Optional",
+      "sentence": "Wearing a seatbelt is mandatory while driving.",
+      "pronunciation": "man-duh-tawr-ee"
+    },
+    {
+      "word": "Supress",
+      "meaning": "To forcibly put an end to something; to prevent the development, action, or expression of something.",
+      "synonym": "Repress",
+      "antonym": "Allow",
+      "sentence": "The government tried to suppress the protest, but the demonstrators remained defiant.",
+      "pronunciation": "suh-pres"
+    },
+    {
+      "word": "Complete",
+      "meaning": "Having all necessary parts or elements; not lacking anything; finished; to bring to a finished state.",
+      "synonym": "Finished",
+      "antonym": "Incomplete",
+      "sentence": "Please complete the form and return it to the office.",
+      "pronunciation": "kuhm-pleet"
+    },
+    {
+      "word": "Lucid",
+      "meaning": "Clear and easily understood; rational or sane.",
+      "synonym": "Clear",
+      "antonym": "Confused",
+      "sentence": "His lucid explanations helped the students understand the complex topic.",
+      "pronunciation": "loo-sid"
+    },
+    {
+      "word": "Diverse",
+      "meaning": "Showing a great deal of variety; varied or diverse in nature.",
+      "synonym": "Varied",
+      "antonym": "Uniform",
+      "sentence": "The city boasts a diverse population representing many different cultures.",
+      "pronunciation": "dahy-vurs"
+    },
+    {
+      "word": "Necessary",
+      "meaning": "Required to be done, achieved, or present; essential; indispensable.",
+      "synonym": "Essential",
+      "antonym": "Unnecessary",
+      "sentence": "Food and water are necessary for survival.",
+      "pronunciation": "nes-uh-ser-ee"
+    },
+    {
+      "word": "Remorse",
+      "meaning": "Deep regret or guilt for a wrong committed; contrition.",
+      "synonym": "Regret",
+      "antonym": "Indifference",
+      "sentence": "She felt remorse for her harsh words and apologized.",
+      "pronunciation": "ri-mawrs"
+    },
+    {
+      "word": "Domesticate",
+      "meaning": "To tame or adapt an animal or plant to live in close association with humans; to bring under control; to make domestic.",
+      "synonym": "Tame",
+      "antonym": "Wild",
+      "sentence": "Humans began to domesticate dogs thousands of years ago.",
+      "pronunciation": "duh-mes-ti-keyt"
+    },
+    {
+      "word": "Steady",
+      "meaning": "Firmly fixed, supported, or balanced; not faltering or wavering; constant or regular.",
+      "synonym": "Stable",
+      "antonym": "Unsteady",
+      "sentence": "She took a deep breath to steady her nerves before the big presentation.",
+      "pronunciation": "sted-ee"
+    },
+    {
+      "word": "Testament",
+      "meaning": "Something that serves as a sign or evidence of a specified fact, event, or quality.",
+      "synonym": "Proof",
+      "antonym": "Denial",
+      "sentence": "Her kindness toward others was a testament to her compassionate nature.",
+      "pronunciation": "tes-tuh-muhnt"
+    },
+    {
+      "word": "Applicable",
+      "meaning": "Relevant or appropriate; capable of being applied; able to be put to practical use.",
+      "synonym": "Relevant",
+      "antonym": "Irrelevant",
+      "sentence": "The rules are applicable to all employees, regardless of their position.",
+      "pronunciation": "ap-li-kuh-buhl"
+    },
+    {
+      "word": "Difficult",
+      "meaning": "Needing much effort or skill to accomplish, deal with, or understand; not easy.",
+      "synonym": "Challenging",
+      "antonym": "Easy",
+      "sentence": "Learning a new language can be difficult, but it's also rewarding.",
+      "pronunciation": "dif-i-kuhlt"
+    },
+    {
+      "word": "Mend",
+      "meaning": "To repair or fix something that is broken or damaged; to improve a difficult or strained situation.",
+      "synonym": "Repair",
+      "antonym": "Break",
+      "sentence": "He tried to mend the broken vase with glue.",
+      "pronunciation": "mend"
+    },
+    {
+      "word": "Moral",
+      "meaning": "Concerned with principles of right and wrong behavior; ethical; relating to principles of right and wrong in behavior.",
+      "synonym": "Ethical",
+      "antonym": "Immoral",
+      "sentence": "The story taught an important moral lesson about honesty.",
+      "pronunciation": "mawr-uhl"
+    },
+    {
+      "word": "Reputation",
+      "meaning": "The beliefs or opinions that are generally held about someone or something; the overall quality or character as seen or judged by people in general.",
+      "synonym": "Image",
+      "antonym": "Disrepute",
+      "sentence": "Her reputation as a reliable employee earned her a promotion.",
+      "pronunciation": "rep-yuh-tey-shuhn"
+    },
+    {
+      "word": "Discount",
+      "meaning": "A deduction from the usual cost of something, typically given for prompt or advance payment or to a special category of buyers; to regard something as being unworthy of consideration or to underestimate its value.",
+      "synonym": "Reduction",
+      "antonym": "Full price",
+      "sentence": "The store offered a 20% discount on all items for the weekend.",
+      "pronunciation": "dis-kount"
+    },
+    {
+      "word": "Appear",
+      "meaning": "To come into sight; to become visible or noticeable; to give the impression of being something or having a particular quality.",
+      "synonym": "Emerge",
+      "antonym": "Disappear",
+      "sentence": "The stars appear in the sky at night.",
+      "pronunciation": "uh-peer"
+    },
+    {
+      "word": "Survive",
+      "meaning": "To continue to live or exist, especially in spite of danger or hardship; to remain alive after the death of someone else.",
+      "synonym": "Endure",
+      "antonym": "Perish",
+      "sentence": "Despite the harsh conditions, the plant managed to survive.",
+      "pronunciation": "ser-vahyv"
+    },
+    {
+      "word": "Informal",
+      "meaning": "Having a relaxed, friendly, or unofficial style, manner, or nature; not formal.",
+      "synonym": "Casual",
+      "antonym": "Formal",
+      "sentence": "The dress code for the party is informal, so feel free to dress comfortably.",
+      "pronunciation": "in-fawr-muhl"
+    },
+    {
+      "word": "Animated",
+      "meaning": "Full of life or excitement; lively.",
+      "synonym": "Lively",
+      "antonym": "Dull",
+      "sentence": "The animated discussion brightened up the room.",
+      "pronunciation": "an-uh-mey-tid"
+    },
+    {
+      "word": "Confuse",
+      "meaning": "To make someone uncertain or unable to understand something; to perplex.",
+      "synonym": "Perplex",
+      "antonym": "Clarify",
+      "sentence": "His unclear instructions confused the students.",
+      "pronunciation": "kuhn-fyooz"
+    },
+    {
+      "word": "Overseas",
+      "meaning": "In or to a foreign country, especially one across the sea.",
+      "synonym": "Abroad",
+      "antonym": "Domestic",
+      "sentence": "She travels overseas for work frequently.",
+      "pronunciation": "oh-ver-seez"
+    },
+    {
+      "word": "Elevated",
+      "meaning": "Situated or placed higher than the surrounding area; raised above the ground.",
+      "synonym": "High",
+      "antonym": "Low",
+      "sentence": "The elevated platform provided a clear view of the entire city.",
+      "pronunciation": "el-uh-vey-tid"
+    },
+    {
+      "word": "Recover",
+      "meaning": "To return to a normal state of health, mind, or strength after illness, injury, or difficulty; to regain possession or control of something.",
+      "synonym": "Regain",
+      "antonym": "Decline",
+      "sentence": "He needed time to recover from the flu.",
+      "pronunciation": "ri-kuhv-er"
+    },
+    {
+      "word": "Grumble",
+      "meaning": "To complain about something in a bad-tempered way; to grumble.",
+      "synonym": "Complain",
+      "antonym": "Praise",
+      "sentence": "The students grumbled about the long assignment.",
+      "pronunciation": "gruhm-buhl"
+    },
+    {
+      "word": "Assure",
+      "meaning": "To tell someone confidently or firmly that something is true or will happen as stated; to make someone certain.",
+      "synonym": "Guarantee",
+      "antonym": "Doubt",
+      "sentence": "He assured his parents that he would be home before midnight.",
+      "pronunciation": "uh-shoor"
+    },
+    {
+      "word": "Ornament",
+      "meaning": "A thing used to make something look more attractive but usually having no practical purpose; to decorate or add beauty to something.",
+      "synonym": "Decoration",
+      "antonym": "Plain",
+      "sentence": "The Christmas tree was adorned with colorful ornaments.",
+      "pronunciation": "awr-nuh-muhnt"
+    },
+    {
+      "word": "Vast",
+      "meaning": "Very great in size, amount, degree, intensity, or extent; immense.",
+      "synonym": "Immense",
+      "antonym": "Limited",
+      "sentence": "The desert stretched out before them, a vast expanse of sand.",
+      "pronunciation": "vast"
+    },
+    {
+      "word": "Diminish",
+      "meaning": "To make or become less; to decrease in size, extent, or importance.",
+      "synonym": "Decrease",
+      "antonym": "Increase",
+      "sentence": "The company's profits began to diminish as competition increased.",
+      "pronunciation": "di-min-ish"
+    },
+    {
+      "word": "Revolt",
+      "meaning": "To rise in rebellion against an authority or government; to refuse to accept or be controlled by something.",
+      "synonym": "Rebellion",
+      "antonym": "Obedience",
+      "sentence": "The citizens decided to revolt against the oppressive regime.",
+      "pronunciation": "ri-vohlt"
+    },
+    {
+      "word": "Torpid",
+      "meaning": "Mentally or physically inactive; lethargic; slow and apathetic.",
+      "synonym": "Lethargic",
+      "antonym": "Energetic",
+      "sentence": "The heat made him feel torpid and unwilling to move.",
+      "pronunciation": "tawr-pid"
+    },
+    {
+      "word": "Impetus",
+      "meaning": "The force or energy with which a body moves; a driving force; something that encourages a particular action or makes it more energetic or effective.",
+      "synonym": "Momentum",
+      "antonym": "Hindrance",
+      "sentence": "The new tax law provided an impetus for people to invest in renewable energy.",
+      "pronunciation": "im-pi-tuhs"
+    },
+    {
+      "word": "Collect",
+      "meaning": "To bring or gather together; to accumulate; to pick up or gather things.",
+      "synonym": "Gather",
+      "antonym": "Distribute",
+      "sentence": "She collected shells on the beach during her vacation.",
+      "pronunciation": "kuh-lekt"
+    },
+    {
+      "word": "Shiny",
+      "meaning": "Bright or glossy in appearance; reflecting light.",
+      "synonym": "Glossy",
+      "antonym": "Dull",
+      "sentence": "The car's shiny new paint job made it stand out on the road.",
+      "pronunciation": "shahy-nee"
+    },
+    {
+      "word": "Worthless",
+      "meaning": "Having no real value or use; not important or useful.",
+      "synonym": "Valueless",
+      "antonym": "Valuable",
+      "sentence": "The old computer was worthless and couldn't be repaired.",
+      "pronunciation": "wurth-lis"
+    },
+    {
+      "word": "Remove",
+      "meaning": "To take away or eliminate something; to extract or displace from a particular place.",
+      "synonym": "Eliminate",
+      "antonym": "Add",
+      "sentence": "He used a sponge to remove the stain from the carpet.",
+      "pronunciation": "ri-moov"
+    },
+    {
+      "word": "Encourage",
+      "meaning": "To give support, confidence, or hope to someone; to inspire with courage, spirit, or confidence.",
+      "synonym": "Inspire",
+      "antonym": "Discourage",
+      "sentence": "His friends encouraged him to pursue his dreams.",
+      "pronunciation": "en-kur-ij"
+    },
+    {
+      "word": "Turmoil",
+      "meaning": "A state of great disturbance, confusion, or uncertainty; chaos.",
+      "synonym": "Chaos",
+      "antonym": "Calm",
+      "sentence": "The country was in turmoil following the political upheaval.",
+      "pronunciation": "tur-moil"
+    },
+    {
+      "word": "Chop",
+      "meaning": "To cut something into pieces with repeated sharp blows of an ax, knife, or other cutting tool; a sharp downward blow or stroke.",
+      "synonym": "Cut",
+      "antonym": "Combine",
+      "sentence": "She chopped vegetables for the soup.",
+      "pronunciation": "chop"
+    },
+    {
+      "word": "Involve",
+      "meaning": "To include or contain as part of a whole; to engage or participate in.",
+      "synonym": "Include",
+      "antonym": "Exclude",
+      "sentence": "The project will involve working with various departments.",
+      "pronunciation": "in-volv"
+    },
+    {
+      "word": "Revolve",
+      "meaning": "To move in a circular orbit around a central point; to rotate or spin.",
+      "synonym": "Rotate",
+      "antonym": "Stay still",
+      "sentence": "The Earth revolves around the Sun.",
+      "pronunciation": "ri-volv"
+    },
+    {
+      "word": "Satisfied",
+      "meaning": "Content or pleased because one's desires or expectations have been fulfilled.",
+      "synonym": "Content",
+      "antonym": "Dissatisfied",
+      "sentence": "After completing the project, she felt satisfied with her work.",
+      "pronunciation": "sat-is-fahyd"
+    },
+    {
+      "word": "Intensify",
+      "meaning": "To become or make more intense; to strengthen or increase in degree or severity.",
+      "synonym": "Heighten",
+      "antonym": "Diminish",
+      "sentence": "The storm is expected to intensify as it approaches the coast.",
+      "pronunciation": "in-ten-suh-fahy"
+    },
+    {
+      "word": "Precis",
+      "meaning": "A concise summary or abstract of a text or speech; a brief statement or account of the main points.",
+      "synonym": "Summary",
+      "antonym": "Elaboration",
+      "sentence": "She provided a precis of the article for her presentation.",
+      "pronunciation": "preh-see"
+    }
+  ]
+}

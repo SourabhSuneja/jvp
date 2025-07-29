@@ -1,0 +1,572 @@
+{
+  "words": [
+    {
+      "word": "Mystery",
+      "meaning": "Something that is difficult or impossible to understand or explain.",
+      "synonym": "Enigma",
+      "antonym": "Clarity",
+      "sentence": "The ancient artifact held the allure of an unsolved mystery.",
+      "pronunciation": "mis-tuh-ree"
+    },
+    {
+      "word": "Treasure",
+      "meaning": "Valuable objects or money of great worth; to cherish or hold dear.",
+      "synonym": "Riches",
+      "antonym": "Trivial",
+      "sentence": "The pirate ship was rumored to carry a hidden treasure chest.",
+      "pronunciation": "trezh-er"
+    },
+    {
+      "word": "Discover",
+      "meaning": "To find something for the first time or to reveal the existence of something previously unknown.",
+      "synonym": "Uncover",
+      "antonym": "Conceal",
+      "sentence": "Scientists continue to discover new species in unexplored regions.",
+      "pronunciation": "dih-skuhv-er"
+    },
+    {
+      "word": "Journey",
+      "meaning": "A long and often challenging trip; the act of traveling from one place to another.",
+      "synonym": "Adventure",
+      "antonym": "Stagnation",
+      "sentence": "The journey through the mountains offered breathtaking views.",
+      "pronunciation": "jur-nee"
+    },
+    {
+      "word": "Whisper",
+      "meaning": "To speak softly and quietly, often in a hushed or secretive manner.",
+      "synonym": "Murmur",
+      "antonym": "Shout",
+      "sentence": "The lovers exchanged sweet whispers under the moonlit sky.",
+      "pronunciation": "hwis-per"
+    },
+    {
+      "word": "Giggle",
+      "meaning": "A light, silly laugh; to laugh in a playful or nervous way.",
+      "synonym": "Chuckle",
+      "antonym": "Sob",
+      "sentence": "The children couldn't help but giggle at the funny clown's antics.",
+      "pronunciation": "gig-uhl"
+    },
+    {
+      "word": "Enchant",
+      "meaning": "To fill with great delight or charm; to captivate or bewitch.",
+      "synonym": "Entrance",
+      "antonym": "Repel",
+      "sentence": "The magical story had the power to enchant readers of all ages.",
+      "pronunciation": "en-chant"
+    },
+    {
+      "word": "Wonderful",
+      "meaning": "Extremely pleasing or excellent; causing wonder or amazement.",
+      "synonym": "Fantastic",
+      "antonym": "Terrible",
+      "sentence": "The beach sunset created a wonderful scene that left everyone in awe.",
+      "pronunciation": "wuhn-der-fuhl"
+    },
+    {
+      "word": "Marvel",
+      "meaning": "A thing or person that is wonderful or astonishing; to be filled with wonder or astonishment.",
+      "synonym": "Wonder",
+      "antonym": "Ordinary",
+      "sentence": "The intricate details of the artwork were a true marvel.",
+      "pronunciation": "mahr-vuhl"
+    },
+    {
+      "word": "Glisten",
+      "meaning": "To shine with a sparkling light; to reflect a sparkling or lustrous appearance.",
+      "synonym": "Sparkle",
+      "antonym": "Dull",
+      "sentence": "The morning dew caused the grass to glisten in the sunlight.",
+      "pronunciation": "glis-uhn"
+    },
+    {
+      "word": "Radiant",
+      "meaning": "Sending out light; shining or glowing brightly.",
+      "synonym": "Luminous",
+      "antonym": "Dim",
+      "sentence": "The bride looked radiant in her wedding gown as she walked down the aisle.",
+      "pronunciation": "rey-dee-uhnt"
+    },
+    {
+      "word": "Tranquil",
+      "meaning": "Free from disturbance; calm and peaceful.",
+      "synonym": "Serene",
+      "antonym": "Chaotic",
+      "sentence": "The tranquil lake provided a perfect setting for meditation.",
+      "pronunciation": "trang-kwil"
+    },
+    {
+      "word": "Mesmerize",
+      "meaning": "To capture and hold one's attention completely; to fascinate or hypnotize.",
+      "synonym": "Entrance",
+      "antonym": "Bore",
+      "sentence": "The magician's performance never failed to mesmerize the audience.",
+      "pronunciation": "mez-muh-rahyz"
+    },
+    {
+      "word": "Bliss",
+      "meaning": "Perfect happiness or joy; a state of supreme happiness.",
+      "synonym": "Euphoria",
+      "antonym": "Misery",
+      "sentence": "The couple experienced pure bliss during their tropical vacation.",
+      "pronunciation": "blis"
+    },
+    {
+      "word": "Zeal",
+      "meaning": "Great enthusiasm or passion for a cause or objective.",
+      "synonym": "Eagerness",
+      "antonym": "Apathy",
+      "sentence": "Her zeal for environmental conservation led to active involvement in local initiatives.",
+      "pronunciation": "zeel"
+    },
+    {
+      "word": "Phenomenal",
+      "meaning": "Extraordinary, outstanding, or remarkable; beyond what is ordinary or usual.",
+      "synonym": "Exceptional",
+      "antonym": "Mediocre",
+      "sentence": "The concert received phenomenal reviews for its breathtaking performance.",
+      "pronunciation": "fi-nom-uh-nl"
+    },
+    {
+      "word": "Leap",
+      "meaning": "To jump or spring a long distance; a sudden or great jump.",
+      "synonym": "Bound",
+      "antonym": "Crawl",
+      "sentence": "The athlete made a spectacular leap to clear the high jump bar.",
+      "pronunciation": "leep"
+    },
+    {
+      "word": "Lonely",
+      "meaning": "Solitary, lacking companionship; feeling isolated or alone.",
+      "synonym": "Isolated",
+      "antonym": "Social",
+      "sentence": "The old house stood lonely on the hill, surrounded by silence.",
+      "pronunciation": "lohn-lee"
+    },
+    {
+      "word": "Pale",
+      "meaning": "Light in color or having a whitish appearance; lacking intensity or vividness.",
+      "synonym": "Faded",
+      "antonym": "Vivid",
+      "sentence": "The moon cast a pale light over the quiet garden.",
+      "pronunciation": "peyl"
+    },
+    {
+      "word": "Parade",
+      "meaning": "A public procession, often celebrating a special event; to march or move in a procession.",
+      "synonym": "Procession",
+      "antonym": "Disperse",
+      "sentence": "The city held a grand parade to celebrate Independence Day.",
+      "pronunciation": "puh-reyd"
+    },
+    {
+      "word": "Scholar",
+      "meaning": "A person who is highly educated or has expertise in a particular area of study.",
+      "synonym": "Academic",
+      "antonym": "Ignoramus",
+      "sentence": "The scholar's research contributions significantly impacted the field of physics.",
+      "pronunciation": "skol-er"
+    },
+    {
+      "word": "Strand",
+      "meaning": "A single thread or fiber; to leave someone isolated or stranded in a difficult situation.",
+      "synonym": "Thread",
+      "antonym": "Connect",
+      "sentence": "A strand of hair caught my attention as it glimmered in the sunlight.",
+      "pronunciation": "strand"
+    },
+    {
+      "word": "Tremble",
+      "meaning": "To shake involuntarily, typically as a result of fear, excitement, or weakness.",
+      "synonym": "Quiver",
+      "antonym": "Steady",
+      "sentence": "The small animal began to tremble in the presence of a larger predator.",
+      "pronunciation": "trem-buhl"
+    },
+    {
+      "word": "Concern",
+      "meaning": "A feeling of worry or distress; to be interested or involved in something.",
+      "synonym": "Worry",
+      "antonym": "Indifference",
+      "sentence": "The sudden change in weather became a concern for the outdoor event.",
+      "pronunciation": "kuhn-surn"
+    },
+    {
+      "word": "Evident",
+      "meaning": "Clearly seen or understood; obvious and apparent.",
+      "synonym": "Apparent",
+      "antonym": "Hidden",
+      "sentence": "The damage to the car was evident, with visible dents and scratches.",
+      "pronunciation": "ev-i-duhnt"
+    },
+    {
+      "word": "Scarce",
+      "meaning": "In short supply; not plentiful or abundant.",
+      "synonym": "Limited",
+      "antonym": "Abundant",
+      "sentence": "During the drought, water became scarce in the region.",
+      "pronunciation": "skeers"
+    },
+    {
+      "word": "Apparent",
+      "meaning": "Clearly visible or understood; easily perceived.",
+      "synonym": "Evident",
+      "antonym": "Hidden",
+      "sentence": "The cause of the problem became apparent after a thorough investigation.",
+      "pronunciation": "uh-par-uhnt"
+    },
+    {
+      "word": "Fabulous",
+      "meaning": "Extremely pleasing or marvelous; extraordinary or incredible.",
+      "synonym": "Fantastic",
+      "antonym": "Terrible",
+      "sentence": "The fashion show displayed fabulous designs that left the audience in awe.",
+      "pronunciation": "fab-yuh-luhs"
+    },
+    {
+      "word": "Skyscraper",
+      "meaning": "A very tall building with multiple floors, typically found in urban areas.",
+      "synonym": "High-rise",
+      "antonym": "Low-rise",
+      "sentence": "The city skyline was dominated by towering skyscrapers.",
+      "pronunciation": "skahy-skrey-per"
+    },
+    {
+      "word": "Nostalgic",
+      "meaning": "A sentimental longing or affection for the past; reminiscent or wistful.",
+      "synonym": "Sentimental",
+      "antonym": "Present",
+      "sentence": "Hearing the old song made her feel nostalgic about her childhood.",
+      "pronunciation": "no-stal-jik"
+    },
+    {
+      "word": "Diehard",
+      "meaning": "Stubbornly resistant to change or determined in one's beliefs; devoted or loyal to a cause.",
+      "synonym": "Fanatic",
+      "antonym": "Flexible",
+      "sentence": "He was a diehard fan of the team, never missing a single game.",
+      "pronunciation": "dahy-hahrd"
+    },
+    {
+      "word": "Avid",
+      "meaning": "Showing enthusiasm or strong interest in something; keen or passionate.",
+      "synonym": "Enthusiastic",
+      "antonym": "Indifferent",
+      "sentence": "She was an avid reader, finishing several books each week.",
+      "pronunciation": "av-id"
+    },
+    {
+      "word": "Notion",
+      "meaning": "A belief, idea, or concept, often a vague or general understanding.",
+      "synonym": "Concept",
+      "antonym": "Certainty",
+      "sentence": "He had a notion that success required hard work and dedication.",
+      "pronunciation": "noh-shuhn"
+    },
+    {
+      "word": "Vacant",
+      "meaning": "Empty, not filled or occupied; available or unengaged.",
+      "synonym": "Empty",
+      "antonym": "Occupied",
+      "sentence": "The vacant house had been on the market for several months.",
+      "pronunciation": "vey-kuhnt"
+    },
+    {
+      "word": "Soothing",
+      "meaning": "Having a calming or comforting effect; alleviating pain or distress.",
+      "synonym": "Calming",
+      "antonym": "Agitating",
+      "sentence": "The soothing music helped her relax after a stressful day.",
+      "pronunciation": "soo-th-ing"
+    },
+    {
+      "word": "Deafening",
+      "meaning": "Extremely loud or noisy; causing temporary deafness due to its high volume.",
+      "synonym": "Ear-splitting",
+      "antonym": "Quiet",
+      "sentence": "The thunder was deafening, rattling the windows and startling everyone.",
+      "pronunciation": "def-uh-ning"
+    },
+    {
+      "word": "Parched",
+      "meaning": "Extremely dry, especially due to heat or thirst.",
+      "synonym": "Dry",
+      "antonym": "Moist",
+      "sentence": "After hours in the sun, their throats were parched and in need of water.",
+      "pronunciation": "pahrcht"
+    },
+    {
+      "word": "Scorching",
+      "meaning": "Extremely hot; burning or searing.",
+      "synonym": "Blistering",
+      "antonym": "Freezing",
+      "sentence": "The scorching desert heat made it difficult to stay outdoors for long.",
+      "pronunciation": "skawr-ching"
+    },
+    {
+      "word": "Assess",
+      "meaning": "To evaluate or determine the nature or quality of something; to estimate or judge.",
+      "synonym": "Evaluate",
+      "antonym": "Guess",
+      "sentence": "The teacher needed time to assess the students' understanding of the lesson.",
+      "pronunciation": "uh-ses"
+    },
+    {
+      "word": "Compensate",
+      "meaning": "To give something, typically money, in recognition of loss, suffering, or injury.",
+      "synonym": "Reimburse",
+      "antonym": "Deprive",
+      "sentence": "The company compensated the workers for the extra hours worked during the holiday.",
+      "pronunciation": "kom-puh n-seyt"
+    },
+    {
+      "word": "Confine",
+      "meaning": "To keep within certain limits or boundaries; to restrict or restrain.",
+      "synonym": "Restrict",
+      "antonym": "Release",
+      "sentence": "The doctor advised him to confine physical activity after the surgery.",
+      "pronunciation": "kuhn-fahyn"
+    },
+    {
+      "word": "Retain",
+      "meaning": "To keep or continue to have something; to hold in place or maintain.",
+      "synonym": "Preserve",
+      "antonym": "Release",
+      "sentence": "It's essential to retain important documents for future reference.",
+      "pronunciation": "ri-teyn"
+    },
+    {
+      "word": "Enquire",
+      "meaning": "To ask for information; to seek or request information about something.",
+      "synonym": "Inquire",
+      "antonym": "Assume",
+      "sentence": "She decided to enquire about the availability of tickets for the concert.",
+      "pronunciation": "en-kwahyuhr"
+    },
+    {
+      "word": "Investigate",
+      "meaning": "To carry out a systematic examination or inquiry; to conduct an official examination.",
+      "synonym": "Examine",
+      "antonym": "Ignore",
+      "sentence": "The detective was assigned to investigate the mysterious disappearance.",
+      "pronunciation": "in-ves-ti-geyt"
+    },
+    {
+      "word": "Postpone",
+      "meaning": "To delay or defer an event or action to a later time or date.",
+      "synonym": "Delay",
+      "antonym": "Advance",
+      "sentence": "Due to bad weather, the outdoor event had to be postponed until next week.",
+      "pronunciation": "pohst-pohn"
+    },
+    {
+      "word": "Tolerate",
+      "meaning": "To accept or endure something unpleasant or disliked; to bear or put up with.",
+      "synonym": "Endure",
+      "antonym": "Reject",
+      "sentence": "She couldn't tolerate the constant noise from the construction site.",
+      "pronunciation": "tol-uh-reyt"
+    },
+    {
+      "word": "Numerous",
+      "meaning": "A large number; many or several in quantity.",
+      "synonym": "Many",
+      "antonym": "Few",
+      "sentence": "The library had numerous books on various subjects.",
+      "pronunciation": "noo-mer-uhs"
+    },
+    {
+      "word": "Collapse",
+      "meaning": "To fall down suddenly due to lack of support or strength; to break down completely.",
+      "synonym": "Fall",
+      "antonym": "Stand",
+      "sentence": "The old building collapsed after years of neglect.",
+      "pronunciation": "kuh-laps"
+    },
+    {
+      "word": "Punishment",
+      "meaning": "A penalty inflicted for an offense or wrongdoing; an imposed consequence.",
+      "synonym": "Penalty",
+      "antonym": "Reward",
+      "sentence": "The punishment for the crime was a year of community service.",
+      "pronunciation": "puhn-ish-muhnt"
+    },
+    {
+      "word": "Tunnel",
+      "meaning": "A passageway underground or through something, typically for vehicles or trains.",
+      "synonym": "Passage",
+      "antonym": "Open space",
+      "sentence": "The train entered the tunnel, disappearing into the darkness.",
+      "pronunciation": "tuhn-l"
+    },
+    {
+      "word": "Boastful",
+      "meaning": "Excessively proud and self-satisfied; inclined to brag or show off.",
+      "synonym": "Proud",
+      "antonym": "Modest",
+      "sentence": "His boastful nature made it challenging for others to connect with him.",
+      "pronunciation": "bohst-fuhl"
+    },
+    {
+      "word": "Horrific",
+      "meaning": "Causing horror, shock, or extreme fear; extremely distressing or dreadful.",
+      "synonym": "Frightening",
+      "antonym": "Pleasant",
+      "sentence": "The accident scene was horrific, leaving a lasting impact on the witnesses.",
+      "pronunciation": "haw-rif-ik"
+    },
+    {
+      "word": "Scary",
+      "meaning": "Causing fear or alarm; frightening or causing unease.",
+      "synonym": "Frightening",
+      "antonym": "Comforting",
+      "sentence": "The horror movie was so scary that some people couldn't sleep afterward.",
+      "pronunciation": "skair-ee"
+    },
+    {
+      "word": "Fortune",
+      "meaning": "Wealth or riches; luck, fate, or destiny, especially in terms of financial success.",
+      "synonym": "Wealth",
+      "antonym": "Misfortune",
+      "sentence": "He made a fortune investing in the stock market.",
+      "pronunciation": "fawr-choon"
+    },
+    {
+      "word": "Glad",
+      "meaning": "Feeling happy or pleased about something.",
+      "synonym": "Happy",
+      "antonym": "Unhappy",
+      "sentence": "She was glad to hear the good news about her friend's recovery.",
+      "pronunciation": "glad"
+    },
+    {
+      "word": "Amused",
+      "meaning": "Entertained or finding something funny or enjoyable.",
+      "synonym": "Entertained",
+      "antonym": "Bored",
+      "sentence": "The comedian's jokes kept the audience amused throughout the show.",
+      "pronunciation": "uh-myoozd"
+    },
+    {
+      "word": "Affectionate",
+      "meaning": "Showing fondness or tender feelings towards someone; loving or warm in nature.",
+      "synonym": "Loving",
+      "antonym": "Cold",
+      "sentence": "The affectionate couple held hands as they walked through the park.",
+      "pronunciation": "uh-fek-shuh-nit"
+    },
+    {
+      "word": "Courteous",
+      "meaning": "Polite, respectful, or considerate in behavior; showing good manners.",
+      "synonym": "Polite",
+      "antonym": "Rude",
+      "sentence": "He always greeted guests with a courteous smile and a welcoming attitude.",
+      "pronunciation": "kur-tee-uhs"
+    },
+    {
+      "word": "Lively",
+      "meaning": "Full of energy, enthusiasm, or spirit; animated or vigorous.",
+      "synonym": "Vibrant",
+      "antonym": "Dull",
+      "sentence": "The lively music at the party encouraged everyone to dance.",
+      "pronunciation": "lahyv-lee"
+    },
+    {
+      "word": "Delighted",
+      "meaning": "Greatly pleased or filled with joy; happily satisfied.",
+      "synonym": "Pleased",
+      "antonym": "Displeased",
+      "sentence": "She was delighted with the surprise birthday party thrown by her friends.",
+      "pronunciation": "dih-lahy-tid"
+    },
+    {
+      "word": "Diffident",
+      "meaning": "Lacking in self-confidence; shy or hesitant due to a lack of self-assurance.",
+      "synonym": "Timid",
+      "antonym": "Confident",
+      "sentence": "Her diffident nature made it challenging for her to speak in public.",
+      "pronunciation": "dif-i-duhnt"
+    },
+    {
+      "word": "Plagiarism",
+      "meaning": "The act of using someone else's work, ideas, or creations and passing them off as one's own.",
+      "synonym": "Copying",
+      "antonym": "Originality",
+      "sentence": "The writer was accused of plagiarism for using passages from another author's book without attribution.",
+      "pronunciation": "pley-juh-riz-uhm"
+    },
+    {
+      "word": "Hindrance",
+      "meaning": "An obstacle or impediment that slows down or obstructs progress.",
+      "synonym": "Obstacle",
+      "antonym": "Advantage",
+      "sentence": "The lack of funding became a hindrance to completing the construction project on time.",
+      "pronunciation": "hin-druhns"
+    },
+    {
+      "word": "Suppress",
+      "meaning": "To forcibly put an end to something; to prevent the development, action, or expression of something.",
+      "synonym": "Quell",
+      "antonym": "Encourage",
+      "sentence": "The government tried to suppress the protests by imposing a curfew.",
+      "pronunciation": "suh-pres"
+    },
+    {
+      "word": "Stringent",
+      "meaning": "Strict, precise, or precise in requirements, regulations, or standards.",
+      "synonym": "Rigorous",
+      "antonym": "Lenient",
+      "sentence": "The school had stringent rules regarding uniform compliance.",
+      "pronunciation": "strin-juhnt"
+    },
+    {
+      "word": "Churlish",
+      "meaning": "Rude, surly, or ill-mannered; lacking in civility or graciousness.",
+      "synonym": "Impolite",
+      "antonym": "Polite",
+      "sentence": "His churlish behavior towards the guests offended everyone at the party.",
+      "pronunciation": "chur-lish"
+    },
+    {
+      "word": "Renowned",
+      "meaning": "Famous, widely acclaimed, or well-known for excellence or achievement.",
+      "synonym": "Famous",
+      "antonym": "Unknown",
+      "sentence": "The renowned scientist received the Nobel Prize for her groundbreaking research.",
+      "pronunciation": "ri-nound"
+    },
+    {
+      "word": "Aversion",
+      "meaning": "A strong dislike or feeling of opposition towards something or someone.",
+      "synonym": "Dislike",
+      "antonym": "Preference",
+      "sentence": "He had an aversion to public speaking due to past negative experiences.",
+      "pronunciation": "uh-vur-zhuhn"
+    },
+    {
+      "word": "Plausible",
+      "meaning": "Seemingly reasonable or believable, often used to describe an explanation or argument.",
+      "synonym": "Believable",
+      "antonym": "Improbable",
+      "sentence": "His explanation for the missing homework seemed plausible, but it lacked evidence.",
+      "pronunciation": "plaw-zuh-buhl"
+    },
+    {
+      "word": "Prodigy",
+      "meaning": "A person, especially a young one, who demonstrates exceptional talent or ability.",
+      "synonym": "Genius",
+      "antonym": "Mediocre",
+      "sentence": "Mozart was a musical prodigy, composing music at a very young age.",
+      "pronunciation": "prod-i-jee"
+    },
+    {
+      "word": "Rigorous",
+      "meaning": "Thorough, demanding, or characterized by strict adherence to a set of standards.",
+      "synonym": "Demanding",
+      "antonym": "Lenient",
+      "sentence": "The rigorous training regimen prepared the athletes for the intense competition.",
+      "pronunciation": "rig-er-uhs"
+    }
+  ]
+}
