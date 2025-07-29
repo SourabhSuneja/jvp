@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamna Vidyapeeth - PT-1 Top Performers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 100px;
+            margin-bottom: 10px;
+        }
+
+        .school-name {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        h2 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .description {
+            text-align: center;
+            color: #555;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        /* Table Styles */
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .results-table thead tr {
+            background-color: #4CAF50;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .results-table thead th {
+            border-bottom: 2px solid #388E3C;
+        }
+        
+        .results-table thead th:first-child { border-top-left-radius: 8px; }
+        .results-table thead th:last-child { border-top-right-radius: 8px; }
+
+        .results-table tbody tr:nth-of-type(even) {
+            background-color: #f9f9f9;
+        }
+
+        .results-table tbody tr:hover {
+            background-color: #e8f5e9;
+            cursor: pointer;
+        }
+
+        .results-table td.rank,
+        .results-table td.class {
+            text-align: center;
+        }
+
+        .results-table td.average {
+            font-weight: 600;
+            color: #2e7d32;
+            text-align: right;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        /* Responsive Styles for Mobile */
+        @media screen and (max-width: 768px) {
+            .school-name {
+                font-size: 1.8em;
+            }
+            .results-table thead {
+                display: none;
+            }
+
+            .results-table,
+            .results-table tbody,
+            .results-table tr,
+            .results-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .results-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .results-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px dotted #ccc;
+            }
+
+            .results-table td:last-child {
+                border-bottom: none;
+            }
+
+            .results-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                width: calc(50% - 30px);
+                text-align: left;
+                font-weight: 600;
+                color: #555;
+            }
+        }
+        
+        /* Print-Friendly Styles */
+        @media print {
+            body {
+                background-color: #fff;
+                font-size: 11pt;
+                padding: 0;
+                margin: 0;
+            }
+            .container {
+                box-shadow: none;
+                border: none;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                margin: 0 auto;
+            }
+            .header {
+                border-bottom: 2px solid #000;
+            }
+            .logo {
+                max-width: 80px;
+            }
+            .school-name, h2 {
+               color: #000;
+            }
+            .school-name { font-size: 22pt; }
+            h2 { font-size: 18pt; }
+            .results-table thead tr {
+               background-color: #e0e0e0 !important;
+               color: #000 !important;
+            }
+            .results-table, .results-table th, .results-table td {
+               border-color: #666 !important;
+               color: #000 !important;
+            }
+            .results-table td.average {
+               color: #000 !important;
+            }
+            .results-table tbody tr:nth-of-type(even) {
+               background-color: #f9f9f9 !important;
+               -webkit-print-color-adjust: exact;
+               print-color-adjust: exact;
+            }
+            .results-table tbody tr:hover {
+                background-color: transparent !important;
+            }
+            .footer {
+                color: #000;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="School Logo" class="logo">
+            <h1 class="school-name">Jamna Vidyapeeth</h1>
+        </div>
+
+        <h2>🏆 PT-1 Top Performers 🏆</h2>
+        <p class="description">
+            Here are the top 20 best-performing students in our school based on the PT-1 examination results. Congratulations to all our high achievers!
+        </p>
+
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Student Name</th>
+                    <th>Class</th>
+                    <th>PT-1 Average</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="Rank" class="rank">1</td>
+                    <td data-label="Student">VYOM</td>
+                    <td data-label="Class" class="class">3-A3</td>
+                    <td data-label="Average" class="average">20.0000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">2</td>
+                    <td data-label="Student">ANSHU KUMAR</td>
+                    <td data-label="Class" class="class">6-A3</td>
+                    <td data-label="Average" class="average">19.8750</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">3</td>
+                    <td data-label="Student">REYANSH RAWAT</td>
+                    <td data-label="Class" class="class">3-A3</td>
+                    <td data-label="Average" class="average">19.8571</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">4</td>
+                    <td data-label="Student">RISHAAN BENIWAL</td>
+                    <td data-label="Class" class="class">1-A3</td>
+                    <td data-label="Average" class="average">19.8333</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">5</td>
+                    <td data-label="Student">RIYA CHOUDHARY</td>
+                    <td data-label="Class" class="class">4-A4</td>
+                    <td data-label="Average" class="average">19.7143</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">5</td>
+                    <td data-label="Student">SARVESH SHARMA</td>
+                    <td data-label="Class" class="class">4-A1</td>
+                    <td data-label="Average" class="average">19.7143</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">5</td>
+                    <td data-label="Student">RUDRA PRATAP YADAV</td>
+                    <td data-label="Class" class="class">3-A2</td>
+                    <td data-label="Average" class="average">19.7143</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">6</td>
+                    <td data-label="Student">HARSHITA</td>
+                    <td data-label="Class" class="class">3-A2</td>
+                    <td data-label="Average" class="average">19.6667</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">6</td>
+                    <td data-label="Student">NAITIK</td>
+                    <td data-label="Class" class="class">2-A1</td>
+                    <td data-label="Average" class="average">19.6667</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">6</td>
+                    <td data-label="Student">NIHARIKA SHEKHAWAT</td>
+                    <td data-label="Class" class="class">1-A2</td>
+                    <td data-label="Average" class="average">19.6667</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">6</td>
+                    <td data-label="Student">BHAVESH</td>
+                    <td data-label="Class" class="class">2-A3</td>
+                    <td data-label="Average" class="average">19.6667</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">6</td>
+                    <td data-label="Student">SHREYA CHOUDHARY</td>
+                    <td data-label="Class" class="class">9-A1</td>
+                    <td data-label="Average" class="average">19.6667</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">7</td>
+                    <td data-label="Student">POORVI JANGID</td>
+                    <td data-label="Class" class="class">7-A2</td>
+                    <td data-label="Average" class="average">19.6250</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">8</td>
+                    <td data-label="Student">KAVYANSH CHOUDHARY</td>
+                    <td data-label="Class" class="class">3-A3</td>
+                    <td data-label="Average" class="average">19.5714</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">8</td>
+                    <td data-label="Student">MADHAV GARG</td>
+                    <td data-label="Class" class="class">5-A4</td>
+                    <td data-label="Average" class="average">19.5714</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">8</td>
+                    <td data-label="Student">AKSHIT PRAJAPAT</td>
+                    <td data-label="Class" class="class">4-A4</td>
+                    <td data-label="Average" class="average">19.5714</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">AKANSH YADAV</td>
+                    <td data-label="Class" class="class">1-A3</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">KRITVI ARYA</td>
+                    <td data-label="Class" class="class">2-A3</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">RIYA SHARMA</td>
+                    <td data-label="Class" class="class">10-A2</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">CHAYA AGARWAL</td>
+                    <td data-label="Class" class="class">2-A3</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">HARSHIT CHOUDHARY</td>
+                    <td data-label="Class" class="class">6-A3</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">LAKSHAY MITTAL</td>
+                    <td data-label="Class" class="class">10-A2</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">BHAVY SHARMA</td>
+                    <td data-label="Class" class="class">6-A2</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+                <tr>
+                    <td data-label="Rank" class="rank">9</td>
+                    <td data-label="Student">VANSHIKA SHARMA</td>
+                    <td data-label="Class" class="class">8-A1</td>
+                    <td data-label="Average" class="average">19.5000</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="footer">
+            <p>Analysis by: Sourabh Sir</p>
+        </div>
+    </div>
+
+</body>
+</html>
