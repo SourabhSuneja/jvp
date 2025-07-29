@@ -565,7 +565,7 @@
          <div id="app-section" class="app-container hidden">
             <div class="dashboard-container">
                <div class="dashboard-welcome">
-                  <h2 class="welcome-title">Welcome Back!</h2>
+                  <h2 id="welcome-title" class="welcome-title">Welcome Back!</h2>
                   <p class="welcome-subtitle">Choose a section to get started</p>
                </div>
                
@@ -655,6 +655,7 @@
          const usernameInput = document.getElementById('username');
          const passwordInput = document.getElementById('password');
          const userInfo = document.getElementById('user-info');
+         const welcomeTitle = document.getElementById('welcome-title');
          const signedInUsername = document.getElementById('signed-in-username');
          const loadingOverlay = document.getElementById('loading-overlay');
 
@@ -672,6 +673,7 @@
             const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
             if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
                signedInUsername.innerText = teacherName.name;
+               welcomeTitle = 'Welcome, ' + teacherName.name.split(" ")[0];
                userInfo.style.display = "block";
             }
          
@@ -723,6 +725,7 @@
          const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
          if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
             signedInUsername.innerText = teacherName.name;
+            welcomeTitle = 'Welcome, ' + teacherName.name.split(" ")[0];
             userInfo.style.display = "block";
          }
          
