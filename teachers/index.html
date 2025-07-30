@@ -726,6 +726,9 @@
          
          // Store the user ID
          window.userId = data.user.id;
+
+         // Redirect to referring page if available in the URL
+         redirectToRef();
          
          // Fetch teacher's name
          const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
@@ -782,6 +785,24 @@
          loadingOverlay.classList.add('hidden');
          }
 
+         function redirectToRef() {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get("ref");
+
+  if (ref) {
+    try {
+      const decodedURL = decodeURIComponent(ref);
+      // Basic URL validation (only http or https for safety)
+      const isValidURL = decodedURL.startsWith("http://") || decodedURL.startsWith("https://");
+
+      if (isValidURL) {
+        window.location.href = decodedURL;
+      }
+    } catch (e) {
+      console.error("Invalid ref URL:", e);
+    }
+  }
+}
       </script>
    </body>
 </html>
