@@ -1227,6 +1227,10 @@
          
          try {
          const isAuthenticated = await checkAuth();
+
+         if(!isAuthenticated) {
+            window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+         }
          
          if (isAuthenticated) {
             // User is already logged in
