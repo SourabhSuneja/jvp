@@ -1,8 +1,3 @@
-DROP POLICY IF EXISTS select_syllabus_policy ON syllabus;
-DROP POLICY IF EXISTS insert_syllabus_policy ON syllabus;
-DROP POLICY IF EXISTS update_syllabus_policy ON syllabus;
-DROP POLICY IF EXISTS delete_syllabus_policy ON syllabus;
-
 create table syllabus (
     id uuid not null default gen_random_uuid(),
     class smallint not null,
@@ -17,58 +12,11 @@ create table syllabus (
     constraint syllabus_class_exam_subject_key unique (class, exam, subject)
 );
 
--- This creates a function that returns the integer part of the class string like '4-A1' => 4
-CREATE OR REPLACE FUNCTION extract_class_number(full_class text)
-RETURNS smallint AS $$
-BEGIN
-  RETURN split_part(full_class, '-', 1)::smallint;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
 -- Enable RLS
 ALTER TABLE syllabus ENABLE ROW LEVEL SECURITY;
 
--- Allow teachers to read data
-CREATE POLICY select_syllabus_policy ON syllabus
-FOR SELECT
-TO authenticated
-USING (true);
-
--- INSERT Policy (uses WITH CHECK)
-CREATE POLICY insert_syllabus_policy ON syllabus
-FOR INSERT
-TO authenticated
-WITH CHECK (
-  EXISTS (
-    SELECT 1
-    FROM class_subject_assignments
-    WHERE teacher_id = auth.uid()
-      AND extract_class_number(class_subject_assignments.class) = syllabus.class
-  )
-);
-
--- UPDATE Policy
-CREATE POLICY update_syllabus_policy ON syllabus
-FOR UPDATE
-TO authenticated
-USING (
-  EXISTS (
-    SELECT 1
-    FROM class_subject_assignments
-    WHERE teacher_id = auth.uid()
-      AND extract_class_number(class_subject_assignments.class) = syllabus.class
-  )
-);
-
--- DELETE Policy
-CREATE POLICY delete_syllabus_policy ON syllabus
-FOR DELETE
-TO authenticated
-USING (
-  EXISTS (
-    SELECT 1
-    FROM class_subject_assignments
-    WHERE teacher_id = auth.uid()
-      AND extract_class_number(class_subject_assignments.class) = syllabus.class
-  )
-);
+-- Simple policy: Allow any authenticated user to perform all operations (select, insert, update, delete)
+CREATE POLICY syllabus_authenticated_policy ON syllabus
+    FOR ALL
+    USING (auth.uid() IS NOT NULL)
+    WITH CHECK (auth.uid() IS NOT NULL);
