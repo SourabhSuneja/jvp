@@ -33,6 +33,9 @@ const copyResponseBtn = document.getElementById('copyResponseBtn');
 let currentAssemblyData = null;
 
 async function init() {
+   authForm.classList.add('hidden');
+   schedulerForm.classList.remove('hidden');
+   upcomingAssemblies.classList.remove('hidden');
    populateClasses();
    await loadAssembliesFromServer();
    updateAssembliesTable();
@@ -759,5 +762,15 @@ document.getElementById('assemblyDate').addEventListener('change', function () {
 });
 
 window.onload = function () {
+   showProcessingDialog();
+   try {
+                const isAuthenticated = await checkAuth();
+                if(!isAuthenticated) {
+                  window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+                }
+             } catch(error) {
+                  console.error('Auth check error:', error);
+             }
+             hideProcessingDialog();
    init();
 };
