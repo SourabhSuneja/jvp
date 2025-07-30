@@ -1170,11 +1170,14 @@
                 
          // Handle page load - show login screen initially
          window.onload = function() {
-             loginScreen.style.display = 'block';
-             dashboard.style.display = 'none';
+             showProcessingDialog();
+             loginScreen.style.display = 'none';
+             dashboard.style.display = 'block';
              const subscription = subscribeToTable('syllabus', handleLiveUpdate);
              reconstructSyllabusObj().then((syllabusObj) => {
                 syllabusData = syllabusObj;
+                createSyllabusTab.style.display = 'block';
+                hideProcessingDialog();
              });
          };
       </script>
