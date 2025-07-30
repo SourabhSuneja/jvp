@@ -360,6 +360,7 @@
          border: none;
          cursor: pointer;
          display: flex;
+         display: none;
          align-items: center;
          gap: 8px;
          }
@@ -1169,8 +1170,16 @@
          }
                 
          // Handle page load - show login screen initially
-         window.onload = function() {
+         window.onload = async function() {
              showProcessingDialog();
+             try {
+                const isAuthenticated = await checkAuth();
+                if(!isAuthenticated) {
+                  window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+                }
+             } catch(error) {
+                  console.error('Auth check error:', error);
+             }
              loginScreen.style.display = 'none';
              dashboard.style.display = 'block';
              const subscription = subscribeToTable('syllabus', handleLiveUpdate);
