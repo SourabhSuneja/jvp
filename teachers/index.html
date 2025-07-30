@@ -693,6 +693,13 @@
             loginSection.classList.remove('hidden');
             appSection.classList.add('hidden');
             logoutBtn.classList.add('hidden');
+            // Show login error if user was sent to this login page from some other page
+            const params = new URLSearchParams(window.location.search);
+            const ref = params.get("ref");
+            if(ref) {
+               loginError.textContent = 'You must login first!';
+               loginError.classList.remove('hidden');
+            }
          }
          } catch (error) {
          console.error('Auth check error:', error);
