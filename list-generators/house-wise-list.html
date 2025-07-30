@@ -803,6 +803,10 @@
           window.onload = async function() {
               try {
                   showLoadingOverlay();
+                  const isAuthenticated = await checkAuth();
+                  if(!isAuthenticated) {
+                     window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+                  }
                   students = await invokeFunction('get_students_sorted');
                   // Initialize the application
                   init();
