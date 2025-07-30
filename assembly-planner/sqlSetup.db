@@ -14,3 +14,12 @@ CREATE TABLE assemblies (
 );
 
 ALTER TABLE assemblies ADD CONSTRAINT unique_date UNIQUE (date);
+
+-- Enable RLS
+ALTER TABLE assemblies ENABLE ROW LEVEL SECURITY;
+
+-- Simple policy: Allow any authenticated user to perform all operations (select, insert, update, delete)
+CREATE POLICY authenticated_users_can_manage_assemblies ON assemblies
+    FOR ALL
+    USING (auth.uid() IS NOT NULL)
+    WITH CHECK (auth.uid() IS NOT NULL);
