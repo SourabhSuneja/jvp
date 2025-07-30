@@ -761,7 +761,7 @@ document.getElementById('assemblyDate').addEventListener('change', function () {
    }
 });
 
-window.onload = function () {
+window.onload = async function () {
    showProcessingDialog();
    try {
                 const isAuthenticated = await checkAuth();
