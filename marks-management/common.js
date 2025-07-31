@@ -7,6 +7,7 @@ let globalSubjectValue = null;
 
 // Global array of subjects
 let subjects = [
+  "All Subjects (Enthusiasm)",
   "English",
   "Hindi",
   "Science",
@@ -64,15 +65,18 @@ const classwiseSubjects = {
   2: ['English', 'Hindi', 'Maths', 'EVS', 'Computer', 'GK'],
   3: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK'],
   4: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK'],
-  5: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK'],
-  6: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK'],
-  7: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK'],
-  8: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Data Science', 'GK'],
-   9: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science'],
-   10: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science'],
-  '12-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics'],
-  '12-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.'],
-  '12-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics']
+  5: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
+  6: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
+  7: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
+  8: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Data Science', 'GK', 'All Subjects (Enthusiasm)'],
+   9: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'],
+   10: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'],
+  '11-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'All Subjects (Enthusiasm)'],
+  '11-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)'],
+  '11-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)'],
+  '12-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'All Subjects (Enthusiasm)'],
+  '12-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)'],
+  '12-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)']
 }
 
 let filteredClasses = [];
@@ -83,7 +87,8 @@ const exams = [
              {'name': 'PT-1', 'mm': 20},
              {'name': 'PT-2', 'mm': 20},
              {'name': 'PT-3', 'mm': 20},
-             {'name': 'PT-4', 'mm': 20}
+             {'name': 'PT-4', 'mm': 20},
+             {'name': 'Enthusiasm (July)', 'mm': 300}
         ];
 
 // Color mapping for updated remarks
