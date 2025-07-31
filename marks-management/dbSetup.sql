@@ -1181,6 +1181,7 @@ AS $$
         s.gender,
         s.house
     FROM students s
+    WHERE s.class NOT ILIKE '%LEFT%'
     ORDER BY 
         -- First sort by numeric part of class (grade level)
         CASE 
@@ -1197,6 +1198,7 @@ AS $$
         -- Finally sort by name ascending
         s.name ASC;
 $$;
+
 
 
 -- A temporary function used for gender/house details collection from teachers for students table in a quick and unauthenticated manner
