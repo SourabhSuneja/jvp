@@ -248,7 +248,8 @@
          const filteredMarks = marks.filter(mark => 
          mark.exam === selectedExam && 
          mark.class === selectedClass && 
-         selectedSubjects.includes(mark.subject)
+         selectedSubjects.includes(mark.subject) &&
+         mark.subject !== 'All Subjects (Enthusiasm)'
          );
          
          // Get unique students and sort alphabetically
