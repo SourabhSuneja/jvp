@@ -243,6 +243,9 @@
          // Set header information
          document.getElementById('exam-name').textContent = selectedExam;
          document.getElementById('class-name').textContent = selectedClass;
+
+         // Remove All Subjects (Enthusiasm) from the selectedSubjects array
+         selectedSubjects = selectedSubjects.filter(s => s !== 'All Subjects (Enthusiasm)');
          
          // Filter marks based on selection
          const filteredMarks = marks.filter(mark => 
