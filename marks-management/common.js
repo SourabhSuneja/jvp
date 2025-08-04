@@ -153,8 +153,8 @@ function getRemarkClass(remark) {
 }
 
 function getPassingMark(examName) {
-   // Assuming passing mark is 33% of maximum marks
-   return getMaxMarks(examName) * 0.33;
+   // Assuming passing mark is 36% of maximum marks
+   return getMaxMarks(examName) * 0.36;
 }
 
 function getSubjectsForClass(classValue, useFilteredSubjects=false) {
