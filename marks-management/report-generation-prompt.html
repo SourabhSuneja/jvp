@@ -470,6 +470,8 @@
             setTimeout(() => {
                 // Hide loading state
                 loading.style.display = 'none';
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Statement';
                 window.location.href = redirectUrl;
             }, 1000);
         }
