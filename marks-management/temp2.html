@@ -512,9 +512,9 @@
             const exam = urlParams.get("exam");
             selectedExam = exam;
             selectedClass = classValue;
-            selectedSubjects = getSubjectsForClass(selectedClass);
             // If class & exam are present and not falsy
             if (classValue && exam) {
+               selectedSubjects = getSubjectsForClass(selectedClass);
                try {
                   const results = await selectData(
                      "marks_view", false, "*", ["class", "exam"], [classValue, exam], "student", "asc"
