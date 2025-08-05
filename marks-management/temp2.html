@@ -467,6 +467,8 @@
 
             // Simulate loading delay for better UX
             setTimeout(() => {
+                // Hide loading state
+                loading.style.display = 'none';
                 window.location.href = redirectUrl;
             }, 1000);
         }
