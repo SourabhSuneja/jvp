@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Marks Statement Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .dialog {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            width: 100%;
+        }
+
+        .dialog-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .dialog-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .dialog-subtitle {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .form-select, .form-radio-group {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select:hover {
+            border-color: #9ca3af;
+        }
+
+        .form-radio-group {
+            padding: 16px;
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .radio-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            flex-direction: column;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #3b82f6;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: 20px;
+            }
+
+            .dialog {
+                padding: 24px 20px;
+                margin: 0;
+                border-radius: 6px;
+                min-height: auto;
+            }
+
+            .dialog-header {
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+            }
+
+            .dialog-title {
+                font-size: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-select, .form-radio-group {
+                padding: 10px 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .radio-option label {
+                font-size: 15px;
+            }
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+
+            .form-actions {
+                margin-top: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .dialog {
+                padding: 20px 16px;
+            }
+
+            .dialog-title {
+                font-size: 18px;
+            }
+
+            .dialog-subtitle {
+                font-size: 13px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                align-items: flex-start;
+                padding-top: 10px;
+            }
+
+            .dialog-header {
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-actions {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h1 class="dialog-title">Marks Statement Generator</h1>
+                <p class="dialog-subtitle">Select the required parameters to generate your marks statement</p>
+            </div>
+
+            <form id="marksForm">
+                <div class="form-group">
+                    <label for="statementType" class="form-label">Statement Type</label>
+                    <div class="form-radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="consolidated" name="statementType" value="consolidated" required>
+                            <label for="consolidated">Consolidated Statement</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="individual" name="statementType" value="individual" required>
+                            <label for="individual">Mark Statements for all individual subjects</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="statementTypeError">Please select a statement type</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="classSelect" class="form-label">Class</label>
+                    <select id="classSelect" class="form-select" required>
+                        <option value="">Select a class</option>
+                    </select>
+                    <div class="error-message" id="classError">Please select a class</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="examSelect" class="form-label">Exam</label>
+                    <select id="examSelect" class="form-select" required>
+                        <option value="">Select an exam</option>
+                    </select>
+                    <div class="error-message" id="examError">Please select an exam</div>
+                </div>
+
+                <div class="loading" id="loading">
+                    <span class="spinner"></span>
+                    Generating marks statement...
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="generateBtn">Generate Statement</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global arrays
+        let classes = ['1-A1', '1-A2', '1-A3', '2-A1', '2-A2', '2-A3', '3-A1', '3-A2', '3-A3', '3-A4', '4-A1', '4-A2', '4-A3', '4-A4', '5-A1', '5-A2', '5-A3', '5-A4', '6-A1', '6-A2', '6-A3', '6-A4', '7-A1', '7-A2', '7-A3', '7-A4', '8-A1', '8-A2', '8-A3', '9-A1', '9-A2', '9-A3', '10-A1', '10-A2', '10-A3', '11-SCI', '11-COM', '11-HUM', '12-SCI', '12-COM', '12-HUM'];
+        
+        let periodicExams = ['PT-1', 'PT-2', 'PT-3', 'PT-4'];
+
+        // DOM elements
+        const classSelect = document.getElementById('classSelect');
+        const examSelect = document.getElementById('examSelect');
+        const form = document.getElementById('marksForm');
+        const generateBtn = document.getElementById('generateBtn');
+        const loading = document.getElementById('loading');
+
+        // Populate dropdowns
+        function populateDropdowns() {
+            // Populate classes
+            classes.forEach(className => {
+                const option = document.createElement('option');
+                option.value = className;
+                option.textContent = `Class ${className}`;
+                classSelect.appendChild(option);
+            });
+
+            // Populate exams
+            periodicExams.forEach(exam => {
+                const option = document.createElement('option');
+                option.value = exam;
+                option.textContent = exam;
+                examSelect.appendChild(option);
+            });
+        }
+
+        // Validation functions
+        function validateForm() {
+            let isValid = true;
+            
+            // Validate statement type selection
+            const statementType = document.querySelector('input[name="statementType"]:checked');
+            if (!statementType) {
+                showError('statementTypeError');
+                isValid = false;
+            } else {
+                hideError('statementTypeError');
+            }
+
+            // Validate class selection
+            if (!classSelect.value) {
+                showError('classError');
+                isValid = false;
+            } else {
+                hideError('classError');
+            }
+
+            // Validate exam selection
+            if (!examSelect.value) {
+                showError('examError');
+                isValid = false;
+            } else {
+                hideError('examError');
+            }
+
+            return isValid;
+        }
+
+        function showError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.style.display = 'block';
+            
+            // Add error styling to the form control
+            const formControl = errorElement.previousElementSibling;
+            if (formControl.classList.contains('form-select')) {
+                formControl.style.borderColor = '#dc2626';
+            } else if (formControl.classList.contains('form-radio-group')) {
+                formControl.style.borderColor = '#dc2626';
+            }
+        }
+
+        function hideError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.style.display = 'none';
+            
+            // Remove error styling from the form control
+            const formControl = errorElement.previousElementSibling;
+            if (formControl.classList.contains('form-select')) {
+                formControl.style.borderColor = '#d1d5db';
+            } else if (formControl.classList.contains('form-radio-group')) {
+                formControl.style.borderColor = '#d1d5db';
+            }
+        }
+
+        // Form submission
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+
+            const statementType = document.querySelector('input[name="statementType"]:checked').value;
+            const classValue = classSelect.value;
+            const examValue = examSelect.value;
+
+            // Show loading state
+            loading.style.display = 'block';
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+
+            // Construct URL based on statement type
+            let baseUrl;
+            if (statementType === 'consolidated') {
+                baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
+            } else {
+                baseUrl = 'https://myjvp.in/marks-management/subjectwise-pt-marks.html';
+            }
+
+            const params = new URLSearchParams({
+                class: classValue,
+                exam: examValue
+            });
+            const redirectUrl = `${baseUrl}?${params.toString()}`;
+
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                // Hide loading state
+                loading.style.display = 'none';
+                window.location.href = redirectUrl;
+            }, 1000);
+        }
+
+        // Reset form
+        function resetForm() {
+            // Reset radio buttons
+            const radioButtons = document.querySelectorAll('input[name="statementType"]');
+            radioButtons.forEach(radio => radio.checked = false);
+            
+            // Reset select elements
+            classSelect.value = '';
+            examSelect.value = '';
+            
+            // Hide all errors
+            hideError('statementTypeError');
+            hideError('classError');
+            hideError('examError');
+            
+            // Reset button state
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate Statement';
+            loading.style.display = 'none';
+        }
+
+        // Event listeners
+        form.addEventListener('submit', handleSubmit);
+
+        // Real-time validation
+        document.querySelectorAll('input[name="statementType"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    hideError('statementTypeError');
+                }
+            });
+        });
+
+        classSelect.addEventListener('change', () => {
+            if (classSelect.value) {
+                hideError('classError');
+            }
+        });
+
+        examSelect.addEventListener('change', () => {
+            if (examSelect.value) {
+                hideError('examError');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            populateDropdowns();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>
