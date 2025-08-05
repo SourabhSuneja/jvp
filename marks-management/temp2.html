@@ -1,579 +1,533 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <base href="https://myjvp.in/marks-management/">
-      <title>Consolidated PT Marks Statement</title>
-      <!-- Supabase CRUD Functions -->
-      <script type="module" src="supabase-crud.js"></script>
-      <!-- Common JS Functions -->
-      <script src="common.js"></script>
-      <style>
-         :root {
-         --primary: #4f46e5;
-         --primary-dark: #4338ca;
-         --secondary: #10b981;
-         --secondary-dark: #059669;
-         --danger: #ef4444;
-         --danger-dark: #c33c3c;
-         --light: #f9fafb;
-         --dark: #1f2937;
-         --text: #374151;
-         --border: #e5e7eb;
-         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-         --transition: all 0.2s ease;
-         }
-         * {
-         max-height: 9999999px;
-         }
-         body {
-         font-family: Arial, sans-serif;
-         margin: 0;
-         padding: 20px;
-         }
-         .container {
-         max-width: 1200px;
-         margin: 0 auto;
-         }
-         .header {
-         text-align: center;
-         margin-bottom: 20px;
-         text-transform: uppercase;
-         }
-         .school-name {
-         font-size: 24px;
-         font-weight: bold;
-         margin-bottom: 5px;
-         }
-         .exam-session {
-         font-size: 18px;
-         margin-bottom: 3px;
-         }
-         .class-info {
-         font-size: 16px;
-         margin-bottom: 15px;
-         }
-         table {
-         width: 100%;
-         border-collapse: collapse;
-         margin-bottom: 20px;
-         }
-         th, td {
-         border: 1px solid #000;
-         padding: 5px;
-         text-align: center;
-         font-size: 14px;
-         }
-         th {
-         background-color: #f2f2f2;
-         }
-         .roll-col {
-         width: 80px;
-         }
-         .name-col {
-         width: 150px;
-         text-align: left;
-         }
-         .mark-col {
-         width: 40px;
-         }
-         .subject-header {
-         position: relative;
-         }
-         .print-btn {
-         padding: 10px 20px;
-         background-color: #4CAF50;
-         color: white;
-         border: none;
-         cursor: pointer;
-         font-size: 16px;
-         border-radius: 4px;
-         }
-         .print-btn:hover {
-         background-color: #45a049;
-         }
-         @media print {
-         .print-btn {
-         display: none;
-         }
-         body {
-         padding: 0;
-         margin: 0;
-         width: 100%;
-         }
-         .container {
-         width: 100%;
-         max-width: none;
-         }
-         table {
-         /*page-break-inside: avoid;*/
-         width: 100%;
-         table-layout: fixed;
-         font-size: 12px;
-         }
-         th, td {
-         padding: 3px;
-         font-size: 12px;
-         }
-         .roll-col {
-         width: 6%;
-         }
-         .name-col {
-         width: 15%;
-         }
-         .mark-col {
-         width: 3%;
-         }
-         @page {
-         size: A4 landscape;
-         margin: 0.5cm;
-         }
-         }
-         .loading-overlay {
-         position: fixed;
-         top: 0;
-         left: 0;
-         width: 100%;
-         height: 100%;
-         background-color: rgba(255, 255, 255, 0.8);
-         backdrop-filter: blur(4px);
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         z-index: 9999;
-         }
-         .spinner {
-         width: 60px;
-         height: 60px;
-         border: 6px solid rgba(79, 70, 229, 0.3);
-         border-radius: 50%;
-         border-top-color: var(--primary);
-         animation: spin 1s ease-in-out infinite;
-         }
-         @keyframes spin {
-         to {
-         transform: rotate(360deg);
-         }
-         }
-         .hidden {
-         display: none;
-         }
-         .highlight-rank {
-         font-weight: bold;
-         background-color: rgb(230, 230, 230);
-         }
-         @media print {
-         .highlight-rank {
-         font-weight: bold;
-         background-color: rgb(230, 230, 230) !important;
-         -webkit-print-color-adjust: exact; /* For Chrome, Safari */
-         print-color-adjust: exact; /* Standard syntax */
-         }
-         }
-         /* Custom Dialog Styles */
-         .custom-dialog-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.15);
-            z-index: 10001;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks Statement Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-         }
-         .custom-dialog {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-            padding: 32px 24px;
-            max-width: 94vw;
-            min-width: 320px;
-            width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            position: relative;
-         }
-         .custom-dialog h2 {
-            font-size: 1.45rem;
-            font-weight: bold;
-            margin: 0 0 4px 0;
-            color: var(--primary-dark);
-            text-align: center;
-         }
-         .custom-dialog label {
-            font-size: 1rem;
-            margin-bottom: 6px;
-            color: var(--text);
-            font-weight: 500;
-         }
-         .custom-dialog select {
+            padding: 15px;
+            line-height: 1.6;
+        }
+
+        .container {
             width: 100%;
-            padding: 9px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            font-size: 1rem;
-            margin-bottom: 8px;
-            background: var(--light);
-            transition: border-color 0.2s;
-         }
-         .custom-dialog select:focus {
-            border-color: var(--primary);
-            outline: none;
-         }
-         .custom-dialog .dialog-btn {
-            padding: 10px 0;
-            background: var(--primary);
-            color: #fff;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .dialog {
+            background: white;
             border-radius: 8px;
-            border: none;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e1e8ed;
+            width: 100%;
+        }
+
+        .dialog-header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #e1e8ed;
+        }
+
+        .dialog-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .dialog-subtitle {
+            font-size: 14px;
+            color: #718096;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        .form-select, .form-radio-group {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 10px;
-         }
-         .custom-dialog .dialog-btn:hover {
-            background: var(--primary-dark);
-         }
-         @media (max-width: 550px) {
-            .custom-dialog {
-               width: 98vw;
-               padding: 18px 10px;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select:hover {
+            border-color: #9ca3af;
+        }
+
+        .form-radio-group {
+            padding: 16px;
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .radio-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .radio-option input[type="radio"] {
+            margin-right: 12px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            flex-direction: column;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease-in-out;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-primary:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        .btn-secondary:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #3b82f6;
+            font-size: 14px;
+            margin-top: 16px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e5e7eb;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+                padding-top: 20px;
             }
-            .custom-dialog h2 {
-               font-size: 1.1rem;
+
+            .dialog {
+                padding: 24px 20px;
+                margin: 0;
+                border-radius: 6px;
+                min-height: auto;
             }
-         }
-      </style>
-   </head>
-   <body>
-      <!-- Loading Overlay -->
-      <div id="loading-overlay" class="loading-overlay">
-         <div class="spinner"></div>
-      </div>
-      <!-- Custom Dialog Overlay (hidden by default)-->
-      <div id="custom-dialog-overlay" class="custom-dialog-overlay hidden">
-         <form id="custom-dialog-form" class="custom-dialog" autocomplete="off">
-            <h2>Select Class & Exam</h2>
-            <div>
-               <label for="class-select">Class</label>
-               <select id="class-select" required>
-                  <!-- Options populated dynamically -->
-               </select>
+
+            .dialog-header {
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+            }
+
+            .dialog-title {
+                font-size: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-select, .form-radio-group {
+                padding: 10px 12px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .radio-option label {
+                font-size: 15px;
+            }
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+
+            .form-actions {
+                margin-top: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+
+            .dialog {
+                padding: 20px 16px;
+            }
+
+            .dialog-title {
+                font-size: 18px;
+            }
+
+            .dialog-subtitle {
+                font-size: 13px;
+            }
+        }
+
+        /* Landscape mobile */
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                align-items: flex-start;
+                padding-top: 10px;
+            }
+
+            .dialog-header {
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .form-actions {
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dialog">
+            <div class="dialog-header">
+                <h1 class="dialog-title">Marks Statement Generator</h1>
+                <p class="dialog-subtitle">Select the required parameters to generate your marks statement</p>
             </div>
-            <div>
-               <label for="exam-select">Exam</label>
-               <select id="exam-select" required>
-                  <!-- Options populated dynamically -->
-               </select>
-            </div>
-            <button type="submit" class="dialog-btn">Generate Marks Statement</button>
-         </form>
-      </div>
-      <div class="container">
-         <div class="header">
-            <div class="school-name">Jamna Vidyapeeth</div>
-            <div class="exam-session"><span id="exam-name"></span> (Session 2025-26)</div>
-            <div class="class-info">Class: <span id="class-name"></span></div>
-         </div>
-         <table id="marks-table">
-            <!-- Table will be dynamically generated -->
-         </table>
-         <div style="text-align: center;">
-            <button class="print-btn" onclick="window.print()">Print Marks Statement</button>
-         </div>
-      </div>
-      <script>
-         // Global arrays
-         let periodicExams = ['PT-1', 'PT-2', 'PT-3', 'PT-4'];
 
-         // DOM elements
-         const loadingOverlay = document.getElementById('loading-overlay');
-         const customDialogOverlay = document.getElementById('custom-dialog-overlay');
-         const classSelect = document.getElementById('class-select');
-         const examSelect = document.getElementById('exam-select');
-         const customDialogForm = document.getElementById('custom-dialog-form');
+            <form id="marksForm">
+                <div class="form-group">
+                    <label for="statementType" class="form-label">Statement Type</label>
+                    <div class="form-radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="consolidated" name="statementType" value="consolidated" required>
+                            <label for="consolidated">Consolidated Statement</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="individual" name="statementType" value="individual" required>
+                            <label for="individual">Mark Statements for all individual subjects</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="statementTypeError">Please select a statement type</div>
+                </div>
 
-         // Marks data (will be loaded from server)
-         let marks = [];
-         
-         let selectedSubjects = [];
-         let selectedExam = '';
-         let selectedClass = '';
-         
-         // Helper function to calculate ranks from an array of values
-         function calculateRanks(values) {
-            const indexedValues = values.map((value, index) => ({ value, index }));
-            indexedValues.sort((a, b) => b.value - a.value);
-            const ranks = new Array(values.length).fill(0);
-            let currentRank = 1;
-            for (let i = 0; i < indexedValues.length; i++) {
-               if (i > 0 && indexedValues[i].value === indexedValues[i-1].value) {
-                  ranks[indexedValues[i].index] = ranks[indexedValues[i-1].index];
-               } else {
-                  ranks[indexedValues[i].index] = currentRank;
-               }
-               if (i === indexedValues.length - 1 || indexedValues[i].value !== indexedValues[i+1].value) {
-                  currentRank++;
-               }
-            }
-            return ranks;
-         }
-         
-         async function generateTable() {
-            document.getElementById('exam-name').textContent = selectedExam;
-            document.getElementById('class-name').textContent = selectedClass;
+                <div class="form-group">
+                    <label for="classSelect" class="form-label">Class</label>
+                    <select id="classSelect" class="form-select" required>
+                        <option value="">Select a class</option>
+                    </select>
+                    <div class="error-message" id="classError">Please select a class</div>
+                </div>
 
-            selectedSubjects = selectedSubjects.filter(s => s !== 'All Subjects (Enthusiasm)');
-            const filteredMarks = marks.filter(mark => 
-               mark.exam === selectedExam && 
-               mark.class === selectedClass && 
-               selectedSubjects.includes(mark.subject) &&
-               mark.subject !== 'All Subjects (Enthusiasm)'
-            );
-            const uniqueStudents = [...new Set(filteredMarks.map(mark => mark.student))].sort();
-            const classNumber = selectedClass.split('-')[0];
-            const sectionNumber = selectedClass.split('-')[1];
-            const sectionDigit = sectionNumber.charAt(1);
-            const table = document.getElementById('marks-table');
-            table.innerHTML = '';
-            const headerRow1 = document.createElement('tr');
-            const headerRow2 = document.createElement('tr');
-            const rollHeader = document.createElement('th');
-            rollHeader.textContent = 'Roll No.';
-            rollHeader.rowSpan = 2;
-            rollHeader.classList.add('roll-col');
-            headerRow1.appendChild(rollHeader);
-            const nameHeader = document.createElement('th');
-            nameHeader.textContent = 'Student Name';
-            nameHeader.rowSpan = 2;
-            nameHeader.classList.add('name-col');
-            headerRow1.appendChild(nameHeader);
-            selectedSubjects.forEach(subject => {
-               const subjectHeader = document.createElement('th');
-               subjectHeader.textContent = subject;
-               subjectHeader.colSpan = 2;
-               subjectHeader.classList.add('subject-header');
-               headerRow1.appendChild(subjectHeader);
-               const mark20Header = document.createElement('th');
-               mark20Header.textContent = '20M';
-               mark20Header.classList.add('mark-col');
-               headerRow2.appendChild(mark20Header);
-               const mark10Header = document.createElement('th');
-               mark10Header.textContent = '10M';
-               mark10Header.classList.add('mark-col');
-               headerRow2.appendChild(mark10Header);
-            });
-            const totalHeader = document.createElement('th');
-            totalHeader.textContent = 'Total';
-            totalHeader.colSpan = 2;
-            headerRow1.appendChild(totalHeader);
-            const aggregateTotal20 = getAggregateMarks(selectedClass, selectedExam);
-            const aggregateTotal10 = (getAggregateMarks(selectedClass, selectedExam))/2;
-            const total20Header = document.createElement('th');
-            total20Header.textContent = aggregateTotal20 + "M";
-            headerRow2.appendChild(total20Header);
-            const total10Header = document.createElement('th');
-            total10Header.textContent = aggregateTotal10 + "M";
-            headerRow2.appendChild(total10Header);
-            const rankHeader = document.createElement('th');
-            rankHeader.textContent = 'Rank';
-            rankHeader.colSpan = 2;
-            headerRow1.appendChild(rankHeader);
-            const rank20Header = document.createElement('th');
-            rank20Header.textContent = '20M';
-            headerRow2.appendChild(rank20Header);
-            const rank10Header = document.createElement('th');
-            rank10Header.textContent = '10M';
-            headerRow2.appendChild(rank10Header);
-            table.appendChild(headerRow1);
-            table.appendChild(headerRow2);
-            const studentTotals20M = [];
-            const studentTotals10M = [];
-            const studentRows = [];
-            uniqueStudents.forEach((student, idx) => {
-               const row = document.createElement('tr');
-               const serialNum = (idx + 1).toString().padStart(2, '0');
-               const rollNo = `${classNumber}${sectionDigit}${serialNum}`;
-               const rollCell = document.createElement('td');
-               rollCell.textContent = rollNo;
-               row.appendChild(rollCell);
-               const nameCell = document.createElement('td');
-               nameCell.textContent = student.toUpperCase();
-               nameCell.style.textAlign = 'left';
-               row.appendChild(nameCell);
-               let total20M = 0;
-               let total10M = 0;
-               selectedSubjects.forEach(subject => {
-                  const studentSubjectMark = filteredMarks.find(mark => 
-                     mark.student === student && mark.subject === subject
-                  );
-                  const mark20Cell = document.createElement('td');
-                  if (studentSubjectMark) {
-                     if (studentSubjectMark.marks === null) {
-                        mark20Cell.textContent = 'Ab';
-                     } else {
-                        const mark20 = Math.ceil(studentSubjectMark.marks);
-                        mark20Cell.textContent = mark20;
-                        total20M += mark20;
-                     }
-                  } else {
-                     mark20Cell.textContent = '-';
-                  }
-                  row.appendChild(mark20Cell);
-                  const mark10Cell = document.createElement('td');
-                  if (studentSubjectMark) {
-                     if (studentSubjectMark.marks === null) {
-                        mark10Cell.textContent = 'Ab';
-                     } else {
-                        const mark10 = Math.ceil(studentSubjectMark.marks / 2);
-                        mark10Cell.textContent = mark10;
-                        total10M += mark10;
-                     }
-                  } else {
-                     mark10Cell.textContent = '-';
-                  }
-                  row.appendChild(mark10Cell);
-               });
-               const total20Cell = document.createElement('td');
-               total20Cell.textContent = total20M;
-               row.appendChild(total20Cell);
-               const total10Cell = document.createElement('td');
-               total10Cell.textContent = total10M;
-               row.appendChild(total10Cell);
-               const rank20Cell = document.createElement('td');
-               rank20Cell.classList.add('rank-20m-cell');
-               row.appendChild(rank20Cell);
-               const rank10Cell = document.createElement('td');
-               rank10Cell.classList.add('rank-10m-cell');
-               row.appendChild(rank10Cell);
-               studentRows.push(row);
-               studentTotals20M.push(total20M);
-               studentTotals10M.push(total10M);
-               table.appendChild(row);
-            });
-            const ranks20M = calculateRanks(studentTotals20M);
-            const ranks10M = calculateRanks(studentTotals10M);
-            studentRows.forEach((row, idx) => {
-               const rank20Cell = row.querySelector('.rank-20m-cell');
-               rank20Cell.textContent = ranks20M[idx];
-               if(ranks20M[idx] === 1 || ranks20M[idx] === 2 || ranks20M[idx] === 3) {
-                  rank20Cell.classList.add('highlight-rank');
-               }
-               const rank10Cell = row.querySelector('.rank-10m-cell');
-               rank10Cell.textContent = ranks10M[idx];
-               if(ranks10M[idx] === 1 || ranks10M[idx] === 2 || ranks10M[idx] === 3) {
-                  rank10Cell.classList.add('highlight-rank');
-               }
-            });
-         }
-         
-         // Show/hide loading overlay
-         function showLoading() {
-            loadingOverlay.classList.remove('hidden');
-         }
-         function hideLoading() {
-            loadingOverlay.classList.add('hidden');
-         }
-         
-         // Show Custom Dialog
-         function showCustomDialog() {
-            // Populate classSelect
-            classSelect.innerHTML = '';
-            classes.forEach(cls => {
-               const opt = document.createElement('option');
-               opt.value = cls;
-               opt.textContent = cls;
-               classSelect.appendChild(opt);
-            });
-            // Populate examSelect
-            examSelect.innerHTML = '';
-            periodicExams.forEach(exm => {
-               const opt = document.createElement('option');
-               opt.value = exm;
-               opt.textContent = exm;
-               examSelect.appendChild(opt);
-            });
-            customDialogOverlay.classList.remove('hidden');
-         }
-         function hideCustomDialog() {
-            customDialogOverlay.classList.add('hidden');
-         }
+                <div class="form-group">
+                    <label for="examSelect" class="form-label">Exam</label>
+                    <select id="examSelect" class="form-select" required>
+                        <option value="">Select an exam</option>
+                    </select>
+                    <div class="error-message" id="examError">Please select an exam</div>
+                </div>
 
-         // Load marks for selected class and exam
-         async function loadMarks() {
-            // Get the "class" parameter from the URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const classValue = urlParams.get("class");
-            const exam = urlParams.get("exam");
-            selectedExam = exam;
-            selectedClass = classValue;
-            // If class & exam are present and not falsy
-            if (classValue && exam) {
-               selectedSubjects = getSubjectsForClass(selectedClass);
-               try {
-                  const results = await selectData(
-                     "marks_view", false, "*", ["class", "exam"], [classValue, exam], "student", "asc"
-                  );
-                  marks = results;
-                  return true;
-               } catch (error) {
-                  console.error("Failed to load marks:", error);
-                  return null;
-               }
+                <div class="loading" id="loading">
+                    <span class="spinner"></span>
+                    Generating marks statement...
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary" id="generateBtn">Generate Statement</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset Form</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global arrays
+        let classes = ['1-A1', '1-A2', '1-A3', '2-A1', '2-A2', '2-A3', '3-A1', '3-A2', '3-A3', '3-A4', '4-A1', '4-A2', '4-A3', '4-A4', '5-A1', '5-A2', '5-A3', '5-A4', '6-A1', '6-A2', '6-A3', '6-A4', '7-A1', '7-A2', '7-A3', '7-A4', '8-A1', '8-A2', '8-A3', '9-A1', '9-A2', '9-A3', '10-A1', '10-A2', '10-A3', '11-SCI', '11-COM', '11-HUM', '12-SCI', '12-COM', '12-HUM'];
+        
+        let periodicExams = ['PT-1', 'PT-2', 'PT-3', 'PT-4'];
+
+        // DOM elements
+        const classSelect = document.getElementById('classSelect');
+        const examSelect = document.getElementById('examSelect');
+        const form = document.getElementById('marksForm');
+        const generateBtn = document.getElementById('generateBtn');
+        const loading = document.getElementById('loading');
+
+        // Populate dropdowns
+        function populateDropdowns() {
+            // Populate classes
+            classes.forEach(className => {
+                const option = document.createElement('option');
+                option.value = className;
+                option.textContent = `Class ${className}`;
+                classSelect.appendChild(option);
+            });
+
+            // Populate exams
+            periodicExams.forEach(exam => {
+                const option = document.createElement('option');
+                option.value = exam;
+                option.textContent = exam;
+                examSelect.appendChild(option);
+            });
+        }
+
+        // Validation functions
+        function validateForm() {
+            let isValid = true;
+            
+            // Validate statement type selection
+            const statementType = document.querySelector('input[name="statementType"]:checked');
+            if (!statementType) {
+                showError('statementTypeError');
+                isValid = false;
             } else {
-               // Show custom dialog instead of redirect
-               showCustomDialog();
-               return false;
+                hideError('statementTypeError');
             }
-         }
 
-         // Listen for dialog form submit
-         customDialogForm.addEventListener('submit', async function(e) {
+            // Validate class selection
+            if (!classSelect.value) {
+                showError('classError');
+                isValid = false;
+            } else {
+                hideError('classError');
+            }
+
+            // Validate exam selection
+            if (!examSelect.value) {
+                showError('examError');
+                isValid = false;
+            } else {
+                hideError('examError');
+            }
+
+            return isValid;
+        }
+
+        function showError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.style.display = 'block';
+            
+            // Add error styling to the form control
+            const formControl = errorElement.previousElementSibling;
+            if (formControl.classList.contains('form-select')) {
+                formControl.style.borderColor = '#dc2626';
+            } else if (formControl.classList.contains('form-radio-group')) {
+                formControl.style.borderColor = '#dc2626';
+            }
+        }
+
+        function hideError(errorId) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.style.display = 'none';
+            
+            // Remove error styling from the form control
+            const formControl = errorElement.previousElementSibling;
+            if (formControl.classList.contains('form-select')) {
+                formControl.style.borderColor = '#d1d5db';
+            } else if (formControl.classList.contains('form-radio-group')) {
+                formControl.style.borderColor = '#d1d5db';
+            }
+        }
+
+        // Form submission
+        function handleSubmit(e) {
             e.preventDefault();
-            selectedClass = classSelect.value;
-            selectedExam = examSelect.value;
-            selectedSubjects = getSubjectsForClass(selectedClass);
-            hideCustomDialog();
-            showLoading();
-            // Simulate URL param availability for downstream code
-            // (Do NOT update window.location)
-            try {
-               // Load marks
-               const results = await selectData(
-                  "marks_view", false, "*", ["class", "exam"], [selectedClass, selectedExam], "student", "asc"
-               );
-               marks = results;
-               generateTable();
-            } catch (err) {
-               alert("Could not load marks for the selected class/exam.");
-            } finally {
-               hideLoading();
+            
+            if (!validateForm()) {
+                return;
             }
-         });
 
-         // When window loads, check auth and load marks or show dialog
-         window.addEventListener('load', async () => {
-            showLoading();
-            try {
-               const isAuthenticated = await checkAuth();
-               if (isAuthenticated) {
-                  const loaded = await loadMarks();
-                  if (loaded) {
-                     generateTable();
-                  }
-                  hideLoading();
-               } else {
-                  window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
-               }
-            } catch (error) {
-               console.error('Auth check error:', error);
+            const statementType = document.querySelector('input[name="statementType"]:checked').value;
+            const classValue = classSelect.value;
+            const examValue = examSelect.value;
+
+            // Show loading state
+            loading.style.display = 'block';
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+
+            // Construct URL based on statement type
+            let baseUrl;
+            if (statementType === 'consolidated') {
+                baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
+            } else {
+                baseUrl = 'https://myjvp.in/marks-management/subjectwise-pt-marks.html';
             }
-         });
-      </script>
-   </body>
+
+            const params = new URLSearchParams({
+                class: classValue,
+                exam: examValue
+            });
+            const redirectUrl = `${baseUrl}?${params.toString()}`;
+
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1000);
+        }
+
+        // Reset form
+        function resetForm() {
+            // Reset radio buttons
+            const radioButtons = document.querySelectorAll('input[name="statementType"]');
+            radioButtons.forEach(radio => radio.checked = false);
+            
+            // Reset select elements
+            classSelect.value = '';
+            examSelect.value = '';
+            
+            // Hide all errors
+            hideError('statementTypeError');
+            hideError('classError');
+            hideError('examError');
+            
+            // Reset button state
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate Statement';
+            loading.style.display = 'none';
+        }
+
+        // Event listeners
+        form.addEventListener('submit', handleSubmit);
+
+        // Real-time validation
+        document.querySelectorAll('input[name="statementType"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                if (radio.checked) {
+                    hideError('statementTypeError');
+                }
+            });
+        });
+
+        classSelect.addEventListener('change', () => {
+            if (classSelect.value) {
+                hideError('classError');
+            }
+        });
+
+        examSelect.addEventListener('change', () => {
+            if (examSelect.value) {
+                hideError('examError');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            populateDropdowns();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.target.tagName !== 'BUTTON') {
+                e.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
 </html>
