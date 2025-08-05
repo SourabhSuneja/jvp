@@ -493,8 +493,10 @@
              selectedExam = exam;
              selectedClass = classValue;
 
-          // Fetch subject list according to class
-          selectedSubjects = getSubjectsForClass(selectedClass);
+             // Fetch subject list according to class
+             selectedSubjects = getSubjectsForClass(selectedClass);
+             // Remove All Subjects (Enthusiasm) from the selectedSubjects array
+             selectedSubjects = selectedSubjects.filter(s => s !== 'All Subjects (Enthusiasm)');
              
              // If class & exam are present and not falsy
              if (classValue && exam) {
