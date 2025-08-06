@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Temporarily Restricted</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            animation: fadeIn 0.5s ease-in-out;
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .overlay::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            position: relative;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .details {
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-size: 0.95rem;
+            color: #718096;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #3182ce;
+        }
+
+        .contact-info {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-top: 1rem;
+        }
+
+        .logo {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo::before {
+            content: '🏫';
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .message {
+                font-size: 1rem;
+            }
+
+            .icon {
+                width: 70px;
+                height: 70px;
+            }
+
+            .icon svg {
+                width: 35px;
+                height: 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 1.5rem 1rem;
+            }
+
+            .title {
+                font-size: 1.3rem;
+            }
+
+            .message {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Prevent scrolling on body when overlay is active */
+        body.overlay-active {
+            overflow: hidden;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body class="overlay-active">
+    <div class="overlay">
+        <div class="content">
+            <div class="logo"></div>
+            
+            <div class="icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10A2,2 0 0,1 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
+                </svg>
+            </div>
+            
+            <h1 class="title">Access Temporarily Restricted</h1>
+            
+            <p class="message">
+                This application has been temporarily disabled by the school administration due to internal reasons.
+            </p>
+            
+            <div class="details">
+                <strong>What happened?</strong><br>
+                Access to this application has been suspended while we address internal administrative matters. This is a temporary measure to ensure system integrity and compliance with school policies.
+            </div>
+            
+            <div class="contact-info">
+                For questions or concerns, please contact your school's IT department or administration office.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
