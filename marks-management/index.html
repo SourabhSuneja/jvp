@@ -720,8 +720,6 @@
       <script>
          // Allowed teacher IDs
          const allowedIds = ['e37fd3ed-d9b7-44f4-90e1-96fadac54684'];
-         // Remove restriction iframe if teacher ID is allowed
-         allowedIds.includes(window.userId) && document.querySelector('iframe')?.remove();
          
          // Data structures         
          const students = {};
@@ -1240,7 +1238,10 @@
          
          if (isAuthenticated) {
             // User is already logged in
-         
+
+            // Remove restriction iframe if teacher ID is allowed
+            allowedIds.includes(window.userId) && document.querySelector('iframe')?.remove();
+            
             // Fetch teacher's name
             const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
             if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
