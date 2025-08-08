@@ -35,6 +35,15 @@ DROP FUNCTION IF EXISTS secure_join_tables(
     text[],
     text
 );
+DROP FUNCTION IF EXISTS restricted_secure_join_tables(
+    text,
+    text,
+    text,
+    text,
+    text[],
+    text[],
+    text
+);
 DROP FUNCTION IF EXISTS update_custom_exam(TEXT, TEXT, INTEGER, TEXT, TEXT);
 DROP FUNCTION IF EXISTS get_students_sorted();
 
@@ -1014,6 +1023,202 @@ BEGIN
             WHERE %I.access_token = %L::uuid
         ) t
     ', column_list, table1, table2, table1, match_column1, table2, match_column2, table1, access_token);
+
+    EXECUTE query_text INTO result_json;
+
+    -- Return empty array instead of null if no results found
+    RETURN COALESCE(result_json, '[]'::json);
+END;
+$$;
+
+-- Function similar to secure_join_tables but with additional capabilities to allow only viewing certain subjects, exams and subjects
+CREATE OR REPLACE FUNCTION restricted_secure_join_tables(
+    table1 text,
+    table2 text,
+    match_column1 text,
+    match_column2 text,
+    columns_table1 text[],
+    columns_table2 text[],
+    access_token text
+) RETURNS json
+SECURITY DEFINER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    query_text text;
+    access_token_column_exists boolean;
+    column_list text := '';
+    result_json json;
+    where_conditions text := '';
+    -- Whitelist definitions
+    allowed_tables text[] := ARRAY['students', 'marks'];
+    allowed_columns_table1 text[] := ARRAY['name', 'class'];
+    allowed_columns_table2 text[] := ARRAY['subject', 'exam', 'marks'];
+    allowed_match_columns text[] := ARRAY['id', 'student_id'];
+    column_valid boolean;
+    regex_pattern text := '^[a-zA-Z0-9_]+$'; -- Only alphanumeric and underscore
+    
+    -- New filtering variables
+    allowed_subjects text[] := ARRAY['Computer', 'Data Science']::text[]; -- Can be populated with allowed subject values
+    allowed_exams text[] := ARRAY[]::text[]; -- Can be populated with allowed exam values
+    allowed_classes text[] := ARRAY['6-A1', '6-A2', '6-A3', '6-A4', '7-A1', '7-A2', '7-A3', '7-A4', '8-A1', '8-A2', '8-A3', '9-A1', '9-A2', '9-A3', '10-A1', '10-A2', '10-A3']::text[]; -- Can be populated with allowed class values
+    disallowed_subjects text[] := ARRAY[]::text[]; -- Can be populated with disallowed subject values
+    disallowed_exams text[] := ARRAY[]::text[]; -- Can be populated with disallowed exam values
+    disallowed_classes text[] := ARRAY[]::text[]; -- Can be populated with disallowed class values
+BEGIN
+    -- Validate table names format before checking whitelist
+    IF table1 !~ regex_pattern OR table2 !~ regex_pattern THEN
+        RAISE EXCEPTION 'Invalid table name format. Only alphanumeric characters and underscores allowed.';
+    END IF;
+    
+    -- Check if tables are in the whitelist (exact match required)
+    IF NOT (table1 = ANY(allowed_tables) AND table2 = ANY(allowed_tables)) THEN
+        RAISE EXCEPTION 'Invalid table names. Only "students" and "marks" are allowed';
+    END IF;
+    
+    -- Validate match columns format and against whitelist
+    IF match_column1 !~ regex_pattern OR match_column2 !~ regex_pattern THEN
+        RAISE EXCEPTION 'Invalid match column format. Only alphanumeric characters and underscores allowed.';
+    END IF;
+    
+    IF NOT (match_column1 = ANY(allowed_match_columns) AND match_column2 = ANY(allowed_match_columns)) THEN
+        RAISE EXCEPTION 'Invalid match columns. Allowed columns are: "id", "student_id", "mark_id"';
+    END IF;
+    
+    -- Check if columns for table1 are valid format and in the whitelist
+    IF array_length(columns_table1, 1) > 0 THEN
+        FOR i IN 1..array_length(columns_table1, 1) LOOP
+            -- Validate format
+            IF columns_table1[i] !~ regex_pattern THEN
+                RAISE EXCEPTION 'Invalid column name format "%" for table1. Only alphanumeric characters and underscores allowed.', columns_table1[i];
+            END IF;
+            
+            -- Check against whitelist
+            column_valid := false;
+            FOR j IN 1..array_length(allowed_columns_table1, 1) LOOP
+                IF columns_table1[i] = allowed_columns_table1[j] THEN
+                    column_valid := true;
+                    EXIT;
+                END IF;
+            END LOOP;
+            
+            IF NOT column_valid THEN
+                RAISE EXCEPTION 'Invalid column name "%" for table1. Allowed columns are: "name", "class"', columns_table1[i];
+            END IF;
+        END LOOP;
+    END IF;
+    
+    -- Check if columns for table2 are valid format and in the whitelist
+    IF array_length(columns_table2, 1) > 0 THEN
+        FOR i IN 1..array_length(columns_table2, 1) LOOP
+            -- Validate format
+            IF columns_table2[i] !~ regex_pattern THEN
+                RAISE EXCEPTION 'Invalid column name format "%" for table2. Only alphanumeric characters and underscores allowed.', columns_table2[i];
+            END IF;
+            
+            -- Check against whitelist
+            column_valid := false;
+            FOR j IN 1..array_length(allowed_columns_table2, 1) LOOP
+                IF columns_table2[i] = allowed_columns_table2[j] THEN
+                    column_valid := true;
+                    EXIT;
+                END IF;
+            END LOOP;
+            
+            IF NOT column_valid THEN
+                RAISE EXCEPTION 'Invalid column name "%" for table2. Allowed columns are: "subject", "exam", "marks"', columns_table2[i];
+            END IF;
+        END LOOP;
+    END IF;
+
+    -- Check if access_token column exists in table1
+    EXECUTE format('
+        SELECT EXISTS (
+            SELECT 1
+            FROM information_schema.columns
+            WHERE table_name = %L AND column_name = %L
+        )', table1, 'access_token')
+    INTO access_token_column_exists;
+
+    -- Validate conditions for access_token
+    IF NOT access_token_column_exists THEN
+        RAISE EXCEPTION 'Access token column does not exist in %', table1;
+    END IF;
+
+    IF access_token IS NULL OR access_token = '' THEN
+        RAISE EXCEPTION 'Access token cannot be null or empty';
+    END IF;
+
+    -- Validate UUID format of access_token
+    BEGIN
+        -- Attempt to cast access_token to UUID
+        PERFORM access_token::uuid;
+    EXCEPTION
+        WHEN others THEN
+            RAISE EXCEPTION 'Invalid UUID format for access_token: %', access_token;
+    END;
+
+    -- Build the column list for the result set
+    -- First add columns from table1
+    FOR i IN 1..array_length(columns_table1, 1) LOOP
+        IF i > 1 THEN
+            column_list := column_list || ', ';
+        END IF;
+        column_list := column_list || format('%I.%I as %I', table1, columns_table1[i], columns_table1[i]);
+    END LOOP;
+
+    -- Then add columns from table2
+    IF array_length(columns_table1, 1) > 0 AND array_length(columns_table2, 1) > 0 THEN
+        column_list := column_list || ', ';
+    END IF;
+
+    FOR i IN 1..array_length(columns_table2, 1) LOOP
+        IF i > 1 THEN
+            column_list := column_list || ', ';
+        END IF;
+        column_list := column_list || format('%I.%I as %I', table2, columns_table2[i], columns_table2[i]);
+    END LOOP;
+
+    -- Build additional WHERE conditions for filtering
+    where_conditions := format('WHERE %I.access_token = %L::uuid', table1, access_token);
+    
+    -- Add subject filtering conditions
+    IF array_length(allowed_subjects, 1) > 0 THEN
+        where_conditions := where_conditions || format(' AND %I.subject = ANY(%L::text[])', table2, allowed_subjects);
+    END IF;
+    
+    IF array_length(disallowed_subjects, 1) > 0 THEN
+        where_conditions := where_conditions || format(' AND NOT (%I.subject = ANY(%L::text[]))', table2, disallowed_subjects);
+    END IF;
+    
+    -- Add exam filtering conditions
+    IF array_length(allowed_exams, 1) > 0 THEN
+        where_conditions := where_conditions || format(' AND %I.exam = ANY(%L::text[])', table2, allowed_exams);
+    END IF;
+    
+    IF array_length(disallowed_exams, 1) > 0 THEN
+        where_conditions := where_conditions || format(' AND NOT (%I.exam = ANY(%L::text[]))', table2, disallowed_exams);
+    END IF;
+    
+    -- Add class filtering conditions
+    IF array_length(allowed_classes, 1) > 0 THEN
+        where_conditions := where_conditions || format(' AND %I.class = ANY(%L::text[])', table1, allowed_classes);
+    END IF;
+    
+    IF array_length(disallowed_classes, 1) > 0 THEN
+        where_conditions := where_conditions || format(' AND NOT (%I.class = ANY(%L::text[]))', table1, disallowed_classes);
+    END IF;
+
+    -- Construct and execute the query with to_json to materialize the results
+    query_text := format('
+        SELECT json_agg(row_to_json(t))
+        FROM (
+            SELECT %s
+            FROM %I
+            JOIN %I ON %I.%I = %I.%I
+            %s
+        ) t
+    ', column_list, table1, table2, table1, match_column1, table2, match_column2, where_conditions);
 
     EXECUTE query_text INTO result_json;
 
