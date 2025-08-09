@@ -191,3 +191,20 @@ function getAggregateMarks(classValue, examName) {
     return null;
   }
 }
+
+// Function to log user activity on server
+function logActivity(visitor, action, extra = null) {
+    // Run insert in the background, without blocking main code
+    (async () => {
+        try {
+            const data = {
+                visitor,
+                action,
+                extra: extra ? extra : null
+            };
+            await insertData("activity_logs", data);
+        } catch (error) {
+            console.error("Error logging activity:", error.message);
+        }
+    })();
+}
