@@ -75,12 +75,19 @@ CREATE TABLE activity_logs (
 -- Enable Row Level Security
 ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
 
--- Create an insert policy for everyone (authenticated or not)
-CREATE POLICY "Allow insert for all"
-ON activity_logs
-FOR INSERT
-TO authenticated, anon
+-- Create policy allowing anyone to insert logs
+CREATE POLICY "Allow public insert on activity_logs" 
+ON activity_logs 
+FOR INSERT 
+TO public 
 WITH CHECK (true);
+
+-- Create policy allowing anyone to read logs
+CREATE POLICY "Allow public select on activity_logs" 
+ON activity_logs 
+FOR SELECT 
+TO public 
+USING (true);
 
 
 -- Create admins table
