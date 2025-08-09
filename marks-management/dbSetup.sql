@@ -59,9 +59,30 @@ DROP TABLE IF EXISTS class_teachers;
 DROP TABLE IF EXISTS teachers;
 DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS admins;
-
+DROP TABLE IF EXISTS activity_logs;
 
 -- Start creating new objects
+
+-- Create activity_logs table to log user activities
+CREATE TABLE activity_logs (
+    id BIGSERIAL PRIMARY KEY,
+    visitor TEXT NOT NULL,
+    action TEXT NOT NULL,
+    extra JSONB DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT now()
+);
+
+-- Enable Row Level Security
+ALTER TABLE activity_logs ENABLE ROW LEVEL SECURITY;
+
+-- Create an insert policy for everyone (authenticated or not)
+CREATE POLICY "Allow insert for all"
+ON activity_logs
+FOR INSERT
+TO authenticated, anon
+WITH CHECK (true);
+
+
 -- Create admins table
 CREATE TABLE admins (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
