@@ -732,6 +732,9 @@
          
          // Hold maximum marks for the currently selected exam for validation checks later on
          let maxMarksForSelectedExam = Infinity;
+
+         // Hold teacher info
+         let teacherName = {};
          
          // DOM Elements
          const loginSection = document.getElementById('login-section');
@@ -1173,7 +1176,7 @@
          window.userId = data.user.id;
          
          // Fetch teacher's name
-         const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+         teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
          if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
             signedInUsername.innerText = teacherName.name;
             userInfo.style.display = "block";
@@ -1243,7 +1246,7 @@
             allowedIds.includes(window.userId) && document.querySelector('iframe')?.remove();
             
             // Fetch teacher's name
-            const teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
+            teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
             if (teacherName && typeof teacherName === 'object' && teacherName.name !== undefined) {
                signedInUsername.innerText = teacherName.name;
                userInfo.style.display = "block";
@@ -1722,8 +1725,8 @@
                 });
                 showFeedback('Marks saved successfully!', 'success');
                 
-                // Update statistics
-                //updateStatistics();
+                // Log this action in activity_logs on server
+                logActivity(teacherName.name, 'MARKS_SAVE', {'exam': selectedExam, 'class': selectedClass, 'subject': selectedSubject});
             } else {
                 await showDialog({
                     title: 'Error',
