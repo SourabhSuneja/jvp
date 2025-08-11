@@ -538,7 +538,7 @@
       </style>
    </head>
    <body>
-      <iframe src="https://myjvp.in/access-blocked.html" style="position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;z-index:9999999;" allowfullscreen></iframe>
+      <!-- <iframe src="https://myjvp.in/access-blocked.html" style="position:fixed;top:0;left:0;width:100vw;height:100vh;border:none;z-index:9999999;" allowfullscreen></iframe> -->
       <div id="loading-overlay" class="loading-overlay hidden">
          <div class="spinner"></div>
       </div>
@@ -1243,7 +1243,7 @@
             // User is already logged in
 
             // Remove restriction iframe if teacher ID is allowed
-            allowedIds.includes(window.userId) && document.querySelector('iframe')?.remove();
+            //allowedIds.includes(window.userId) && document.querySelector('iframe')?.remove();
             
             // Fetch teacher's name
             teacherName = await selectData('teachers', true, 'name', ['id'], [window.userId]);
