@@ -1726,7 +1726,7 @@
                 showFeedback('Marks saved successfully!', 'success');
                 
                 // Log this action in activity_logs on server
-                logActivity(teacherName.name, 'MARKS_SAVE', {'exam': selectedExam, 'class': selectedClass, 'subject': selectedSubject});
+                logActivity(teacherName.name.toUpperCase(), 'MARKS_SAVE', {'exam': selectedExam, 'class': selectedClass, 'subject': selectedSubject});
             } else {
                 await showDialog({
                     title: 'Error',
