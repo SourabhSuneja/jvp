@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JVP Roll Number Assignment</title>
+    <base href="https://myjvp.in/marks-management/">
+       <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            max-height: 99999999px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .class-selector {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .class-selector h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .class-select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .class-select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
+        }
+        
+        .students-section {
+            display: none;
+        }
+        
+        .students-section.active {
+            display: block;
+        }
+        
+        .students-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+        }
+        
+        .class-badge {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .student-count {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        
+        .students-grid {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f0f0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .student-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(79, 172, 254, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .student-card.moving {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(79, 172, 254, 0.3);
+            z-index: 10;
+            border: 2px solid #4facfe;
+        }
+        
+        .student-card.moving::before {
+            left: 100%;
+        }
+        
+        .student-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .student-card.moving:hover {
+            transform: scale(1.02) translateY(-2px);
+        }
+        
+        .student-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .student-position {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .student-card.moving .student-position {
+            transform: rotate(360deg);
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        }
+        
+        .student-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            transition: color 0.3s ease;
+        }
+        
+        .student-card.moving .student-name {
+            color: #4facfe;
+        }
+        
+        .student-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .reorder-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .reorder-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+        }
+        
+        .reorder-btn:hover::after {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .reorder-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+        }
+        
+        .reorder-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .reorder-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .reorder-btn:disabled::after {
+            display: none;
+        }
+        
+        .btn-up {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+        
+        .btn-down {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
+            color: white;
+        }
+        
+        .save-button {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(86, 171, 47, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(86, 171, 47, 0.4);
+        }
+        
+        .save-button:active {
+            transform: translateY(0);
+        }
+        
+        .save-button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .save-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .no-students {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            padding: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            width: 90%;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .loading-subtext {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        /* Animation keyframes */
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0.7;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0.7;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .student-card.slide-up {
+            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .student-card.slide-down {
+            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .student-card {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .student-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Student Management System</h1>
+            <p>Manage Student List Order</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="class-selector">
+                <h2>Select Class</h2>
+                <div class="select-wrapper">
+                    <select id="classSelect" class="class-select">
+                        <option value="">Choose a class...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="studentsSection" class="students-section">
+                <h2>
+                    Students in Class<br>
+                    <span id="selectedClass" class="class-badge"></span>
+                </h2>
+                <div id="studentCount" class="student-count"></div>
+                <div id="studentsGrid" class="students-grid"></div>
+                <div id="noStudents" class="no-students" style="display: none;">
+                    No students found in this class.
+                </div>
+                <div class="save-section">
+                    <button id="saveButton" class="save-button" onclick="handleSave()">
+                        Save Changes
+                    </button>
+                    <p style="margin-top: 10px; color: #7f8c8d; font-size: 0.9rem;">
+                        Save the new order to the system
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Processing...</div>
+            <div class="loading-subtext">Please wait a moment.</div>
+        </div>
+    </div>
+
+    <script>
+        // Global data
+        let students = [];
+
+        let savedOrder = {};
+        let currentClassStudents = [];
+        let selectedClass = '';
+
+        // Initialize the page
+        function init() {
+            populateClassSelect();
+            setupEventListeners();
+        }
+
+        // Function to generate unique roll numbers
+function generateUniqueRollNumber(className, rollNumber) {
+    // Map special sections
+    const sectionMap = {
+        "SCI": "A1",
+        "COM": "A2",
+        "HUM": "A3"
+    };
+
+    // Replace special section names with their mappings if needed
+    for (const key in sectionMap) {
+        if (className.includes(key)) {
+            className = className.replace(key, sectionMap[key]);
+        }
+    }
+
+    // Split class into number and section (e.g., "6" and "A2")
+    const [classNum, section] = className.split("-");
+    
+    // Extract section number from "A2"
+    const sectionNum = section.replace("A", "");
+
+    // Pad roll number with leading zero if single digit
+    const paddedRoll = rollNumber < 10 ? "0" + rollNumber : rollNumber.toString();
+
+    // Return the concatenated unique roll number
+    return `${classNum}${sectionNum}${paddedRoll}`;
+}
+
+        // Populate the class select dropdown
+        function populateClassSelect() {
+            const classSelect = document.getElementById('classSelect');
+            classes.forEach(cls => {
+                const option = document.createElement('option');
+                option.value = cls;
+                option.textContent = cls;
+                classSelect.appendChild(option);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            const classSelect = document.getElementById('classSelect');
+            classSelect.addEventListener('change', handleClassChange);
+        }
+
+        // Handle class selection change
+        function handleClassChange(event) {
+            selectedClass = event.target.value;
+            if (selectedClass) {
+                loadStudentsForClass(selectedClass);
+                document.getElementById('studentsSection').classList.add('active');
+                document.getElementById('selectedClass').textContent = selectedClass;
+            } else {
+                document.getElementById('studentsSection').classList.remove('active');
+                currentClassStudents = [];
+            }
+        }
+
+        // Load students for selected class
+        function loadStudentsForClass(className) {
+            // Filter students by class
+            let classStudents = students.filter(student => student.class === className);
+            
+            // Sort by roll_no if available, otherwise keep natural order
+            if (classStudents.length > 0 && classStudents[0].hasOwnProperty('roll_no')) {
+                classStudents.sort((a, b) => a.roll_no - b.roll_no);
+            }
+            
+            currentClassStudents = [...classStudents];
+            displayStudents();
+        }
+
+        // Display students in the UI
+        function displayStudents() {
+            const studentsGrid = document.getElementById('studentsGrid');
+            const studentCount = document.getElementById('studentCount');
+            const noStudents = document.getElementById('noStudents');
+            
+            if (currentClassStudents.length === 0) {
+                studentsGrid.style.display = 'none';
+                noStudents.style.display = 'block';
+                studentCount.textContent = '';
+                return;
+            }
+            
+            studentsGrid.style.display = 'block';
+            noStudents.style.display = 'none';
+            studentCount.textContent = `${currentClassStudents.length} students in this class`;
+            
+            studentsGrid.innerHTML = '';
+            
+            currentClassStudents.forEach((student, index) => {
+                const studentCard = createStudentCard(student, index);
+                studentsGrid.appendChild(studentCard);
+            });
+        }
+
+        // Create a student card element
+        function createStudentCard(student, index) {
+            const card = document.createElement('div');
+            card.className = 'student-card';
+            card.dataset.studentId = student.id;
+            
+            card.innerHTML = `
+                <div class="student-info">
+                    <div class="student-position">${index + 1}</div>
+                    <div class="student-name">${student.name}</div>
+                </div>
+                <div class="student-controls">
+                    <button class="reorder-btn btn-up" onclick="moveStudent(${index}, 'up')" ${index === 0 ? 'disabled' : ''}>
+                        ▲
+                    </button>
+                    <button class="reorder-btn btn-down" onclick="moveStudent(${index}, 'down')" ${index === currentClassStudents.length - 1 ? 'disabled' : ''}>
+                        ▼
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Move student up or down with animation
+        function moveStudent(currentIndex, direction) {
+            const cards = document.querySelectorAll('.student-card');
+            const currentCard = cards[currentIndex];
+            let targetIndex;
+            
+            if (direction === 'up' && currentIndex > 0) {
+                targetIndex = currentIndex - 1;
+                // Swap with previous student
+                [currentClassStudents[currentIndex], currentClassStudents[currentIndex - 1]] = 
+                [currentClassStudents[currentIndex - 1], currentClassStudents[currentIndex]];
+            } else if (direction === 'down' && currentIndex < currentClassStudents.length - 1) {
+                targetIndex = currentIndex + 1;
+                // Swap with next student
+                [currentClassStudents[currentIndex], currentClassStudents[currentIndex + 1]] = 
+                [currentClassStudents[currentIndex + 1], currentClassStudents[currentIndex]];
+            } else {
+                return; // No valid move
+            }
+
+            // Add animation classes
+            const targetCard = cards[targetIndex];
+            
+            // Disable all buttons temporarily to prevent multiple clicks
+            const allButtons = document.querySelectorAll('.reorder-btn');
+            allButtons.forEach(btn => btn.disabled = true);
+            
+            // Add moving effect to both cards
+            currentCard.classList.add('moving');
+            targetCard.classList.add('moving');
+            
+            // Add slide animations
+            if (direction === 'up') {
+                currentCard.classList.add('slide-up');
+                targetCard.classList.add('slide-down');
+            } else {
+                currentCard.classList.add('slide-down');
+                targetCard.classList.add('slide-up');
+            }
+            
+            // Remove animation classes and refresh display after animation
+            setTimeout(() => {
+                // Clear all animation classes
+                const allCards = document.querySelectorAll('.student-card');
+                allCards.forEach(card => {
+                    card.classList.remove('moving', 'slide-up', 'slide-down');
+                });
+                
+                // Refresh the display with new order
+                displayStudents();
+                
+                // Re-enable buttons
+                setTimeout(() => {
+                    const newButtons = document.querySelectorAll('.reorder-btn');
+                    newButtons.forEach(btn => {
+                        if (!btn.hasAttribute('disabled') || btn.getAttribute('disabled') === 'false') {
+                            btn.disabled = false;
+                        }
+                    });
+                }, 100);
+            }, 400); // Match the animation duration
+        }
+
+        // Handle save button click
+        async function handleSave() {
+            if (!selectedClass || currentClassStudents.length === 0) {
+                return;
+            }
+            
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+            
+            // Simulate save operation with timeout
+            setTimeout(async () => {
+                // Create the order object for this class
+                const classOrder = {};
+                currentClassStudents.forEach((student, index) => {
+                    classOrder[student.id] = generateUniqueRollNumber(selectedClass, index + 1);
+                });
+                
+                // Update the global savedOrder
+                savedOrder[selectedClass] = classOrder;
+
+                // Sync changes to Supabase server
+                const result = await invokeFunction('update_student_roll_numbers', {
+                 roll_data: savedOrder
+             }, true);
+             
+             console.log('Result', result);
+             if (!result) {
+                 console.error('Function call failed entirely.');
+                 alert('Update failed. Please try again or check function permissions.');
+                 return false;
+             }
+                
+                // Hide loading overlay
+                loadingOverlay.classList.remove('active');
+                
+                // Show success message (you can enhance this with a proper toast notification)
+                alert(`Successfully saved the order for class ${selectedClass}!`);
+                
+                // Log the saved order for debugging
+                console.log('Saved Order:', savedOrder);
+                
+            }, 0); 
+        }
+
+
+         window.onload = async function() {
+             try {
+                 loadingOverlay.classList.add('active');
+                 students = await selectData(
+                     'students',
+                     false,
+                     'id, name, class',
+                     [],
+                     [],
+                     'name',
+                     'asc'
+                 );
+                 console.log('Students data loaded:', students);
+                 init();
+                 loadingOverlay.classList.remove('active');
+             } catch (error) {
+                 console.error('Error loading students:', error);
+                 loadingOverlay.classList.remove('active');
+             }
+         };
+
+    </script>
+</body>
+</html>
