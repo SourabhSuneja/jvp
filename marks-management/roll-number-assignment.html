@@ -17,49 +17,95 @@
          max-height: 99999999px;
          }
          body {
-         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+         background: #f8fafc;
          min-height: 100vh;
-         padding: 20px;
+         color: #334155;
+         line-height: 1.6;
          }
          .container {
          max-width: 1200px;
          margin: 0 auto;
-         background: rgba(255, 255, 255, 0.95);
-         border-radius: 20px;
-         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-         overflow: hidden;
-         backdrop-filter: blur(10px);
+         background: white;
+         min-height: 100vh;
+         box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
          }
          .header {
-         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+         background: #1e293b;
          color: white;
-         padding: 30px;
-         text-align: center;
+         padding: 2rem;
+         border-bottom: 1px solid #e2e8f0;
          }
          .header h1 {
-         font-size: 2.5rem;
-         margin-bottom: 10px;
-         font-weight: 600;
+         font-size: 1.875rem;
+         margin-bottom: 0.5rem;
+         font-weight: 700;
          }
          .header p {
-         font-size: 1.1rem;
-         opacity: 0.9;
+         font-size: 1rem;
+         color: #94a3b8;
+         font-weight: 400;
          }
          .main-content {
-         padding: 30px;
+         padding: 2rem;
+         }
+         .instructions {
+         background: #f1f5f9;
+         border: 1px solid #e2e8f0;
+         border-radius: 0.75rem;
+         padding: 1.5rem;
+         margin-bottom: 2rem;
+         }
+         .instructions h3 {
+         color: #1e293b;
+         margin-bottom: 0.75rem;
+         font-size: 1.125rem;
+         font-weight: 600;
+         display: flex;
+         align-items: center;
+         gap: 0.5rem;
+         }
+         .instructions-icon {
+         width: 20px;
+         height: 20px;
+         background: #3b82f6;
+         border-radius: 50%;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         color: white;
+         font-size: 12px;
+         font-weight: bold;
+         }
+         .instructions ul {
+         list-style: none;
+         margin-left: 0;
+         }
+         .instructions li {
+         margin-bottom: 0.5rem;
+         padding-left: 1.5rem;
+         position: relative;
+         color: #64748b;
+         }
+         .instructions li:before {
+         content: "•";
+         color: #3b82f6;
+         font-weight: bold;
+         position: absolute;
+         left: 0;
          }
          .class-selector {
-         background: #f8f9fa;
-         border-radius: 15px;
-         padding: 25px;
-         margin-bottom: 30px;
-         border: 1px solid #e9ecef;
+         background: white;
+         border: 1px solid #e2e8f0;
+         border-radius: 0.75rem;
+         padding: 1.5rem;
+         margin-bottom: 2rem;
          }
          .class-selector h2 {
-         color: #2c3e50;
-         margin-bottom: 15px;
-         font-size: 1.4rem;
+         color: #1e293b;
+         margin-bottom: 1rem;
+         font-size: 1.25rem;
+         font-weight: 600;
          }
          .select-wrapper {
          position: relative;
@@ -68,18 +114,18 @@
          }
          .class-select {
          width: 100%;
-         padding: 15px 20px;
-         border: 2px solid #e9ecef;
-         border-radius: 10px;
-         font-size: 1.1rem;
+         padding: 0.75rem 1rem;
+         border: 1px solid #d1d5db;
+         border-radius: 0.5rem;
+         font-size: 1rem;
          background: white;
          cursor: pointer;
-         transition: all 0.3s ease;
+         transition: all 0.2s ease;
          }
          .class-select:focus {
          outline: none;
-         border-color: #4facfe;
-         box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
+         border-color: #3b82f6;
+         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
          }
          .students-section {
          display: none;
@@ -88,66 +134,52 @@
          display: block;
          }
          .students-section h2 {
-         color: #2c3e50;
-         margin-bottom: 20px;
-         font-size: 1.6rem;
+         color: #1e293b;
+         margin-bottom: 1rem;
+         font-size: 1.5rem;
+         font-weight: 600;
+         display: flex;
+         align-items: center;
+         gap: 0.75rem;
          }
          .class-badge {
-         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+         background: #3b82f6;
          color: white;
-         padding: 5px 15px;
-         border-radius: 20px;
-         font-size: 0.9rem;
-         font-weight: 600;
+         padding: 0.25rem 0.75rem;
+         border-radius: 9999px;
+         font-size: 0.875rem;
+         font-weight: 500;
          }
          .student-count {
-         color: #7f8c8d;
-         margin-bottom: 20px;
-         font-size: 1rem;
+         color: #64748b;
+         margin-bottom: 1.5rem;
+         font-size: 0.875rem;
          }
          .students-grid {
-         margin-bottom: 30px;
+         margin-bottom: 2rem;
          position: relative;
          }
          .student-card {
          background: white;
-         border-radius: 15px;
-         padding: 20px;
-         margin-bottom: 15px;
-         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-         border: 1px solid #f0f0f0;
-         transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+         border: 1px solid #e2e8f0;
+         border-radius: 0.5rem;
+         padding: 1rem;
+         margin-bottom: 0.75rem;
+         transition: all 0.2s ease;
          display: flex;
          align-items: center;
          justify-content: space-between;
          position: relative;
-         overflow: hidden;
-         }
-         .student-card::before {
-         content: '';
-         position: absolute;
-         top: 0;
-         left: -100%;
-         width: 100%;
-         height: 100%;
-         background: linear-gradient(90deg, transparent, rgba(79, 172, 254, 0.1), transparent);
-         transition: left 0.5s ease;
-         }
-         .student-card.moving {
-         transform: scale(1.02);
-         box-shadow: 0 15px 30px rgba(79, 172, 254, 0.3);
-         z-index: 10;
-         border: 2px solid #4facfe;
-         }
-         .student-card.moving::before {
-         left: 100%;
          }
          .student-card:hover {
-         transform: translateY(-2px);
-         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+         border-color: #cbd5e1;
+         box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
          }
-         .student-card.moving:hover {
-         transform: scale(1.02) translateY(-2px);
+         .student-card.moving {
+         transform: translateY(-2px);
+         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+         border-color: #3b82f6;
+         background: #f8fafc;
          }
          .student-info {
          display: flex;
@@ -155,128 +187,111 @@
          flex: 1;
          }
          .student-position {
-         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+         background: #1e293b;
          color: white;
-         width: 40px;
-         height: 40px;
-         border-radius: 50%;
+         width: 2rem;
+         height: 2rem;
+         border-radius: 0.375rem;
          display: flex;
          align-items: center;
          justify-content: center;
          font-weight: 600;
-         margin-right: 15px;
-         font-size: 1rem;
-         transition: all 0.3s ease;
+         margin-right: 1rem;
+         font-size: 0.875rem;
          }
          .student-card.moving .student-position {
-         transform: rotate(360deg);
-         background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+         background: #3b82f6;
          }
          .student-name {
-         font-size: 1.1rem;
-         font-weight: 600;
-         color: #2c3e50;
-         transition: color 0.3s ease;
-         }
-         .student-card.moving .student-name {
-         color: #4facfe;
+         font-size: 1rem;
+         font-weight: 500;
+         color: #1e293b;
          }
          .student-controls {
          display: flex;
-         gap: 10px;
+         gap: 0.5rem;
          }
          .reorder-btn {
-         width: 40px;
-         height: 40px;
-         border: none;
-         border-radius: 8px;
+         width: 2rem;
+         height: 2rem;
+         border: 1px solid #d1d5db;
+         border-radius: 0.375rem;
          cursor: pointer;
          display: flex;
          align-items: center;
          justify-content: center;
-         font-size: 16px;
-         transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-         font-weight: bold;
-         position: relative;
-         overflow: hidden;
+         font-size: 12px;
+         transition: all 0.2s ease;
+         font-weight: 600;
+         background: white;
+         color: #64748b;
          }
-         .reorder-btn::after {
-         content: '';
-         position: absolute;
-         top: 50%;
-         left: 50%;
-         width: 0;
-         height: 0;
-         background: rgba(255, 255, 255, 0.3);
-         border-radius: 50%;
-         transform: translate(-50%, -50%);
-         transition: all 0.3s ease;
+         .reorder-btn:hover:not(:disabled) {
+         border-color: #3b82f6;
+         color: #3b82f6;
+         background: #f8fafc;
          }
-         .reorder-btn:hover::after {
-         width: 100%;
-         height: 100%;
-         }
-         .reorder-btn:hover {
-         transform: scale(1.1) translateY(-2px);
-         }
-         .reorder-btn:active {
+         .reorder-btn:active:not(:disabled) {
          transform: scale(0.95);
          }
          .reorder-btn:disabled {
-         opacity: 0.3;
+         opacity: 0.4;
          cursor: not-allowed;
-         transform: none;
          }
-         .reorder-btn:disabled::after {
-         display: none;
+         .btn-up:hover:not(:disabled) {
+         border-color: #059669;
+         color: #059669;
+         background: #f0fdf4;
          }
-         .btn-up {
-         background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-         color: white;
-         }
-         .btn-down {
-         background: linear-gradient(135deg, #ff6b6b 0%, #ffa8a8 100%);
-         color: white;
+         .btn-down:hover:not(:disabled) {
+         border-color: #dc2626;
+         color: #dc2626;
+         background: #fef2f2;
          }
          .save-button {
-         background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+         background: #3b82f6;
          color: white;
          border: none;
-         padding: 15px 40px;
-         font-size: 1.1rem;
-         font-weight: 600;
-         border-radius: 50px;
+         padding: 0.75rem 2rem;
+         font-size: 1rem;
+         font-weight: 500;
+         border-radius: 0.5rem;
          cursor: pointer;
-         transition: all 0.3s ease;
-         box-shadow: 0 5px 15px rgba(86, 171, 47, 0.3);
-         text-transform: uppercase;
-         letter-spacing: 1px;
+         transition: all 0.2s ease;
          }
          .save-button:hover {
-         transform: translateY(-2px);
-         box-shadow: 0 8px 25px rgba(86, 171, 47, 0.4);
+         background: #2563eb;
          }
          .save-button:active {
-         transform: translateY(0);
+         transform: translateY(1px);
          }
          .save-button:disabled {
-         background: #95a5a6;
+         background: #9ca3af;
          cursor: not-allowed;
          transform: none;
-         box-shadow: none;
          }
          .save-section {
          text-align: center;
-         margin-top: 30px;
+         margin-top: 2rem;
+         padding: 1.5rem;
+         background: #f8fafc;
+         border-radius: 0.75rem;
+         border: 1px solid #e2e8f0;
+         }
+         .save-section p {
+         margin-top: 0.5rem;
+         color: #64748b;
+         font-size: 0.875rem;
          }
          .no-students {
          text-align: center;
-         color: #7f8c8d;
-         font-size: 1.1rem;
-         padding: 40px;
-         background: #f8f9fa;
-         border-radius: 15px;
-         margin: 20px 0;
+         color: #64748b;
+         font-size: 1rem;
+         padding: 3rem 1rem;
+         background: #f8fafc;
+         border: 1px solid #e2e8f0;
+         border-radius: 0.75rem;
+         margin: 1rem 0;
          }
          .loading-overlay {
          position: fixed;
@@ -284,15 +299,14 @@
          left: 0;
          width: 100%;
          height: 100%;
-         background: rgba(0, 0, 0, 0.7);
+         background: rgba(0, 0, 0, 0.5);
          display: flex;
          justify-content: center;
          align-items: center;
          z-index: 10000;
          opacity: 0;
          visibility: hidden;
-         transition: all 0.3s ease;
-         backdrop-filter: blur(5px);
+         transition: all 0.2s ease;
          }
          .loading-overlay.active {
          opacity: 1;
@@ -300,41 +314,41 @@
          }
          .loading-content {
          background: white;
-         padding: 40px;
-         border-radius: 20px;
+         padding: 2rem;
+         border-radius: 0.75rem;
          text-align: center;
-         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-         max-width: 300px;
+         box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+         max-width: 20rem;
          width: 90%;
          }
          .spinner {
-         width: 50px;
-         height: 50px;
-         border: 4px solid #f3f3f3;
-         border-top: 4px solid #4facfe;
+         width: 2rem;
+         height: 2rem;
+         border: 2px solid #e2e8f0;
+         border-top: 2px solid #3b82f6;
          border-radius: 50%;
          animation: spin 1s linear infinite;
-         margin: 0 auto 20px;
+         margin: 0 auto 1rem;
          }
          @keyframes spin {
          0% { transform: rotate(0deg); }
          100% { transform: rotate(360deg); }
          }
          .loading-text {
-         font-size: 1.1rem;
-         font-weight: 600;
-         color: #2c3e50;
-         margin-bottom: 10px;
+         font-size: 1rem;
+         font-weight: 500;
+         color: #1e293b;
+         margin-bottom: 0.5rem;
          }
          .loading-subtext {
-         font-size: 0.9rem;
-         color: #7f8c8d;
+         font-size: 0.875rem;
+         color: #64748b;
          }
          /* Animation keyframes */
          @keyframes slideUp {
          from {
-         transform: translateY(20px);
-         opacity: 0.7;
+         transform: translateY(10px);
+         opacity: 0.8;
          }
          to {
          transform: translateY(0);
@@ -343,8 +357,8 @@
          }
          @keyframes slideDown {
          from {
-         transform: translateY(-20px);
-         opacity: 0.7;
+         transform: translateY(-10px);
+         opacity: 0.8;
          }
          to {
          transform: translateY(0);
@@ -352,27 +366,33 @@
          }
          }
          .student-card.slide-up {
-         animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+         animation: slideUp 0.3s ease-out;
          }
          .student-card.slide-down {
-         animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+         animation: slideDown 0.3s ease-out;
          }
          /* Responsive Design */
          @media (max-width: 768px) {
+         .main-content {
+         padding: 1rem;
+         }
+         .header {
+         padding: 1.5rem 1rem;
+         }
+         .header h1 {
+         font-size: 1.5rem;
+         }
          .student-card {
          flex-direction: column;
-         gap: 15px;
+         gap: 1rem;
          text-align: center;
          }
          .student-info {
          flex-direction: column;
-         gap: 10px;
+         gap: 0.75rem;
          }
-         .header h1 {
-         font-size: 2rem;
-         }
-         .main-content {
-         padding: 20px;
+         .instructions {
+         padding: 1rem;
          }
          }
       </style>
@@ -384,6 +404,18 @@
             <p>Manage Student List Order</p>
          </div>
          <div class="main-content">
+            <div class="instructions">
+               <h3>
+                  <span class="instructions-icon">i</span>
+                  How to Reorder Students
+               </h3>
+               <ul>
+                  <li>Use the up (▲) and down (▼) arrow buttons to move students in the list</li>
+                  <li>The order you set here will be reflected in all marks statements</li>
+                  <li>Click "Save Changes" to save your new order</li>
+               </ul>
+            </div>
+            
             <div class="class-selector">
                <h2>Select Class</h2>
                <div class="select-wrapper">
@@ -394,7 +426,7 @@
             </div>
             <div id="studentsSection" class="students-section">
                <h2>
-                  Students in Class<br>
+                  Students in Class
                   <span id="selectedClass" class="class-badge"></span>
                </h2>
                <div id="studentCount" class="student-count"></div>
@@ -406,9 +438,7 @@
                   <button id="saveButton" class="save-button" onclick="handleSave()">
                   Save Changes
                   </button>
-                  <p style="margin-top: 10px; color: #7f8c8d; font-size: 0.9rem;">
-                     Save the new order to the system
-                  </p>
+                  <p>Save the new order to the system</p>
                </div>
             </div>
          </div>
@@ -617,7 +647,7 @@
                          }
                      });
                  }, 100);
-             }, 400); // Match the animation duration
+             }, 300); // Match the animation duration
          }
          
          // Handle save button click
