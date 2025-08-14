@@ -501,14 +501,14 @@
              // If class & exam are present and not falsy
              if (classValue && exam) {
                  try {
-                     // Call selectData to get records from "marks_view" 
+                     // Call selectData to get records from "marks_view_with_roll_number" 
                      const results = await selectData(
-                     "marks_view",            // tableName
+                     "marks_view_with_roll_number",            // tableName
                      false,              // fetchSingle
                      "*",                // columns
                      ["class", "exam"],  // matchColumns
                      [classValue, exam], // matchValues
-                     "student",          // orderByColumn
+                     "roll_number",          // orderByColumn
                      "asc"               // orderDirection
                      );
                      marks = results;
@@ -519,7 +519,7 @@
                  }
              } else {
                  // No class or exam parameters found, redirect user back to dashboard
-                 window.location.href = "https://sourabhsuneja.github.io/redirect/jvp-marks-management/";
+                 window.location.href = "https://myjvp.in/marks-management/";
              }
          }
       </script>
