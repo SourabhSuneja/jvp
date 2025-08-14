@@ -256,7 +256,7 @@
          );
          
          // Get unique students and sort alphabetically
-         const uniqueStudents = [...new Set(filteredMarks.map(mark => mark.student))].sort();
+         const uniqueStudents = [...new Set(filteredMarks.map(mark => mark.student))];
          
          // Create roll numbers
          const classNumber = selectedClass.split('-')[0];
