@@ -540,9 +540,9 @@
              // Filter students by class
              let classStudents = students.filter(student => student.class === className);
              
-             // Sort by roll_no if available, otherwise keep natural order
-             if (classStudents.length > 0 && classStudents[0].hasOwnProperty('roll_no')) {
-                 classStudents.sort((a, b) => a.roll_no - b.roll_no);
+             // Sort by roll_number if available, otherwise keep natural order
+             if (classStudents.length > 0 && classStudents[0].hasOwnProperty('roll_number')) {
+                 classStudents.sort((a, b) => a.roll_number - b.roll_number);
              }
              
              currentClassStudents = [...classStudents];
