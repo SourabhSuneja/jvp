@@ -506,6 +506,7 @@ SELECT
     m.id,
     m.exam,
     m.subject,
+    s.roll_number,
     s.name AS student,
     s.class,
     m.marks,
