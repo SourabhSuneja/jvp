@@ -7,6 +7,7 @@ DROP TRIGGER IF EXISTS check_marks_before_delete ON students;
 
 -- Drop views
 DROP VIEW IF EXISTS marks_view;
+DROP VIEW IF EXISTS marks_view_with_roll_number;
 DROP VIEW IF EXISTS marks_backup_view;
 
 -- Drop functions
@@ -49,6 +50,8 @@ DROP FUNCTION IF EXISTS get_students_sorted();
 
 -- This function is ANYWAY temporary
 DROP FUNCTION IF EXISTS update_students_info(JSON, JSON);
+
+DROP FUNCTION IF EXISTS update_student_roll_numbers(JSONB);
 
 -- Drop tables (in reverse order of creation to handle foreign key dependencies)
 DROP TABLE IF EXISTS marks_backup;
@@ -108,6 +111,7 @@ USING (auth.role() = 'authenticated');
 -- Create students table
 CREATE TABLE students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    roll_number INTEGER DEFAULT 99999,
     name TEXT NOT NULL,
     class TEXT NOT NULL,
     house TEXT,
@@ -148,6 +152,13 @@ FOR UPDATE
 USING (
   auth.uid() IN (SELECT id FROM admins)
 );
+
+-- Allow authenticated users (teachers) to update data
+CREATE POLICY "Allow authenticated users to update student data"
+ON students
+FOR UPDATE
+TO authenticated
+USING ( true );
 
 -- Delete policy for admin users
 CREATE POLICY "admins_can_delete_students"
@@ -506,6 +517,23 @@ SELECT
     m.id,
     m.exam,
     m.subject,
+    s.name AS student,
+    s.class,
+    m.marks,
+    m.updated_at
+FROM 
+    marks m
+JOIN 
+    students s ON m.student_id = s.id;
+
+-- Create a view that matches the structure of the original marks table but with roll number field included (minor fix to allow re-ordering and keep the order in sync with manual student lists)
+
+CREATE OR REPLACE VIEW marks_view_with_roll_number WITH (security_invoker = true)
+AS
+SELECT 
+    m.id,
+    m.exam,
+    m.subject,
     s.roll_number,
     s.name AS student,
     s.class,
@@ -515,6 +543,7 @@ FROM
     marks m
 JOIN 
     students s ON m.student_id = s.id;
+
 
 -- Create a view that matches the structure of the original marks_backup table
 CREATE OR REPLACE VIEW marks_backup_view WITH (security_invoker = true)
@@ -779,14 +808,14 @@ BEGIN
         mv.class,
         SUM(mv.marks) AS marks
     FROM 
-        marks_view mv
+        marks_view_with_roll_number mv
     WHERE 
         mv.exam = p_exam
         AND mv.class = p_class
     GROUP BY 
-        mv.student, mv.class, mv.exam
+        mv.roll_number, mv.student, mv.class, mv.exam
     ORDER BY 
-        mv.student ASC;
+        mv.roll_number ASC;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -1527,3 +1556,78 @@ SELECT * FROM update_students_info(
     '{"male": ["003f2b2f-38cc-48aa-ab33-1a0f61bd66b9", "008e8e76-0053-41c1-bc59-0db3e67bfe25"], "female": ["0105927c-5d79-47a5-98c8-24d2a3a1c6c5", "018780ab-c385-43a8-acf4-f35c74b10134"]}'::JSON
 );
 */
+
+-- Function to let teachers change the order of students in a class list (update roll numbers)
+CREATE OR REPLACE FUNCTION update_student_roll_numbers(roll_data JSONB)
+RETURNS TABLE(updated_count INTEGER) 
+SECURITY INVOKER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    class_key TEXT;
+    student_id_key TEXT;
+    roll_number_value TEXT;
+    roll_number_int INTEGER;
+    update_count INTEGER := 0;
+    student_exists BOOLEAN;
+    rows_affected INTEGER;
+BEGIN
+    -- Loop through each class in the JSON object
+    FOR class_key IN SELECT jsonb_object_keys(roll_data)
+    LOOP
+        -- Loop through each student ID within the current class
+        FOR student_id_key IN SELECT jsonb_object_keys(roll_data -> class_key)
+        LOOP
+            -- Get the roll number value for this student
+            roll_number_value := roll_data -> class_key ->> student_id_key;
+            
+            -- Validate and convert roll number to integer
+            BEGIN
+                roll_number_int := roll_number_value::INTEGER;
+            EXCEPTION 
+                WHEN invalid_text_representation THEN
+                    RAISE EXCEPTION 'Invalid roll number format: % for student %', roll_number_value, student_id_key;
+                WHEN numeric_value_out_of_range THEN
+                    RAISE EXCEPTION 'Roll number out of range: % for student %', roll_number_value, student_id_key;
+            END;
+            
+            -- Check if student exists with the given ID and class
+            SELECT EXISTS(
+                SELECT 1 FROM students 
+                WHERE id = student_id_key::UUID AND class = class_key
+            ) INTO student_exists;
+            
+            IF NOT student_exists THEN
+                RAISE EXCEPTION 'Student not found: ID % in class %', student_id_key, class_key;
+            END IF;
+            
+            -- Update the roll number for the student
+            UPDATE students 
+            SET roll_number = roll_number_int
+            WHERE id = student_id_key::UUID 
+              AND class = class_key;
+              
+            -- Check if the update was successful
+            GET DIAGNOSTICS rows_affected = ROW_COUNT;
+            
+            IF rows_affected = 0 THEN
+                RAISE EXCEPTION 'Failed to update student: ID % in class %', student_id_key, class_key;
+            END IF;
+            
+            -- Increment the update counter
+            update_count := update_count + 1;
+            
+        END LOOP;
+    END LOOP;
+    
+    -- Return the count of updated rows
+    RETURN QUERY SELECT update_count;
+    
+EXCEPTION 
+    WHEN invalid_text_representation THEN
+        RAISE EXCEPTION 'Invalid UUID format in input data';
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Error updating roll numbers: %', SQLERRM;
+END;
+$$;
+
