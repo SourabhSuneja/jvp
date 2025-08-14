@@ -512,9 +512,20 @@
          }
          
          // Handle class selection change
-         function handleClassChange(event) {
+         async function handleClassChange(event) {
              selectedClass = event.target.value;
+             loadingOverlay.classList.add('active');
              if (selectedClass) {
+                 students = await selectData(
+                      'students',
+                      false,
+                      'id, name, class',
+                      ['class'],
+                      [selectedClass],
+                      'name',
+                      'asc'
+                  );
+                 loadingOverlay.classList.remove('active');
                  loadStudentsForClass(selectedClass);
                  document.getElementById('studentsSection').classList.add('active');
                  document.getElementById('selectedClass').textContent = selectedClass;
@@ -703,16 +714,6 @@
                   if (!isAuthenticated) {
                        window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
                   }
-                  students = await selectData(
-                      'students',
-                      false,
-                      'id, name, class',
-                      [],
-                      [],
-                      'name',
-                      'asc'
-                  );
-                  console.log('Students data loaded:', students);
                   await filterClassesByClassTeachership();
                   init();
                   loadingOverlay.classList.remove('active');
