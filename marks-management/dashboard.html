@@ -1253,12 +1253,12 @@
          fetchedMarks = await invokeFunction('get_total_marks', {'p_exam': selectedExam , 'p_class': selectedClass});
          } else {
          fetchedMarks = await selectData(
-         "marks_view",                                   // tableName
+         "marks_view_with_roll_number",                                   // tableName
          false,                                     // fetchSingle (we want multiple records)
          "*",                                       // columns (fetch all columns)
          ["class", "exam", "subject"],              // matchColumns
          [selectedClass, selectedExam, selectedSubject], // matchValues
-         "student",                                 // orderByColumn (sort by student name)
+         "roll_number",                                 // orderByColumn (sort by roll number)
          "asc"                                      // orderDirection
          );
          }
