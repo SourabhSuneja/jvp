@@ -1983,10 +1983,10 @@
          let results = [];
          let isOptionalSub = (optionalSubjects[classValue] && optionalSubjects[classValue].includes(subjectValue));
          if(subjectValue && isOptionalSub) {
-             results = await selectData('students', false, 'name', ['class'], [classValue], 'name', 'asc', [
+             results = await selectData('students', false, 'name', ['class'], [classValue], 'roll_number', 'asc', [
          { column: "opted_subjects", operator: "ov", value: [subjectValue] } ]);
          } else {
-             results = await selectData('students', false, 'name', ['class'], [classValue], 'name', 'asc');
+             results = await selectData('students', false, 'name', ['class'], [classValue], 'roll_number', 'asc');
          }
          students[classValue] = results.map(result => result.name);
          hideLoading();
