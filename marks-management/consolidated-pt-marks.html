@@ -56,6 +56,50 @@
          font-size: 16px;
          margin-bottom: 15px;
          }
+         /* Center the whole anomaly container and limit max width */
+         #anomalyContainer {
+         max-width: 1200px;   /* keeps it tidy on big screens */
+         margin: 0 auto;      /* center horizontally */
+         padding: 0.5rem;
+         }
+         /* Flex layout for anomaly list */
+         #anomalyContainer ol {
+         display: flex;
+         flex-wrap: wrap;     /* allow wrapping */
+         gap: 1rem;           /* space between boxes */
+         list-style: none;    /* remove numbers */
+         padding: 0;
+         margin: 0;
+         }
+         /* Each anomaly type box */
+         #anomalyContainer ol > li {
+         flex: 1 1 50%;       /* try for 2 columns */
+         min-width: 280px;    /* don't shrink too much */
+         border: 1px solid #ddd;
+         border-radius: 6px;
+         padding: 0.6rem 0.8rem;
+         box-sizing: border-box;
+         }
+         /* Title (anomaly type) */
+         #anomalyContainer strong {
+         display: block;
+         margin-bottom: 0.4rem;
+         font-size: 0.95rem;
+         color: #333;
+         }
+         /* Nested student list */
+         #anomalyContainer ul {
+         margin: 0;
+         padding-left: 1.2rem;
+         }
+         #anomalyContainer ul li {
+         margin-bottom: 0.25rem;
+         line-height: 1.3;
+         font-size: 0.9rem;
+         }
+         #anomalyContainer ul li:last-child {
+         margin-bottom: 0;
+         }
          table {
          width: 100%;
          border-collapse: collapse;
@@ -79,6 +123,9 @@
          }
          .mark-col {
          width: 40px;
+         }
+         .has-anomaly {
+         font-weight: bold;
          }
          .subject-header {
          position: relative;
@@ -189,6 +236,7 @@
          <table id="marks-table">
             <!-- Table will be dynamically generated -->
          </table>
+         <div id="anomalyContainer"></div>
          <div style="text-align: center;">
             <button class="print-btn" onclick="window.print()">Print Marks Statement</button>
          </div>
@@ -199,6 +247,9 @@
          
          // Marks data (will be loaded from server)
          let marks = [];
+         
+         // Store score anomalies
+         let anomalies = [];
          
          let selectedSubjects = [];
          let selectedExam = '';
@@ -243,7 +294,7 @@
          // Set header information
          document.getElementById('exam-name').textContent = selectedExam;
          document.getElementById('class-name').textContent = selectedClass;
-
+         
          // Remove All Subjects (Enthusiasm) from the selectedSubjects array
          selectedSubjects = selectedSubjects.filter(s => s !== 'All Subjects (Enthusiasm)');
          
@@ -255,7 +306,7 @@
          mark.subject !== 'All Subjects (Enthusiasm)'
          );
          
-         // Get unique students and sort alphabetically
+         // Get unique students
          const uniqueStudents = [...new Set(filteredMarks.map(mark => mark.student))];
          
          // Create roll numbers
@@ -308,7 +359,7 @@
          totalHeader.textContent = 'Total';
          totalHeader.colSpan = 2;
          headerRow1.appendChild(totalHeader);
-
+         
          const aggregateTotal20 = getAggregateMarks(selectedClass, selectedExam);
          const aggregateTotal10 = (getAggregateMarks(selectedClass, selectedExam))/2;
          
@@ -373,6 +424,9 @@
             
             // 20M cell
             const mark20Cell = document.createElement('td');
+            mark20Cell.classList.add('mark-cell');
+            mark20Cell.dataset.name = student;
+            mark20Cell.dataset.subject = subject;
             if (studentSubjectMark) {
                 if (studentSubjectMark.marks === null) {
                     mark20Cell.textContent = 'Ab';
@@ -461,12 +515,14 @@
                  // Load all marks data for the grade specified in the URL params
                  await loadMarks();
                  // Generate marks table
-                 generateTable();
+                 await generateTable();
+                 // Display anomalies
+                 renderAnomalies();
                  // Hide loading screen
                  hideLoading();
              } else {
                  // User is not logged in, redirect back to dashboard
-                 window.location.href = "https://sourabhsuneja.github.io/redirect/jvp-marks-management/";
+                 window.location.href = "https://myjvp.in/marks-management/";
              }
           } catch (error) {
              console.error('Auth check error:', error);
@@ -492,7 +548,7 @@
           // Store in global variables as well
          selectedExam = exam;
          selectedClass = classValue;
-
+         
           // Fetch subject list according to class
           selectedSubjects = getSubjectsForClass(selectedClass);
           
@@ -509,7 +565,7 @@
           "roll_number",          // orderByColumn
           "asc"               // orderDirection
           );
-          marks = results;
+          marks = results;         
           return true;
           } catch (error) {
           console.error("Failed to load marks:", error);
@@ -520,6 +576,75 @@
           window.location.href = "https://myjvp.in/marks-management/";
           }
           }
+         
+         async function renderAnomalies() {
+         // Find anomalies for the selected class and exam
+         anomalies = await invokeFunction("detect_exam_anomalies", {
+         p_base_exam: "PT-1",
+         p_current_exam: selectedExam,
+         p_class: selectedClass,
+         p_case_array: ["case1", "case2", "case4"], // must be array of strings
+         p_only_multiple_types: false,
+         p_deviation_case_1: 6,
+         p_difference_case_2: 10,
+         p_stdev_case_4: 6
+         });
+         
+         const container = document.getElementById("anomalyContainer");
+         
+         if (!anomalies || anomalies.length === 0) {
+         container.innerHTML = "<p>No anomalies detected.</p>";
+         return;
+         }
+         
+         // ⚡ First: clear any previous anomaly highlights
+         document.querySelectorAll(".mark-cell.has-anomaly").forEach(cell => {
+         cell.classList.remove("has-anomaly");
+         });
+         
+         // Group anomalies by anomaly_type
+         const grouped = anomalies.reduce((acc, item) => {
+         // For deviation and inconsistency anomalies, only include selectedExam
+         if (
+         (item.anomaly_type.startsWith("Deviation from overall average") ||
+         item.anomaly_type.startsWith("High inconsistency across subjects")) &&
+         item.exam !== selectedExam
+         ) {
+         return acc; // skip this anomaly
+         }
+         
+         if (!acc[item.anomaly_type]) {
+         acc[item.anomaly_type] = new Set();
+         }
+         acc[item.anomaly_type].add(`${item.student} (${item.subject} | ${item.exam})`);
+         
+         // ⚡ Highlight matching table cell(s)
+         let selector = `.mark-cell[data-name="${item.student}"][data-subject="${item.subject}"]`;
+         document.querySelectorAll(selector).forEach(cell => {
+         cell.classList.add("has-anomaly");
+         });
+         
+         return acc;
+         }, {});
+         
+         // Build HTML content
+         let html = "<h3>Anomalies Detected:</h3><ol>";
+         Object.entries(grouped).forEach(([type, entries]) => {
+         // Convert set to sorted array
+         const sortedEntries = Array.from(entries).sort((a, b) =>
+         a.localeCompare(b)
+         );
+         html += `<li><strong>${type}</strong><ul>`;
+         sortedEntries.forEach(e => {
+         html += `<li>${e}</li>`;
+         });
+         html += "</ul></li>";
+         });
+         html += "</ol>";
+         
+         // Inject into container
+         container.innerHTML = html;
+         }
       </script>
    </body>
 </html>
