@@ -602,7 +602,17 @@ checkbox.addEventListener("change", function() {
   // Check if the checkbox is checked
   if (checkbox.checked) {
     // Set today's date in the specified format
-    dateElementP.innerText = '(' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +')';
+    // Get date in en-GB format (e.g. "16 Aug 2025")
+let dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+// Split into parts
+let [day, mon, year] = dateStr.split(" ");
+
+// Replace month with Hindi version
+let hindiMonth = getHindiMonth(mon);
+
+// Rebuild string
+dateElementP.innerText = `(${day} ${hindiMonth} ${year})`;
   } else {
     // If the checkbox is unchecked, clear the date
     dateElementP.innerText = "";
@@ -773,6 +783,31 @@ checkbox.addEventListener("change", function() {
             }
         });
     });
+
+function getHindiMonth(monthAbbr) {
+  if (!monthAbbr) return null;
+
+  // Normalize input (capitalize first letter, lowercase rest)
+  let key = monthAbbr.trim().toLowerCase();
+
+  // Mapping of English (3-letter) to Hindi month names
+  const months = {
+    jan: "जनवरी",
+    feb: "फ़रवरी",
+    mar: "मार्च",
+    apr: "अप्रैल",
+    may: "मई",
+    jun: "जून",
+    jul: "जुलाई",
+    aug: "अगस्त",
+    sep: "सितंबर",
+    oct: "अक्टूबर",
+    nov: "नवंबर",
+    dec: "दिसंबर"
+  };
+
+  return months[key] || null; // return null if not found
+}
 </script>
 
 </body>
