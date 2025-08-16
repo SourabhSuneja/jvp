@@ -4,6 +4,8 @@ DROP TRIGGER IF EXISTS backup_marks_trigger ON marks;
 DROP TRIGGER IF EXISTS marks_view_insert ON marks_view;
 DROP TRIGGER IF EXISTS marks_view_update ON marks_view;
 DROP TRIGGER IF EXISTS check_marks_before_delete ON students;
+DROP TRIGGER IF EXISTS trg_assign_subjects_after_class_teacher_insert ON class_teachers;
+DROP TRIGGER IF EXISTS trg_remove_subjects_after_class_teacher_delete ON class_teachers;
 
 -- Drop views
 DROP VIEW IF EXISTS marks_view;
@@ -47,6 +49,8 @@ DROP FUNCTION IF EXISTS restricted_secure_join_tables(
 );
 DROP FUNCTION IF EXISTS update_custom_exam(TEXT, TEXT, INTEGER, TEXT, TEXT);
 DROP FUNCTION IF EXISTS get_students_sorted();
+DROP FUNCTION IF EXISTS assign_subjects_to_class_teacher();
+DROP FUNCTION IF EXISTS remove_subjects_of_class_teacher();
 
 -- This function is ANYWAY temporary
 DROP FUNCTION IF EXISTS update_students_info(JSON, JSON);
@@ -1630,4 +1634,86 @@ EXCEPTION
         RAISE EXCEPTION 'Error updating roll numbers: %', SQLERRM;
 END;
 $$;
+
+-- Trigger function to automatically assign all subjects for a class to a class teacher
+CREATE OR REPLACE FUNCTION assign_subjects_to_class_teacher()
+RETURNS TRIGGER AS $$
+DECLARE
+    subjects TEXT[];
+    subj TEXT;
+BEGIN
+    -- Get subjects array for the given class
+    CASE 
+        WHEN NEW.class LIKE '1-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'EVS', 'Computer', 'GK'];
+        WHEN NEW.class LIKE '2-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'EVS', 'Computer', 'GK'];
+        WHEN NEW.class LIKE '3-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK'];
+        WHEN NEW.class LIKE '4-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK'];
+        WHEN NEW.class LIKE '5-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class LIKE '6-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class LIKE '7-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class LIKE '8-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Data Science', 'GK', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class LIKE '9-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class LIKE '10-%' THEN 
+            subjects := ARRAY['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class = '11-SCI' THEN 
+            subjects := ARRAY['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'Psychology', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class = '11-COM' THEN 
+            subjects := ARRAY['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology'];
+        WHEN NEW.class = '11-HUM' THEN 
+            subjects := ARRAY['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology'];
+        WHEN NEW.class = '12-SCI' THEN 
+            subjects := ARRAY['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class = '12-COM' THEN 
+            subjects := ARRAY['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)'];
+        WHEN NEW.class = '12-HUM' THEN 
+            subjects := ARRAY['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)'];
+        ELSE
+            RAISE NOTICE 'No subjects found for class %', NEW.class;
+            RETURN NEW;
+    END CASE;
+
+    -- Insert each subject if not exists
+    FOREACH subj IN ARRAY subjects LOOP
+        INSERT INTO class_subject_assignments (teacher_id, subject, class)
+        VALUES (NEW.teacher_id, subj, NEW.class)
+        ON CONFLICT (teacher_id, subject, class) DO NOTHING;
+    END LOOP;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create the trigger
+CREATE TRIGGER trg_assign_subjects_after_class_teacher_insert
+    AFTER INSERT ON class_teachers
+    FOR EACH ROW
+    EXECUTE FUNCTION assign_subjects_to_class_teacher();
+
+-- Trigger function to remove subject assignments when classteachership is removed
+CREATE OR REPLACE FUNCTION remove_subjects_of_class_teacher()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM class_subject_assignments
+    WHERE teacher_id = OLD.teacher_id
+      AND class = OLD.class;
+
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Create the trigger
+CREATE TRIGGER trg_remove_subjects_after_class_teacher_delete
+    AFTER DELETE ON class_teachers
+    FOR EACH ROW
+    EXECUTE FUNCTION remove_subjects_of_class_teacher();
+
 
