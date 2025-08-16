@@ -130,7 +130,7 @@
          .subject-header {
          position: relative;
          }
-         .print-btn {
+         .print-btn, .anomaly-btn {
          padding: 10px 20px;
          background-color: #4CAF50;
          color: white;
@@ -138,12 +138,13 @@
          cursor: pointer;
          font-size: 16px;
          border-radius: 4px;
+         margin: 10px;
          }
-         .print-btn:hover {
+         .print-btn:hover, .anomaly-btn:hover {
          background-color: #45a049;
          }
          @media print {
-         .print-btn {
+         .print-btn, .anomaly-btn {
          display: none;
          }
          body {
@@ -239,6 +240,7 @@
          <div id="anomalyContainer"></div>
          <div style="text-align: center;">
             <button class="print-btn" onclick="window.print()">Print Marks Statement</button>
+            <button class="anomaly-btn" onclick="renderAnomalies()">Find Anomalies</button>
          </div>
       </div>
       <script>
@@ -516,8 +518,6 @@
                  await loadMarks();
                  // Generate marks table
                  await generateTable();
-                 // Display anomalies
-                 renderAnomalies();
                  // Hide loading screen
                  hideLoading();
              } else {
@@ -542,8 +542,8 @@
           async function loadMarks() {
           // Get the "class" parameter from the URL
           const urlParams = new URLSearchParams(window.location.search);
-          const classValue = urlParams.get("class");
-          const exam = urlParams.get("exam");
+          const classValue = urlParams.get("class") || '9-A2';
+          const exam = urlParams.get("exam") || 'PT-2';
          
           // Store in global variables as well
          selectedExam = exam;
@@ -578,6 +578,9 @@
           }
          
          async function renderAnomalies() {
+         // Show loading animation
+         showLoading();
+
          // Find anomalies for the selected class and exam
          anomalies = await invokeFunction("detect_exam_anomalies", {
          p_base_exam: "PT-1",
@@ -585,7 +588,7 @@
          p_class: selectedClass,
          p_case_array: ["case1", "case2", "case4"], // must be array of strings
          p_only_multiple_types: false,
-         p_deviation_case_1: 8,
+         p_deviation_case_1: 7,
          p_difference_case_2: 10,
          p_stdev_case_4: 6
          });
@@ -644,6 +647,9 @@
          
          // Inject into container
          container.innerHTML = html;
+
+         // Hide loading animation
+         hideLoading();
          }
       </script>
    </body>
