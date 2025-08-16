@@ -597,7 +597,7 @@
          return;
          }
          
-         // ⚡ First: clear any previous anomaly highlights
+         // First: clear any previous anomaly highlights
          document.querySelectorAll(".mark-cell.has-anomaly").forEach(cell => {
          cell.classList.remove("has-anomaly");
          });
@@ -618,7 +618,7 @@
          }
          acc[item.anomaly_type].add(`${item.student} (${item.subject} | ${item.exam})`);
          
-         // ⚡ Highlight matching table cell(s)
+         // Highlight matching table cell(s)
          let selector = `.mark-cell[data-name="${item.student}"][data-subject="${item.subject}"]`;
          document.querySelectorAll(selector).forEach(cell => {
          cell.classList.add("has-anomaly");
