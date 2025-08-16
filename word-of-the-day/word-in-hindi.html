@@ -473,13 +473,22 @@ const dateCheckbox = document.getElementById("checkbox");
 const dateElementPara = document.getElementById("sdate");
 
  // Check if the checkbox is checked
-  if (dateCheckbox.checked) {
-    // Set today's date in the specified format
-    dateElementPara.innerText = '(' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) +')';
-  } else {
-    // If the checkbox is unchecked, clear the date
-    dateElementPara.innerText = "";
-  }
+  // Check if the checkbox is checked
+if (dateCheckbox.checked) {
+  // Get date in en-GB format (e.g. "16 Aug 2025")
+  let dateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  // Split into parts
+  let [day, mon, year] = dateStr.split(" ");
+
+  // Convert to Hindi month
+  let hindiMonth = getHindiMonth(mon);
+
+  // Rebuild date string
+  dateElementPara.innerText = `(${day} ${hindiMonth} ${year})`;
+} else {
+  dateElementPara.innerText = "";
+}
 
 setRandomImage();
 
