@@ -220,6 +220,39 @@
          -webkit-print-color-adjust: exact; /* For Chrome, Safari */
          print-color-adjust: exact; /* Standard syntax */
          }
+         #anomalyContainer ol {
+         padding: 0;
+         margin: 0;
+         list-style: none;
+         display: block;
+         width: 100%;
+         }
+         #anomalyContainer ol > li {
+         width: 100%;
+         min-width: 600px;
+         border: 1px solid #ddd;
+         border-radius: 6px;
+         padding: 0.6rem 0.8rem;
+         box-sizing: border-box;
+         margin-top: 8px;
+         }
+         #anomalyContainer ul {
+         padding-left: 0;
+         margin: 0;
+         list-style: none;
+         }
+         #anomalyContainer ul li {
+         display: inline;
+         margin-right: 0.7rem;
+         font-size: 0.9rem;
+         }
+         #anomalyContainer ul li::after {
+         content: " •";  
+         margin-left: 0.4rem;
+         }
+         #anomalyContainer ul li:last-child::after {
+         content: "";
+         }
          }
       </style>
    </head>
@@ -240,7 +273,7 @@
          <div id="anomalyContainer"></div>
          <div style="text-align: center;">
             <button class="print-btn" onclick="window.print()">Print Marks Statement</button>
-            <button class="anomaly-btn" onclick="renderAnomalies()">Find Anomalies</button>
+            <button class="anomaly-btn hidden" onclick="renderAnomalies()">Find Anomalies</button>
          </div>
       </div>
       <script>
@@ -518,6 +551,8 @@
                  await loadMarks();
                  // Generate marks table
                  await generateTable();
+                 // Render anomalies
+                 await renderAnomalies();
                  // Hide loading screen
                  hideLoading();
              } else {
@@ -580,7 +615,7 @@
          async function renderAnomalies() {
          // Show loading animation
          showLoading();
-
+         
          // Find anomalies for the selected class and exam
          anomalies = await invokeFunction("detect_exam_anomalies", {
          p_base_exam: "PT-1",
@@ -647,7 +682,7 @@
          
          // Inject into container
          container.innerHTML = html;
-
+         
          // Hide loading animation
          hideLoading();
          }
