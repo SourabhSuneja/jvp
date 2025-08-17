@@ -577,8 +577,8 @@
           async function loadMarks() {
           // Get the "class" parameter from the URL
           const urlParams = new URLSearchParams(window.location.search);
-          const classValue = urlParams.get("class") || '9-A2';
-          const exam = urlParams.get("exam") || 'PT-2';
+          const classValue = urlParams.get("class");
+          const exam = urlParams.get("exam");
          
           // Store in global variables as well
          selectedExam = exam;
@@ -654,7 +654,9 @@
          if (!acc[item.anomaly_type]) {
          acc[item.anomaly_type] = new Set();
          }
-         acc[item.anomaly_type].add(`${item.student} (${item.subject} | ${item.exam})`);
+         acc[item.anomaly_type].add(
+  `${item.student} (${item.subject})`
+);
          
          // Highlight matching table cell(s)
          let selector = `.mark-cell[data-name="${item.student}"][data-subject="${item.subject}"]`;
