@@ -577,8 +577,8 @@
           async function loadMarks() {
           // Get the "class" parameter from the URL
           const urlParams = new URLSearchParams(window.location.search);
-          const classValue = urlParams.get("class");
-          const exam = urlParams.get("exam");
+          const classValue = urlParams.get("class") || '9-A2';
+          const exam = urlParams.get("exam") || 'PT-2';
          
           // Store in global variables as well
          selectedExam = exam;
@@ -617,7 +617,7 @@
          showLoading();
          
          // Find anomalies for the selected class and exam
-         anomalies = await invokeFunction("detect_exam_anomalies", {
+         anomalies = await invokeFunction("detect_score_anomalies", {
          p_base_exam: "PT-1",
          p_current_exam: selectedExam,
          p_class: selectedClass,
@@ -655,8 +655,8 @@
          acc[item.anomaly_type] = new Set();
          }
          acc[item.anomaly_type].add(
-  `${item.student} (${item.subject})`
-);
+         `${item.student} (${item.subject}) | ${formatDifference(item.difference)}`
+         );
          
          // Highlight matching table cell(s)
          let selector = `.mark-cell[data-name="${item.student}"][data-subject="${item.subject}"]`;
@@ -687,6 +687,37 @@
          
          // Hide loading animation
          hideLoading();
+         }
+         
+         function formatDifference(value) {
+         if (value === null || value === "null") return null;
+         
+         let num;
+         let sign;
+         
+         if (typeof value === "number") {
+         if (value === 0) return null; // optional: handle zero separately
+         sign = value > 0 ? "+" : "-";
+         num = Math.abs(value);
+         } else if (typeof value === "string") {
+         const str = value.trim();
+         
+         const match = str.match(/^([+-])(\d+)(?:\.(\d{1,2}))?$/);
+         if (!match) return null;
+         
+         sign = match[1];
+         num = parseFloat(match[2] + (match[3] ? "." + match[3] : ""));
+         } else {
+         return null;
+         }
+         
+         // Round to at most 1 decimal
+         num = Math.round(num * 10) / 10;
+         
+         // Remove .0 if present
+         num = num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
+         
+         return sign === "+" ? `↑${num}` : `↓${num}`;
          }
       </script>
    </body>
