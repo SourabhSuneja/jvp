@@ -655,7 +655,7 @@
          acc[item.anomaly_type] = new Set();
          }
          acc[item.anomaly_type].add(
-         `${item.student} (${item.subject}) | ${formatDifference(item.difference)}`
+         `${item.student} (${item.subject})${formatDifference(item.difference)}`
          );
          
          // Highlight matching table cell(s)
@@ -690,7 +690,7 @@
          }
          
          function formatDifference(value) {
-         if (value === null || value === "null") return null;
+         if (value === null || value === "null") return '';
          
          let num;
          let sign;
@@ -708,7 +708,7 @@
          sign = match[1];
          num = parseFloat(match[2] + (match[3] ? "." + match[3] : ""));
          } else {
-         return null;
+         return '';
          }
          
          // Round to at most 1 decimal
@@ -717,7 +717,7 @@
          // Remove .0 if present
          num = num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
          
-         return sign === "+" ? `↑${num}` : `↓${num}`;
+         return sign === "+" ? ` | ↑${num}` : ` | ↓${num}`;
          }
       </script>
    </body>
