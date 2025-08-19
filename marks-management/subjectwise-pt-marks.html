@@ -103,15 +103,21 @@
          margin-top: 10px;
          line-height: 1.8;
          }
-         .teacher-line {
+         .teacher-line, .signature-line {
          display: flex;
          }
-         .teacher-label {
+         .signature-line {
+         padding-top: 6px;
+         }
+         .teacher-label, .signature-label {
          min-width: 200px;
          }
          .teacher-value {
          flex: 1;
          border-bottom: 1px solid #000;
+         }
+         .signature-value {
+         flex: 1;
          }
          .print-btn {
          padding: 10px 20px;
@@ -208,11 +214,9 @@
             <div class="exam-session"><span id="exam-name"></span> (Session 2025-26)</div>
             <div class="class-info">Class: <span id="class-name"></span></div>
          </div>
-         
          <div id="subject-tables-container">
             <!-- Subject tables will be dynamically generated here -->
          </div>
-         
          <div style="text-align: center;">
             <button class="print-btn" onclick="window.print()">Print All Marks Statements</button>
          </div>
@@ -224,6 +228,9 @@
          
          // Marks data (will be loaded from server)
          let marks = [];
+         
+         // Store unique subject mark signatures 
+         let signatures = {};
          
          let selectedSubjects = [];
          let selectedExam = '';
@@ -436,7 +443,7 @@
              
              const verifiedLabel = document.createElement('div');
              verifiedLabel.className = 'teacher-label';
-             verifiedLabel.textContent = 'Cross-verified by:';
+             verifiedLabel.textContent = 'Cross-verified by:'; 
              
              const verifiedValue = document.createElement('div');
              verifiedValue.className = 'teacher-value';
@@ -444,8 +451,24 @@
              verifiedLine.appendChild(verifiedLabel);
              verifiedLine.appendChild(verifiedValue);
              teacherInfo.appendChild(verifiedLine);
+         
+             // Digital signature
+             const signatureLine = document.createElement('div');
+             signatureLine.className = 'signature-line';
+             
+             const signatureLabel = document.createElement('div');
+             signatureLabel.className = 'signature-label';
+             signatureLabel.textContent = 'Digital Signature: ';
+         
+             const signatureValue = document.createElement('div');
+             signatureValue.className = 'signature-value';
+             signatureValue.textContent = signatures[subject];
+         
+             signatureLine.appendChild(signatureLabel);
+             signatureLine.appendChild(signatureValue);
              
              container.appendChild(teacherInfo);
+             container.appendChild(signatureLine);
              
              return container;
          }
@@ -486,13 +509,13 @@
          async function loadMarks() {
              // Get the "class" parameter from the URL
              const urlParams = new URLSearchParams(window.location.search);
-             const classValue = urlParams.get("class");
-             const exam = urlParams.get("exam");
+             const classValue = urlParams.get("class") || '9-A2';
+             const exam = urlParams.get("exam") || 'PT-2';
              
              // Store in global variables as well
              selectedExam = exam;
              selectedClass = classValue;
-
+         
              // Fetch subject list according to class
              selectedSubjects = getSubjectsForClass(selectedClass);
              // Remove All Subjects (Enthusiasm) from the selectedSubjects array
@@ -512,6 +535,7 @@
                      "asc"               // orderDirection
                      );
                      marks = results;
+                     signatures = await buildSubjectSignatures();
                      return true;
                  } catch (error) {
                      console.error("Failed to load marks:", error);
@@ -521,6 +545,70 @@
                  // No class or exam parameters found, redirect user back to dashboard
                  window.location.href = "https://myjvp.in/marks-management/";
              }
+         }
+         
+         function getFormattedDateTime() {
+         const now = new Date();
+         
+         const options = { 
+         month: 'short',  // "Aug"
+         day: 'numeric',  // "19"
+         year: 'numeric', // "2025"
+         hour: 'numeric', // "7"
+         minute: '2-digit', // "49"
+         hour12: true     // AM/PM format
+         };
+         
+         // Example: "Aug 19, 2025, 7:49 AM"
+         let formatted = now.toLocaleString('en-US', options);
+         
+         return formatted;
+         }
+         
+         async function generateNumericSignature(marksData) {
+         // 1. Sort by id to make order consistent
+         const sorted = [...marksData].sort((a, b) => a.id.localeCompare(b.id));
+         
+         // 2. Extract only id + subject + marks
+         const canonicalString = sorted
+         .map(item => `${item.id}:${item.subject}:${item.marks}`)
+         .join("|");
+         
+         // 3. Create SHA-256 hash
+         const msgBuffer = new TextEncoder().encode(canonicalString);
+         const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+         
+         // 4. Convert hash bytes → BigInt
+         const hashArray = Array.from(new Uint8Array(hashBuffer));
+         let bigNum = 0n;
+         for (let byte of hashArray) {
+         bigNum = (bigNum << 8n) + BigInt(byte);
+         }
+         
+         // 5. Take modulo to shrink to 12-digit number
+         const signature = bigNum % 1000000000000n; // 12 digits
+         
+         // Pad with leading zeros if needed
+         return signature.toString().padStart(12, "0");
+         }
+         
+         async function buildSubjectSignatures() {
+         // Step 1: Group marks by subject
+         const subjectMarks = marks.reduce((acc, item) => {
+         if (!acc[item.subject]) {
+         acc[item.subject] = [];
+         }
+         acc[item.subject].push(item);
+         return acc;
+         }, {});
+         
+         // Step 2: Generate digital signature for each subject
+         const subjectSignature = {};
+         for (const subject of Object.keys(subjectMarks)) {
+         subjectSignature[subject] = await generateNumericSignature(subjectMarks[subject]);
+         }
+         
+         return subjectSignature;
          }
       </script>
    </body>
