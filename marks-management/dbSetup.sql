@@ -57,6 +57,17 @@ DROP FUNCTION IF EXISTS update_students_info(JSON, JSON);
 
 DROP FUNCTION IF EXISTS update_student_roll_numbers(JSONB);
 
+DROP FUNCTION IF EXISTS detect_score_anomalies(
+    TEXT, 
+    TEXT, 
+    TEXT, 
+    TEXT[], 
+    BOOLEAN, 
+    NUMERIC, 
+    NUMERIC, 
+    NUMERIC
+);
+
 -- Drop tables (in reverse order of creation to handle foreign key dependencies)
 DROP TABLE IF EXISTS marks_backup;
 DROP TABLE IF EXISTS marks;
@@ -1717,3 +1728,230 @@ CREATE TRIGGER trg_remove_subjects_after_class_teacher_delete
     EXECUTE FUNCTION remove_subjects_of_class_teacher();
 
 
+
+-- ===========================================================
+-- Function: detect_score_anomalies
+-- Purpose : Detect anomalies between two exams for a given class.
+-- Notes   : Preserves original query structure with parameterization.
+-- Security: SECURITY INVOKER (runs with caller’s rights).
+-- ===========================================================
+
+CREATE OR REPLACE FUNCTION detect_score_anomalies(
+    p_base_exam TEXT,                 -- e.g. 'PT-1' (reference exam)
+    p_current_exam TEXT,              -- e.g. 'PT-2' (exam to check anomalies against base)
+    p_class TEXT,                     -- e.g. '2-A1' (filter only this class)
+    p_case_array TEXT[],              -- e.g. ARRAY['case1','case2','case4'] (which anomaly cases to include)
+    p_only_multiple_types BOOLEAN,    -- true = show only students flagged in more than one anomaly type
+    p_deviation_case_1 NUMERIC,       -- threshold for case1 deviation (e.g. 6 marks)
+    p_difference_case_2 NUMERIC,      -- threshold for case2 difference (e.g. 10 marks)
+    p_stdev_case_4 NUMERIC            -- threshold for case4 stddev (e.g. 6 marks)
+)
+RETURNS TABLE (
+    student TEXT,
+    class TEXT,
+    exam TEXT,
+    subject TEXT,
+    anomaly_type TEXT,
+    difference TEXT                   -- NEW: signed difference value (e.g. '+7', '-9')
+)
+SECURITY INVOKER
+AS $$
+/*
+===========================================================
+ANOMALY CASES (choose which to include in p_case_array)
+-----------------------------------------------------------
+case1 → One subject deviates significantly from student's overall average 
+         (deviation ≥ p_deviation_case_1 marks across base/current exam).
+
+case2 → Large swing in the same subject between base and current exam 
+         (difference ≥ p_difference_case_2 marks).
+
+case3 → Marks outside valid range (less than 0 or greater than 20).
+
+case4 → High inconsistency across subjects in the same exam 
+         (stddev ≥ p_stdev_case_4 marks), showing worst offending subject(s).
+===========================================================
+*/
+WITH student_avg AS (
+    SELECT
+        student,
+        class,
+        AVG(marks) AS avg_score
+    FROM marks_view
+    WHERE marks IS NOT NULL
+      AND exam IN (p_base_exam, p_current_exam)
+      AND class = p_class
+    GROUP BY student, class
+),
+exam_pair_diff AS (
+    SELECT
+        a.student,
+        a.class,
+        a.subject,
+        MAX(a.marks) FILTER (WHERE a.exam = p_base_exam) AS base_marks,
+        MAX(a.marks) FILTER (WHERE a.exam = p_current_exam) AS current_marks
+    FROM marks_view a
+    WHERE marks IS NOT NULL
+      AND exam IN (p_base_exam, p_current_exam)
+      AND class = p_class
+    GROUP BY a.student, a.class, a.subject
+),
+-- Case 1
+case1_anomalies AS (
+    SELECT
+        m.student,
+        m.class,
+        m.exam,
+        m.subject,
+        'case1' AS case_code,
+        format('Deviation from overall average (≥ %s marks)', p_deviation_case_1) AS anomaly_type,
+        CASE 
+            WHEN (m.marks - sa.avg_score) >= 0 
+                 THEN '+' || ROUND(m.marks - sa.avg_score,1)::TEXT
+            ELSE ROUND(m.marks - sa.avg_score,1)::TEXT
+        END AS difference
+    FROM marks_view m
+    JOIN student_avg sa USING (student, class)
+    WHERE 'case1' = ANY(p_case_array)
+      AND m.marks IS NOT NULL
+      AND m.exam IN (p_base_exam, p_current_exam)
+      AND m.class = p_class
+      AND ABS(m.marks - sa.avg_score) >= p_deviation_case_1
+),
+-- Case 2
+case2_anomalies AS (
+    SELECT
+        e.student,
+        e.class,
+        format('%s/%s Swing', p_base_exam, p_current_exam) AS exam,
+        e.subject,
+        'case2' AS case_code,
+        format('Large score swing between %s and %s (≥ %s marks)', p_base_exam, p_current_exam, p_difference_case_2) AS anomaly_type,
+        CASE 
+            WHEN (e.current_marks - e.base_marks) >= 0 
+                 THEN '+' || (e.current_marks - e.base_marks)::TEXT
+            ELSE (e.current_marks - e.base_marks)::TEXT
+        END AS difference
+    FROM exam_pair_diff e
+    WHERE 'case2' = ANY(p_case_array)
+      AND e.base_marks IS NOT NULL
+      AND e.current_marks IS NOT NULL
+      AND ABS(e.base_marks - e.current_marks) >= p_difference_case_2
+),
+-- Case 3
+case3_anomalies AS (
+    SELECT
+        m.student,
+        m.class,
+        m.exam,
+        m.subject,
+        'case3' AS case_code,
+        'Marks outside valid range (0-20)' AS anomaly_type,
+        NULL::TEXT AS difference
+    FROM marks_view m
+    WHERE 'case3' = ANY(p_case_array)
+      AND m.marks IS NOT NULL
+      AND m.exam IN (p_base_exam, p_current_exam)
+      AND m.class = p_class
+      AND (m.marks < 0 OR m.marks > 20)
+),
+-- Case 4 step 1: Stddev per exam per student
+exam_variability AS (
+    SELECT
+        student,
+        class,
+        exam,
+        STDDEV_POP(marks) AS stddev_score,
+        AVG(marks) AS exam_avg
+    FROM marks_view
+    WHERE marks IS NOT NULL
+      AND exam IN (p_base_exam, p_current_exam)
+      AND class = p_class
+    GROUP BY student, class, exam
+),
+-- Case 4 step 2: Deviation per subject from exam average
+subject_deviation AS (
+    SELECT
+        m.student,
+        m.class,
+        m.exam,
+        m.subject,
+        ABS(m.marks - ev.exam_avg) AS deviation,
+        ev.stddev_score
+    FROM marks_view m
+    JOIN exam_variability ev
+      ON m.student = ev.student
+     AND m.class = ev.class
+     AND m.exam = ev.exam
+    WHERE m.marks IS NOT NULL
+      AND m.exam IN (p_base_exam, p_current_exam)
+      AND m.class = p_class
+),
+-- Case 4 step 3: Subjects with highest deviation per exam
+max_deviation_subjects AS (
+    SELECT
+        sd.student,
+        sd.class,
+        sd.exam,
+        sd.subject,
+        sd.stddev_score
+    FROM subject_deviation sd
+    WHERE sd.deviation = (
+        SELECT MAX(sd2.deviation)
+        FROM subject_deviation sd2
+        WHERE sd2.student = sd.student
+          AND sd2.class = sd.class
+          AND sd2.exam = sd.exam
+    )
+),
+-- Case 4 final
+case4_anomalies AS (
+    SELECT
+        mds.student,
+        mds.class,
+        mds.exam,
+        mds.subject,
+        'case4' AS case_code,
+        format('High inconsistency across subjects (stddev ≥ %s), worst offending subject', p_stdev_case_4) AS anomaly_type,
+        NULL::TEXT AS difference
+    FROM max_deviation_subjects mds
+    WHERE 'case4' = ANY(p_case_array)
+      AND mds.stddev_score >= p_stdev_case_4
+),
+-- Combine all anomalies
+all_anomalies AS (
+    SELECT * FROM case1_anomalies
+    UNION ALL
+    SELECT * FROM case2_anomalies
+    UNION ALL
+    SELECT * FROM case3_anomalies
+    UNION ALL
+    SELECT * FROM case4_anomalies
+),
+-- Students flagged in more than one anomaly type
+multi_flagged AS (
+    SELECT
+        student,
+        class,
+        COUNT(DISTINCT case_code) AS anomaly_count
+    FROM all_anomalies
+    GROUP BY student, class
+    HAVING COUNT(DISTINCT case_code) > 1
+)
+SELECT
+    a.student,
+    a.class,
+    a.exam,
+    a.subject,
+    a.anomaly_type,
+    a.difference
+FROM all_anomalies a
+WHERE p_only_multiple_types = false
+   OR (p_only_multiple_types = true AND EXISTS (
+       SELECT 1
+       FROM multi_flagged mf
+       WHERE mf.student = a.student
+         AND mf.class = a.class
+   ))
+ORDER BY a.class ASC, a.student ASC;
+$$ LANGUAGE sql;
