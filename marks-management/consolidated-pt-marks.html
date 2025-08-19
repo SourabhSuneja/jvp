@@ -56,6 +56,10 @@
          font-size: 16px;
          margin-bottom: 15px;
          }
+         #timestamp-info {
+         font-size: 14px;
+         text-transform: none;
+         }
          /* Center the whole anomaly container and limit max width */
          #anomalyContainer {
          max-width: 1200px;   /* keeps it tidy on big screens */
@@ -265,7 +269,7 @@
          <div class="header">
             <div class="school-name">Jamna Vidyapeeth</div>
             <div class="exam-session"><span id="exam-name"></span> (Session 2025-26)</div>
-            <div class="class-info">Class: <span id="class-name"></span></div>
+            <div class="class-info">Class: <span id="class-name"></span><br><span id="timestamp-info"></span></div>
          </div>
          <table id="marks-table">
             <!-- Table will be dynamically generated -->
@@ -282,6 +286,9 @@
          
          // Marks data (will be loaded from server)
          let marks = [];
+         
+         // Store a numeric digital signature for marks data (so that even a small change in the scores changes it altogether)
+          let digitalSignature = '';
          
          // Store score anomalies
          let anomalies = [];
@@ -553,6 +560,9 @@
                  await generateTable();
                  // Render anomalies
                  await renderAnomalies();
+                 // Set timestamp digital signature at the top
+                 document.getElementById('timestamp-info').textContent = 'Generated on ' + getFormattedDateTime() + ' | Digital Signature: ' + digitalSignature;
+         
                  // Hide loading screen
                  hideLoading();
              } else {
@@ -600,7 +610,8 @@
           "roll_number",          // orderByColumn
           "asc"               // orderDirection
           );
-          marks = results;         
+          marks = results;
+          digitalSignature = await generateNumericSignature(marks);       
           return true;
           } catch (error) {
           console.error("Failed to load marks:", error);
@@ -718,6 +729,51 @@
          num = num % 1 === 0 ? num.toFixed(0) : num.toFixed(1);
          
          return sign === "+" ? ` | ↑${num}` : ` | ↓${num}`;
+         }
+         
+         function getFormattedDateTime() {
+         const now = new Date();
+         
+         const options = { 
+         month: 'short',  // "Aug"
+         day: 'numeric',  // "19"
+         year: 'numeric', // "2025"
+         hour: 'numeric', // "7"
+         minute: '2-digit', // "49"
+         hour12: true     // AM/PM format
+         };
+         
+         // Example: "Aug 19, 2025, 7:49 AM"
+         let formatted = now.toLocaleString('en-US', options);
+         
+         return formatted;
+         }
+         
+         async function generateNumericSignature(marksData) {
+         // 1. Sort by id to make order consistent
+         const sorted = [...marksData].sort((a, b) => a.id.localeCompare(b.id));
+         
+         // 2. Extract only id + subject + marks
+         const canonicalString = sorted
+         .map(item => `${item.id}:${item.subject}:${item.marks}`)
+         .join("|");
+         
+         // 3. Create SHA-256 hash
+         const msgBuffer = new TextEncoder().encode(canonicalString);
+         const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+         
+         // 4. Convert hash bytes → BigInt
+         const hashArray = Array.from(new Uint8Array(hashBuffer));
+         let bigNum = 0n;
+         for (let byte of hashArray) {
+         bigNum = (bigNum << 8n) + BigInt(byte);
+         }
+         
+         // 5. Take modulo to shrink to 12-digit number
+         const signature = bigNum % 1000000000000n; // 12 digits
+         
+         // Pad with leading zeros if needed
+         return signature.toString().padStart(12, "0");
          }
       </script>
    </body>
