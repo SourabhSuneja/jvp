@@ -1,0 +1,356 @@
+{
+  "words": [
+    {
+      "word": "साहस",
+      "meaning": "डर या कठिनाई के सामने डटे रहने की शक्ति।",
+      "synonym": "हिम्मत",
+      "antonym": "भय",
+      "sentence": "विपरीत परिस्थितियों में भी उसने अद्भुत साहस दिखाया।",
+      "pronunciation": "saahas"
+    },
+    {
+      "word": "ज्ञान",
+      "meaning": "समझने और जानने की शक्ति।",
+      "synonym": "विद्या",
+      "antonym": "अज्ञान",
+      "sentence": "शिक्षा से हमें सही ज्ञान प्राप्त होता है।",
+      "pronunciation": "gyaan"
+    },
+    {
+      "word": "शांति",
+      "meaning": "सुकून और स्थिरता की अवस्था।",
+      "synonym": "सुकून",
+      "antonym": "अशांति",
+      "sentence": "ध्यान करने से मन में शांति मिलती है।",
+      "pronunciation": "shaanti"
+    },
+    {
+      "word": "करुणा",
+      "meaning": "दूसरों के दुख पर दया करना।",
+      "synonym": "दया",
+      "antonym": "निर्दयता",
+      "sentence": "गरीबों के प्रति करुणा रखना मानवता का लक्षण है।",
+      "pronunciation": "karunaa"
+    },
+    {
+      "word": "सत्य",
+      "meaning": "जो वास्तविक और असली हो।",
+      "synonym": "सच",
+      "antonym": "झूठ",
+      "sentence": "सत्य हमेशा विजयी होता है।",
+      "pronunciation": "satya"
+    },
+    {
+      "word": "बल",
+      "meaning": "शारीरिक या मानसिक शक्ति।",
+      "synonym": "शक्ति",
+      "antonym": "निर्बलता",
+      "sentence": "एकता में अपार बल होता है।",
+      "pronunciation": "bal"
+    },
+    {
+      "word": "आशा",
+      "meaning": "उम्मीद और विश्वास।",
+      "synonym": "उम्मीद",
+      "antonym": "निराशा",
+      "sentence": "कठिन समय में भी आशा नहीं छोड़नी चाहिए।",
+      "pronunciation": "aasha"
+    },
+    {
+      "word": "मैत्री",
+      "meaning": "दोस्ताना संबंध।",
+      "synonym": "मित्रता",
+      "antonym": "शत्रुता",
+      "sentence": "सच्ची मैत्री जीवन को सुंदर बनाती है।",
+      "pronunciation": "maitree"
+    },
+    {
+      "word": "विनम्रता",
+      "meaning": "नम्र और सरल स्वभाव।",
+      "synonym": "नम्रता",
+      "antonym": "अहंकार",
+      "sentence": "विनम्रता से व्यक्ति का सम्मान बढ़ता है।",
+      "pronunciation": "vinamrata"
+    },
+    {
+      "word": "आनंद",
+      "meaning": "खुशी और प्रसन्नता की अवस्था।",
+      "synonym": "प्रसन्नता",
+      "antonym": "दुःख",
+      "sentence": "प्रकृति के बीच समय बिताने से आनंद मिलता है।",
+      "pronunciation": "aanand"
+    },
+    {
+      "word": "विश्वास",
+      "meaning": "किसी पर भरोसा रखना।",
+      "synonym": "भरोसा",
+      "antonym": "संदेह",
+      "sentence": "मित्रता का आधार विश्वास होता है।",
+      "pronunciation": "vishvaas"
+    },
+    {
+      "word": "परिश्रम",
+      "meaning": "लगन और मेहनत से किया गया कार्य।",
+      "synonym": "मेहनत",
+      "antonym": "आलस्य",
+      "sentence": "परिश्रम से ही सफलता मिलती है।",
+      "pronunciation": "parishram"
+    },
+    {
+      "word": "धैर्य",
+      "meaning": "संयम और शांति से प्रतीक्षा करने की क्षमता।",
+      "synonym": "संयम",
+      "antonym": "अधैर्य",
+      "sentence": "धैर्य रखने से कठिनाइयाँ आसान लगती हैं।",
+      "pronunciation": "dhairya"
+    },
+    {
+      "word": "न्याय",
+      "meaning": "सही और निष्पक्ष निर्णय।",
+      "synonym": "इंसाफ",
+      "antonym": "अन्याय",
+      "sentence": "न्याय से समाज में शांति बनी रहती है।",
+      "pronunciation": "nyaay"
+    },
+    {
+      "word": "कर्म",
+      "meaning": "कार्य और गतिविधि।",
+      "synonym": "कार्य",
+      "antonym": "अकर्म",
+      "sentence": "कर्म करते रहो, फल की चिंता मत करो।",
+      "pronunciation": "karm"
+    },
+    {
+      "word": "धन",
+      "meaning": "पैसा और संपत्ति।",
+      "synonym": "संपत्ति",
+      "antonym": "दरिद्रता",
+      "sentence": "धन से सुविधा तो मिलती है, पर खुशी नहीं।",
+      "pronunciation": "dhan"
+    },
+    {
+      "word": "भक्ति",
+      "meaning": "ईश्वर के प्रति प्रेम और समर्पण।",
+      "synonym": "श्रद्धा",
+      "antonym": "अविश्वास",
+      "sentence": "भक्ति से मन को शांति मिलती है।",
+      "pronunciation": "bhakti"
+    },
+    {
+      "word": "प्रेम",
+      "meaning": "सच्चा स्नेह और लगाव।",
+      "synonym": "स्नेह",
+      "antonym": "घृणा",
+      "sentence": "प्रेम से ही रिश्ते मजबूत होते हैं।",
+      "pronunciation": "prem"
+    },
+    {
+      "word": "उदारता",
+      "meaning": "बड़े दिल और सहनशीलता का गुण।",
+      "synonym": "दयालुता",
+      "antonym": "कठोरता",
+      "sentence": "उदारता से समाज में मेल-जोल बढ़ता है।",
+      "pronunciation": "udaarata"
+    },
+    {
+      "word": "स्वतंत्रता",
+      "meaning": "बिना बंधन के जीने की अवस्था।",
+      "synonym": "आज़ादी",
+      "antonym": "ग़ुलामी",
+      "sentence": "स्वतंत्रता हमारा सबसे बड़ा अधिकार है।",
+      "pronunciation": "svatantrata"
+    },
+    {
+      "word": "कुशाग्र",
+      "meaning": "तेज़ दिमाग़ वाला, बुद्धिमान।",
+      "synonym": "बुद्धिमान",
+      "antonym": "मूर्ख",
+      "sentence": "वह बालक अत्यंत कुशाग्र बुद्धि का है।",
+      "pronunciation": "kushaagr"
+    },
+    {
+      "word": "निर्भीक",
+      "meaning": "जिसे किसी बात का भय न हो।",
+      "synonym": "निडर",
+      "antonym": "भयभीत",
+      "sentence": "सच्चा नेता हमेशा निर्भीक होता है।",
+      "pronunciation": "nirbheek"
+    },
+    {
+      "word": "तिरस्कार",
+      "meaning": "घृणा या अपमान का भाव।",
+      "synonym": "घृणा",
+      "antonym": "सम्मान",
+      "sentence": "उसने झूठ बोलने वाले का तिरस्कार किया।",
+      "pronunciation": "tirskaar"
+    },
+    {
+      "word": "दृढ़ता",
+      "meaning": "मजबूती और अटल रहने की अवस्था।",
+      "synonym": "मजबूती",
+      "antonym": "कमज़ोरी",
+      "sentence": "दृढ़ता से कठिनाइयों को हराया जा सकता है।",
+      "pronunciation": "dridhta"
+    },
+    {
+      "word": "विकास",
+      "meaning": "आगे बढ़ने और प्रगति करने की प्रक्रिया।",
+      "synonym": "प्रगति",
+      "antonym": "पतन",
+      "sentence": "शिक्षा के बिना विकास संभव नहीं।",
+      "pronunciation": "vikaas"
+    },
+    {
+      "word": "विनाश",
+      "meaning": "नष्ट हो जाना।",
+      "synonym": "नाश",
+      "antonym": "सृजन",
+      "sentence": "अहंकार से विनाश होता है।",
+      "pronunciation": "vinaash"
+    },
+    {
+      "word": "साहचर्य",
+      "meaning": "साथ रहने या संगति।",
+      "synonym": "संगति",
+      "antonym": "अलगाव",
+      "sentence": "अच्छे लोगों का साहचर्य जीवन को सफल बनाता है।",
+      "pronunciation": "saahacharya"
+    },
+    {
+      "word": "संयम",
+      "meaning": "इच्छाओं पर नियंत्रण।",
+      "synonym": "नियंत्रण",
+      "antonym": "असंयम",
+      "sentence": "संयम से बड़ा कोई साधन नहीं।",
+      "pronunciation": "sanyam"
+    },
+    {
+      "word": "अवसर",
+      "meaning": "मौका मिलने की स्थिति।",
+      "synonym": "मौका",
+      "antonym": "वंचना",
+      "sentence": "अवसर हर किसी के जीवन में आता है।",
+      "pronunciation": "avasar"
+    },
+    {
+      "word": "कुंठा",
+      "meaning": "असंतोष और निराशा की भावना।",
+      "synonym": "निराशा",
+      "antonym": "संतोष",
+      "sentence": "अपनी कुंठा दूसरों पर मत निकालो।",
+      "pronunciation": "kuntha"
+    },
+    {
+      "word": "त्याग",
+      "meaning": "स्वार्थ छोड़कर दूसरों के लिए काम करना।",
+      "synonym": "बलिदान",
+      "antonym": "स्वार्थ",
+      "sentence": "माँ का त्याग अतुलनीय होता है।",
+      "pronunciation": "tyaag"
+    },
+    {
+      "word": "अहंकार",
+      "meaning": "अत्यधिक गर्व और घमंड।",
+      "synonym": "घमंड",
+      "antonym": "विनम्रता",
+      "sentence": "अहंकार व्यक्ति को पतन की ओर ले जाता है।",
+      "pronunciation": "ahankaar"
+    },
+    {
+      "word": "संकल्प",
+      "meaning": "दृढ़ निश्चय करना।",
+      "synonym": "निश्चय",
+      "antonym": "अनिश्चय",
+      "sentence": "संकल्प शक्ति से असंभव भी संभव हो जाता है।",
+      "pronunciation": "sankalp"
+    },
+    {
+      "word": "आत्मविश्वास",
+      "meaning": "अपने ऊपर भरोसा रखना।",
+      "synonym": "स्वविश्वास",
+      "antonym": "हीनभावना",
+      "sentence": "आत्मविश्वास सफलता की कुंजी है।",
+      "pronunciation": "aatmavishvaas"
+    },
+    {
+      "word": "विपत्ति",
+      "meaning": "मुसीबत और संकट की स्थिति।",
+      "synonym": "मुसीबत",
+      "antonym": "सुख",
+      "sentence": "सच्चा मित्र विपत्ति में पहचाना जाता है।",
+      "pronunciation": "vipatti"
+    },
+    {
+      "word": "प्रेरणा",
+      "meaning": "उत्साह और ऊर्जा देने वाला कारण।",
+      "synonym": "उत्साह",
+      "antonym": "निरुत्साह",
+      "sentence": "महापुरुषों का जीवन हमें प्रेरणा देता है।",
+      "pronunciation": "prernaa"
+    },
+    {
+      "word": "सद्भावना",
+      "meaning": "अच्छा और सकारात्मक भाव।",
+      "synonym": "भलाई",
+      "antonym": "द्वेष",
+      "sentence": "सद्भावना से समाज में शांति रहती है।",
+      "pronunciation": "sadbhaavnaa"
+    },
+    {
+      "word": "कष्ट",
+      "meaning": "दुःख या परेशानी।",
+      "synonym": "पीड़ा",
+      "antonym": "सुख",
+      "sentence": "कष्ट सहने से इंसान मजबूत बनता है।",
+      "pronunciation": "kasht"
+    },
+    {
+      "word": "विवेक",
+      "meaning": "सही और गलत में फर्क समझने की शक्ति।",
+      "synonym": "समझ",
+      "antonym": "मूर्खता",
+      "sentence": "विवेक से निर्णय लेना बुद्धिमानी है।",
+      "pronunciation": "vivek"
+    },
+    {
+      "word": "श्रद्धा",
+      "meaning": "गहरी आस्था और विश्वास।",
+      "synonym": "भक्ति",
+      "antonym": "अश्रद्धा",
+      "sentence": "श्रद्धा से ही पूजा सफल होती है।",
+      "pronunciation": "shraddhaa"
+    },
+    {
+      "word": "लोभ",
+      "meaning": "अत्यधिक चाह और लालच।",
+      "synonym": "लालच",
+      "antonym": "संतोष",
+      "sentence": "लोभ सबसे बड़ा दुर्गुण है।",
+      "pronunciation": "lobh"
+    },
+    {
+      "word": "धन्यवाद",
+      "meaning": "आभार प्रकट करने का शब्द।",
+      "synonym": "आभार",
+      "antonym": "उपेक्षा",
+      "sentence": "आपकी सहायता के लिए धन्यवाद।",
+      "pronunciation": "dhanyavaad"
+    },
+    {
+      "word": "साहचर्य",
+      "meaning": "मिलकर रहने की प्रवृत्ति।",
+      "synonym": "संगति",
+      "antonym": "अलगाव",
+      "sentence": "अच्छा साहचर्य जीवन को श्रेष्ठ बनाता है।",
+      "pronunciation": "saahacharya"
+    },
+    {
+      "word": "दया",
+      "meaning": "दूसरों के दुख पर सहानुभूति।",
+      "synonym": "करुणा",
+      "antonym": "निर्दयता",
+      "sentence": "दया सबसे बड़ी मानवता है।",
+      "pronunciation": "dayaa"
+    }
+  ]
+}
