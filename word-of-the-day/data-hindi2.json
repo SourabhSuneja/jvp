@@ -1,0 +1,164 @@
+{
+  "words": [
+    {
+      "word": "संश्लेषण",
+      "meaning": "मिश्रण",
+      "synonym": "संयोजन",
+      "antonym": "विश्लेषण",
+      "sentence": "तथ्यों के संश्लेषण से श्रेष्ठ विचार का जन्म होता है।",
+      "pronunciation": "sanshleshan"
+    },
+    {
+      "word": "व्यक्तिक",
+      "meaning": "व्यक्तिगत",
+      "synonym": "स्वकीय",
+      "antonym": "निव्यक्तिक",
+      "sentence": "यह उसका व्यक्तिगत निर्णय है, इसमें किसी और का हस्तक्षेप उचित नहीं।",
+      "pronunciation": "vyaktik"
+    },
+    {
+      "word": "वृद्धीकरण",
+      "meaning": "विस्तार",
+      "synonym": "प्रसार",
+      "antonym": "संक्षिप्तीकरण",
+      "sentence": "शिक्षा के क्षेत्र में तकनीक का प्रयोग ज्ञान के वृद्धीकरण में सहायक है।",
+      "pronunciation": "vriddhikaran"
+    },
+    {
+      "word": "भौतिक",
+      "meaning": "सांसारिक",
+      "synonym": "लौकिक",
+      "antonym": "आध्यात्मिक",
+      "sentence": "मानव केवल भौतिक सुखों से संतुष्ट नहीं हो सकता।",
+      "pronunciation": "bhautik"
+    },
+    {
+      "word": "संपन्नता",
+      "meaning": "धन या साधन की प्रचुरता",
+      "synonym": "समृद्धि",
+      "antonym": "विपन्नता",
+      "sentence": "कड़ी मेहनत करने से ही जीवन में संपन्नता आती है।",
+      "pronunciation": "sampannata"
+    },
+    {
+      "word": "ज्येष्ठ",
+      "meaning": "बड़ा",
+      "synonym": "वरिष्ठ",
+      "antonym": "कनिष्ठ",
+      "sentence": "ज्येष्ठ नागरिकों का सम्मान करना हमारा कर्तव्य है।",
+      "pronunciation": "jyeshth"
+    },
+    {
+      "word": "सच्चरित्र",
+      "meaning": "सद्गुणी",
+      "synonym": "उत्तम चरित्र",
+      "antonym": "दुश्चरित्र",
+      "sentence": "सच्चरित्र व्यक्ति समाज के लिए आदर्श होता है।",
+      "pronunciation": "sachcharitra"
+    },
+    {
+      "word": "कृतज्ञता",
+      "meaning": "उपकार मानना",
+      "synonym": "आभार",
+      "antonym": "कृतघ्नता",
+      "sentence": "कृतज्ञता की भावना इंसान को विनम्र बनाती है।",
+      "pronunciation": "kritagyata"
+    },
+    {
+      "word": "उत्साहित",
+      "meaning": "आनंदित",
+      "synonym": "रोमांचित",
+      "antonym": "हतोत्साह",
+      "sentence": "अपना परीक्षा परिणाम देखकर बालक उत्साहित हो गया।",
+      "pronunciation": "utsahit"
+    },
+    {
+      "word": "ऊर्ध्वगामी",
+      "meaning": "प्रगति की ओर बढ़ने वाला",
+      "synonym": "प्रगतिशील",
+      "antonym": "अधोमुखी",
+      "sentence": "ऊर्ध्वमुखी प्रयास ही सफलता की ओर ले जाते हैं।",
+      "pronunciation": "oordhvagami"
+    },
+    {
+      "word": "शाश्वत",
+      "meaning": "सदैव रहने वाला",
+      "synonym": "सनातन",
+      "antonym": "नश्वर",
+      "sentence": "सत्य और अहिंसा शाश्वत मूल्य हैं।",
+      "pronunciation": "shaashvat"
+    },
+    {
+      "word": "अप्रत्याशित",
+      "meaning": "जिसकी आशा न की गई हो",
+      "synonym": "अनपेक्षित",
+      "antonym": "प्रत्याशित",
+      "sentence": "उसकी अप्रत्याशित सफलता ने परिवार को गौरवान्वित कर दिया।",
+      "pronunciation": "apratyaashit"
+    },
+    {
+      "word": "व्यावहारिक",
+      "meaning": "व्यवहार योग्य",
+      "synonym": "व्यवहायोग्य",
+      "antonym": "अव्यावहारिक",
+      "sentence": "हमें समस्या का व्यावहारिक समाधान खोजना चाहिए।",
+      "pronunciation": "vyaavaharik"
+    },
+    {
+      "word": "निषिद्ध",
+      "meaning": "जिस पर रोक हो",
+      "synonym": "वर्जित",
+      "antonym": "विहित",
+      "sentence": "इस क्षेत्र में धूम्रपान निषिद्ध है।",
+      "pronunciation": "nishiddh"
+    },
+    {
+      "word": "जागरण",
+      "meaning": "चेतना की प्राप्ति",
+      "synonym": "सचेतन",
+      "antonym": "सुप्त",
+      "sentence": "सामाजिक सुधार के लिए समाज में जागरण आवश्यक है।",
+      "pronunciation": "jaagaran"
+    },
+    {
+      "word": "प्रेरणा",
+      "meaning": "प्रोत्साहन देना",
+      "synonym": "उत्साह",
+      "antonym": "निरुत्साह",
+      "sentence": "महान व्यक्तियों की जीवनी हमें प्रेरणा देती है।",
+      "pronunciation": "prerna"
+    },
+    {
+      "word": "आत्मविश्वास",
+      "meaning": "स्वयं पर विश्वास",
+      "synonym": "दृढ़ता",
+      "antonym": "संशय",
+      "sentence": "आत्मविश्वास सफलता की कुंजी है।",
+      "pronunciation": "aatmavishwas"
+    },
+    {
+      "word": "सहानुभूति",
+      "meaning": "दूसरे के दुख में साथ देना",
+      "synonym": "करुणा",
+      "antonym": "निर्दयता",
+      "sentence": "सहानुभूति से रिश्ते मजबूत होते हैं।",
+      "pronunciation": "sahanubhooti"
+    },
+    {
+      "word": "समर्पण",
+      "meaning": "पूर्ण निष्ठा और लगन से कार्य करना",
+      "synonym": "अर्पण",
+      "antonym": "उदासीनता",
+      "sentence": "उसने अपने कार्य में अद्भुत समर्पण दिखाया।",
+      "pronunciation": "samarpan"
+    },
+    {
+      "word": "सद्भावना",
+      "meaning": "अच्छी भावना",
+      "synonym": "मित्रता",
+      "antonym": "द्वेष",
+      "sentence": "सद्भावना से समाज में शांति बनी रहती है।",
+      "pronunciation": "sadbhavana"
+    }
+  ]
+}
