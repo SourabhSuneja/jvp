@@ -920,6 +920,9 @@
          examModal.classList.add('hidden');
          newExamName.value = '';
          newExamMarks.value = '10';
+
+         // Log this action in activity_logs on server
+         logActivity(teacherName.name.toUpperCase(), 'EXAM_ADD', {'exam': examName, 'class': selectedClass, 'subject': selectedSubject, 'mm': maxMarks});
          
          hideLoading();
          
@@ -1039,7 +1042,9 @@
          examModal.classList.add('hidden');
          newExamName.value = '';
          newExamMarks.value = '10';
-         
+
+         // Log this action in activity_logs on server
+         logActivity(teacherName.name.toUpperCase(), 'EXAM_DETAILS_UPDATE', {'exam': examName, 'class': selectedClass, 'subject': selectedSubject, 'mm': maxMarks});
          
          hideLoading();
          
