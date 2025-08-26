@@ -953,6 +953,8 @@
          const selectedClass = classSelect.value;
          const selectedSubject = subjectSelect.value;
          const selectedExam = examSelect.value;
+         const oldExamName = selectedExam;
+         const oldMM = maxMarks;
          
          if(!customExams.find(e => e.name === selectedExam)) {
          return;
@@ -1044,7 +1046,7 @@
          newExamMarks.value = '10';
 
          // Log this action in activity_logs on server
-         logActivity(teacherName.name.toUpperCase(), 'EXAM_DETAILS_UPDATE', {'exam': examName, 'class': selectedClass, 'subject': selectedSubject, 'mm': maxMarks});
+         logActivity(teacherName.name.toUpperCase(), 'EXAM_DETAILS_UPDATE', {'newExamName': examName, 'class': selectedClass, 'subject': selectedSubject, 'newMM': maxMarks, 'oldExamName': oldExamName, 'oldMM': oldMM});
          
          hideLoading();
          
