@@ -954,7 +954,7 @@
          const selectedSubject = subjectSelect.value;
          const selectedExam = examSelect.value;
          const oldExamName = selectedExam;
-         const oldMM = maxMarks;
+         let oldMM;
          
          if(!customExams.find(e => e.name === selectedExam)) {
          return;
@@ -1017,6 +1017,7 @@
          );
          
          if (foundExam) {
+         oldMM = foundExam.mm;
          foundExam.name = examName;
          foundExam.mm = maxMarks;
          }
