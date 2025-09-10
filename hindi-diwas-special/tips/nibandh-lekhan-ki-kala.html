@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>रचनात्मक लेखन - निबंध लेखन की कला</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-intro {
+            font-size: 1.25rem;
+            color: #4b5563;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .guide-section {
+            margin-bottom: 2.5rem;
+        }
+        .guide-subheading {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e7ff;
+        }
+        .guide-content p, .guide-content li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        .guide-content ul, .guide-content ol {
+            padding-left: 2rem;
+        }
+        .tip-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #eef2ff;
+            border-left: 5px solid var(--text-dark);
+            border-radius: 8px;
+        }
+        .tip-box strong {
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+            .guide-subheading { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="content-wrapper">
+            <h1 class="page-title">निबंध लेखन की कला</h1>
+
+            <p class="page-intro">चलो, सीखते हैं कि एक बढ़िया निबंध कैसे लिखें! निबंध लिखना मतलब अपने मन की बातों को सुंदर तरीके से कागज पर उतारना। यह बहुत आसान है, आओ देखें कैसे।</p>
+              
+            <div class="guide-section">
+                <h2 class="guide-subheading">१. विषय को समझें (Understand the Topic)</h2>
+                <div class="guide-content">
+                    <p>निबंध लिखने का सबसे पहला कदम है विषय (Topic) को अच्छे से समझना। खुद से पूछो, "यह विषय मुझसे क्या लिखने के लिए कह रहा है?"</p>
+                    <p><strong>उदाहरण:</strong> अगर विषय 'मेरा प्रिय त्योहार' है, तो आपको यह बताना है कि आपका पसंदीदा त्योहार कौन-सा है, वह क्यों मनाया जाता है, आप उस दिन क्या-क्या करते हैं, और वह आपको क्यों अच्छा लगता है।</p>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <h2 class="guide-subheading">२. एक प्लान बनाएँ (Prepare an Outline)</h2>
+                <div class="guide-content">
+                    <p>सीधे लिखना शुरू करने से पहले, एक छोटा सा प्लान बना लो। इसे 'रूपरेखा' कहते हैं। यह गेम खेलने से पहले नियम जानने जैसा है! इससे आपको पता रहेगा कि कब क्या लिखना है। हर निबंध के तीन हिस्से होते हैं:</p>
+                    <ol>
+                        <li><strong>शुरुआत (Introduction):</strong> इसमें विषय के बारे में बताओ।<br>
+                            <em>उदाहरण: "दीवाली भारत का सबसे बड़ा त्योहार है। इसे रोशनी का पर्व भी कहते हैं।"</em></li>
+                        <li><strong>बीच का हिस्सा (Body):</strong> इसमें विषय के बारे में 2-3 पैराग्राफ में और जानकारी दो।<br>
+                            <em>उदाहरण: पहले पैराग्राफ में लिखो कि हम घर कैसे सजाते हैं। दूसरे में बताओ कि कौन-कौन से पकवान बनते हैं और हम पूजा कैसे करते हैं।</em></li>
+                        <li><strong>अंत (Conclusion):</strong> इसमें अपनी पूरी बात को एक या दो लाइन में खत्म करो।<br>
+                            <em>उदाहरण: "मुझे दीवाली बहुत पसंद है क्योंकि इस दिन चारों ओर खुशी और रोशनी होती है।"</em></li>
+                    </ol>
+                    <div class="tip-box">
+                        <strong>क्यों जरूरी है प्लान?</strong> एक अच्छा प्लान आपकी लिखने की गाड़ी को सही रास्ते पर रखता है और उसे भटकने से बचाता है!
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <h2 class="guide-subheading">३. सुंदर भाषा का प्रयोग करें (Language and Style)</h2>
+                <div class="guide-content">
+                    <p>अच्छे और सरल शब्दों का प्रयोग करने से आपका निबंध सुंदर लगता है।</p>
+                    <ul>
+                        <li><strong>छोटे-छोटे वाक्य लिखें:</strong> लंबे वाक्यों से बचना चाहिए।<br>
+                        <strong>ऐसे नहीं:</strong> <em>दीवाली, जो कि एक ऐसा त्योहार है जिसमें हम बहुत सारे दीये जलाते हैं और मिठाई खाते हैं, मुझे बहुत अच्छा लगता है।</em><br>
+                        <strong>ऐसे लिखें:</strong> <em>दीवाली रोशनी का त्योहार है। हम दीये जलाते हैं और मिठाई खाते हैं। मुझे यह त्योहार बहुत पसंद है।</em></li>
+                        <br>
+                        <li><strong>नए शब्दों का प्रयोग करें:</strong> एक ही शब्द बार-बार न लिखें।<br>
+                        <strong>ऐसे नहीं:</strong> <em>मेरी फ्रॉक <strong>सुंदर</strong> है। मेरा घर भी <strong>सुंदर</strong> लग रहा है।</em><br>
+                        <strong>ऐसे लिखें:</strong> <em>मेरी फ्रॉक बहुत <strong>प्यारी</strong> है। मेरा घर भी <strong>रोशन</strong> हो गया है।</em></li>
+                    </ul>
+                    <div class="tip-box">
+                        <strong>एक मजेदार टिप:</strong> रोज एक कहानी पढ़ो। देखो कि लेखक ने कैसे अच्छे शब्दों का इस्तेमाल किया है। इससे आप भी नए-नए शब्द सीखोगे और आप की लेखन शैली में सुधार होगा।
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="back-link-container">
+             <a href="https://myjvp.in/hindi-diwas-special/" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+
+    <script>
+        // Simple script for particles background
+        document.addEventListener('DOMContentLoaded', function () {
+            const particlesContainer = document.getElementById('particles');
+            if(particlesContainer) {
+                const particleCount = 50;
+                for (let i = 0; i < particleCount; i++) {
+                    let particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.animationDelay = `${Math.random() * 10}s`;
+                    particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
