@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>लघु कथा - खज़ाने की चाबी</title>
+    <meta name="description" content="विक्रम की रहस्यमयी कहानी पढ़ें — एक साहसिक खोज, पिता की मौत का सच और पुश्तैनी खज़ाने का राज़। जानें जिज्ञासा और हिम्मत से कैसे बदली उसकी किस्मत।">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-author {
+            font-size: 1.25rem;
+            color: #d97706;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+        .story-body {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: #374151;
+            text-align: justify;
+        }
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+        .story-moral {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #fef3c7;
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 0 8px 8px 0;
+        }
+        .story-moral strong {
+            font-size: 1.2rem;
+            color: #92400e;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .story-moral p {
+            color: #451a03;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <article class="content-wrapper">
+            <h1 class="page-title">खज़ाने की चाबी</h1>
+
+            <p class="page-author">रचयिता: सुमन, नवमीं - A2</p>
+            
+            <div class="story-body">
+<p>यह बात है 1987 की, जब तमिलनाडु में विक्रम नाम का एक बालक रहता था। यूं तो बच्चों में हमेशा ही कोई न कोई साहसिक काम करने की इच्छा रहती है और वे अक्सर स्वयं को एक नायक के रूप में देखना चाहते हैं, विक्रम के लिए भी जिंदगी ने एक ऐसा दरवाज़ा छोड़ रखा था जिससे गुजरकर वह किसी बड़ी साहसिक तलाश पर निकलने वाला था। विक्रम एक ऐसी गुत्थी सुलझाने वाला था जो उसका भाग्य पलटने वाली थी और उसे अनकहे रहस्यों की परतों में ले जाने वाली थी।</p>
+
+<p>विक्रम 16 वर्ष का हो चुका था और अपने चाचा–चाची के साथ रहता था। जब विक्रम महज़ छः वर्ष का था, तभी उसके पिता दुनिया से चल बसे थे। तभी से उस पर जिम्मेदारियों का पहाड़ टूट पड़ा था। चाचा–चाची की भी माली हालत कुछ ठीक न थी। जैसे–तैसे उन्होंने विक्रम को पास ही के सरकारी स्कूल में पढ़ाया–लिखाया और लालन–पालन किया। विक्रम अपनी उम्र के बाकी बच्चों से काफ़ी मेधावी था और अद्भुत बौद्धिक क्षमता का धनी था। हालांकि उसे अपने पिता की मृत्यु का कारण नहीं पता था, वह अक्सर चाचा से पूछा करता था कि उसके पिता की मृत्यु आखिर हुई कैसे थी। चाचा सब कुछ जानते तो थे पर विक्रम को बताने में आनाकानी करते थे। विक्रम जानने की हठ भी करता तो उसे फटकार लगाकर चुप करवा देते।</p>
+
+<p>विक्रम के पिता की मृत्यु यकीनन एक रहस्य था और विक्रम के मस्तिष्क में गुदगुदी का कारण भी। एक दिन हुआ यूं कि खेलते वक्त विक्रम के गले में लटका लॉकेट टूट गया, जो उसे पिता ने दिया था। लॉकेट में से एक छोटी–सी पर्ची निकली जिस पर कांपते हाथ से कोई अजीबो–गरीब पहेली लिखी गई थी। पहेली के अक्षरों की बनावट से साफ़ पता चल रहा था कि लिखने वाले ने जल्दबाजी में लिखा था। पर्ची पर लिखा था — "समुद्र को देखो, मैं हूं वहां की रानी"।</p>
+
+<p>पहेली को पढ़ते ही विक्रम अपने दिमाग के घोड़े दौड़ाने लगा। उसे तत्क्षण आशंका हुई कि यही वो सुराग है जिसके सहारे वह अपने पिता की मौत का सच जान सकता है। आखिर समुद्र में ऐसे कौनसे राज़ दफ़न थे? विक्रम के दिमाग में अजीब–सी सुगबुगाहट होने लगी और उसने ठान लिया कि वह समुद्र तट पर जाकर इस पहेली का हल निकालेगा।</p>
+
+<p>एक दिन बिना किसी को कुछ बताए विक्रम समुद्र तट की तरफ़ निकल पड़ा। सागर की लहरें मानों अटखेलियां कर रही थीं। विक्रम उन्हीं सन्नाटे को चीरती लहरों पर अपने पिता की आवाज़ का अंतःकरण में अनुभव करने लगा। कुछ देर वह बैठा और उठती–बैठती तरंगों को एकटक निहारता रहा। कुछ देर बाद फिर वही पर्ची जेब से निकाली और पहेली को दोबारा पढ़ा — "समुद्र को देखो, मैं हूं वहां की रानी"।</p>
+
+<p>फिर उसकी नज़र उठी और पास से गुजर रहे मछुआरे पर पड़ी। मछुआरा एक मरी हुई डॉल्फिन को अपने साथ टोकरी में ले जा रहा था। विक्रम के दिमाग में कुछ खटका और उसने मछुआरे को रोककर पूछा, "इसमें क्या ले जा रहे हो, भाई?"  
+मछुआरे ने उत्तर दिया, "डॉल्फिन"।  
+विक्रम चौंककर बोला, "डॉल्फिन यानी समुद्र की रानी?"  
+"जी, आप कह सकते हैं।", मछुआरे ने कहा।</p>
+
+<p>विक्रम की नज़र डॉल्फिन के साथ ही टोकरी में पड़े हुए आधे कटे–फटे जूते पर पड़ी।  
+"यह आधा कटा हुआ जूता किस लिए?", विक्रम ने हैरतंगेज अंदाज़ में पूछा।  
+"यह जूता शायद डॉल्फिन अपने मुंह में चबा गई थी। मुझे इसके मुंह से मिला।", मछुआरे ने बताया।</p>
+
+<p>विक्रम ने जूता उठाकर बारीकी से निरीक्षण किया। एकाएक उसके स्मृति पटल पर अपने पिता की उसी जूते को पहने हुए छवि उभर आई। वह समझ गया कि यह जूता उसके पिता का ही है। विक्रम के चेहरे पर मुस्कान छा गई मानों उसने आधी पहेली हल कर ली थी। विक्रम ने मछुआरे को मुंह–मांगे पैसे देकर डॉल्फिन और उसके साथ मिला कटा हुआ जूता खरीद लिया।</p>
+
+<p>वह कुछ देर तक डॉल्फिन को हाथ में लेकर बैठा रहा और पहेली के बारे में सोचता रहा। फिर अचानक उसकी नज़र डॉल्फिन के दांतों पर पड़ी। दांतों में कोई चमकदार चीज़ अटकी हुई मालूम हुई। विक्रम ने डॉल्फिन का मुंह खोलकर दांतों से उसे खींचकर निकाला और देखा कि वह कागज़ में लिपटी एक चाबी है।</p>
+
+<p>बस अब क्या था? विक्रम की खुशी में चार चांद लग गए और वह पहेली सुलझाने के और करीब आ गया। कागज़ पर किसी पुरानी हवेली का पता अंकित था। विक्रम चाबी को लेकर उस हवेली की ओर निकल पड़ा। हवेली में उसे खूब सारा खज़ाना छुपा हुआ मिला। खज़ाने के साथ ही एक पत्र पड़ा हुआ मिला जो उसके पिता ने खज़ाना छुपाते वक्त और मरने से ठीक पहले लिखा था।</p>
+
+<p>पत्र में लिखा था:  
+"बेटा, यह हमारा पुश्तैनी खज़ाना है। मैं इसे यहां हिफाजत से रख रहा हूं। कुछ समुद्री डाकुओं को पता चल गया है कि यह खज़ाना मेरे पास है। वे मेरे पीछे लगे हैं। मैं हवेली की चाबी अपने दाएं पैर के जूते में छुपाकर भाग रहा हूं ताकि डाकू मुझे पकड़ भी लें तो भी उन्हें यह चाबी हाथ न लगे। यदि दुर्भाग्यवश डाकुओं ने मुझे मारना भी चाहा तो मैं यह जूता समुद्र में फेंक दूंगा। समुद्र में एक बड़ी डॉल्फिन रहती है और तुम्हें बता दूं कि डॉल्फिन कभी भी खाना चबाकर नहीं खाती हैं। यदि यह जूता डॉल्फिन जैसे किसी जीव ने खा भी लिया तो उसके मुख तक ही अटक जाएगा। तुम डॉल्फिन तक पहुंचकर जूता और चाबी निकाल लेना। भगवान तुम्हें सलामत रखे।"</p>
+
+<p>पत्र पढ़ते ही विक्रम को अपने सारे सवालों के जवाब मिल गए थे। विक्रम की जिज्ञासा और सभी आशंकाओं का शमन हो चुका था। विक्रम स्वभाव से ही जिज्ञासु और खोजबीन करने वाला लड़का था। विक्रम का व्यक्तित्व हमें बाल–स्वभाव के बारे में बताता है और हमें भी बालपन जैसी जिज्ञासा रखने के लिए प्रेरित करता है।</p>
+
+<p>यदि विक्रम पहेली को सुलझाने का न ठानता तो शायद कभी भी अपने पुश्तैनी खज़ाने तक न पहुंच पाता। दोस्तों, जिंदगी भी हमें ऐसे ही छोटी–छोटी पहेलियों में उलझाती है और ईश्वर सुराग दिखाकर हमें बाहर निकालने की कोशिश करता है। यदि हम बच्चों जैसी जिज्ञासा, विश्वास, सूझबूझ और निष्ठा रखें तो हम निश्चित ही ज़िंदगी की बड़ी से बड़ी उलझन को भी सुलझाने में कामयाब हो जाएंगे।</p>
+            </div>
+
+            <div class="story-moral">
+                <strong>शिक्षा:</strong>
+                <p>जीवन की हर कठिनाई एक पहेली की तरह होती है, जिसे धैर्य और जिज्ञासा से ही सुलझाया जा सकता है।<br>
+सच्ची लगन और सूझबूझ इंसान को छुपे हुए सत्य और सफलता तक पहुँचा देती है।</p>
+            </div>
+        </article>
+
+        <div class="back-link-container">
+            <a href="https://myjvp.in/hindi-diwas-special/" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+</body>
+</html>
