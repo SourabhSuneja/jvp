@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>रचनात्मक लेखन - कविता कैसे लिखें?</title>
+    <meta name="description" content="कविता लेखन की कला सीखें – सरल तरीके, टिप्स और उदाहरणों के साथ अपनी भावनाओं को शब्दों में ढालें।">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-intro {
+            font-size: 1.25rem;
+            color: #4b5563;
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .guide-section {
+            margin-bottom: 2.5rem;
+        }
+        .guide-subheading {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e7ff;
+        }
+        .guide-content p, .guide-content li {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+        .guide-content ul, .guide-content ol {
+            padding-left: 2rem;
+        }
+        .tip-box {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #eef2ff;
+            border-left: 5px solid var(--text-dark);
+            border-radius: 8px;
+        }
+        .tip-box strong {
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+            .guide-subheading { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="content-wrapper">
+            <h1 class="page-title">कविता कैसे लिखें?</h1>
+
+            <p class="page-intro">कविता लिखना तो दिल की बात कहने जैसा है, बस थोड़े सुर और ताल के साथ! यह शब्दों का एक मजेदार खेल है। चलो, सीखते हैं कि तुम अपनी खुद की कविता कैसे बना सकते हो।</p>
+              
+            <div class="guide-section">
+                <h2 class="guide-subheading">१. तुक वाले शब्द ढूंढो (Find Rhyming Words)</h2>
+                <div class="guide-content">
+                    <p>कविता की शुरुआत करने का सबसे आसान तरीका है तुक वाले शब्द (Rhyming Words) ढूंढना। ये वे शब्द होते हैं जिनकी आखिरी आवाज एक जैसी होती है। जैसे- <strong>राजा-बाजा, मोर-शोर, पानी-रानी।</strong></p>
+                    <p>अब इन शब्दों को लाइन के आखिर में रखकर छोटी-छोटी कविता बनाओ।</p>
+                    <p><strong>उदाहरण:</strong><br>
+                    देखो-देखो आया <strong>मोर</strong>,<br>
+                    जंगल में है इसका <strong>शोर</strong>।<br>
+                    कितने सुंदर पंख हैं <strong>इसके</strong>,<br>
+                    नाचे जब बादल हों <strong>बरसते</strong>।
+                    </p>
+                    <div class="tip-box">
+                        <strong>मदद चाहिए?</strong> अगर किसी शब्द का तुक वाला शब्द नहीं मिल रहा, तो गूगल पर "पानी के तुक वाले शब्द" खोजें या किसी AI असिस्टेंट से पूछें!
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <h2 class="guide-subheading">२. अपने आसपास देखो (Look Around You)</h2>
+                <div class="guide-content">
+                    <p>कविता लिखने के लिए विचार आपके चारों ओर हैं! अपनी खिड़की से बाहर देखो, अपनी पसंदीदा गुड़िया को देखो, या सोचो कि जब आप खुश होते हो तो कैसा लगता है। किसी भी चीज़ पर कविता बन सकती है।</p>
+                    <p><strong>उदाहरण:</strong> मान लो आपने रात में एक तारा देखा। आप सोच सकते हो:</p>
+                    <ul>
+                        <li>रात में निकला एक <strong>तारा</strong>,</li>
+                        <li>लगता था कितना <strong>प्यारा</strong>।</li>
+                        <li>मैंने उसको पास <strong>बुलाया</strong>,</li>
+                        <li>हाथ हिलाकर <strong>मुस्काया</strong>।</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="guide-section">
+                <h2 class="guide-subheading">३. शब्दों से खेलो (Play with Words)</h2>
+                <div class="guide-content">
+                    <p>कविता में आप वाक्यों को थोड़ा घुमा-फिराकर लिख सकते हैं, ताकि वे सुनने में और भी अच्छे लगें। जरूरी नहीं कि आप हमेशा वैसे ही लिखें जैसे आप बोलते हैं।</p>
+                    <p><strong>साधारण वाक्य:</strong> <em>"नीले आसमान में एक छोटा तारा चमक रहा है।"</em></p>
+                    <p><strong>कविता की लाइन:</strong> आप इसे ऐसे लिख सकते हैं:</p>
+                    <ul>
+                        <li><em>चमक रहा <strong>आसमान</strong> में, एक नन्हा <strong>तारा</strong>।</em></li>
+                        <li>या, <em>तारा एक <strong>चमके</strong>, नीले <strong>आसमान</strong> में।</em></li>
+                    </ul>
+                     <div class="tip-box">
+                        <strong>याद रखो!</strong> कविता लिखने का कोई एक सही तरीका नहीं होता। बस अपने दिल की बात लिखो और शब्दों के साथ मजे करो!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="back-link-container">
+             <a href="MAIN_PAGE_LINK.html" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+
+    <script>
+        // Simple script for particles background
+        document.addEventListener('DOMContentLoaded', function () {
+            const particlesContainer = document.getElementById('particles');
+            if(particlesContainer) {
+                const particleCount = 50;
+                for (let i = 0; i < particleCount; i++) {
+                    let particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    particle.style.animationDelay = `${Math.random() * 10}s`;
+                    particle.style.animationDuration = `${5 + Math.random() * 5}s`;
+                    particlesContainer.appendChild(particle);
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
