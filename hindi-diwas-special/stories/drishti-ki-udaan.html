@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>लघु कथा - दृष्टि की उड़ान</title>
+    <meta name="description" content="पढ़ें दृष्टि की प्रेरणादायक कहानी — एक नन्हीं बच्ची जिसने नेत्रहीनता की कठिनाईयों को मात देकर IAS बनने का सपना पूरा किया। जानें कैसे मेहनत, विश्वास और हिम्मत से असंभव को संभव बनाया जा सकता है।">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-author {
+            font-size: 1.25rem;
+            color: #d97706;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+        .story-body {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: #374151;
+            text-align: justify;
+        }
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+        .story-moral {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #fef3c7;
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 0 8px 8px 0;
+        }
+        .story-moral strong {
+            font-size: 1.2rem;
+            color: #92400e;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .story-moral p {
+            color: #451a03;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <article class="content-wrapper">
+            <h1 class="page-title">दृष्टि की उड़ान</h1>
+
+            <p class="page-author">रचयिता: आस्था कुमारी, दसवीं - A1</p>
+            
+            <div class="story-body">
+<p>बालकों का हंसता चेहरा  
+डालता है प्रभाव गहरा।  
+मकर संक्रांति पर खाते हैं तिल,  
+तंदुरुस्त है हम सब बच्चों का दिल।</p>
+
+<p>बाल मनोविज्ञान एक ऐसा शब्द है जो ‘बाल’ उपसर्ग से बनता है। हमें बाल मनोविज्ञान को गहराई से समझाना पड़ता है। बाल मनोविज्ञान में यह बताया जाता है कि बालकों की कई अवस्थाएं होती हैं। बालक अपने बचपन से लेकर बड़े या समझदार होने तक क्या ग्रहण करता है और किन विशेष चीजों को समझ पाता है। कभी-कभी बालकों के मनोविज्ञान पर गलत असर पड़ जाता है। एक कहानी से हम यह जानने वाले हैं कि एक दृष्टि नाम की लड़की कैसे मेहनत करके अपने माता-पिता का नाम रोशन करती है और मनोविज्ञान का प्रयोग करती है।</p>
+
+<p>एक बार की बात है, एक दृष्टि नाम की लड़की थी। उसे पढ़ना-लिखना तथा फोटो खींचने का बहुत शौक था। वह दिनभर पढ़ती और लिखती रहती थी। वह हर चीज में होशियार थी तथा हर काम को बारीकी से करती थी। वह बड़ी होकर कुछ नया करना चाहती थी और कुछ बड़ा करना चाहती थी। उसकी मां एक अध्यापिका थी और उसके पिता एक डॉक्टर थे।</p>
+
+<p>एक दिन दृष्टि की मां को आते-आते देर हो गई थी और उसके पिता भी अस्पताल में ही काम कर रहे थे। दृष्टि अपने स्कूल से घर आ गई थी और थोड़ी देर बाद उसके दोस्त भी उसके घर आ गए थे। वे आंखों पर पट्टी बांधकर आंख-मिचौनी खेल रहे थे। जब दृष्टि की बारी आई तो उसकी भी आंखों पर पट्टी बांधी गई। लेकिन उन्हें क्या पता था कि अब क्या होने वाला है। दृष्टि की आंखें बंद हो गई थीं और सभी बच्चे जाकर छुप गए थे। दृष्टि बच्चों को ढूंढते–ढूंढते दीवार के पास चली गई। दीवार पर लगी कील गलती से उसकी आंखों में लग गई और आंखों से भयानक तरीके से खून निकलने लगा। सभी बच्चे चिल्लाने लगे और दृष्टि बहुत जोर-जोर से रोने लगी। उसे कुछ दिखाई नहीं दे रहा था।</p>
+
+<p>उसी वक्त दृष्टि की मां घर आईं। दृष्टि को ऐसे देखकर मां रोने लगीं और मानो उनके पैरों तले जमीन खिसक गई। मां ने दृष्टि के पिता को फोन किया और वे जल्दी से एंबुलेंस लेकर आए तथा दृष्टि को आंखों के डॉक्टर के पास ले गए। डॉक्टर ने यह बताया कि अब दृष्टि की दृष्टि नहीं रही। अब दृष्टि देख नहीं सकती। यह सुनकर दृष्टि की मां ने आत्महत्या करने की सोची लेकिन नहीं कर पाईं।</p>
+
+<p>फिर दृष्टि को एक महीने बाद घर लाया गया। जब दृष्टि रात को सो रही थी तो उसके माता-पिता ने यह तय किया कि दृष्टि को मुंबई में ब्रेल लिपि के माध्यम से पढ़ाया जाएगा क्योंकि उन्हें दृष्टि के भविष्य की चिंता हो रही थी। दो दिन बाद दृष्टि को 8 साल के लिए मुंबई भेज दिया गया। मां का मन बहुत उदास था, लेकिन अपनी बेटी को आगे बढ़ाने के लिए भेजना भी जरूरी था।</p>
+
+<p>दृष्टि भी मना कर रही थी कि मुझे नहीं जाना, लेकिन उसके माता-पिता ने उसे समझाया। फिर अपने माता-पिता पर विश्वास करके वह 8 साल के लिए घर से दूर चली गई। उसने वहां ब्रेल लिपि सीखी तथा बहुत मेहनत से अलग–अलग विषयों का अध्ययन किया। वह चीजों को महसूस कर धीरे-धीरे सीख रही थी। अब उसको चलने के लिए किसी और की सहायता की जरूरत नहीं थी।</p>
+
+<p>फिर दृष्टि ने अपनी मेहनत और लगन से सबको गलत साबित कर दिया। कई लोग उसे कहते थे कि वह अब कुछ नहीं कर सकती। लेकिन उसने यह साबित कर दिखाया कि कोई भी काम नामुमकिन नहीं है। 8 साल के बाद दृष्टि ने I.A.S का पेपर देने की सोची। पहले प्रयास में वह असफल हुई और बहुत उदास हो गई, लेकिन उसने एक और प्रयास देने का निश्चय किया। इस बार वह पूरी मेहनत और लगन के साथ तैयार थी, जैसे वह एक घायल परिंदा हो। दूसरे प्रयास में उसने I.A.S को पूरी तरह पार कर लिया। अब दृष्टि एक ऐसी लड़की है जो अंधी होकर भी I.A.S है। अब वे लोग दृष्टि को देखकर हैरान हैं जो पहले कहते थे कि इसके भविष्य का कुछ नहीं हो सकता।</p>
+
+<p>माना दृष्टि का फोटो खींचने का सपना पूरा नहीं हो पाया, लेकिन उसका कुछ बड़ा करने का सपना जरूर पूरा हुआ। अगर दृष्टि और उसके माता-पिता जैसी सोच सबकी हो जाए तो हमारे देश का एक-एक बच्चा चुनौतियों के बावजूद कुछ बड़ा कर सकता है।</p>
+            </div>
+
+            <div class="story-moral">
+                <strong>शिक्षा:</strong>
+                <p>कठिनाइयाँ चाहे जितनी भी बड़ी हों, मेहनत और धैर्य से हर सपना पूरा किया जा सकता है।<br>
+सच्चा मार्गदर्शन और विश्वास इंसान को अंधकार से निकालकर सफलता की ऊँचाइयों तक पहुँचा देता है।</p>
+            </div>
+        </article>
+
+        <div class="back-link-container">
+            <a href="https://myjvp.in/hindi-diwas-special/" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+</body>
+</html>
