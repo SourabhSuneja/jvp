@@ -1,1 +1,179 @@
- 
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>लघु कथा - सपना मगर अधूरा</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-author {
+            font-size: 1.25rem;
+            color: #d97706;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+        .story-body {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: #374151;
+            text-align: justify;
+        }
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+        .story-moral {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #fef3c7;
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 0 8px 8px 0;
+        }
+        .story-moral strong {
+            font-size: 1.2rem;
+            color: #92400e;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .story-moral p {
+            color: #451a03;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <article class="content-wrapper">
+            <h1 class="page-title">सपना मगर अधूरा</h1>
+
+            <p class="page-author">रचयिता: हर्षिता, नवमीं - A2</p>
+            
+            <div class="story-body">
+<p>छोटे बच्चों की दुनिया अक्सर नासमझी से भरी होती है। यदि समय पर सही मार्गदर्शन न मिले तो कुछ बच्चे ऐसी नादानियां कर बैठते हैं जिनका खामियाजा उन्हें ताउम्र भुगतना पड़ता है। ऐसी ही एक कहानी है — जयपुर के पार्थ नाम के लड़के की। पार्थ एक गरीब परिवार में जन्मा था और माता–पिता के पास अधिक आर्थिक संसाधन न थे। पार्थ शुरू से ही क्रिकेट का दीवाना था और उस पर क्रिकेटर बनने का भूत सवार था। उसे क्रिकेट से बहुत लगाव था किंतु पैसों के अभाव वह औपचारिक रूप से किसी प्रतियोगिता में भाग लेने में असमर्थ था। शौकिया तौर पर अपने गली–मोहल्ले के लड़कों के साथ अथवा कभी–कभार विद्यालय में ही क्रिकेट खेल लिया करता था। पार्थ के जीवन में एक अहम मोड़ उस वक्त आया जब स्कूल में नए कोच के रूप में शास्त्री जी पधारे। कहते हैं न कि भला जौहरी से कब तक हीरे की चमक छुप सकती है? शास्त्री जी ने महज पांच–सात दिनों में ही पार्थ की खेल प्रतिभा को भांप लिया था। जब विद्यालय में क्रिकेट की प्रतियोगिता रखी गई तो पार्थ ने उम्मीद से बढ़कर ऐसा उम्दा प्रदर्शन किया कि कोच भी हक्के–बक्के रह गए। मैच के बाद शास्त्री जी ने पार्थ को अकेले में मिलने के लिए बुलाया।</p>
+
+<p>"शाबाश पार्थ! तुम वाकई बहुत अच्छा खेलते हो। तुम कहां खेलने जाते हो?"<br>
+"सर, मैं यूं तो कहीं नहीं जाता; बस गली के दोस्तों के साथ खेल लेता हूं।"<br>
+"तुम कल से प्रैक्टिस के लिए मेरी अकादमी में आ जाना।"<br>
+".... पर सर, मेरे पास न तो क्रिकेट किट है, न ही आप को देने के लिए पैसे!"<br>
+"तुम पैसों की चिंता मत करो। किट मैं तुम्हें दे दूंगा और फीस जब तुम्हारे पास हो, तब दे देना।"<br>
+"थैंक्स सर। आप के रूप में मुझे भगवान मिल गए हैं।" — यह कहते हुए पार्थ खुशी–खुशी घर जाता है और अपने माता–पिता को पूरी बात बताता है।</p>
+
+<p>पार्थ अब रोज़ प्रैक्टिस के लिए जाता और दिन प्रतिदिन अपने हुनर को निखारता। अब वह पहले की तुलना में और बेहतर खेलने लगा था और बड़ी प्रतियोगिताओं के लिए तैयार होता जा रहा था। देखते ही देखते दो साल बीत गए। शहर के लायंस क्रिकेट क्लब द्वारा एक जिलास्तरीय क्रिकेट प्रतियोगिता आयोजित करवाई गई जिसमें पार्थ ने भी हिस्सा लिया। पार्थ की शानदार बैटिंग की बदौलत उसकी टीम टूर्नामेंट में विजयी रही लेकिन टूर्नामेंट के बाद उसकी क्रिकेट किट पूरी तरह खराब हो चुकी थी। अब उसे नई किट की दरकार थी। उसने अपने कोच से किट बदलने का निवेदन किया पर इस बार कोच ने साफ़ कह दिया कि इस बार उसे किट के पैसे देने होंगे। पार्थ असमंजस में पड़ गया। अभी भी उसकी माली हालत ठीक न थी। वह अपनी मंजिल के बेहद करीब था और सोच में पड़ गया कि किट के लिए पैसों का बंदोबस्त कहां से किया जाए। अब जीवन में दूसरा मोड़ आया जो उसकी ज़िंदगी में कहर बरपाने वाला था। एक दिन उसका दोस्त मनोज उसके पास आया और मौके का फायदा उठाकर बोला,</p>
+
+<p>"तुझे पैसे चाहिए? मैं बताता हूं कि पैसे कहां से मिलेंगे।"<br>
+"बता न भाई।"</p>
+
+<p>मनोज लापता बच्चों के पोस्टर लगाने का काम करता था। जैसे ही पुलिस को कोई लापता बच्चा मिलता, शहर में पोस्टर लगाकर पुलिस वाले जानकारी प्रचारित करते थे ताकि बच्चे के अभिभावक या संबंधी आकार बच्चे को ले जा सकें।<br>
+मनोज बोला, "हमें कुछ लापता बच्चों के पोस्टर मिलेंगे। तुझे बस उन बच्चों के मां–बाप को फोन करके जितने चाहे, उतने पैसे मंगवा लेने हैं। पर यह सावधानी से करना होगा। पुलिस को कानों–कान भनक न लग पाए।"</p>
+
+<p>पार्थ यह सुनकर ठिठका और भयभीत हुआ। आत्मा इजाज़त न दे रही थी पर दूसरी ओर सपनों का महल धराशाई होता भी दिख रहा था। दोस्त के बार–बार ललचाने पर आखिर पार्थ उस खाई में कूद ही पड़ा। उसने जैसे ही पहली फिरौती की मांग की, पुलिस ने आकर धर दबोचा और पार्थ के न केवल सपने टूटे बल्कि जिंदगी की किताब पर भी ऐसे दाग गए जो मिटाए न मिट सके। पार्थ को दो वर्ष के लिए बाल–सुधार गृह में भेज दिया गया। जब वह वापस आया तो उसका पूरा करियर बर्बाद हो चुका था और माता–पिता ने भी उसे घर से बेदखल कर दिया। वह किसी को मुंह दिखाने लायक न रहा।</p>
+
+<p>दोस्तों, इस कहानी से हम सीखते हैं कि जीवन में भगवान और शैतान दोनों ही हमारे सामने किसी न किसी रूप में प्रकट होते हैं। पहले, पार्थ के जीवन में कोच के रूप में भगवान आए और फिर मनोज के रूप में शैतान! दोनों ने पार्थ को अलग–अलग राहें दिखाई। पार्थ ने अपनी नासमझी के चलते ऐसा रास्ता अपनाया जिसने उसकी अच्छी–भली जिंदगी को दुख से भर दिया और उसके सपनों पर पानी फेर दिया। ऐसा ही जीवन में अक्सर हमारे साथ होता है। मार्गदर्शन हमें बहुत लोगों से मिलता है पर किसके मार्गदर्शन को स्वीकार करना है, यह हमारी खुद की समझ पर निर्भर करता है। यदि मार्गदर्शन गलत व्यक्ति से मिले तो वह हमें हमारे नैतिक पथ से च्युत कर देता है। अपने सपनों के लिए दौड़ना गलत नहीं है पर दौड़ते–दौड़ते गलत राह पकड़ लेना गलत है। गलत राह हमेशा गलत मंजिल पर ही ले जाती है।</p>
+            </div>
+
+            <div class="story-moral">
+                <strong>शिक्षा:</strong>
+                <p>हमें सही और गलत मार्गदर्शन में फर्क समझकर ही कदम बढ़ाना चाहिए। <br>
+सपनों को पाने की दौड़ में कभी भी गलत रास्ता नहीं चुनना चाहिए, वरना मंज़िल बर्बादी ही होगी।</p>
+            </div>
+        </article>
+
+        <div class="back-link-container">
+            <a href="index.html" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+</body>
+</html>
