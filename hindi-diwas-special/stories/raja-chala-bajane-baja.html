@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>लघु कथा - राजा चला बजाने बाजा</title>
+    <meta name="description" content="पढ़ें श्याम की कल्पनाओं से भरी रहस्यमयी कहानी — एक जादुई किताब, अजीबो–गरीब बाजा और खुशी का असली राज़ जो मन की शांति में छुपा है।">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-author {
+            font-size: 1.25rem;
+            color: #d97706;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+        .story-body {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: #374151;
+            text-align: justify;
+        }
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+        .story-moral {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #fef3c7;
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 0 8px 8px 0;
+        }
+        .story-moral strong {
+            font-size: 1.2rem;
+            color: #92400e;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .story-moral p {
+            color: #451a03;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <article class="content-wrapper">
+            <h1 class="page-title">राजा चला बजाने बाजा</h1>
+
+            <p class="page-author">रचयिता: नाम्या प्रजापति, ग्यारहवीं - विज्ञान</p>
+            
+            <div class="story-body">
+<p>बच्चों की दुनिया बड़ी रंग–बिरंगी और कल्पनाओं से भरी होती है। खिलौने भी इनके दोस्त बन जाते हैं, बादल भी परीलोक की सैर पर ले जाते हैं और किताबें एक ऐसे रहस्यमई जगत में ले जाती हैं जो बच्चों को हकीकत से भी अधिक हकीकत लगता है।</p>
+
+<p>श्याम एक ऐसा ही बच्चा था जो अक्सर कल्पनाओं की दुनिया में खो जाया करता था। स्वभाव से शांत और अपने में मग्न रहने वाला 10 वर्षीय श्याम एक दिन अपनी दादी मां की अलमारी की खोजबीन कर रहा था। स्वभावतः बच्चे खोजी किस्म के होते हैं और उन्हें पुरानी वस्तुओं में भी एक आकर्षण दिखाई देता है। श्याम भी आज ऐसी ही वस्तु की तलाश में था। और हाथ लग ही गई! उसे अलमारी में एक विचित्र पुस्तक मिली जिसका शीर्षक था — "राजा चला बजाने बाजा"। हास्यास्पद शीर्षक ने श्याम में रोमांच की लहर पैदा करती है और वह चल पड़ा किताब लेकर अपने कमरे में! पहले किताब को थोड़ा निहारा और फिर सुनहरे पन्ने पलटते लगा। उसने किताब पढ़ना ही शुरू किया था कि मानों उसे एक अजीब–सी अनुभूति हुई और वह उसी कहानी में जा पहुंचा जिसे वह किताब में पढ़ रहा था। श्याम ने तत्क्षण स्वयं को राजा के रूप में सिंहासन पर विराजमान देखा और सामने खड़ी मंत्रियों की फौज उनकी जय–जयकार कर रही थी। सिर पर साफा ओढ़े दो व्यापारियों को दरबार में उनके समक्ष लाया गया। दिखने में व्यापारी परदेसी लग रहे थे और अच्छी कद–काठी के थे।</p>
+
+<p>श्याम राजा ने उनसे दरबार में आने का प्रयोजन पूछा — "बताइए, यहां कैसे आना हुआ?"</p>
+
+<p>उनमें से एक व्यापारी बोला, "प्रणाम महाराज। हम दोनों मंगोल हैं और आप के देश में खुशी का व्यापार करने आए हैं। हम अपने देश से ऐसा वाद्य यंत्र लाए हैं जिसे बजाकर खुशी बेची अथवा खरीदी जा सकती है।" यह सुनकर राजा और सभी दरबारी अचरज भरी निगाहों से दोनों व्यापारियों को देखने लगे।</p>
+
+<p>राजा ने पूछा, "यह कैसे संभव है? ज़रा स्पष्ट करें।"  
+व्यापारी बोला, "इसके लिए आप को यह यंत्र खरीदना होगा और जैसा हम कहें, वैसा व्यवहारिक रूप से करना होगा।"  
+राजा ने यंत्र की कीमत पूछी। व्यापारी ने मात्र 2 अशर्फियां देने का आग्रह किया। राजा ने मंत्री को दो अशर्फियां देने का आदेश दिया। राजा ने अब व्यापारी को यंत्र देने को कहा। व्यापारियों ने अपने थैले से एक मुख से फूंककर बजाया जाने वाला बड़ा–सा अजीबो–गरीब यंत्र निकाला और राजा को सौंप दिया। राजा (श्याम) ने क्रुद्ध होकर कहा, "यह क्या है? क्या हम तुम्हें पागल दिखते हैं? इस बाजे का खुशी से क्या संबंध है?"</p>
+
+<p>पहला व्यापारी बोला, "महाराज, रूष्ट न हों। आप की और पूरे नगर की खुशी इसी यंत्र में छुपी है।"</p>
+
+<p>एक मंत्री बोला, "यह कैसे संभव है?"</p>
+
+<p>व्यापारी ने विनम्र होकर कहा, "इसके लिए महाराज को वैसा सब करना होगा जैसा हम कह रहे हैं। आप को तीन दिन तक रोज़ रात को 11 बजे यह यंत्र बजाते हुए नगर में भ्रमण करना होगा।"</p>
+
+<p>यह सुनते ही एक मंत्री चिल्ला पड़ा, "महाराज, यह व्यापारी हमें विक्षिप्त लगते हैं। यह आप की प्रतिष्ठा पर दाग लगाने की योजना बनाकर आए हैं और हमें मूर्ख बना रहे हैं। इन्हें तत्क्षण मृत्युदंड दे देना चाहिए।"  
+राजा मंत्री की बात सुनकर बोले, "तुम दोनों की बात हम सब की समझ से परे है। तुम चाहते क्या हो? यदि तुम्हें धन चाहिए तो हम तुम्हें वैसे ही दे देंगे। इसके लिए ऐसा छल–प्रपंच करने की क्या आवश्यकता है?"</p>
+
+<p>"महाराज, हम प्रपंच नहीं कर रहे हैं। आप हमारी बात पर विश्वास कीजिए और हम आप को सिद्ध कर देंगे कि यह यंत्र खुशी बनाता अथवा छीनता है।", व्यापारी ने बड़े विनम्र स्वर में उत्तर दिया।  
+"ठीक है। हम तुम्हारी बात मानकर आज ही से नगर में यह बाजा बजाते हुए निकलेंगे और ऐसा तीन दिन तक निरंतर करेंगे। यदि इसके बाद भी तुम अपनी बात सिद्ध न कर सके तो तुम्हें इसकी कीमत चुकानी पड़ेगी।" — यह कहते हुए राजा श्याम ने सभा स्थगित कर दी। दिन ढला और रात घिरते ही मंगोल व्यापारियों के बताए हुए समयानुसार राजा दरबार से निकलता है और बाजा बजाते हुए नगर में पूरी रात भ्रमण करता है। बाजे के शोर से नगरवासियों की नींद में खलल पड़ता है। ऐसा तीन रात्रि तक चलता रहा। सभी नगरवासी पूरी–पूरी रात बिना सोए गुजारते परंतु राजा के आगे कुछ बोल न पाते। दिन में काम–धंधा भी जरूरी था। इसलिए दिन में भी पल–भर का सुकून न मिलता।</p>
+
+<p>तीन दिन बाद सभी की हालत ऐसी हो गई थी जैसे किसी पागलखाने के पागलों की होती है। फिर से दरबार लगा और व्यापारियों को हाज़िर होने का आदेश दिया गया।</p>
+
+<p>"वादे के मुताबिक हम ने ठीक वैसा ही किया जैसा तुम दोनों ने कहा था। हम तीन रात्रि तक इस वाद्य यंत्र को लेकर नगर में बजाते रहे। तुम्हारे इस सुझाव से हमारी पूरी प्रजा हमसे नाराज़ है। अब बताओ कि इस यंत्र का खुशी से क्या तालुक है। नहीं तो दंड भुगतने के लिए तैयार रहो।", महाराज ने नाराज़गी जताते हुए ऊंचे स्वर में कहा।</p>
+
+<p>मंगोल व्यापारी बोला, "क्षमा करें, महाराज! हमारी इस गुस्ताखी के लिए हम क्षमाप्रार्थी हैं। हमारे कारण आप को और आप की प्रजा को जो कष्ट मिला, उसके लिए हम माफ़ी चाहते हैं। किंतु यह सब करना जरूरी थी।"  
+"परंतु क्यों? तुम दोनों अभी भी पहेलियां बुझा रहे हो?"  
+दूसरा व्यापारी बोला, "महाराज, यह बाहरी यंत्र केवल मनुष्य के स्वयं के भीतरी यंत्र, यानी मन, का प्रतीक है। जिस प्रकार मात्र तीन रात्रियों में इस यंत्र ने सब का जीना हराम कर दिया, ठीक उसी प्रकार हमारा मन है। यह यंत्र तो फिर भी तीन रात्रि तक ही बजा; मनुष्य का मन हर पल बजता है, दिन–रात, खाते–पीते, सोते–जागते! इस यंत्र में निरंतर विचारों का कोलाहल सुनाई देता है। जिस प्रकार आप की प्रजा ने अपने राजा की इच्छा मानते हुए आप को इसे बजाने से नहीं रोका, यद्यपि वह स्वर तो यंत्र का था। पर चूंकि यंत्र आप के हाथ में था, और आप उनके राजा हैं, किसी ने आप को नहीं रोका। ठीक वैसे ही हम भी अपने मन को राजा मानकर बैठ जाते हैं और इसके कोलाहल को नहीं रोकते। यही कोलाहल ही तो हमारा सुख–चैन छीन लेता है और फिर हम खुशियों को बाहर ढूंढते फिरते हैं। रही बात सुख की तो असली सुख क्या है? यदि आप चैन से रात को सो पाते हैं, विश्राम कर पाते हैं तो इससे बड़ा सुख क्या? जिसे चैन की निद्रा नसीब नहीं होती, वह दुखी है।"</p>
+
+<p>राजा श्याम ऐसा उत्तर सुनकर अत्यंत प्रसन्न हुए और व्यापारी की बात बखूबी समझ गए। इससे पहले कि राजा श्याम व्यापारियों को पुरस्कृत कर पाते, श्याम की मां (हकीकत में) आकर उन्हें जगाती हैं और स्कूल जाने को कहती हैं। श्याम किताब से बाहर आ जाता है पर एक ऐसा अनुभव लेकर आता है जो उसे हमेशा खुश रखने के लिए काफ़ी था।</p>
+            </div>
+
+            <div class="story-moral">
+                <strong>शिक्षा:</strong>
+                <p>असली सुख–चैन बाहर की वस्तुओं से नहीं, बल्कि अपने मन को शांत करने से मिलता है।<br>
+जिसे रात को चैन की नींद और मन की शांति मिल जाए, वही वास्तव में सबसे सुखी इंसान है।</p>
+            </div>
+        </article>
+
+        <div class="back-link-container">
+            <a href="https://myjvp.in/hindi-diwas-special/" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+</body>
+</html>
