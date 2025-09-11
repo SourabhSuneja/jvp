@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="https://myjvp.in/commons/">
+    <title>My JVP Portal</title>
+    <meta name="description" content="Jamna Vidyapeeth тАУ A one-stop hub where students access academic resources and teachers find smart tools for daily tasks.">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            max-height: 99999999px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3; }
+        }
+
+        /* Header */
+        .header {
+            background: #1e3a8a;
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            position: relative;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .school-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .welcome-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+        }
+
+        .user-type-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+        }
+
+        .student-access-selection, .class-selection {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .student-access-selection.active, .class-selection.active {
+            display: block;
+        }
+
+        .btn-access {
+            background: linear-gradient(135deg, #9f7aea, #805ad5);
+            color: white;
+            box-shadow: 0 8px 25px rgba(159, 122, 234, 0.3);
+        }
+
+        .btn-access:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(159, 122, 234, 0.4);
+        }
+
+        .btn-class {
+            background: linear-gradient(135deg, #ed8936, #dd6b20);
+            color: white;
+            box-shadow: 0 8px 25px rgba(237, 137, 54, 0.3);
+        }
+
+        .btn-class:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(237, 137, 54, 0.4);
+        }
+
+        .back-btn {
+            background: rgba(113, 128, 150, 0.1);
+            color: #718096;
+            border: 2px solid rgba(113, 128, 150, 0.2);
+            margin-bottom: 1rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(113, 128, 150, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1e3a8a;
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-text {
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 400;
+            text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .school-name {
+                font-size: 1.5rem;
+            }
+            
+            .container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .welcome-text {
+                font-size: 2rem;
+            }
+            
+            .btn {
+                padding: 0.875rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .logo {
+                width: 85px;
+                height: 85px;
+            }
+            
+            .school-name {
+                font-size: 2rem;
+            }
+            
+            .welcome-text {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+    <style>
+        /* Hindi Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
+        
+        /* Pop-up Overlay */
+        .hindi-diwas-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .hindi-diwas-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Pop-up Container */
+        .hindi-diwas-popup {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7) translateY(100px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+        }
+        
+        .hindi-diwas-overlay.active .hindi-diwas-popup {
+            transform: scale(1) translateY(0);
+        }
+        
+        /* Close Button */
+        .hindi-popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hindi-popup-close:hover {
+            background: #fff;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        /* Header Section */
+        .hindi-popup-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .hindi-popup-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .hindi-popup-title {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+        
+        .hindi-popup-subtitle {
+            font-family: 'Kalam', cursive;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Content Section */
+        .hindi-popup-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hindi-popup-text {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .hindi-popup-features {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        
+        .hindi-popup-features li {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hindi-popup-features li:hover {
+            transform: translateX(5px) translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .hindi-popup-features li::before {
+            content: 'тЬи';
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Action Buttons */
+        .hindi-popup-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hindi-popup-btn {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hindi-popup-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .hindi-popup-btn:hover::before {
+            left: 100%;
+        }
+        
+        .hindi-popup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .hindi-popup-btn.secondary {
+            background: linear-gradient(135degree, #48bb78, #38a169);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+        
+        .hindi-popup-btn.secondary:hover {
+            box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+        }
+        
+        /* Decorative Elements */
+        .hindi-popup-decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .hindi-popup-decoration.top-left {
+            top: -50px;
+            left: -50px;
+            animation-delay: 0s;
+        }
+        
+        .hindi-popup-decoration.bottom-right {
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hindi-diwas-popup {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .hindi-popup-title {
+                font-size: 1.6rem;
+            }
+            
+            .hindi-popup-text {
+                font-size: 1rem;
+            }
+            
+            .hindi-popup-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hindi-popup-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="School Logo" class="logo">
+            <h1 class="school-name">My JVP</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container fade-in-up">
+            <h2 class="welcome-text">Welcome!</h2>
+            <p class="subtitle">Please select your role to continue</p>
+            
+            <!-- User Type Selection -->
+            <div class="user-type-section" id="userTypeSection">
+                <h3 class="section-title">I am a...</h3>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="selectTeacher()">
+                        <span class="material-icons">school</span>
+                        Teacher
+                    </button>
+                    <button class="btn btn-secondary" onclick="showStudentAccessSelection()">
+                        <span class="material-icons">person</span>
+                        Student
+                    </button>
+                </div>
+            </div>
+
+            <!-- Student Access Selection (New section) -->
+            <div class="student-access-selection" id="studentAccessSelection">
+                <button class="btn back-btn" onclick="showUserTypeSelection()">
+                    <span class="material-icons">arrow_back</span>
+                    Back
+                </button>
+                <h3 class="section-title">What do you want to access?</h3>
+                <div class="button-group">
+                    <button class="btn btn-access" onclick="selectResult()">
+                        <span class="material-icons">assessment</span>
+                        Result
+                    </button>
+                    <button class="btn btn-access" onclick="showClassSelection()">
+                        <span class="material-icons">computer</span>
+                        Sourabh Sir's Computer Resources
+                    </button>
+                </div>
+            </div>
+
+            <!-- Class Selection (Hidden by default) -->
+            <div class="class-selection" id="classSelection">
+                <button class="btn back-btn" onclick="showStudentAccessSelection()">
+                    <span class="material-icons">arrow_back</span>
+                    Back
+                </button>
+                <h3 class="section-title">Select your class</h3>
+                <div class="button-group">
+                    <button class="btn btn-class" onclick="selectClass(6)">
+                        Class 6
+                    </button>
+                    <button class="btn btn-class" onclick="selectClass(7)">
+                        Class 7
+                    </button>
+                    <button class="btn btn-class" onclick="selectClass(8)">
+                        Class 8
+                    </button>
+                    <button class="btn btn-class" onclick="selectClass(9)">
+                        Class 9
+                    </button>
+                    <button class="btn btn-class" onclick="selectClass(12)">
+                        Class 12
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p class="footer-text">Crafted by Sourabh Sir</p>
+    </footer>
+
+    <!-- Hindi Diwas Pop-up -->
+    <div class="hindi-diwas-overlay" id="hindiDiwasOverlay">
+        <div class="hindi-diwas-popup">
+            <!-- Decorative Elements -->
+            <div class="hindi-popup-decoration top-left"></div>
+            <div class="hindi-popup-decoration bottom-right"></div>
+            
+            <!-- Close Button -->
+            <button class="hindi-popup-close" onclick="closeHindiDiwasPopup()">×</button>
+            
+            <!-- Header -->
+            <div class="hindi-popup-header">
+                <div class="hindi-popup-icon">📚</div>
+                <h2 class="hindi-popup-title">हिंदी दिवस विशेष</h2>
+                <p class="hindi-popup-subtitle">My JVP Portal पर नया खंड लॉन्च!</p>
+            </div>
+            
+            <!-- Content -->
+            <div class="hindi-popup-content">
+                <p class="hindi-popup-text">
+                    हमारे स्कूल ने My JVP Portal पर एक विशेष खंड "हिंदी दिवस विशेष" लॉन्च किया है!
+                </p>
+                
+                <ul class="hindi-popup-features">
+                    <li>शिक्षकों की सर्वश्रेष्ठ साहित्यिक कृतियाँ</li>
+                    <li>छात्रों के रचनात्मक लेखन के नमूने</li>
+                    <li>हिंदी भाषा और साहित्य की समृद्ध परंपरा</li>
+                    <li>रचनात्मक लेखन की कला सीखें</li>
+                </ul>
+                
+                <p class="hindi-popup-text">
+                    <strong>आइए, हिंदी की महानता का जश्न मनाएं!</strong>
+                </p>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="hindi-popup-actions">
+                <a href="https://myjvp.in/hindi-diwas/" class="hindi-popup-btn">
+                    🎯 अभी देखें
+                </a>
+                <button class="hindi-popup-btn secondary" onclick="closeHindiDiwasPopup()">
+                    बाद में देखूंगा
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create animated background particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Navigation functions
+        function selectTeacher() {
+            window.location.href = 'https://myjvp.in/teachers/';
+        }
+
+        function showStudentAccessSelection() {
+            document.getElementById('userTypeSection').style.display = 'none';
+            document.getElementById('studentAccessSelection').classList.add('active');
+        }
+
+        function selectResult() {
+            window.location.href = 'https://sourabhsuneja.github.io/academic-resources/result.html';
+        }
+
+        function showClassSelection() {
+            document.getElementById('studentAccessSelection').classList.remove('active');
+            document.getElementById('classSelection').classList.add('active');
+        }
+
+        function showUserTypeSelection() {
+            document.getElementById('studentAccessSelection').classList.remove('active');
+            document.getElementById('classSelection').classList.remove('active');
+            document.getElementById('userTypeSection').style.display = 'block';
+        }
+
+        function selectClass(classNumber) {
+            if (classNumber === 6) {
+                window.location.href = 'https://sourabhsuneja.github.io/academic-resources/class-6/';
+            } else if (classNumber === 7) {
+                window.location.href = 'https://sourabhsuneja.github.io/academic-resources/class-7/';
+            } else if (classNumber === 8) {
+                window.location.href = 'https://sourabhsuneja.github.io/academic-resources/class-8/ds-ch-3.pdf';
+            } else if (classNumber === 9) {
+                window.location.href = 'https://sourabhsuneja.github.io/academic-resources/class-9/';
+            }
+            else if (classNumber === 12) {
+                window.location.href = 'https://sourabhsuneja.github.io/academic-resources/class-12/networking-notes.pdf';
+            }
+        }
+
+        // Initialize particles on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+        });
+
+        // Add some interactive effects
+        document.addEventListener('mousemove', function(e) {
+            const particles = document.querySelectorAll('.particle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            particles.forEach((particle, index) => {
+                const speed = (index % 5 + 1) * 0.5;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                particle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+    </script>
+    <script>
+        // Hindi Diwas Pop-up
+        
+        // Show popup after page loads completely
+        window.addEventListener('load', function() {
+            // Add a slight delay for better user experience
+            setTimeout(function() {
+                showHindiDiwasPopup();
+            }, 1000); // Shows after 1 second
+        });
+        
+        function showHindiDiwasPopup() {
+            const overlay = document.getElementById('hindiDiwasOverlay');
+            overlay.classList.add('active');
+            
+            // Prevent body scroll when popup is open
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeHindiDiwasPopup() {
+            const overlay = document.getElementById('hindiDiwasOverlay');
+            overlay.classList.remove('active');
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const overlay = document.getElementById('hindiDiwasOverlay');
+            const popup = document.querySelector('.hindi-diwas-popup');
+            
+            if (event.target === overlay && !popup.contains(event.target)) {
+                closeHindiDiwasPopup();
+            }
+        });
+        
+        // Close popup with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeHindiDiwasPopup();
+            }
+        });
+    </script>
+</body>
+</html>
