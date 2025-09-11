@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="https://myjvp.in/commons/">
     <title>My JVP Portal</title>
-    <meta name="description" content="Jamna Vidyapeeth – A one-stop hub where students access academic resources and teachers find smart tools for daily tasks.">
+    <meta name="description" content="Jamna Vidyapeeth тАУ A one-stop hub where students access academic resources and teachers find smart tools for daily tasks.">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -350,6 +350,286 @@
             }
         }
     </style>
+    <style>
+        /* Hindi Font Import */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
+        
+        /* Pop-up Overlay */
+        .hindi-diwas-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .hindi-diwas-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Pop-up Container */
+        .hindi-diwas-popup {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7) translateY(100px);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+        }
+        
+        .hindi-diwas-overlay.active .hindi-diwas-popup {
+            transform: scale(1) translateY(0);
+        }
+        
+        /* Close Button */
+        .hindi-popup-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hindi-popup-close:hover {
+            background: #fff;
+            transform: rotate(90deg) scale(1.1);
+        }
+        
+        /* Header Section */
+        .hindi-popup-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .hindi-popup-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .hindi-popup-title {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+        
+        .hindi-popup-subtitle {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Content Section */
+        .hindi-popup-content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .hindi-popup-text {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 1.1rem;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .hindi-popup-features {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        
+        .hindi-popup-features li {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .hindi-popup-features li:hover {
+            transform: translateX(5px) translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .hindi-popup-features li::before {
+            content: 'тЬи';
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Action Buttons */
+        .hindi-popup-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hindi-popup-btn {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hindi-popup-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .hindi-popup-btn:hover::before {
+            left: 100%;
+        }
+        
+        .hindi-popup-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .hindi-popup-btn.secondary {
+            background: linear-gradient(135degree, #48bb78, #38a169);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+        }
+        
+        .hindi-popup-btn.secondary:hover {
+            box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+        }
+        
+        /* Decorative Elements */
+        .hindi-popup-decoration {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .hindi-popup-decoration.top-left {
+            top: -50px;
+            left: -50px;
+            animation-delay: 0s;
+        }
+        
+        .hindi-popup-decoration.bottom-right {
+            bottom: -50px;
+            right: -50px;
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hindi-diwas-popup {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .hindi-popup-title {
+                font-size: 1.6rem;
+            }
+            
+            .hindi-popup-text {
+                font-size: 1rem;
+            }
+            
+            .hindi-popup-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hindi-popup-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Animated background particles -->
@@ -436,6 +716,53 @@
         <p class="footer-text">Crafted by Sourabh Sir</p>
     </footer>
 
+    <!-- Hindi Diwas Pop-up -->
+    <div class="hindi-diwas-overlay" id="hindiDiwasOverlay">
+        <div class="hindi-diwas-popup">
+            <!-- Decorative Elements -->
+            <div class="hindi-popup-decoration top-left"></div>
+            <div class="hindi-popup-decoration bottom-right"></div>
+            
+            <!-- Close Button -->
+            <button class="hindi-popup-close" onclick="closeHindiDiwasPopup()">×</button>
+            
+            <!-- Header -->
+            <div class="hindi-popup-header">
+                <div class="hindi-popup-icon">📚</div>
+                <h2 class="hindi-popup-title">हिंदी दिवस विशेष</h2>
+                <p class="hindi-popup-subtitle">पढ़ें हमारे अध्यापक व छात्रों की उत्कृष्ठ रचनाएं और साथ ही हिंदी में लेखन करने के सुझाव...</p>
+            </div>
+            
+            <!-- Content -->
+            <div class="hindi-popup-content">
+                <p class="hindi-popup-text">
+                    हमारे स्कूल ने My JVP Portal पर एक विशेष खंड "हिंदी दिवस विशेष" लॉन्च किया है!
+                </p>
+                
+                <ul class="hindi-popup-features">
+                    <li>शिक्षकों की सर्वश्रेष्ठ साहित्यिक कृतियाँ</li>
+                    <li>छात्रों के रचनात्मक लेखन के नमूने</li>
+                    <li>हिंदी भाषा और साहित्य की समृद्ध परंपरा</li>
+                    <li>रचनात्मक लेखन की कला सीखें</li>
+                </ul>
+                
+                <p class="hindi-popup-text">
+                    <strong>आइए, हिंदी की महानता का जश्न मनाएं!</strong>
+                </p>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="hindi-popup-actions">
+                <a href="https://myjvp.in/hindi-diwas/" class="hindi-popup-btn">
+                    🎯 अभी देखें
+                </a>
+                <button class="hindi-popup-btn secondary" onclick="closeHindiDiwasPopup()">
+                    बाद में देखूंगा
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Create animated background particles
         function createParticles() {
@@ -510,6 +837,50 @@
                 const yOffset = (y - 0.5) * speed;
                 particle.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
             });
+        });
+    </script>
+    <script>
+        // Hindi Diwas Pop-up
+        
+        // Show popup after page loads completely
+        window.addEventListener('load', function() {
+            // Add a slight delay for better user experience
+            setTimeout(function() {
+                showHindiDiwasPopup();
+            }, 100); // Shows after 100 ms
+        });
+        
+        function showHindiDiwasPopup() {
+            const overlay = document.getElementById('hindiDiwasOverlay');
+            overlay.classList.add('active');
+            
+            // Prevent body scroll when popup is open
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeHindiDiwasPopup() {
+            const overlay = document.getElementById('hindiDiwasOverlay');
+            overlay.classList.remove('active');
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Close popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const overlay = document.getElementById('hindiDiwasOverlay');
+            const popup = document.querySelector('.hindi-diwas-popup');
+            
+            if (event.target === overlay && !popup.contains(event.target)) {
+                closeHindiDiwasPopup();
+            }
+        });
+        
+        // Close popup with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeHindiDiwasPopup();
+            }
         });
     </script>
 </body>
