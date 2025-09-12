@@ -963,7 +963,17 @@
             poemContent.classList.toggle('active');
             icon.classList.toggle('rotated');
         }
-        
+
+
+            // Function to toggle the schedule accordion
+        function toggleDay(headerElement) {
+            const content = headerElement.nextElementSibling;
+            const icon = headerElement.querySelector('.expand-icon');
+            
+            content.classList.toggle('active');
+            icon.classList.toggle('rotated');
+        }
+    
         // Function to create animated background particles
         document.addEventListener('DOMContentLoaded', function () {
             const particlesContainer = document.getElementById('particles');
