@@ -1,1562 +1,1388 @@
 <!DOCTYPE html>
 <html lang="hi">
-<head>
-    <!-- Google tag -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
-    <script>
+   <head>
+      <!-- Google tag -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+      <script>
          window.dataLayer = window.dataLayer || [];
          function gtag(){dataLayer.push(arguments);}
          gtag('js', new Date());
-
+         
          gtag('config', 'G-QF1MCK0B9Y');
-    </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>जमना विद्यापीठ - हिंदी दिवस विशेष</title>
-    <meta name="description" content="हिन्दी दिवस पर शिक्षकों और छात्रों की रचनाएँ, लेखन सुझाव और विशेष सामग्री के साथ हमारे स्कूल वेबपेज से जुड़ें।">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            max-height: 99999999px;
-        }
-
-        :root {
-            --bg-dark-indigo: #0a0f2c;
-            --bg-light-cream: #fffbf0;
-            --accent-saffron: #ff9933;
-            --accent-gold: #f9a825;
-            --text-dark: #3730a3;
-            --text-light: #e0e7ff;
-            --border-light: rgba(255, 255, 255, 0.1);
-        }
-
-        body {
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            background-color: var(--bg-dark-indigo);
-            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
-                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden;
-            color: #333;
-        }
-
-        /* Animated background particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--accent-saffron);
-            border-radius: 50%;
-            animation: float 10s ease-in-out infinite;
-            opacity: 0;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
-        }
-
-        /* Header */
-        .header {
-            background: rgba(10, 15, 44, 0.7);
-            backdrop-filter: blur(12px);
-            padding: 1.5rem 2rem;
-            position: relative;
-            top: 0;
-            z-index: 10;
-            border-bottom: 1px solid var(--border-light);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            border: 3px solid rgba(255, 153, 51, 0.5);
-        }
-
-        .logo:hover {
-            transform: scale(1.05) rotate(5deg);
-        }
-
-        .header-text {
-            flex: 1;
-            color: white;
-        }
-
-        .school-name {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            color: #fff;
-        }
-
-        .hindi-diwas-title {
-            font-size: 1.5rem;
-            font-weight: 500;
-            color: var(--accent-saffron);
-            margin-bottom: 0.25rem;
-        }
-
-        .date-range {
-            font-size: 1rem;
-            color: var(--text-light);
-            font-weight: 400;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 3rem 2rem;
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Introduction Section */
-        .intro-section {
-            background: rgba(255, 251, 240, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 3rem;
-            border-radius: 20px;
-            margin-bottom: 3rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .intro-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-family: 'Tiro Devanagari Hindi', serif;
-        }
-
-        .intro-subtitle {
-            font-size: 1.25rem;
-            color: #d97706;
-            text-align: center;
-            margin-bottom: 2rem;
-            font-weight: 600;
-        }
-
-        .hindi-facts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .fact-card {
-            background: linear-gradient(135deg, #fef3c7, #fed7aa);
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-left: 5px solid var(--accent-gold);
-        }
-
-        .fact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .fact-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #92400e;
-            margin-bottom: 0.5rem;
-        }
-
-        .fact-text {
-            color: #451a03;
-            line-height: 1.6;
-        }
-
-        /* Content Tiles Section */
-        .content-section {
-            margin-bottom: 3rem;
-        }
-
-        .section-title {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: white;
-            text-align: center;
-            margin-bottom: 2rem;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            font-family: 'Tiro Devanagari Hindi', serif;
-        }
-
-        .content-tiles {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .tile {
-            background: rgba(255, 251, 240, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .tile:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .tile-header {
-            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
-            padding: 1.5rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .tile-title-wrapper {
-            text-align: left;
-        }
-
-        .tile-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 0.25rem;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-        }
-
-        .tile-subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
-        }
-
-        .tile-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            background: white;
-        }
-
-        .tile-content.active {
-            max-height: 999999px; /* Increased max-height */
-            padding: 2rem;
-        }
-
-        .accordion-content {
-            margin-top: 1rem;
-        }
-
-        .poem-item {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .poem-header {
-            padding: 1rem 1.5rem;
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .poem-header:hover {
-            background: linear-gradient(135deg, #c7d2fe, #a5b4fc);
-        }
-
-        .poem-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out;
-            background: white;
-        }
-
-        .poem-content.active {
-            max-height: 9999999px;
-            padding: 1.5rem;
-        }
-
-        .poem-text {
-            font-family: 'Tiro Devanagari Hindi', serif;
-            line-height: 2.2;
-            color: #374151;
-            font-size: 1.3rem;
-            white-space: pre-line;
-        }
-
-        .expand-icon {
-            transition: transform 0.3s ease;
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.8);
-        }
-        
-        .poem-header .expand-icon {
-            font-size: 1rem;
-            color: var(--text-dark);
-        }
-
-        .expand-icon.rotated {
-            transform: rotate(180deg);
-        }
-        
-        /* NEW STYLES FOR CONTENT LINKS */
-        .content-link-list {
-            list-style: none;
-            padding: 0;
-            margin-top: 1.5rem;
-        }
-
-        .content-link-item {
-            display: block;
-            padding: 0.85rem 1.25rem;
-            margin-bottom: 0.75rem;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-left: 4px solid var(--accent-saffron);
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .content-link-item:hover {
-            background-color: #eef2ff;
-            border-left-color: var(--text-dark);
-            transform: translateX(5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-                gap: 1rem;
-            }
-
-            .school-name { font-size: 2rem; }
-            .hindi-diwas-title { font-size: 1.25rem; }
-            .intro-section { padding: 2rem 1.5rem; }
-            .intro-title { font-size: 2rem; }
-            .main-content { padding: 2rem 1rem; }
-            .hindi-facts { grid-template-columns: 1fr; }
-            .content-tiles { grid-template-columns: 1fr; }
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(10, 15, 44, 0.7);
-            backdrop-filter: blur(12px);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: auto;
-            border-top: 1px solid var(--border-light);
-            position: relative;
-            z-index: 5;
-        }
-
-        .footer-text {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-
-/* --- HINDI PAKHWADA SCHEDULE STYLES --- */
-.schedule-section {
-    margin-bottom: 3rem;
-}
-
-.schedule-accordion {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.schedule-day {
-    background: var(--bg-light-cream);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
-}
-
-.schedule-header {
-    background: linear-gradient(135deg, #4f46e5, #3730a3);
-    padding: 1.5rem 2rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-}
-
-.schedule-header:hover {
-    background: linear-gradient(135deg, #3730a3, #4f46e5);
-}
-
-.schedule-date {
-    font-size: 1.3rem;
-    font-weight: 600;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-}
-
-.schedule-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-    padding: 0 2rem;
-    background: #fff;
-}
-
-.schedule-content.active {
-    max-height: 2000px; /* Adjust if needed for more content */
-    padding: 2rem;
-}
-
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1rem;
-}
-
-.schedule-table th, .schedule-table td {
-    padding: 0.75rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.schedule-table thead {
-    background-color: #eef2ff;
-}
-
-.schedule-table th {
-    color: var(--text-dark);
-    font-weight: 600;
-}
-
-.schedule-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-    </style>
-</head>
-<body>
-    <div class="particles" id="particles"></div>
-
-    <header class="header">
-        <div class="header-content">
+      </script>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>जमना विद्यापीठ - हिंदी दिवस विशेष</title>
+      <meta name="description" content="हिन्दी दिवस पर शिक्षकों और छात्रों की रचनाएँ, लेखन सुझाव और विशेष सामग्री के साथ हमारे स्कूल वेबपेज से जुड़ें।">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+      <style>
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         max-height: 99999999px;
+         }
+         :root {
+         --bg-dark-indigo: #0a0f2c;
+         --bg-light-cream: #fffbf0;
+         --accent-saffron: #ff9933;
+         --accent-gold: #f9a825;
+         --text-dark: #3730a3;
+         --text-light: #e0e7ff;
+         --border-light: rgba(255, 255, 255, 0.1);
+         }
+         body {
+         font-family: 'Noto Sans Devanagari', sans-serif;
+         background-color: var(--bg-dark-indigo);
+         background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+         radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+         min-height: 100vh;
+         display: flex;
+         flex-direction: column;
+         overflow-x: hidden;
+         color: #333;
+         }
+         /* Animated background particles */
+         .particles {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         pointer-events: none;
+         z-index: 1;
+         }
+         .particle {
+         position: absolute;
+         width: 20px;
+         height: 20px;
+         background: var(--accent-saffron);
+         border-radius: 50%;
+         animation: float 10s ease-in-out infinite;
+         opacity: 0;
+         }
+         @keyframes float {
+         0% { transform: translateY(0) scale(0.5); opacity: 0; }
+         50% { opacity: 0.5; }
+         100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+         }
+         /* Header */
+         .header {
+         background: rgba(10, 15, 44, 0.7);
+         backdrop-filter: blur(12px);
+         padding: 1.5rem 2rem;
+         position: relative;
+         top: 0;
+         z-index: 10;
+         border-bottom: 1px solid var(--border-light);
+         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+         }
+         .header-content {
+         max-width: 1200px;
+         margin: 0 auto;
+         display: flex;
+         align-items: center;
+         gap: 2rem;
+         flex-wrap: wrap;
+         }
+         .logo {
+         width: 90px;
+         height: 90px;
+         border-radius: 50%;
+         object-fit: cover;
+         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+         transition: transform 0.3s ease;
+         border: 3px solid rgba(255, 153, 51, 0.5);
+         }
+         .logo:hover {
+         transform: scale(1.05) rotate(5deg);
+         }
+         .header-text {
+         flex: 1;
+         color: white;
+         }
+         .school-name {
+         font-size: 2.5rem;
+         font-weight: 700;
+         margin-bottom: 0.5rem;
+         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+         color: #fff;
+         }
+         .hindi-diwas-title {
+         font-size: 1.5rem;
+         font-weight: 500;
+         color: var(--accent-saffron);
+         margin-bottom: 0.25rem;
+         }
+         .date-range {
+         font-size: 1rem;
+         color: var(--text-light);
+         font-weight: 400;
+         }
+         /* Main Content */
+         .main-content {
+         flex: 1;
+         padding: 3rem 2rem;
+         position: relative;
+         z-index: 2;
+         max-width: 1200px;
+         margin: 0 auto;
+         width: 100%;
+         }
+         /* Introduction Section */
+         .intro-section {
+         background: rgba(255, 251, 240, 0.98);
+         backdrop-filter: blur(10px);
+         padding: 3rem;
+         border-radius: 20px;
+         margin-bottom: 3rem;
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+         border: 1px solid rgba(255, 255, 255, 0.2);
+         }
+         .intro-title {
+         font-size: 2.5rem;
+         font-weight: 700;
+         color: var(--text-dark);
+         margin-bottom: 1.5rem;
+         text-align: center;
+         font-family: 'Tiro Devanagari Hindi', serif;
+         }
+         .intro-subtitle {
+         font-size: 1.25rem;
+         color: #d97706;
+         text-align: center;
+         margin-bottom: 2rem;
+         font-weight: 600;
+         }
+         .hindi-facts {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+         gap: 1.5rem;
+         margin-top: 2rem;
+         }
+         .fact-card {
+         background: linear-gradient(135deg, #fef3c7, #fed7aa);
+         padding: 1.5rem;
+         border-radius: 15px;
+         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+         transition: transform 0.3s ease, box-shadow 0.3s ease;
+         border-left: 5px solid var(--accent-gold);
+         }
+         .fact-card:hover {
+         transform: translateY(-5px);
+         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+         }
+         .fact-title {
+         font-size: 1.1rem;
+         font-weight: 600;
+         color: #92400e;
+         margin-bottom: 0.5rem;
+         }
+         .fact-text {
+         color: #451a03;
+         line-height: 1.6;
+         }
+         /* Content Tiles Section */
+         .content-section {
+         margin-bottom: 3rem;
+         }
+         .section-title {
+         font-size: 2.25rem;
+         font-weight: 700;
+         color: white;
+         text-align: center;
+         margin-bottom: 2rem;
+         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+         font-family: 'Tiro Devanagari Hindi', serif;
+         }
+         .content-tiles {
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+         gap: 2rem;
+         }
+         .tile {
+         background: rgba(255, 251, 240, 0.98);
+         backdrop-filter: blur(10px);
+         border-radius: 20px;
+         overflow: hidden;
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+         transition: transform 0.3s ease, box-shadow 0.3s ease;
+         border: 1px solid rgba(255, 255, 255, 0.2);
+         }
+         .tile:hover {
+         transform: translateY(-10px);
+         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+         }
+         .tile-header {
+         background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+         padding: 1.5rem 2rem;
+         text-align: center;
+         cursor: pointer;
+         position: relative;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         }
+         .tile-title-wrapper {
+         text-align: left;
+         }
+         .tile-title {
+         font-size: 1.5rem;
+         font-weight: 700;
+         color: white;
+         margin-bottom: 0.25rem;
+         text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+         }
+         .tile-subtitle {
+         color: rgba(255, 255, 255, 0.9);
+         font-size: 0.9rem;
+         }
+         .tile-content {
+         max-height: 0;
+         overflow: hidden;
+         transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+         background: white;
+         }
+         .tile-content.active {
+         max-height: 999999px; /* Increased max-height */
+         padding: 2rem;
+         }
+         .accordion-content {
+         margin-top: 1rem;
+         }
+         .poem-item {
+         background: #f8fafc;
+         border: 1px solid #e2e8f0;
+         border-radius: 10px;
+         margin-bottom: 1rem;
+         overflow: hidden;
+         }
+         .poem-header {
+         padding: 1rem 1.5rem;
+         background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+         cursor: pointer;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         font-weight: 600;
+         color: var(--text-dark);
+         }
+         .poem-header:hover {
+         background: linear-gradient(135deg, #c7d2fe, #a5b4fc);
+         }
+         .poem-content {
+         max-height: 0;
+         overflow: hidden;
+         transition: max-height 0.4s ease-out;
+         background: white;
+         }
+         .poem-content.active {
+         max-height: 9999999px;
+         padding: 1.5rem;
+         }
+         .poem-text {
+         font-family: 'Tiro Devanagari Hindi', serif;
+         line-height: 2.2;
+         color: #374151;
+         font-size: 1.3rem;
+         white-space: pre-line;
+         }
+         .expand-icon {
+         transition: transform 0.3s ease;
+         font-size: 1.5rem;
+         color: rgba(255,255,255,0.8);
+         }
+         .poem-header .expand-icon {
+         font-size: 1rem;
+         color: var(--text-dark);
+         }
+         .expand-icon.rotated {
+         transform: rotate(180deg);
+         }
+         /* NEW STYLES FOR CONTENT LINKS */
+         .content-link-list {
+         list-style: none;
+         padding: 0;
+         margin-top: 1.5rem;
+         }
+         .content-link-item {
+         display: block;
+         padding: 0.85rem 1.25rem;
+         margin-bottom: 0.75rem;
+         background-color: #f8fafc;
+         border: 1px solid #e2e8f0;
+         border-left: 4px solid var(--accent-saffron);
+         border-radius: 8px;
+         text-decoration: none;
+         color: var(--text-dark);
+         font-weight: 500;
+         transition: all 0.3s ease;
+         }
+         .content-link-item:hover {
+         background-color: #eef2ff;
+         border-left-color: var(--text-dark);
+         transform: translateX(5px);
+         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+         }
+         /* Responsive Design */
+         @media (max-width: 768px) {
+         .header-content {
+         flex-direction: column;
+         text-align: center;
+         gap: 1rem;
+         }
+         .school-name { font-size: 2rem; }
+         .hindi-diwas-title { font-size: 1.25rem; }
+         .intro-section { padding: 2rem 1.5rem; }
+         .intro-title { font-size: 2rem; }
+         .main-content { padding: 2rem 1rem; }
+         .hindi-facts { grid-template-columns: 1fr; }
+         .content-tiles { grid-template-columns: 1fr; }
+         }
+         /* Footer */
+         .footer {
+         background: rgba(10, 15, 44, 0.7);
+         backdrop-filter: blur(12px);
+         color: white;
+         text-align: center;
+         padding: 2rem;
+         margin-top: auto;
+         border-top: 1px solid var(--border-light);
+         position: relative;
+         z-index: 5;
+         }
+         .footer-text {
+         font-size: 1rem;
+         opacity: 0.9;
+         }
+         /* --- HINDI PAKHWADA SCHEDULE STYLES --- */
+         .schedule-section {
+         margin-bottom: 3rem;
+         }
+         .schedule-accordion {
+         display: flex;
+         flex-direction: column;
+         gap: 1.5rem;
+         }
+         .schedule-day {
+         background: var(--bg-light-cream);
+         border-radius: 20px;
+         overflow: hidden;
+         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+         border: 1px solid rgba(255, 255, 255, 0.2);
+         transition: all 0.3s ease;
+         }
+         .schedule-header {
+         background: linear-gradient(135deg, #4f46e5, #3730a3);
+         padding: 1.5rem 2rem;
+         cursor: pointer;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         color: white;
+         }
+         .schedule-header:hover {
+         background: linear-gradient(135deg, #3730a3, #4f46e5);
+         }
+         .schedule-date {
+         font-size: 1.3rem;
+         font-weight: 600;
+         text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+         }
+         .schedule-content {
+         max-height: 0;
+         overflow: hidden;
+         transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+         padding: 0 2rem;
+         background: #fff;
+         }
+         .schedule-content.active {
+         max-height: 2000px; /* Adjust if needed for more content */
+         padding: 2rem;
+         }
+         .schedule-table {
+         width: 100%;
+         border-collapse: collapse;
+         font-size: 1rem;
+         }
+         .schedule-table th, .schedule-table td {
+         padding: 0.75rem 1rem;
+         text-align: left;
+         border-bottom: 1px solid #e2e8f0;
+         }
+         .schedule-table thead {
+         background-color: #eef2ff;
+         }
+         .schedule-table th {
+         color: var(--text-dark);
+         font-weight: 600;
+         }
+         .schedule-table tbody tr:last-child td {
+         border-bottom: none;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="particles" id="particles"></div>
+      <header class="header">
+         <div class="header-content">
             <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
             <div class="header-text">
-                <h1 class="school-name">जमना विद्यापीठ</h1>
-                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
-                <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
+               <h1 class="school-name">जमना विद्यापीठ</h1>
+               <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+               <div class="date-range">हिंदी पखवाड़ा: 14 सितम्बर – 28 सितम्बर 2025</div>
             </div>
-        </div>
-    </header>
-
-    <main class="main-content">
-        <section class="intro-section">
+         </div>
+      </header>
+      <main class="main-content">
+         <section class="intro-section">
             <h2 class="intro-title">हिंदी दिवस की हार्दिक शुभकामनाएं</h2>
             <p class="intro-subtitle">हिंदी का गौरव और महत्व</p>
-            
             <div class="hindi-facts">
-                <div class="fact-card">
-                    <div class="fact-title">🏛️ संवैधानिक मान्यता</div>
-                    <div class="fact-text">14 सितंबर 1949 को हिंदी को राजभाषा का दर्जा मिला। संविधान सभा में हिंदी को भारत की राजभाषा के रूप में स्वीकार किया गया।</div>
-                </div>
-                
-                <div class="fact-card">
-                    <div class="fact-title">🌍 वैश्विक पहुंच</div>
-                    <div class="fact-text">हिंदी विश्व की तीसरी सबसे बड़ी भाषा है। लगभग 60 करोड़ लोग हिंदी बोलते और समझते हैं।</div>
-                </div>
-                
-                <div class="fact-card">
-                    <div class="fact-title">📚 साहित्यिक धरोहर</div>
-                    <div class="fact-text">हिंदी साहित्य का इतिहास हजारों साल पुराना है। तुलसीदास, कबीर, रहीम जैसे महान कवियों की भाषा है हिंदी।</div>
-                </div>
-                
-                <div class="fact-card">
-                    <div class="fact-title">🔤 वैज्ञानिक लिपि</div>
-                    <div class="fact-text">देवनागरी लिपि अत्यंत वैज्ञानिक है। जैसा बोला जाता है, वैसा ही लिखा जाता है।</div>
-                </div>
-                
-                <div class="fact-card">
-                    <div class="fact-title">🤝 एकता की भाषा</div>
-                    <div class="fact-text">हिंदी भारत की विविधता में एकता लाने वाली संपर्क भाषा है। यह सभी भारतीयों को जोड़ने का काम करती है।</div>
-                </div>
-                
-                <div class="fact-card">
-                    <div class="fact-title">🎯 आधुनिक हिंदी</div>
-                    <div class="fact-text">आज हिंदी डिजिटल युग में भी अग्रणी है। इंटरनेट पर हिंदी कंटेंट तेजी से बढ़ रहा है।</div>
-                </div>
+               <div class="fact-card">
+                  <div class="fact-title">🏛️ संवैधानिक मान्यता</div>
+                  <div class="fact-text">14 सितंबर 1949 को हिंदी को राजभाषा का दर्जा मिला। संविधान सभा में हिंदी को भारत की राजभाषा के रूप में स्वीकार किया गया।</div>
+               </div>
+               <div class="fact-card">
+                  <div class="fact-title">🌍 वैश्विक पहुंच</div>
+                  <div class="fact-text">हिंदी विश्व की तीसरी सबसे बड़ी भाषा है। लगभग 60 करोड़ लोग हिंदी बोलते और समझते हैं।</div>
+               </div>
+               <div class="fact-card">
+                  <div class="fact-title">📚 साहित्यिक धरोहर</div>
+                  <div class="fact-text">हिंदी साहित्य का इतिहास हजारों साल पुराना है। तुलसीदास, कबीर, रहीम जैसे महान कवियों की भाषा है हिंदी।</div>
+               </div>
+               <div class="fact-card">
+                  <div class="fact-title">🔤 वैज्ञानिक लिपि</div>
+                  <div class="fact-text">देवनागरी लिपि अत्यंत वैज्ञानिक है। जैसा बोला जाता है, वैसा ही लिखा जाता है।</div>
+               </div>
+               <div class="fact-card">
+                  <div class="fact-title">🤝 एकता की भाषा</div>
+                  <div class="fact-text">हिंदी भारत की विविधता में एकता लाने वाली संपर्क भाषा है। यह सभी भारतीयों को जोड़ने का काम करती है।</div>
+               </div>
+               <div class="fact-card">
+                  <div class="fact-title">🎯 आधुनिक हिंदी</div>
+                  <div class="fact-text">आज हिंदी डिजिटल युग में भी अग्रणी है। इंटरनेट पर हिंदी कंटेंट तेजी से बढ़ रहा है।</div>
+               </div>
             </div>
-        </section>
-
-        <section class="content-section">
+         </section>
+         <section class="content-section">
             <h2 class="section-title">अनमोल सामग्री</h2>
-            
             <div class="content-tiles">
-                <div class="tile">
-                    <div class="tile-header" onclick="toggleTile(this)">
-                        <div class="tile-title-wrapper">
-                            <div class="tile-title">सौरभ सर का काव्य संग्रह</div>
-                            <div class="tile-subtitle">हिंदी की मधुर कविताओं का संग्रह</div>
+               <div class="tile">
+                  <div class="tile-header" onclick="toggleTile(this)">
+                     <div class="tile-title-wrapper">
+                        <div class="tile-title">सौरभ सर का काव्य संग्रह</div>
+                        <div class="tile-subtitle">हिंदी की मधुर कविताओं का संग्रह</div>
+                     </div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="tile-content">
+                     <div class="accordion-content">
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 1: हम नन्हें परिंदे</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 हम नन्हें परिंदे, इस प्यारे जमनाधाम के
+                                 गीत गाते, चल पड़े हैं निज अभिमान के। 
+                                 अब तो सफलता के शिखरों को छूना है,
+                                 भरा विश्वास है, अनुशासन उससे भी दूना है।
+                                 हम नन्हें सुमन, इस प्यारे गुलिस्तां के
+                                 महक उठे हैं, पाकर भंडार सद्ज्ञान के।
+                                 भरें हैं भीतर, विविधता के हमारे कोश हैं,
+                                 इरादे हैं पक्के और मन हमारे निर्दोष हैं।
+                                 हम नन्हें पुतले, सत्य, निष्ठा, ईमान के
+                                 गीत गाते, चल पड़े हैं निज अभिमान के।
+                                 हम बच्चे जमना विद्यापीठ की शान हैं,
+                                 हुनर भरा है, संस्कारों की भी खान है।
+                                 हम सुंदर रूप, उस परमपिता भगवान के
+                                 आशीष लिए, चल पड़े हैं गुरु की छांव में।
+                                 अब तो विद्यालय को ऐसा गौरव देना है,
+                                 न रुकें कदम, ऐसा प्रण अब लेना है।
+                                 हम नन्हें परिंदे, इस प्यारे जमनाधाम के
+                                 गीत गाते, चल पड़े हैं निज अभिमान के। 
+                                 अब तो सफलता के शिखरों को छूना है,
+                                 भरा विश्वास है, अनुशासन उससे भी दूना है।
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
                         </div>
-                        <div class="expand-icon">▼</div>
-                    </div>
-                    <div class="tile-content">
-                        <div class="accordion-content">
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 1: हम नन्हें परिंदे</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-हम नन्हें परिंदे, इस प्यारे जमनाधाम के
-गीत गाते, चल पड़े हैं निज अभिमान के। 
-अब तो सफलता के शिखरों को छूना है,
-भरा विश्वास है, अनुशासन उससे भी दूना है।
-
-हम नन्हें सुमन, इस प्यारे गुलिस्तां के
-महक उठे हैं, पाकर भंडार सद्ज्ञान के।
-भरें हैं भीतर, विविधता के हमारे कोश हैं,
-इरादे हैं पक्के और मन हमारे निर्दोष हैं।
-
-हम नन्हें पुतले, सत्य, निष्ठा, ईमान के
-गीत गाते, चल पड़े हैं निज अभिमान के।
-हम बच्चे जमना विद्यापीठ की शान हैं,
-हुनर भरा है, संस्कारों की भी खान है।
-
-हम सुंदर रूप, उस परमपिता भगवान के
-आशीष लिए, चल पड़े हैं गुरु की छांव में।
-अब तो विद्यालय को ऐसा गौरव देना है,
-न रुकें कदम, ऐसा प्रण अब लेना है।
-
-हम नन्हें परिंदे, इस प्यारे जमनाधाम के
-गीत गाते, चल पड़े हैं निज अभिमान के। 
-अब तो सफलता के शिखरों को छूना है,
-भरा विश्वास है, अनुशासन उससे भी दूना है।
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 2: अंतरिक्ष की सैर से क्यूं डरना?</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-जगमग–जगमग हुए हैं तारे सारे,
-चले जमीं से हम, नापने चंदा मामा प्यारे।
-यह धरा, हिमकण, सब है प्रभु की रचना,
-चल बिटिया, अंतरिक्ष की सैर से क्यूं डरना?
-अपनी शक्ति अचला पर तुम ने दिखाई,
-बन बछेंद्री पाल, तुम शिखर भी छू आई।
-सफर तय तुम्हें अब तारों का है करना
-बातें हवा से, कदम चांद पर है रखना!
-
-यह कल–कल बहते निर्झर, पावन फूलों की टोली,
-यह नायाब दुनिया, किसी ने रंगों की डिबिया खोली!
-क्या है चांद पर भी यह सब? ज़रा कदम तो बढ़ा,
-तिरंगा लेकर, उस दुनिया के ऊंचे पर्वत भी चढ़-आ!
-
-इस जगत के, उस जगत के, क्या हैं कहने?
-क्या धरती, चांद और तारे, सब भाई और बहनें?
-बिटिया, तुम ही रहस्य का पता लगाओ,
-जाओ, आकाशगंगा से कोई सुराग लाओ!
-
-धरती पर तो हवा भी पेड़ों को नचाती है,
-जल की धार भी पत्थर–प्रस्तर काट जाती है,
-सफ़ेद–से चांद पर क्या वायु है, पानी बथेरा है?
-या, गड्ढों की चादर और बस धूलि–धूसर का डेरा है?
-
-जगमग–जगमग हुए हैं तारे सारे,
-चले जमीं से हम, नापने चंदा मामा प्यारे।
-यह धरा, हिमकण, सब है प्रभु की रचना,
-चल बिटिया, अंतरिक्ष की सैर से क्यूं डरना?
-विज्ञान की ताकत को अपनी ताकत में मिला ले,
-उठा गठरी, चंदा मामा की तरफ कदम बढ़ा ले।
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 3: आओ, दशहरा मनाते हैं</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-आओ, दशहरा मनाते हैं,
-दानव दंभ का भीतर 
-बैठा, उसे आज जलाते हैं।
-
-आओ, दशहरा मनाते हैं,
-मोह की बेड़ियां भीतर
-अकड़ी, उन्हें आज गलाते हैं।
-
-आओ, दशहरा मनाते हैं,
-काम, क्रोध, लोभ असुर
-बने, इन्हें राम से मिलवाते हैं।
-
-मानव मन मिथ्या दुराचारी
-हावी होता बड़ा व्यभिचारी,
-आज इन्हें अंजाम तक पहुंचाते हैं,
-आओ, दशहरा मनाते हैं। 
-
-रोज़ छली जा रही नारी,
-पाप है अभी भी जारी,
-दशरथ नंदन को फिर बुलाते हैं,
-आओ, दशहरा मनाते हैं।
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 4: नई राष्ट्रीय शिक्षा नीति</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-अब बोझ न लगेगा बस्ता,
-हालत करेगा नहीं खस्ता!
-ऐसी शिक्षा नीति है आई,
-बदलाव की लहर है लाई! 
-
-कदम नन्हें–से दौड़े चले आएंगे,
-स्कूल के घंटे अब नहीं डराएंगे!
-कौन कहता है पढ़ाई उबाऊ है?
-किताबी कीड़ा और सब रटाऊ है?
-
-पलट देगी पढ़ाने के पुराने ढंग,
-छिटका देगी दिलचस्पी के रंग!
-श्यामपट तो कहीं खो जाएगा,
-सब कुछ 'क्रियात्मक' हो जाएगा!
-
-शायद यंत्र भी बच्चों को पढ़ाएंगे,
-शिक्षक के संगी-साथी हो जाएंगे!
-कलम-घसीटी कुछ कम हो जाएगी,
-गतिविधियां ही अहम रोल निभाएंगी!
-
-सृजन की डिब्बियां खुल जाएंगी,
-चुपके से आकाश में घुल जाएंगी!
-कोई रचेगा कविता, कोई बुनेगा गीत,
-कोई दौड़ेगा, खेल में मैदान लेगा जीत!
-
-अब नहीं होगी अंकों की माया,
-न होगा सिर पर डंडे का साया!
-पढ़ाई खेल–सी सरल बन जाएगी,
-शिक्षा नीति बच्चों को बड़ा लुभाएगी!
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-                          
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 5: चंद्रयान ३ का सफ़र</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-अंतरिक्ष की सैर पर 
-चला यान हमारा है,
-करोड़ों लोगों की उम्मीद,
-इसरो का सहारा है।
-
-चांद की सतह का राज़ चुराने,
-जीवन के सुराग का पता लगाने,
-पोल खोलेगा चांद के गड्ढों की!
-और कहीं, हीलियम के अड्डों की!
-
-चंदा 'मामा' का अब किसको डर है?
-बच्चों का तो अब वही दूसरा घर है!
-विज्ञान की ताकत भी बड़ी अनूठी है,
-चंदा मामा की कहानी लगती झूठी है!
-
-सतीश धवन से उल्टी गिनती,
-वैज्ञानिक कर रहे प्रभु विनती!
-यान चांद पर कुछ दिन बिताएगा,
-खोजकर कोई तो निशान लाएगा!
-
-क्या मिलेंगे जल के झरने?
-क्या सच होंगे कल के सपने?
-इंसान चांद पर क्या बस पाएगा?
-या, कोई अभाव स्वप्न डस जाएगा?
-
-रॉकेट वाले बाबू हाथ हिलाते हैं,
-सफ़ल लैंडिंग का समाचार सुनाते हैं।
-सवा सौ करोड़ दिलों की धड़कन,
-अब नहीं, नहीं कोई तकनीकी अड़चन!
-
-चांद पर तिरंगा फिर लहराएगा,
-भारत कांति विश्व में फैलाएगा!
-इसरो की मेहनत रंग तो लाएगी,
-चांद पर हमारी वजह से दुनिया जाएगी!
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 6: टमाटर का नाटक</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-आज हम सब ने नुक्कड़ नाटक है रचाया,
-एक बच्चे को प्याज़, दूसरे को टमाटर है बनाया!
-टमाटर था महंगा, प्याज़ के साथ चली न यारी,
-टमाटर चढ़ते चार, प्याज़ भर देते टोकरी सारी!
-
-हिंदी अध्यापक भीे सब खड़े हैरान, 
-बच्चों की टोली में टमाटर बने भगवान!
-प्याज़ की व्यथा भी सुनो भाई,
-जो दूसरों को देता था आंसू, 
-आज उसकी आंख भर आई!
-
-नाटक का खलनायक – टमाटर गोल,
-दिन–दहाड़े आसमान छूते इसके मोल!
-बच्चे बजाते ताली और थाली,
-दर्शाते आम आदमी की बदहाली!
-
-गरीब जो प्याज़ से रोटी खाता,
-पीसकर टमाटर की चटनी बनाता,
-उसकी जेब पर कहर ढाते क्यों हो?
-अपनी लालिमा से भरमाते क्यों हो?
-
-अब तो बंद करो इठलाना!
-यूं नहीं खून के आंसू रुलाना!
-क्या भूल गए वे दिन ?
-तुम क्या हो प्याज़ के बिन?
-तुम अकेले ही नहीं लगाते तड़का,
-साथ खड़ा प्याज़, टमाटर पर भड़का!
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 7: शारदा मैडम चली बीकानेर</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-शारदा मैडम 
-चल पड़ी हैं बीकानेर !
-शहर यह बीकाजी का अनोखा है,
-टीलों पर नाचता हवा का झोंका है !
-
-दिन में तपती धरती रे!
-ऊंट भागते अलमस्त रे!
-उड़–उड़ जाते धूल में छप्पर,
-खनक जाते हैं घरों के खप्पर!
-बीकानेर की बात ही अजब है,
-यहां सुनहरी रेत ढाती गजब है!
-
-शारदा मैडम 
-चल पड़ी हैं बीकानेर !
-सलाम ठोकती अपने शहर को,
-मां के संग बिताती हर पहर को !
-तराने छेड़ देती हैं कभी बचपन के,
-बटन हाथ में पिता के अचकन के !
-
-रेत पर उकरी लकीरें हैं,
-यादों की बोलती तस्वीरें हैं।
-कारपेट पर छपा एक एहसास है,
-बीकानेर मैडम के लिए खास है ! 
-
-शारदा मैडम 
-चल पड़ी हैं बीकानेर !
-शहर यह बीकाजी का अनोखा है,
-टीलों पर नाचता हवा का झोंका है !
-
-झरोखों से झांकती यादें रे!
-सरपट भागती मीठी बातें रे!
-तनकर खड़ी जूनागढ़ की मिनारे,
-आहें भरती सुंदर ऊंची दीवारें !
-बीकानेर के ठाठ बाट निराले हैं,
-रामपुरिया ने वीर लाल पाले हैं !
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 8: फूलों के रंग</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-फूलों के रंग बदल रहे हैं,
-खिलने के ढंग बदल रहे हैं।
-तितलियों ने 
-छोड़े आशियाने सारे,
-नभ में लटके मायूस तारे
-आभा की 
-तलाश कर रहे हैं,
-फूलों के रंग बदल रहे हैं।
-
-घटाओं के अंदाज़ बदल रहे हैं,
-पावस के कण भी
-सागरों पर बरस रहे हैं।
-उल्लास के क्षण भी
-कुटिया को तरस रहे हैं। 
-
-फूलों के रंग बदल रहे हैं,
-खिलने के ढंग बदल रहे हैं।
-भौंरे अपने दल,
-तालाब अपनेे तल
-आज फिर बदल रहे हैं।
-
-नगरियों में वक्त बदल रहे हैं,
-धमनियों में रक्त बदल रहे हैं,
-आज की सूरत में,
-कल के ख्वाब पल रहे हैं।
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-  
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 9: जय की हठ</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-जय ने आज हठ विचित्र ठानी है –
-"मां, तुम से अच्छी तो मेरी नानी है
-दो श्वान हैं उनके घर, काले-काले
-धमा चौकड़ी मारते, लगते प्यारे-प्यारे !
-
-तुम एक न दिलाती, इतना रोता हूं,
-दिन जाता है कट, रात अकेले सोता हूं।
-बड़ा न सही, श्वान मुझे छोटा ही दिला दो
-सफ़ेद चकते वाला, कनखड़ा, मोटा ही लिवा दो
-भूरी-नीली आंखों वाला, झब्बर-झब्बर बालों वाला
-अभी-अभी जन्मा, नहीं किसी का हो पोसा-पाला।
-
-मां, श्वान दिला दो – इतना ही कहता हूं,
-सदा देती हो टाल – हर बार ही सहता हूं।"
-
-सुनकर बात जय की, बोल पड़ी मां भी –
-"बेटा, जानता है तू, जानती हूं मैं भी
-नहीं पसंद है श्वान, दादा - दादी को,
-क्या होगा खुश, करके नाराज़ सभी को?
-सुन, तुझे आज मैं एक बात सिखलाती हूं –
-परिवार सुखी तो अमावस में भी सवेरा है
-प्रेम के नीड़ में ही तो हम सब का डेरा है।
-छोड़ ज़िद अब, बन जा तू थोड़ा सयाना, 
-श्वान से नानी के यहां ही रह-रह मिल आना।"
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
-
-
-                            <div class="poem-item">
-                                <div class="poem-header" onclick="togglePoem(this)">
-                                    <span>कविता 10: आज कहीं दूर चलते हैं</span>
-                                    <span class="expand-icon">▼</span>
-                                </div>
-                                <div class="poem-content">
-                                    <div class="poem-text">
-चलो, अनजान रास्तों से यारी करते हैं,
-एक नई मंज़िल का इस्तकबाल करते हैं।
-चलो, आज कहीं दूर चलते हैं।
-
-चाहे पड़े काटना, पत्थर को काटेंगे,
-वीरान ज़िंदगी में भी खुशियां बाटेंगे,
-नहीं है अब मायूसी के गड्ढों में गिरना!
-दस्तूर है गिरकर उठना, और फिर चलना!
-
-जहां अपनों का हाथ देता है साथ,
-जहां ठोकरें भी हमें पढ़ाती हैं पाठ,
-जहां जादू नई उमंग के चलते हैं,
-चलो, आज कहीं दूर चलते हैं।
-
-जहां नए सवेरे अपनी बाहें खोलते हैं,
-जहां फूल भी प्यार की बोली बोलते हैं,
-जहां घड़े भी करुणा के जल से भरते हैं,
-चलो, आज कहीं दूर चलते हैं।
-
-चलो, एक सफ़र मुस्कुराकर तय करते हैं,
-जीवन के गीत में विश्वास की लय भरते हैं,
-चलो, आज कहीं दूर चलते हैं।
-
-
-<strong>— सौरभ सर</strong>
-</div>
-                                </div>
-                            </div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 2: अंतरिक्ष की सैर से क्यूं डरना?</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 जगमग–जगमग हुए हैं तारे सारे,
+                                 चले जमीं से हम, नापने चंदा मामा प्यारे।
+                                 यह धरा, हिमकण, सब है प्रभु की रचना,
+                                 चल बिटिया, अंतरिक्ष की सैर से क्यूं डरना?
+                                 अपनी शक्ति अचला पर तुम ने दिखाई,
+                                 बन बछेंद्री पाल, तुम शिखर भी छू आई।
+                                 सफर तय तुम्हें अब तारों का है करना
+                                 बातें हवा से, कदम चांद पर है रखना!
+                                 यह कल–कल बहते निर्झर, पावन फूलों की टोली,
+                                 यह नायाब दुनिया, किसी ने रंगों की डिबिया खोली!
+                                 क्या है चांद पर भी यह सब? ज़रा कदम तो बढ़ा,
+                                 तिरंगा लेकर, उस दुनिया के ऊंचे पर्वत भी चढ़-आ!
+                                 इस जगत के, उस जगत के, क्या हैं कहने?
+                                 क्या धरती, चांद और तारे, सब भाई और बहनें?
+                                 बिटिया, तुम ही रहस्य का पता लगाओ,
+                                 जाओ, आकाशगंगा से कोई सुराग लाओ!
+                                 धरती पर तो हवा भी पेड़ों को नचाती है,
+                                 जल की धार भी पत्थर–प्रस्तर काट जाती है,
+                                 सफ़ेद–से चांद पर क्या वायु है, पानी बथेरा है?
+                                 या, गड्ढों की चादर और बस धूलि–धूसर का डेरा है?
+                                 जगमग–जगमग हुए हैं तारे सारे,
+                                 चले जमीं से हम, नापने चंदा मामा प्यारे।
+                                 यह धरा, हिमकण, सब है प्रभु की रचना,
+                                 चल बिटिया, अंतरिक्ष की सैर से क्यूं डरना?
+                                 विज्ञान की ताकत को अपनी ताकत में मिला ले,
+                                 उठा गठरी, चंदा मामा की तरफ कदम बढ़ा ले।
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="tile">
-                    <div class="tile-header" onclick="toggleTile(this)">
-                        <div class="tile-title-wrapper">
-                            <div class="tile-title">लघु कथाएं (बच्चों द्वारा)</div>
-                            <div class="tile-subtitle">शिक्षाप्रद व प्रेरणादायक कहानियां</div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 3: आओ, दशहरा मनाते हैं</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 आओ, दशहरा मनाते हैं,
+                                 दानव दंभ का भीतर 
+                                 बैठा, उसे आज जलाते हैं।
+                                 आओ, दशहरा मनाते हैं,
+                                 मोह की बेड़ियां भीतर
+                                 अकड़ी, उन्हें आज गलाते हैं।
+                                 आओ, दशहरा मनाते हैं,
+                                 काम, क्रोध, लोभ असुर
+                                 बने, इन्हें राम से मिलवाते हैं।
+                                 मानव मन मिथ्या दुराचारी
+                                 हावी होता बड़ा व्यभिचारी,
+                                 आज इन्हें अंजाम तक पहुंचाते हैं,
+                                 आओ, दशहरा मनाते हैं। 
+                                 रोज़ छली जा रही नारी,
+                                 पाप है अभी भी जारी,
+                                 दशरथ नंदन को फिर बुलाते हैं,
+                                 आओ, दशहरा मनाते हैं।
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
                         </div>
-                        <div class="expand-icon">▼</div>
-                    </div>
-                    <div class="tile-content">
-                        <p>यहां प्रस्तुत हैं हमारे नन्हे साहित्यकारों की कलम से निकली अनमोल हिंदी कहानियां।</p>
-                        
-                        <div class="content-link-list">
-                            <a href="stories/sapna-magar-adhoora.html" class="content-link-item">कहानी 1: सपना मगर अधूरा</a>
-                            <a href="stories/drishti-ki-udaan.html" class="content-link-item">कहानी 2: दृष्टि की उड़ान</a>
-                            <a href="stories/khazane-ki-chaabi.html" class="content-link-item">कहानी 3: खज़ाने की चाबी</a>
-                            <a href="stories/raja-chala-bajane-baja.html" class="content-link-item">कहानी 4: राजा चला बजाने बाजा</a>
-                            
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 4: नई राष्ट्रीय शिक्षा नीति</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 अब बोझ न लगेगा बस्ता,
+                                 हालत करेगा नहीं खस्ता!
+                                 ऐसी शिक्षा नीति है आई,
+                                 बदलाव की लहर है लाई! 
+                                 कदम नन्हें–से दौड़े चले आएंगे,
+                                 स्कूल के घंटे अब नहीं डराएंगे!
+                                 कौन कहता है पढ़ाई उबाऊ है?
+                                 किताबी कीड़ा और सब रटाऊ है?
+                                 पलट देगी पढ़ाने के पुराने ढंग,
+                                 छिटका देगी दिलचस्पी के रंग!
+                                 श्यामपट तो कहीं खो जाएगा,
+                                 सब कुछ 'क्रियात्मक' हो जाएगा!
+                                 शायद यंत्र भी बच्चों को पढ़ाएंगे,
+                                 शिक्षक के संगी-साथी हो जाएंगे!
+                                 कलम-घसीटी कुछ कम हो जाएगी,
+                                 गतिविधियां ही अहम रोल निभाएंगी!
+                                 सृजन की डिब्बियां खुल जाएंगी,
+                                 चुपके से आकाश में घुल जाएंगी!
+                                 कोई रचेगा कविता, कोई बुनेगा गीत,
+                                 कोई दौड़ेगा, खेल में मैदान लेगा जीत!
+                                 अब नहीं होगी अंकों की माया,
+                                 न होगा सिर पर डंडे का साया!
+                                 पढ़ाई खेल–सी सरल बन जाएगी,
+                                 शिक्षा नीति बच्चों को बड़ा लुभाएगी!
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="tile">
-                    <div class="tile-header" onclick="toggleTile(this)">
-                        <div class="tile-title-wrapper">
-                            <div class="tile-title">रचनात्मक लेखन की चाबी</div>
-                            <div class="tile-subtitle">लेखन कला के गुर और तकनीकें</div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 5: चंद्रयान ३ का सफ़र</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 अंतरिक्ष की सैर पर 
+                                 चला यान हमारा है,
+                                 करोड़ों लोगों की उम्मीद,
+                                 इसरो का सहारा है।
+                                 चांद की सतह का राज़ चुराने,
+                                 जीवन के सुराग का पता लगाने,
+                                 पोल खोलेगा चांद के गड्ढों की!
+                                 और कहीं, हीलियम के अड्डों की!
+                                 चंदा 'मामा' का अब किसको डर है?
+                                 बच्चों का तो अब वही दूसरा घर है!
+                                 विज्ञान की ताकत भी बड़ी अनूठी है,
+                                 चंदा मामा की कहानी लगती झूठी है!
+                                 सतीश धवन से उल्टी गिनती,
+                                 वैज्ञानिक कर रहे प्रभु विनती!
+                                 यान चांद पर कुछ दिन बिताएगा,
+                                 खोजकर कोई तो निशान लाएगा!
+                                 क्या मिलेंगे जल के झरने?
+                                 क्या सच होंगे कल के सपने?
+                                 इंसान चांद पर क्या बस पाएगा?
+                                 या, कोई अभाव स्वप्न डस जाएगा?
+                                 रॉकेट वाले बाबू हाथ हिलाते हैं,
+                                 सफ़ल लैंडिंग का समाचार सुनाते हैं।
+                                 सवा सौ करोड़ दिलों की धड़कन,
+                                 अब नहीं, नहीं कोई तकनीकी अड़चन!
+                                 चांद पर तिरंगा फिर लहराएगा,
+                                 भारत कांति विश्व में फैलाएगा!
+                                 इसरो की मेहनत रंग तो लाएगी,
+                                 चांद पर हमारी वजह से दुनिया जाएगी!
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
                         </div>
-                        <div class="expand-icon">▼</div>
-                    </div>
-                    <div class="tile-content">
-                        <p>हिंदी में रचनात्मक लेखन की कला सीखने के लिए यहाँ विशेष तकनीकें और सुझाव प्रस्तुत किए गए हैं।</p>
-                        
-                        <div class="content-link-list">
-                           <a href="tips/kavita-kaise-likhen.html" class="content-link-item">विषय 1: कविता कैसे लिखें?</a>
-                           <a href="tips/nibandh-lekhan-ki-kala.html" class="content-link-item">विषय 2: निबंध लेखन की कला</a>
-                           <a style="display: none" href="writing-3.html" class="content-link-item">विषय 3: कहानी में पात्रों का निर्माण</a>
-                           <a style="display: none" href="writing-4.html" class="content-link-item">विषय 4: अपने लेखन में सुधार कैसे करें</a>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 6: टमाटर का नाटक</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 आज हम सब ने नुक्कड़ नाटक है रचाया,
+                                 एक बच्चे को प्याज़, दूसरे को टमाटर है बनाया!
+                                 टमाटर था महंगा, प्याज़ के साथ चली न यारी,
+                                 टमाटर चढ़ते चार, प्याज़ भर देते टोकरी सारी!
+                                 हिंदी अध्यापक भीे सब खड़े हैरान, 
+                                 बच्चों की टोली में टमाटर बने भगवान!
+                                 प्याज़ की व्यथा भी सुनो भाई,
+                                 जो दूसरों को देता था आंसू, 
+                                 आज उसकी आंख भर आई!
+                                 नाटक का खलनायक – टमाटर गोल,
+                                 दिन–दहाड़े आसमान छूते इसके मोल!
+                                 बच्चे बजाते ताली और थाली,
+                                 दर्शाते आम आदमी की बदहाली!
+                                 गरीब जो प्याज़ से रोटी खाता,
+                                 पीसकर टमाटर की चटनी बनाता,
+                                 उसकी जेब पर कहर ढाते क्यों हो?
+                                 अपनी लालिमा से भरमाते क्यों हो?
+                                 अब तो बंद करो इठलाना!
+                                 यूं नहीं खून के आंसू रुलाना!
+                                 क्या भूल गए वे दिन ?
+                                 तुम क्या हो प्याज़ के बिन?
+                                 तुम अकेले ही नहीं लगाते तड़का,
+                                 साथ खड़ा प्याज़, टमाटर पर भड़का!
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
                         </div>
-                    </div>
-                </div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 7: शारदा मैडम चली बीकानेर</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 शारदा मैडम 
+                                 चल पड़ी हैं बीकानेर !
+                                 शहर यह बीकाजी का अनोखा है,
+                                 टीलों पर नाचता हवा का झोंका है !
+                                 दिन में तपती धरती रे!
+                                 ऊंट भागते अलमस्त रे!
+                                 उड़–उड़ जाते धूल में छप्पर,
+                                 खनक जाते हैं घरों के खप्पर!
+                                 बीकानेर की बात ही अजब है,
+                                 यहां सुनहरी रेत ढाती गजब है!
+                                 शारदा मैडम 
+                                 चल पड़ी हैं बीकानेर !
+                                 सलाम ठोकती अपने शहर को,
+                                 मां के संग बिताती हर पहर को !
+                                 तराने छेड़ देती हैं कभी बचपन के,
+                                 बटन हाथ में पिता के अचकन के !
+                                 रेत पर उकरी लकीरें हैं,
+                                 यादों की बोलती तस्वीरें हैं।
+                                 कारपेट पर छपा एक एहसास है,
+                                 बीकानेर मैडम के लिए खास है ! 
+                                 शारदा मैडम 
+                                 चल पड़ी हैं बीकानेर !
+                                 शहर यह बीकाजी का अनोखा है,
+                                 टीलों पर नाचता हवा का झोंका है !
+                                 झरोखों से झांकती यादें रे!
+                                 सरपट भागती मीठी बातें रे!
+                                 तनकर खड़ी जूनागढ़ की मिनारे,
+                                 आहें भरती सुंदर ऊंची दीवारें !
+                                 बीकानेर के ठाठ बाट निराले हैं,
+                                 रामपुरिया ने वीर लाल पाले हैं !
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 8: फूलों के रंग</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 फूलों के रंग बदल रहे हैं,
+                                 खिलने के ढंग बदल रहे हैं।
+                                 तितलियों ने 
+                                 छोड़े आशियाने सारे,
+                                 नभ में लटके मायूस तारे
+                                 आभा की 
+                                 तलाश कर रहे हैं,
+                                 फूलों के रंग बदल रहे हैं।
+                                 घटाओं के अंदाज़ बदल रहे हैं,
+                                 पावस के कण भी
+                                 सागरों पर बरस रहे हैं।
+                                 उल्लास के क्षण भी
+                                 कुटिया को तरस रहे हैं। 
+                                 फूलों के रंग बदल रहे हैं,
+                                 खिलने के ढंग बदल रहे हैं।
+                                 भौंरे अपने दल,
+                                 तालाब अपनेे तल
+                                 आज फिर बदल रहे हैं।
+                                 नगरियों में वक्त बदल रहे हैं,
+                                 धमनियों में रक्त बदल रहे हैं,
+                                 आज की सूरत में,
+                                 कल के ख्वाब पल रहे हैं।
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 9: जय की हठ</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 जय ने आज हठ विचित्र ठानी है –
+                                 "मां, तुम से अच्छी तो मेरी नानी है
+                                 दो श्वान हैं उनके घर, काले-काले
+                                 धमा चौकड़ी मारते, लगते प्यारे-प्यारे !
+                                 तुम एक न दिलाती, इतना रोता हूं,
+                                 दिन जाता है कट, रात अकेले सोता हूं।
+                                 बड़ा न सही, श्वान मुझे छोटा ही दिला दो
+                                 सफ़ेद चकते वाला, कनखड़ा, मोटा ही लिवा दो
+                                 भूरी-नीली आंखों वाला, झब्बर-झब्बर बालों वाला
+                                 अभी-अभी जन्मा, नहीं किसी का हो पोसा-पाला।
+                                 मां, श्वान दिला दो – इतना ही कहता हूं,
+                                 सदा देती हो टाल – हर बार ही सहता हूं।"
+                                 सुनकर बात जय की, बोल पड़ी मां भी –
+                                 "बेटा, जानता है तू, जानती हूं मैं भी
+                                 नहीं पसंद है श्वान, दादा - दादी को,
+                                 क्या होगा खुश, करके नाराज़ सभी को?
+                                 सुन, तुझे आज मैं एक बात सिखलाती हूं –
+                                 परिवार सुखी तो अमावस में भी सवेरा है
+                                 प्रेम के नीड़ में ही तो हम सब का डेरा है।
+                                 छोड़ ज़िद अब, बन जा तू थोड़ा सयाना, 
+                                 श्वान से नानी के यहां ही रह-रह मिल आना।"
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="poem-item">
+                           <div class="poem-header" onclick="togglePoem(this)">
+                              <span>कविता 10: आज कहीं दूर चलते हैं</span>
+                              <span class="expand-icon">▼</span>
+                           </div>
+                           <div class="poem-content">
+                              <div class="poem-text">
+                                 चलो, अनजान रास्तों से यारी करते हैं,
+                                 एक नई मंज़िल का इस्तकबाल करते हैं।
+                                 चलो, आज कहीं दूर चलते हैं।
+                                 चाहे पड़े काटना, पत्थर को काटेंगे,
+                                 वीरान ज़िंदगी में भी खुशियां बाटेंगे,
+                                 नहीं है अब मायूसी के गड्ढों में गिरना!
+                                 दस्तूर है गिरकर उठना, और फिर चलना!
+                                 जहां अपनों का हाथ देता है साथ,
+                                 जहां ठोकरें भी हमें पढ़ाती हैं पाठ,
+                                 जहां जादू नई उमंग के चलते हैं,
+                                 चलो, आज कहीं दूर चलते हैं।
+                                 जहां नए सवेरे अपनी बाहें खोलते हैं,
+                                 जहां फूल भी प्यार की बोली बोलते हैं,
+                                 जहां घड़े भी करुणा के जल से भरते हैं,
+                                 चलो, आज कहीं दूर चलते हैं।
+                                 चलो, एक सफ़र मुस्कुराकर तय करते हैं,
+                                 जीवन के गीत में विश्वास की लय भरते हैं,
+                                 चलो, आज कहीं दूर चलते हैं।
+                                 <strong>— सौरभ सुनेजा</strong>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="tile">
+                  <div class="tile-header" onclick="toggleTile(this)">
+                     <div class="tile-title-wrapper">
+                        <div class="tile-title">लघु कथाएं (बच्चों द्वारा)</div>
+                        <div class="tile-subtitle">शिक्षाप्रद व प्रेरणादायक कहानियां</div>
+                     </div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="tile-content">
+                     <p>यहां प्रस्तुत हैं हमारे नन्हे साहित्यकारों की कलम से निकली अनमोल हिंदी कहानियां।</p>
+                     <div class="content-link-list">
+                        <a href="stories/sapna-magar-adhoora.html" class="content-link-item">कहानी 1: सपना मगर अधूरा</a>
+                        <a href="stories/drishti-ki-udaan.html" class="content-link-item">कहानी 2: दृष्टि की उड़ान</a>
+                        <a href="stories/khazane-ki-chaabi.html" class="content-link-item">कहानी 3: खज़ाने की चाबी</a>
+                        <a href="stories/raja-chala-bajane-baja.html" class="content-link-item">कहानी 4: राजा चला बजाने बाजा</a>
+                     </div>
+                  </div>
+               </div>
+               <div class="tile">
+                  <div class="tile-header" onclick="toggleTile(this)">
+                     <div class="tile-title-wrapper">
+                        <div class="tile-title">रचनात्मक लेखन की चाबी</div>
+                        <div class="tile-subtitle">लेखन कला के गुर और तकनीकें</div>
+                     </div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="tile-content">
+                     <p>हिंदी में रचनात्मक लेखन की कला सीखने के लिए यहाँ विशेष तकनीकें और सुझाव प्रस्तुत किए गए हैं।</p>
+                     <div class="content-link-list">
+                        <a href="tips/kavita-kaise-likhen.html" class="content-link-item">विषय 1: कविता कैसे लिखें?</a>
+                        <a href="tips/nibandh-lekhan-ki-kala.html" class="content-link-item">विषय 2: निबंध लेखन की कला</a>
+                        <a style="display: none" href="writing-3.html" class="content-link-item">विषय 3: कहानी में पात्रों का निर्माण</a>
+                        <a style="display: none" href="writing-4.html" class="content-link-item">विषय 4: अपने लेखन में सुधार कैसे करें</a>
+                     </div>
+                  </div>
+               </div>
             </div>
-        </section>
-<section class="schedule-section">
-    <h2 class="section-title">हिंदी पखवाड़ा - कार्यक्रम सूची</h2>
-
-    <div class="schedule-accordion">
-        
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">13 सितम्बर 2025, शनिवार</div>
-                <div class="expand-icon">▼</div>
+         </section>
+         <section class="schedule-section">
+            <h2 class="section-title">हिंदी पखवाड़ा - कार्यक्रम सूची</h2>
+            <div class="schedule-accordion">
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">13 सितम्बर 2025, शनिवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>6 से 10</td>
+                              <td>हिंदी पखवाड़ा शुभारंभ समारोह</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>सुबह 7:30 से 8:45</td>
+                           </tr>
+                           <tr>
+                              <td>3 से 10</td>
+                              <td>पोस्टर निर्माण एवं नारा लेखन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 7 और 8</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">15 सितम्बर 2025, सोमवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>1 और 2</td>
+                              <td>सुलेख प्रतियोगिता</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>1 और 2</td>
+                              <td>कविता वाचन प्रतियोगिता</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1, 2, 3</td>
+                           </tr>
+                           <tr>
+                              <td>1 और 2</td>
+                              <td>एकल अभिनय प्रतियोगिता</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1, 2, 3</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">16 सितम्बर 2025, मंगलवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>3</td>
+                              <td>सुलेख प्रतियोगिता</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>3</td>
+                              <td>कविता वाचन, एकल अभिनय, छंद गायन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1, 2, 3</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">17 सितम्बर 2025, बुधवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>1 और 2</td>
+                              <td>समापन एवं सम्मान समारोह</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 2, 3, 4</td>
+                           </tr>
+                           <tr>
+                              <td>4</td>
+                              <td>सुलेख प्रतियोगिता</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 5</td>
+                           </tr>
+                           <tr>
+                              <td>4</td>
+                              <td>कविता वाचन, भाषण, एकल अभिनय, छंद गायन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 5, 6, 7</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">18 सितम्बर 2025, गुरुवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>3 से 10</td>
+                              <td>हिंदी ओलंपियाड परीक्षा का आयोजन</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">19 सितम्बर 2025, शुक्रवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>5</td>
+                              <td>सुलेख प्रतियोगिता</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>5</td>
+                              <td>कविता वाचन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>5</td>
+                              <td>एकल अभिनय</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 2</td>
+                           </tr>
+                           <tr>
+                              <td>5</td>
+                              <td>भाषण एवं गायन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 3</td>
+                           </tr>
+                           <tr>
+                              <td>5</td>
+                              <td>दोहा प्रतियोगिता</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 4</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">20 सितम्बर 2025, शनिवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>6</td>
+                              <td>अनुच्छेद लेखन</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>6</td>
+                              <td>एकल अभिनय</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>6</td>
+                              <td>वाद विवाद</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 2</td>
+                           </tr>
+                           <tr>
+                              <td>6</td>
+                              <td>भाषण</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 3</td>
+                           </tr>
+                           <tr>
+                              <td>6</td>
+                              <td>कविता वाचन/दोहा गायन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 4</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">23 सितम्बर 2025, मंगलवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>7</td>
+                              <td>अनुच्छेद लेखन</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>7</td>
+                              <td>एकल अभिनय</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>7</td>
+                              <td>वाद विवाद</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 2</td>
+                           </tr>
+                           <tr>
+                              <td>7</td>
+                              <td>भाषण</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 3</td>
+                           </tr>
+                           <tr>
+                              <td>7</td>
+                              <td>कविता वाचन/दोहा गायन</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 4</td>
+                           </tr>
+                           <tr>
+                              <td>3 से 5</td>
+                              <td>समापन एवं सम्मान समारोह</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 5, 6</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">24 सितम्बर 2025, बुधवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>8</td>
+                              <td>अनुच्छेद लेखन</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>8</td>
+                              <td>कविता वाचन एवं भाषण</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>8</td>
+                              <td>वाद विवाद</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 2</td>
+                           </tr>
+                           <tr>
+                              <td>8</td>
+                              <td>प्रश्नोत्तरी</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 3</td>
+                           </tr>
+                           <tr>
+                              <td>8</td>
+                              <td>दोहा/चौपाई गायन एवं एकल अभिनय</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 4</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">25 सितम्बर 2025, गुरुवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>9</td>
+                              <td>अनुच्छेद लेखन</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>9</td>
+                              <td>अभिनय प्रतियोगिता</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>9</td>
+                              <td>वाद विवाद प्रतियोगिता</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 2, 3</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">26 सितम्बर 2025, शुक्रवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>10</td>
+                              <td>अनुच्छेद लेखन प्रतियोगिता</td>
+                              <td>कक्षा कक्ष</td>
+                              <td>कालांश 1</td>
+                           </tr>
+                           <tr>
+                              <td>10</td>
+                              <td>अभिनय प्रतियोगिता</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 1, 2</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <div class="schedule-day">
+                  <div class="schedule-header" onclick="toggleDay(this)">
+                     <div class="schedule-date">27 सितम्बर 2025, शनिवार</div>
+                     <div class="expand-icon">▼</div>
+                  </div>
+                  <div class="schedule-content">
+                     <table class="schedule-table">
+                        <thead>
+                           <tr>
+                              <th>कक्षा</th>
+                              <th>गतिविधि</th>
+                              <th>स्थान</th>
+                              <th>समय</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                              <td>6 से 10</td>
+                              <td>समापन एवं सम्मान समारोह</td>
+                              <td>प्रार्थना सभागार</td>
+                              <td>कालांश 0, 1, 2</td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
             </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>6 से 10</td>
-                            <td>हिंदी पखवाड़ा शुभारंभ समारोह</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>सुबह 7:30 से 8:45</td>
-                        </tr>
-                        <tr>
-                            <td>3 से 10</td>
-                            <td>पोस्टर निर्माण एवं नारा लेखन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 7 और 8</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">15 सितम्बर 2025, सोमवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1 और 2</td>
-                            <td>सुलेख प्रतियोगिता</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>1 और 2</td>
-                            <td>कविता वाचन प्रतियोगिता</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1, 2, 3</td>
-                        </tr>
-                        <tr>
-                            <td>1 और 2</td>
-                            <td>एकल अभिनय प्रतियोगिता</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1, 2, 3</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">16 सितम्बर 2025, मंगलवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>3</td>
-                            <td>सुलेख प्रतियोगिता</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>कविता वाचन, एकल अभिनय, छंद गायन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1, 2, 3</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">17 सितम्बर 2025, बुधवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1 और 2</td>
-                            <td>समापन एवं सम्मान समारोह</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 2, 3, 4</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>सुलेख प्रतियोगिता</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 5</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>कविता वाचन, भाषण, एकल अभिनय, छंद गायन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 5, 6, 7</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">18 सितम्बर 2025, गुरुवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>3 से 10</td>
-                            <td>हिंदी ओलंपियाड परीक्षा का आयोजन</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">19 सितम्बर 2025, शुक्रवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>5</td>
-                            <td>सुलेख प्रतियोगिता</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>कविता वाचन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>एकल अभिनय</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 2</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>भाषण एवं गायन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 3</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>दोहा प्रतियोगिता</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 4</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">20 सितम्बर 2025, शनिवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>6</td>
-                            <td>अनुच्छेद लेखन</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>एकल अभिनय</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>वाद विवाद</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 2</td>
-                        </tr>
-                         <tr>
-                            <td>6</td>
-                            <td>भाषण</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 3</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>कविता वाचन/दोहा गायन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 4</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">23 सितम्बर 2025, मंगलवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                         <tr>
-                            <td>7</td>
-                            <td>अनुच्छेद लेखन</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>एकल अभिनय</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>वाद विवाद</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 2</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>भाषण</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 3</td>
-                        </tr>
-                         <tr>
-                            <td>7</td>
-                            <td>कविता वाचन/दोहा गायन</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 4</td>
-                        </tr>
-                        <tr>
-                            <td>3 से 5</td>
-                            <td>समापन एवं सम्मान समारोह</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 5, 6</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">24 सितम्बर 2025, बुधवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                         <tr>
-                            <td>8</td>
-                            <td>अनुच्छेद लेखन</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>कविता वाचन एवं भाषण</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>वाद विवाद</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 2</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>प्रश्नोत्तरी</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 3</td>
-                        </tr>
-                         <tr>
-                            <td>8</td>
-                            <td>दोहा/चौपाई गायन एवं एकल अभिनय</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 4</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">25 सितम्बर 2025, गुरुवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>9</td>
-                            <td>अनुच्छेद लेखन</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>अभिनय प्रतियोगिता</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>वाद विवाद प्रतियोगिता</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 2, 3</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">26 सितम्बर 2025, शुक्रवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>10</td>
-                            <td>अनुच्छेद लेखन प्रतियोगिता</td>
-                            <td>कक्षा कक्ष</td>
-                            <td>कालांश 1</td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td>अभिनय प्रतियोगिता</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 1, 2</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="schedule-day">
-            <div class="schedule-header" onclick="toggleDay(this)">
-                <div class="schedule-date">27 सितम्बर 2025, शनिवार</div>
-                <div class="expand-icon">▼</div>
-            </div>
-            <div class="schedule-content">
-                <table class="schedule-table">
-                    <thead>
-                        <tr>
-                            <th>कक्षा</th>
-                            <th>गतिविधि</th>
-                            <th>स्थान</th>
-                            <th>समय</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>6 से 10</td>
-                            <td>समापन एवं सम्मान समारोह</td>
-                            <td>प्रार्थना सभागार</td>
-                            <td>कालांश 0, 1, 2</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
-</section>
-    </main>
-
-    <footer class="footer">
-        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित | सौरभ सर द्वारा निर्मित व संचालित</p>
-    </footer>
-
-    <script>
-        // Function to toggle the main content tiles
-        function toggleTile(headerElement) {
-            const tileContent = headerElement.nextElementSibling;
-            const icon = headerElement.querySelector('.expand-icon');
-            
-            tileContent.classList.toggle('active');
-            icon.classList.toggle('rotated');
-        }
-
-        // Function to toggle the individual poem accordions
-        function togglePoem(poemHeaderElement) {
-            const poemContent = poemHeaderElement.nextElementSibling;
-            const icon = poemHeaderElement.querySelector('.expand-icon');
-            
-            poemContent.classList.toggle('active');
-            icon.classList.toggle('rotated');
-        }
-
-
-            // Function to toggle the schedule accordion
-        function toggleDay(headerElement) {
-            const content = headerElement.nextElementSibling;
-            const icon = headerElement.querySelector('.expand-icon');
-            
-            content.classList.toggle('active');
-            icon.classList.toggle('rotated');
-        }
-    
-        // Function to create animated background particles
-        document.addEventListener('DOMContentLoaded', function () {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                particle.style.left = `${Math.random() * 100}vw`;
-                particle.style.top = `${Math.random() * 100}vh`;
-                
-                const animationDuration = Math.random() * 10 + 5; // 5 to 15 seconds
-                const animationDelay = Math.random() * 10; // 0 to 10 seconds
-                
-                particle.style.animationDuration = `${animationDuration}s`;
-                particle.style.animationDelay = `${animationDelay}s`;
-
-                particlesContainer.appendChild(particle);
-            }
-        });
-    </script>
-</body>
+         </section>
+      </main>
+      <footer class="footer">
+         <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित | सौरभ सर द्वारा निर्मित व संचालित</p>
+      </footer>
+      <script>
+         // Function to toggle the main content tiles
+         function toggleTile(headerElement) {
+             const tileContent = headerElement.nextElementSibling;
+             const icon = headerElement.querySelector('.expand-icon');
+             
+             tileContent.classList.toggle('active');
+             icon.classList.toggle('rotated');
+         }
+         
+         // Function to toggle the individual poem accordions
+         function togglePoem(poemHeaderElement) {
+             const poemContent = poemHeaderElement.nextElementSibling;
+             const icon = poemHeaderElement.querySelector('.expand-icon');
+             
+             poemContent.classList.toggle('active');
+             icon.classList.toggle('rotated');
+         }
+         
+         
+             // Function to toggle the schedule accordion
+         function toggleDay(headerElement) {
+             const content = headerElement.nextElementSibling;
+             const icon = headerElement.querySelector('.expand-icon');
+             
+             content.classList.toggle('active');
+             icon.classList.toggle('rotated');
+         }
+         
+         // Function to create animated background particles
+         document.addEventListener('DOMContentLoaded', function () {
+             const particlesContainer = document.getElementById('particles');
+             const particleCount = 50;
+         
+             for (let i = 0; i < particleCount; i++) {
+                 const particle = document.createElement('div');
+                 particle.classList.add('particle');
+                 
+                 particle.style.left = `${Math.random() * 100}vw`;
+                 particle.style.top = `${Math.random() * 100}vh`;
+                 
+                 const animationDuration = Math.random() * 10 + 5; // 5 to 15 seconds
+                 const animationDelay = Math.random() * 10; // 0 to 10 seconds
+                 
+                 particle.style.animationDuration = `${animationDuration}s`;
+                 particle.style.animationDelay = `${animationDelay}s`;
+         
+                 particlesContainer.appendChild(particle);
+             }
+         });
+      </script>
+   </body>
 </html>
