@@ -422,6 +422,37 @@
          .schedule-table tbody tr:last-child td {
          border-bottom: none;
          }
+/* --- TEACHER THANKS SECTION --- */
+.teacher-thanks-section {
+    margin-bottom: 3rem;
+}
+
+.teacher-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.teacher-card {
+    background: rgba(255, 251, 240, 0.98);
+    padding: 1.5rem 1rem;
+    border-radius: 15px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    border-top: 4px solid var(--accent-gold);
+}
+
+.teacher-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    background-color: #ffffff;
+}
+
       </style>
    </head>
    <body>
@@ -1329,6 +1360,35 @@
                </div>
             </div>
          </section>
+         <section class="teacher-thanks-section">
+            <h2 class="section-title">आभार व्यक्त शिक्षकगण</h2>
+            <p style="color: #e0e7ff; text-align: center; font-size: 1.1rem; max-width: 800px; margin: -1rem auto 0;">
+               हिंदी पखवाड़े के सफल आयोजन में निम्नलिखित शिक्षकों का बहुमूल्य योगदान रहा। विद्यालय परिवार आपका हार्दिक आभार व्यक्त करता है।
+            </p>
+            <div class="teacher-grid">
+               <div class="teacher-card">श्री मंजू बाला</div>
+               <div class="teacher-card">श्री सविता देवी</div>
+               <div class="teacher-card">श्री रश्मि अधिकारी</div>
+               <div class="teacher-card">श्री सी.एस. शर्मा</div>
+               <div class="teacher-card">श्री अभिलाषा जोशी</div>
+               <div class="teacher-card">श्री रेखा पारीक</div>
+               <div class="teacher-card">श्री सौरभ सुनेजा</div>
+               <div class="teacher-card">श्री काजल झा</div>
+               <div class="teacher-card">श्री ऋतु दास</div>
+               <div class="teacher-card">श्री आजाद सिंह चौहान</div>
+               <div class="teacher-card">श्री योगेश्वरी शर्मा</div>
+               <div class="teacher-card">श्री सरोज जांगिड़</div>
+               <div class="teacher-card">श्री सुमित्रा चौहान</div>
+               <div class="teacher-card">श्री अनूप शुक्ला</div>
+               <div class="teacher-card">श्री ज्योति शर्मा</div>
+               <div class="teacher-card">श्री अंजू</div>
+               <div class="teacher-card">श्री अंजू कुमारी</div>
+            </div>
+         </section>
+         ```
+
+By adding these snippets, your page will now feature a beautifully styled section acknowledging the teachers, perfectly integrated with your existing theme.
+
       </main>
       <footer class="footer">
          <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित | सौरभ सर द्वारा निर्मित व संचालित</p>
