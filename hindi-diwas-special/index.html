@@ -17,6 +17,31 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- DYNAMIC PHOTO GALLERY ---
+        const gallery = [
+            {
+                event: "पोस्टर एवं नारा लेखन (13 सितंबर)",
+                link: "https://drive.google.com/drive/folders/1vSG0ygUYsJNsrfs12fOQZy7aI0LxJYP_"
+            }
+        ];
+    
+        const galleryContainer = document.getElementById('gallery-container');
+    
+        if (galleryContainer) {
+            gallery.forEach(item => {
+                const linkCard = document.createElement('a');
+                linkCard.href = item.link;
+                linkCard.className = 'gallery-link-card';
+                linkCard.textContent = item.event;
+                galleryContainer.appendChild(linkCard);
+            });
+        }
+    });
+</script>
+
       <style>
          * {
          margin: 0;
@@ -1487,44 +1512,5 @@
              }
          });
       </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // --- DYNAMIC PHOTO GALLERY ---
-        const gallery = [
-            {
-                event: "शुभारंभ समारोह",
-                link: "https://myjvp.in/hindi-diwas-special/gallery/?event=shubharambh-samaroh"
-            },
-            {
-                event: "वाद-विवाद प्रतियोगिता",
-                link: "https://myjvp.in/hindi-diwas-special/gallery/?event=vaad-vivaad"
-            },
-            {
-                event: "सुलेख प्रतियोगिता",
-                link: "https://myjvp.in/hindi-diwas-special/gallery/?event=sulekh-pratiyogita"
-            },
-            {
-               event: "एकल अभिनय",
-               link: "https://myjvp.in/hindi-diwas-special/gallery/?event=ekal-abhinay"
-            },
-            {
-               event: "कविता वाचन",
-               link: "https://myjvp.in/hindi-diwas-special/gallery/?event=kavita-vaachan"
-            }
-        ];
-    
-        const galleryContainer = document.getElementById('gallery-container');
-    
-        if (galleryContainer) {
-            gallery.forEach(item => {
-                const linkCard = document.createElement('a');
-                linkCard.href = item.link;
-                linkCard.className = 'gallery-link-card';
-                linkCard.textContent = item.event;
-                galleryContainer.appendChild(linkCard);
-            });
-        }
-    });
-</script>
    </body>
 </html>
