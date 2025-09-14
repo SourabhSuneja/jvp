@@ -422,6 +422,50 @@
          .schedule-table tbody tr:last-child td {
          border-bottom: none;
          }
+/* --- PHOTO GALLERY SECTION --- */
+.gallery-section {
+    margin-bottom: 3rem;
+}
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+.gallery-link-card {
+    background: var(--bg-light-cream);
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.15rem;
+    color: var(--text-dark);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-bottom: 4px solid var(--accent-gold);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.gallery-link-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    border-bottom-color: var(--accent-saffron);
+}
+.gallery-link-card::before {
+    content: '📸'; /* Camera Emoji */
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    display: block;
+    filter: grayscale(30%);
+    transition: filter 0.3s ease;
+}
+.gallery-link-card:hover::before {
+    filter: grayscale(0%);
+}
+
          /* --- TEACHER THANKS SECTION --- */
          .teacher-thanks-section {
          margin-bottom: 3rem;
@@ -1356,6 +1400,11 @@
                </div>
             </div>
          </section>
+         <section class="gallery-section">
+            <h2 class="section-title">फोटो गैलरी</h2>
+            <div id="gallery-container" class="gallery-grid">
+               </div>
+         </section>
          <section class="teacher-thanks-section">
             <h2 class="section-title">आभार व्यक्त शिक्षकगण</h2>
             <p style="color: #e0e7ff; text-align: center; font-size: 1.1rem; max-width: 800px; margin: -1rem auto 0;">
@@ -1437,5 +1486,44 @@
              }
          });
       </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // --- DYNAMIC PHOTO GALLERY ---
+        const gallery = [
+            {
+                event: "शुभारंभ समारोह",
+                link: "https://myjvp.in/hindi-diwas-special/gallery/?event=shubharambh-samaroh"
+            },
+            {
+                event: "वाद-विवाद प्रतियोगिता",
+                link: "https://myjvp.in/hindi-diwas-special/gallery/?event=vaad-vivaad"
+            },
+            {
+                event: "सुलेख प्रतियोगिता",
+                link: "https://myjvp.in/hindi-diwas-special/gallery/?event=sulekh-pratiyogita"
+            },
+            {
+               event: "एकल अभिनय",
+               link: "https://myjvp.in/hindi-diwas-special/gallery/?event=ekal-abhinay"
+            },
+            {
+               event: "कविता वाचन",
+               link: "https://myjvp.in/hindi-diwas-special/gallery/?event=kavita-vaachan"
+            }
+        ];
+    
+        const galleryContainer = document.getElementById('gallery-container');
+    
+        if (galleryContainer) {
+            gallery.forEach(item => {
+                const linkCard = document.createElement('a');
+                linkCard.href = item.link;
+                linkCard.className = 'gallery-link-card';
+                linkCard.textContent = item.event;
+                galleryContainer.appendChild(linkCard);
+            });
+        }
+    });
+</script>
    </body>
 </html>
