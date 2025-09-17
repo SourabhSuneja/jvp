@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>लघु कथा - दो बेचारे भाई</title>
+    <meta name="description" content="ननकू और सनकू की दिलचस्प कहानी—भाईचारे, सादगी और जीवन के उतार-चढ़ाव से जुड़ी हास्यरस से भरी प्रेरणादायक कथा। पढ़ें और सीखें जीवन का असली सबक।">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700&family=Tiro+Devanagari+Hindi:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Base Styles (Copied from main page for consistency) --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; max-height: 99999999px; }
+        :root {
+            --bg-dark-indigo: #0a0f2c;
+            --accent-saffron: #ff9933;
+            --accent-gold: #f9a825;
+            --text-dark: #3730a3;
+            --text-light: #e0e7ff;
+            --border-light: rgba(255, 255, 255, 0.1);
+        }
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: var(--bg-dark-indigo);
+            background-image: radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 153, 51, 0.05) 0%, transparent 40%);
+            min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; color: #333;
+        }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .particle { position: absolute; width: 3px; height: 3px; background: var(--accent-saffron); border-radius: 50%; animation: float 10s ease-in-out infinite; opacity: 0; }
+        @keyframes float { 0% { transform: translateY(0) scale(0.5); opacity: 0; } 50% { opacity: 0.5; } 100% { transform: translateY(-100vh) scale(1); opacity: 0; } }
+        .header { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); padding: 1.5rem 2rem; position: relative; top: 0; z-index: 10; border-bottom: 1px solid var(--border-light); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; }
+        .logo { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; transition: transform 0.3s ease; border: 3px solid rgba(255, 153, 51, 0.5); }
+        .logo:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { flex: 1; color: white; }
+        .school-name { font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+        .hindi-diwas-title { font-size: 1.5rem; font-weight: 500; color: var(--accent-saffron); margin-bottom: 0.25rem; }
+        .date-range { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .main-content { flex: 1; padding: 3rem 2rem; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; width: 100%; }
+        .footer { background: rgba(10, 15, 44, 0.7); backdrop-filter: blur(12px); color: white; text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid var(--border-light); position: relative; z-index: 5; }
+        .footer-text { font-size: 1rem; opacity: 0.9; }
+
+        /* --- Page Specific Styles --- */
+        .content-wrapper {
+            background: rgba(255, 251, 240, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .page-title {
+            font-size: 2.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            border-bottom: 3px solid var(--accent-gold);
+            padding-bottom: 1rem;
+        }
+        .page-author {
+            font-size: 1.25rem;
+            color: #d97706;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+        .story-body {
+            font-family: 'Tiro Devanagari Hindi', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            color: #374151;
+            text-align: justify;
+        }
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+        .story-moral {
+            margin-top: 3rem;
+            padding: 1.5rem;
+            background: #fef3c7;
+            border-left: 5px solid var(--accent-gold);
+            border-radius: 0 8px 8px 0;
+        }
+        .story-moral strong {
+            font-size: 1.2rem;
+            color: #92400e;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .story-moral p {
+            color: #451a03;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .back-link-container {
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, var(--accent-saffron), var(--accent-gold));
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 153, 51, 0.3);
+        }
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 153, 51, 0.4);
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 2rem 1rem; }
+            .content-wrapper { padding: 1.5rem; }
+            .page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <header class="header">
+        <div class="header-content">
+            <img src="https://i.postimg.cc/Y0qB2Wyc/images-2024-05-21-T183208-408.jpg" alt="जमना विद्यापीठ लोगो" class="logo">
+            <div class="header-text">
+                <h1 class="school-name">जमना विद्यापीठ</h1>
+                <div class="hindi-diwas-title">हिंदी दिवस विशेष</div>
+                <div class="date-range">हिंदी पखवाड़ा: 13 सितम्बर – 27 सितम्बर 2025</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <article class="content-wrapper">
+            <h1 class="page-title">दो बेचारे भाई</h1>
+
+            <p class="page-author">रचयिता: कृष्णिका हरचंदानी, सप्तम - A1</p>
+            
+            <div class="story-body">
+                <p>बेलापुर गाँव के कोने में एक कच्चे घर में दो भाई रहते थे। बड़े भाई का नाम था ननकू और छोटे का नाम सनकू। दोनों के माता-पिता का बरसों पहले ही देहांत हो चुका था और न कोई घरवाली थी, न ही कोई और सहारा। अकेलेपन के बावजूद उनका जीवन हँसी-मज़ाक और भाईचारे से भरा था। ननकू शांत, समझदार और सोच-विचार करके काम करने वाला था, जबकि सनकू फुर्तीला, शरारती और कभी-कभी अक्ल से पैदल साबित हो जाता था। गाँव में लोग अक्सर कहते कि दोनों भाई एक-दूसरे के बिल्कुल उलट हैं—एक सिरा समझदारी का और दूसरा सिरा सनक का—फिर भी दोनों की जोड़ी खूब जमती थी।</p>
+
+                <p>दिनभर वे खेतों में काम करते। एक हल चलाता तो दूसरा पीछे-पीछे बीज डालता। घर पर भी यही हाल था। ननकू झाड़ू-पोंछा करता तो सनकू बर्तन धोता। कपड़े धोने की बारी आती तो दोनों आपस में झगड़ पड़ते कि कौन धोएगा। ननकू कहता, “मैं धो लूं,” और सनकू तुरंत जवाब देता, “नहीं, तू बैठकर आराम कर, कपड़े मैं धो लूंगा।” फिर दोनों हँस पड़ते और काम पूरा कर देते।</p>
+
+                <p>लेकिन उनके जीवन में एक राज था। दोनों को रतौंधी का रोग था। दिन में तो सब साफ-साफ दिखाई देता, पर जैसे ही सूरज ढलता, अंधेरा उनके लिए बिल्कुल अंधा कर देने वाला बन जाता। वे न तो रास्ता पहचान पाते, न ही सामने खड़े इंसान को। यही कारण था कि वे हमेशा सूर्यास्त से पहले घर लौट आते और रात होते ही काम-धंधे समेटकर खाट पर बैठकर आपस में किस्से-कहानियाँ गढ़ते रहते।</p>
+
+                <p>सनकू अक्सर डींगें हाँकता। एक दिन उसने कहा, “भैया, जब उस रात शेर मेरी तरफ बढ़ा तो मैंने उसे आँख मार दी। बेचारा डरकर भाग गया।” ननकू तुरंत हँस पड़ा और बोला, “अबे गप्पी कहीं का! रात को तो तुझे कुछ दिखाई ही नहीं देता।” ऐसे ही उनकी नोकझोंक चलती रहती और गाँववाले हैरान होकर देखते कि दोनों बिना घरवाली के भी कितनी मौज में रहते हैं।</p>
+
+                <p>लेकिन अड़ोस-पड़ोस के कुछ लोग उनकी बीमारी को जानते थे। वे अक्सर ताना कसते, “देखो-देखो, ननकू-सनक जा रहे हैं। बेचारे दिन में ही बाहर निकल पाते हैं, रात को तो कुछ देख ही नहीं सकते। कोई इन्हें अपनी लड़की क्यों देगा?” ऐसी बातें सुनकर सनकू का खून खौल उठता। वह गुस्से में आकर कहता, “भैया, सुना तूने ये रामजी दुकानदार क्या बोल रहा है?” लेकिन ननकू हमेशा शांत स्वर में समझाता, “तू क्यों खून जला रहा है? इन्हें बोलने दे। एक दिन अपने आप चुप हो जाएंगे।”</p>
+
+                <p>इसी बीच पड़ोस के गाँव में रहने वाले रणजी ने एक दिन दोनों भाइयों को अपने घर बुलाया। उसकी दो बहनें गुणवंती और लाजवंती थीं और वह चाहता था कि ननकू-सनक उनसे विवाह करें। खबर सुनकर सनकू का मन फूल की तरह खिल गया। उसने कहा, “भैया, इस बार तो किस्मत बदलने वाली है।” ननकू ने हौले से मुस्कुराते हुए कहा, “चल, देखेंगे। लेकिन संभलकर रहना। कहीं हमारी बीमारी का राज खुल गया तो मुश्किल होगी।”</p>
+
+                <p>शुक्रवार की सुबह दोनों भाइयों ने अपनी बैलगाड़ी सजाई। साफ कपड़े पहने, बाल संवारे और निकल पड़े। रास्ते में गाँव के लोग चुटकी लेते बोले, “वाह! ऐसे सजधजकर कहाँ जा रहे हो? लगता है सच में दूल्हे बन बैठे हो।” दोनों शरमा गए, लेकिन अंदर ही अंदर खुश थे।</p>
+
+                <p>जंगल पार करते समय मुसीबत आ गई। बैल अचानक कहीं ग़ायब हो गए। सनकू घबरा गया, “भैया, बैल तो दिख ही नहीं रहे।” ननकू ने कहा, “घबराने की जरूरत नहीं, एक तरकीब आज़माते हैं।” उसने अपनी पगड़ी उतारी और कहा, “इसका एक सिरा तू पकड़, एक मैं पकड़ता हूँ। इसे फैलाकर आगे बढ़ेंगे। बीच में कुछ भी अटका तो टटोलकर देख लेंगे। हो सकता है बैल मिल जाएं।” दोनों पगड़ी फैलाकर जंगल में घूमने लगे। तभी अचानक पगड़ी में रणजी फँस गया। वह हँसते हुए बोला, “अरे ननकू-सनक! यह क्या तमाशा है?” ननकू झटपट बोला, “कुछ नहीं, बस पगड़ी सुखा रहे थे। कौवे ने गंदा कर दिया था।” रणजी को शक हुआ लेकिन उसने बात टाल दी और खुद बैल पकड़कर ले आया।</p>
+
+                <p>ससुराल पहुँचकर दोनों भाइयों का बड़ा स्वागत हुआ। लेकिन असली परेशानी अब शुरू हुई। जैसे ही गुणवंती और लाजवंती लस्सी लेकर कमरे में दाखिल हुईं, अंधेरे में आहट सुनते ही सनकू ने डंडा चला दिया। दोनों बहनें चीख उठीं। माहौल बिगड़ता देख ननकू तुरंत बोला, “असल में हमारे यहाँ रिवाज है कि दुल्हन भोजन परोसे तो लकड़ी से बस छुआई जाती है। यह सनकू गलती से जोर से मार बैठा।” सबने बात मान ली, पर माहौल थोड़ा अजीब हो गया।</p>
+
+                <p>इसी बीच एक और घटना हुई। जब दूध लेकर नौकरानी आई तो सनकू ने उसे माता जी समझकर पैर छू लिए। रणजी हैरान हुआ और बोला, “यह तो हमारी नौकरानी है।” लेकिन ननकू ने समझदारी से कहा, “असल में हमारे माता-पिता ने हमें सिखाया था कि बड़े-छोटे में कोई भेद नहीं करना चाहिए। अमीर-गरीब, मालिक-नौकर सब बराबर होते हैं।” यह सुनकर रणजी बहुत प्रभावित हुआ।</p>
+
+                <p>इतनी गड़बड़ियों के बावजूद रणजी और उसके माता-पिता ने दोनों भाइयों की सादगी और संस्कार देखकर निर्णय लिया कि गुणवंती की शादी ननकू से और लाजवंती की शादी सनकू से होगी। गाँव में यह खबर फैली तो लोग हैरान रह गए। जो लोग पहले मजाक उड़ाते थे, वही अब कहने लगे, “देखो, जिन पर हम हँसते थे, वही दूल्हे बनकर घर बसाने जा रहे हैं।”</p>
+
+                <p>कुछ ही दिनों बाद दोनों भाइयों की शादी धूमधाम से हुई। शादी के बाद भी ननकू और सनकू की शरारतें और नोकझोंक चलती रही, पर अब उनके साथ उनकी पत्नियाँ भी थीं। चारों मिलकर जीवन को हँसी-खुशी बिताने लगे।</p>
+            </div>
+
+            <div class="story-moral">
+                <strong>शिक्षा:</strong>
+                <p>इस कहानी से हमें सीख मिलती है कि जीवन की कमजोरियाँ भी प्रेम, समझदारी और सादगी से ढँकी जा सकती हैं। <br>
+भाईचारा, धैर्य और अच्छे संस्कार हमें कठिनाइयों से उबारकर सम्मान दिलाते हैं।</p>
+            </div>
+        </article>
+
+        <div class="back-link-container">
+            <a href="https://myjvp.in/hindi-diwas-special/" class="back-link">← वापस मुख्य पृष्ठ पर जाएं</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2025 जमना विद्यापीठ | सभी अधिकार सुरक्षित</p>
+    </footer>
+</body>
+</html>
