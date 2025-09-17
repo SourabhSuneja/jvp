@@ -71,9 +71,9 @@ const classwiseSubjects = {
   8: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Data Science', 'GK', 'All Subjects (Enthusiasm)'],
    9: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'],
    10: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'],
-  '11-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'Psychology', 'All Subjects (Enthusiasm)'],
-  '11-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology'],
-  '11-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology'],
+  '11-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'Psychology', 'All Subjects (Enthusiasm)', 'Fine Arts'],
+  '11-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts'],
+  '11-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts'],
   '12-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'All Subjects (Enthusiasm)'],
   '12-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)'],
   '12-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)']
