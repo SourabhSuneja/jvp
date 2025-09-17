@@ -88,6 +88,8 @@ const exams = [
              {'name': 'PT-2', 'mm': 20},
              {'name': 'PT-3', 'mm': 20},
              {'name': 'PT-4', 'mm': 20},
+             {'name': 'Pre-Term Test 1', 'mm': 15},
+             {'name': 'Pre-Term Test 2', 'mm': 15},
              {'name': 'Enthusiasm (July)', 'mm': 300},
              {'name': 'Enthusiasm (August)', 'mm': 300}
         ];
