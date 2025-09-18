@@ -513,7 +513,7 @@
          // Fetch blueprints for viewing
          async function fetchBlueprints() {
              const selectedClass = document.getElementById('view-class-select').value;
-             const selectedExam = document.getElementById('view-class-select').value;
+             const selectedExam = document.getElementById('view-exam-select').value;
              if (!selectedClass || !selectedExam) return;
          
              // Hide previous results
@@ -529,7 +529,7 @@
                                  fetchSingle = false,
                                  columns = 'class, subject, exam, blueprint',
                                  matchColumns = ['class', 'exam'],
-                                 matchValues = [parseInt(selectedClass, selectedExam)]
+                                 matchValues = [parseInt(selectedClass), selectedExam]
                               );
              if(response) {
                   displayBlueprints(response);
