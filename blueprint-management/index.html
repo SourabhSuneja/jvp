@@ -280,7 +280,7 @@
          page-break-after: avoid;
          }
          .header::after {
-         content: "EXAM BLUEPRINTS";
+         content: attr(data-content);
          display: block;
          font-size: 1.5em;
          font-weight: bold;
@@ -321,7 +321,7 @@
          <div class="spinner"></div>
       </div>
       <div class="container">
-         <div class="header">
+         <div class="header" data-content="Exam Blueprint">
             <img src="https://myjvp.in/commons/school-logo.jpg" alt="Jamna Vidyapeeth Logo">
             <h1>Jamna Vidyapeeth</h1>
             <p id="subheading">Exam Blueprint Management System</p>
@@ -616,6 +616,11 @@
              const selectedClass = document.getElementById('view-class-select').value;
              const selectedExam = document.getElementById('view-exam-select').value;
              if (!selectedClass || !selectedExam) return;
+
+             // Set data-content attribute on header for print view
+             document.querySelector('.header').setAttribute("data-content", `${selectedExam} Exam Blueprint | Class ${selectedClass}`);
+              // Also update page title
+              document.title = `${selectedExam} Exam Blueprint - Class ${selectedClass}`;
          
              // Hide previous results
              document.getElementById('compiled-blueprints').classList.remove('show');
