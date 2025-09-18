@@ -501,7 +501,7 @@
          });
          
          // Fetch blueprints for viewing
-         function fetchBlueprints() {
+         async function fetchBlueprints() {
              const selectedClass = document.getElementById('view-class-select').value;
              if (!selectedClass) return;
          
@@ -521,8 +521,10 @@
                                  matchValues = [parseInt(selectedClass)]
                               );
              if(response) {
-                  
+                  displayBlueprints(response);
              }
+             // Hide loading
+             hideLoading();
          }
          
          // Display blueprints
