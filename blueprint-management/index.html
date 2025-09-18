@@ -581,7 +581,7 @@
          try {
          const isAuthenticated = await checkAuth();
          if (!isAuthenticated) {
-             //window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+             window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
          } else {
              // User is logged in, hide loading
              hideLoading();
