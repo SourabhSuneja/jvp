@@ -163,7 +163,7 @@
          resize: vertical;
          line-height: 1.5;
          }
-         .submit-btn {
+         .submit-btn, .delete-btn {
          background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
          color: white;
          border: none;
@@ -176,15 +176,18 @@
          width: 100%;
          max-width: 225px;
          }
-         .submit-btn:hover {
+         .submit-btn:hover, .delete-btn:hover {
          transform: translateY(-2px);
          box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
          }
-         .submit-btn:disabled {
+         .submit-btn:disabled, .delete-btn:disabled {
          background: #95a5a6;
          cursor: not-allowed;
          transform: none;
          box-shadow: none;
+         }
+         #delete-btn {
+         background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
          }
          .success-message {
          background: #d4edda;
@@ -364,6 +367,7 @@
                   <textarea id="blueprint-text" placeholder="Enter the exam blueprint details here..." required></textarea>
                </div>
                <button type="submit" class="submit-btn" id="submit-btn">Submit Blueprint</button>
+               <button type="button" class="delete-btn" id="delete-btn" onclick="deleteBlueprint()">Delete Blueprint</button>
                <div class="success-message" id="success-message">
                   Blueprint submitted successfully!
                </div>
