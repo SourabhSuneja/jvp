@@ -373,7 +373,7 @@
                   <textarea id="blueprint-text" placeholder="Enter the exam blueprint details here..." required></textarea>
                </div>
                <button type="submit" class="submit-btn" id="submit-btn">Submit Blueprint</button>
-               <button type="button" class="delete-btn" id="delete-btn" onclick="deleteBlueprint()">Delete Blueprint</button>
+               <button type="button" class="delete-btn" id="delete-btn">Delete Blueprint</button>
                <div class="success-message" id="success-message">
                   Blueprint submitted successfully!
                </div>
@@ -519,6 +519,56 @@
              document.getElementById('submit-btn').disabled = false;
              //document.getElementById('success-message').classList.add('show');
          });
+
+         // Handle blueprint deletion
+         document.getElementById('delete-btn').addEventListener('click', async function() {
+
+             const classValue = document.getElementById('class-select').value;
+             const subjectValue = document.getElementById('subject-select').value;
+             const examValue = document.getElementById('exam-select').value;
+
+             if (!classValue || !subjectValue || !examValue) {
+                 alert('Please select the class, subject and exam before deleting.');
+                 return;
+             }
+
+             // Confirm before deleting
+             const confirmDelete = await showDialog({
+            			         title: 'Confirm Delete',
+           			            message: 'Are you sure you want to delete the blueprint for the selected class, subject and exam?',
+            			         type: 'confirm'
+         			            });
+             if (!confirmDelete) return;
+
+             // Show loading
+             showLoading();
+             document.getElementById('delete-btn').disabled = true;
+
+             // Delete from Supabase
+             const result = await deleteRow(
+   'blueprint',
+   matchColumns = ['class', 'exam', 'subject'],
+   matchValues = [parseInt(classValue), examValue, subjectValue]
+);
+             if(result) {
+               showDialog({
+                   title: 'Success',
+                   message: 'Blueprint deleted successfully!',
+                   type: 'alert'
+                   });
+             } else {
+               showDialog({
+                   title: 'Error',
+                   message: 'Error deleting the blueprint!',
+                   type: 'alert'
+                   });
+             }
+
+             // Hide loading
+             hideLoading();
+             document.getElementById('delete-btn').disabled = false;
+         });
+
          
          // Fetch blueprints for viewing
          async function fetchBlueprints() {
