@@ -595,6 +595,23 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeSubjects();
         });
+
+        // Check auth on page load
+        document.addEventListener('load', async function() {
+    // Show loading
+    document.getElementById('view-loading').classList.add('show');
+    try {
+        const isAuthenticated = await checkAuth();
+        if (!isAuthenticated) {
+            window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+        } else {
+            // User is logged in, hide loading
+            document.getElementById('view-loading').classList.remove('show');
+        }
+    } catch (error) {
+        console.error('Auth check error:', error);
+    }
+}, false);
     </script>
 </body>
 </html>
