@@ -512,35 +512,17 @@
              // Show loading
              showLoading();
          
-             // Simulate server fetch (replace with your server logic)
-             setTimeout(() => {
-                 // Hide loading
-                 document.getElementById('view-loading').classList.remove('show');
-                 
-                 // Mock response data - replace with actual server response
-                 const mockResponse = [
-                     {
-                         class: parseInt(selectedClass),
-                         exam: 'Term-1',
-                         subject: 'English',
-                         blueprint: 'Unit 1: Reading Comprehension (20 marks)\n- Unseen Passages\n- Poetry Analysis\n\nUnit 2: Writing Skills (25 marks)\n- Letter Writing\n- Essay Writing\n- Report Writing\n\nUnit 3: Grammar (15 marks)\n- Tenses\n- Voice\n- Narration'
-                     },
-                     {
-                         class: parseInt(selectedClass),
-                         exam: 'Term-1',
-                         subject: 'Maths',
-                         blueprint: 'Chapter 1: Real Numbers (8 marks)\n- Euclid\'s Division Algorithm\n- HCF and LCM\n\nChapter 2: Polynomials (10 marks)\n- Degree of Polynomial\n- Zeros of Polynomial\n\nChapter 3: Linear Equations (12 marks)\n- Two Variables\n- Graphical Method'
-                     },
-                     {
-                         class: parseInt(selectedClass),
-                         exam: 'Term-1',
-                         subject: 'Science',
-                         blueprint: 'Physics Section (25 marks)\n- Light and Reflection\n- Electricity\n\nChemistry Section (25 marks)\n- Acids, Bases and Salts\n- Metals and Non-metals\n\nBiology Section (30 marks)\n- Life Processes\n- Heredity and Evolution'
-                     }
-                 ];
-         
-                 displayBlueprints(mockResponse);
-             }, 1500);
+             // Fetch the blueprint for the selected class from Supabase
+             const response = await selectData(
+                                 'blueprint',
+                                 fetchSingle = false,
+                                 columns = 'class, subject, exam, blueprint',
+                                 matchColumns = ['class'],
+                                 matchValues = [parseInt(selectedClass)]
+                              );
+             if(response) {
+                  
+             }
          }
          
          // Display blueprints
