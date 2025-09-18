@@ -160,9 +160,9 @@
          box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
          }
          textarea {
-         min-height: 200px;
          resize: vertical;
          line-height: 1.5;
+         overflow-y: auto;
          }
          .submit-btn, .delete-btn {
          background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
@@ -371,7 +371,7 @@
                </div>
                <div class="form-group">
                   <label for="blueprint-text">Blueprint Content:</label>
-                  <textarea id="blueprint-text" placeholder="Enter the exam blueprint details here..." required></textarea>
+                  <textarea id="blueprint-text" placeholder="Enter the exam blueprint details here..." rows="10" required></textarea>
                </div>
                <button type="submit" class="submit-btn" id="submit-btn">Submit Blueprint</button>
                <button type="button" class="delete-btn" id="delete-btn">Delete Blueprint</button>
