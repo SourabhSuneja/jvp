@@ -362,10 +362,6 @@
                   <textarea id="blueprint-text" placeholder="Enter the exam blueprint details here..." required></textarea>
                </div>
                <button type="submit" class="submit-btn" id="submit-btn">Submit Blueprint</button>
-               <div class="loading" id="loading">
-                  <div class="spinner"></div>
-                  <p>Processing your blueprint submission...</p>
-               </div>
                <div class="success-message" id="success-message">
                   Blueprint submitted successfully!
                </div>
@@ -446,7 +442,7 @@
          }
          
          // Handle form submission
-         document.getElementById('blueprint-form').addEventListener('submit', function(e) {
+         document.getElementById('blueprint-form').addEventListener('submit', async function(e) {
              e.preventDefault();
              
              const classValue = document.getElementById('class-select').value;
@@ -467,29 +463,13 @@
              };
          
              // Show loading
+             showLoading();
              document.getElementById('submit-btn').disabled = true;
-             document.getElementById('loading').classList.add('show');
              document.getElementById('success-message').classList.remove('show');
          
-             // Simulate server submission (replace with your server logic)
-             setTimeout(() => {
-                 // Hide loading
-                 document.getElementById('loading').classList.remove('show');
-                 document.getElementById('submit-btn').disabled = false;
-                 
-                 // Show success message
-                 document.getElementById('success-message').classList.add('show');
-                 
-                 // Reset form
-                 document.getElementById('blueprint-form').reset();
-                 
-                 console.log('Blueprint submitted:', blueprint);
-                 
-                 // Hide success message after 3 seconds
-                 setTimeout(() => {
-                     document.getElementById('success-message').classList.remove('show');
-                 }, 3000);
-             }, 2000);
+             // Upsert on Supabase
+             const result = await upsertData('blueprint', blueprint, conflictColumns = ['class', 'subject', 'exam']);
+             
          });
          
          // Fetch blueprints for viewing
