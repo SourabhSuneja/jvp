@@ -4,6 +4,7 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Exam Blueprint - Jamna Vidyapeeth</title>
+      <meta name="description" content="An intuitive exam blueprint management app that helps teachers design, organise, and track exam structures—streamlined, efficient, and collaborative.">
       <!-- Supabase CRUD Functions -->
       <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
       <!-- Dialog Box Styles -->
@@ -333,7 +334,7 @@
                <div class="form-row">
                   <div class="form-group">
                      <label for="class-select">Select Class:</label>
-                     <select id="class-select" required>
+                     <select id="class-select" onchange="fetchCurrentBlueprint()" required>
                         <option value="" disabled selected>Select Class</option>
                         <option value="1">Class 1</option>
                         <option value="2">Class 2</option>
@@ -351,13 +352,13 @@
                   </div>
                   <div class="form-group">
                      <label for="subject-select">Select Subject:</label>
-                     <select id="subject-select" required>
+                     <select id="subject-select" onchange="fetchCurrentBlueprint()" required>
                         <option value="" disabled selected>Select Subject</option>
                      </select>
                   </div>
                   <div class="form-group">
                      <label for="exam-select">Select Exam:</label>
-                     <select id="exam-select" required>
+                     <select id="exam-select" onchange="fetchCurrentBlueprint()" required>
                         <option value="" disabled selected>Select Exam</option>
                         <option value="PT-1">PT-1</option>
                         <option value="PT-2">PT-2</option>
@@ -472,6 +473,36 @@
              document.getElementById(`${tabName}-tab`).classList.add('active');
          }
          
+         async function fetchCurrentBlueprint() {
+         const classValue = document.getElementById('class-select').value;
+             const subjectValue = document.getElementById('subject-select').value;
+             const examValue = document.getElementById('exam-select').value;
+             const blueprintArea = document.getElementById('blueprint-text');
+         
+         if (!classValue || !subjectValue || !examValue) {
+                 blueprintArea.value = '';
+                 return;
+             }
+         
+         // Show loading
+         showLoading();
+         const result = await selectData(
+         'blueprint',
+         fetchSingle = true,
+         columns = 'blueprint',
+         matchColumns = ['class', 'exam', 'subject'],
+         matchValues = [parseInt(classValue), examValue, subjectValue]
+         );
+         
+         if(result && result.blueprint) {
+         blueprintArea.value = result.blueprint;
+         } else {
+         blueprintArea.value = '';
+         }
+         // Hide loading
+         hideLoading();
+         }
+         
          // Handle form submission
          document.getElementById('blueprint-form').addEventListener('submit', async function(e) {
              e.preventDefault();
@@ -479,7 +510,7 @@
              const classValue = document.getElementById('class-select').value;
              const subjectValue = document.getElementById('subject-select').value;
              const examValue = document.getElementById('exam-select').value;
-             const blueprintValue = document.getElementById('blueprint-text').value;
+             const blueprintValue = document.getElementById('blueprint-text').value.trim();
          
              if (!classValue || !subjectValue || !examValue || !blueprintValue) {
                  alert('Please fill in all fields before submitting.');
@@ -513,25 +544,29 @@
                    type: 'alert'
                    });
              }
-
+         
              // Hide loading
              hideLoading();
              document.getElementById('submit-btn').disabled = false;
              //document.getElementById('success-message').classList.add('show');
          });
-
+         
          // Handle blueprint deletion
          document.getElementById('delete-btn').addEventListener('click', async function() {
-
+         
              const classValue = document.getElementById('class-select').value;
              const subjectValue = document.getElementById('subject-select').value;
              const examValue = document.getElementById('exam-select').value;
-
+         
              if (!classValue || !subjectValue || !examValue) {
-                 alert('Please select the class, subject and exam before deleting.');
+                 showDialog({
+                   title: 'Error',
+                   message: 'Please select the class, exam and subject before deleting.',
+                   type: 'alert'
+                   });
                  return;
              }
-
+         
              // Confirm before deleting
              const confirmDelete = await showDialog({
             			         title: 'Confirm Delete',
@@ -539,17 +574,17 @@
             			         type: 'confirm'
          			            });
              if (!confirmDelete) return;
-
+         
              // Show loading
              showLoading();
              document.getElementById('delete-btn').disabled = true;
-
+         
              // Delete from Supabase
              const result = await deleteRow(
-   'blueprint',
-   matchColumns = ['class', 'exam', 'subject'],
-   matchValues = [parseInt(classValue), examValue, subjectValue]
-);
+         'blueprint',
+         matchColumns = ['class', 'exam', 'subject'],
+         matchValues = [parseInt(classValue), examValue, subjectValue]
+         );
              if(result) {
                showDialog({
                    title: 'Success',
@@ -563,12 +598,12 @@
                    type: 'alert'
                    });
              }
-
+         
              // Hide loading
              hideLoading();
              document.getElementById('delete-btn').disabled = false;
          });
-
+         
          
          // Fetch blueprints for viewing
          async function fetchBlueprints() {
