@@ -537,6 +537,8 @@
                    message: 'Blueprint saved successfully!',
                    type: 'alert'
                    });
+                   // Update compiled syllabus view
+                   await fetchBlueprints();
              } else {
                showDialog({
                    title: 'Error',
