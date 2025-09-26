@@ -68,6 +68,8 @@ DROP FUNCTION IF EXISTS detect_score_anomalies(
     NUMERIC
 );
 
+DROP FUNCTION IF EXISTS get_student_profile(uuid);
+
 -- Drop tables (in reverse order of creation to handle foreign key dependencies)
 DROP TABLE IF EXISTS marks_backup;
 DROP TABLE IF EXISTS marks;
@@ -1955,3 +1957,30 @@ WHERE p_only_multiple_types = false
    ))
 ORDER BY a.class ASC, a.student ASC;
 $$ LANGUAGE sql;
+
+
+-- Migration function to get basic student details to create accounts on Ion Spark
+CREATE OR REPLACE FUNCTION get_student_profile(p_access_token uuid)
+RETURNS TABLE (
+    name TEXT,
+    grade INT,
+    section TEXT,
+    gender TEXT,
+    house TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        s.name,
+        split_part(s.class, '-', 1)::int AS grade,
+        split_part(s.class, '-', 2) AS section,
+        s.gender,
+        s.house
+    FROM students s
+    WHERE s.access_token = p_access_token
+    LIMIT 1;
+END;
+$$;
