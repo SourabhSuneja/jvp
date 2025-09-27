@@ -673,10 +673,10 @@
                 </button>
                 <h3 class="section-title">What do you want to access?</h3>
                 <div class="button-group">
-                    <button class="btn btn-access" onclick="goToURL('https://myjvp.in/hindi-diwas-special/')">
+                    <!-- <button class="btn btn-access" onclick="goToURL('https://myjvp.in/hindi-diwas-special/')">
                         <span class="material-icons">draw</span>
                         Hindi Pakhwada Special
-                    </button>
+                    </button> -->
                     <button class="btn btn-access" onclick="goToURL('https://sourabhsuneja.github.io/academic-resources/result.html')">
                         <span class="material-icons">assessment</span>
                         Result
@@ -721,24 +721,24 @@
         <p class="footer-text">Crafted by Sourabh Sir</p>
     </footer>
 
-    <!-- Hindi Diwas Pop-up -->
+    <!-- Hindi Diwas Pop-up 
     <div class="hindi-diwas-overlay" id="hindiDiwasOverlay" lang="hi">
         <div class="hindi-diwas-popup">
-            <!-- Decorative Elements -->
+            
             <div class="hindi-popup-decoration top-left"></div>
             <div class="hindi-popup-decoration bottom-right"></div>
             
-            <!-- Close Button -->
+            
             <button class="hindi-popup-close" onclick="closeHindiDiwasPopup()">×</button>
             
-            <!-- Header -->
+            
             <div class="hindi-popup-header">
                 <div class="hindi-popup-icon">📚</div>
                 <h2 class="hindi-popup-title">हिंदी पखवाड़ा विशेष</h2>
                 <p class="hindi-popup-subtitle">पढ़ें हमारे अध्यापकों व छात्रों की उत्कृष्ठ रचनाएं और सीखें रचनात्मक लेखन के गुर...</p>
             </div>
             
-            <!-- Content -->
+            
             <div class="hindi-popup-content">
                 <p class="hindi-popup-text">
                     हमारे स्कूल ने My JVP Portal पर एक विशेष खंड "हिंदी दिवस विशेष" लॉन्च किया है!
@@ -756,7 +756,7 @@
                 </p>
             </div>
             
-            <!-- Action Buttons -->
+            
             <div class="hindi-popup-actions">
                 <a href="https://myjvp.in/hindi-diwas-special/" class="hindi-popup-btn">
                     🎯 अभी देखें
@@ -766,7 +766,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script>
         // Create animated background particles
@@ -851,7 +851,7 @@
         window.addEventListener('load', function() {
             // Add a slight delay for better user experience
             setTimeout(function() {
-                showHindiDiwasPopup();
+                //showHindiDiwasPopup();
             }, 100); // Shows after 100 ms
         });
         
@@ -888,12 +888,5 @@
             }
         });
     </script>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
-    .then(reg => console.log('Service Worker registered', reg))
-    .catch(err => console.error('SW registration failed:', err));
-}
-</script>
 </body>
 </html>
