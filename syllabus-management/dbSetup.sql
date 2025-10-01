@@ -20,3 +20,33 @@ CREATE POLICY syllabus_authenticated_policy ON syllabus
     FOR ALL
     USING (auth.uid() IS NOT NULL)
     WITH CHECK (auth.uid() IS NOT NULL);
+
+-- Function to fetch grade-wise syllabus intended for Ion Spark app
+CREATE OR REPLACE FUNCTION get_syllabus_data(p_class SMALLINT, p_exam TEXT)
+RETURNS TABLE (
+    class SMALLINT,
+    exam TEXT,
+    subject TEXT,
+    syllabus_text TEXT
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    subjects_order TEXT[] := ARRAY[
+        'English', 'Hindi', 'Maths', 'Applied Maths', 'Science', 
+        'Social Science', 'EVS', 'Sanskrit', 'GK', 'Computer', 'Data Science', 'Informatics Practices', 'Physical Education',
+        'Accountancy', 'Business Studies', 'Economics', 'History', 'Geography', 'Political Science',
+        'Psychology','Fine Arts', 'Physics', 'Chemistry', 'Biology'
+    ];
+BEGIN
+    RETURN QUERY
+    SELECT s.class, s.exam, s.subject, s.syllabus_text
+    FROM syllabus s
+    WHERE s.class = p_class
+      AND s.exam = p_exam
+    ORDER BY 
+        COALESCE(ARRAY_POSITION(subjects_order, s.subject), 9999),  -- custom array order first
+        s.subject;                                                 -- fallback alphabetical
+END;
+$$;
