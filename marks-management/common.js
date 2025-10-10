@@ -86,6 +86,11 @@ let filteredSubjects = [];
 const exams = [
              {'name': 'PT-1', 'mm': 20},
              {'name': 'PT-2', 'mm': 20},
+             {'name': 'Term-1 (Objective)', 'mm': 0},
+             {'name': 'Term-1 (Theory)', 'mm': 0},
+             {'name': 'Term-1 (SEA)', 'mm': 0},
+             {'name': 'Term-1 (PP)', 'mm': 0},
+             {'name': 'Term-1 (Practical)', 'mm': 0},
              {'name': 'PT-3', 'mm': 20},
              {'name': 'PT-4', 'mm': 20},
              {'name': 'Pre-Term Test 1', 'mm': 15},
@@ -211,3 +216,100 @@ function logActivity(visitor, action, extra = null) {
         }
     })();
 }
+
+
+
+// Configuration structure SPECIFICALLY for handling Term-1 Exam components
+const examMarksConfig = [
+  {
+    classes: [1, 2],
+    subjects: ["English", "Hindi", "EVS", "Maths"],
+    exams: {
+      "Term-1 (Objective)": 20,
+      "Term-1 (Theory)": 50,
+      "Term-1 (SEA)": 5,
+      "Term-1 (PP)": 5
+    }
+  },
+  {
+    classes: [1, 2],
+    subjects: ["GK", "Computer"],
+    exams: {
+      "Term-1 (Theory)": 30
+    }
+  },
+  {
+    classes: [3, 4, 5],
+    subjects: ["English", "Hindi", "Science", "Maths", "Social Science"],
+    exams: {
+      "Term-1 (Objective)": 20,
+      "Term-1 (Theory)": 50,
+      "Term-1 (SEA)": 5,
+      "Term-1 (PP)": 5
+    }
+  },
+  {
+    classes: [3, 4, 5],
+    subjects: ["GK", "Computer"],
+    exams: {
+      "Term-1 (Theory)": 30
+    }
+  },
+  {
+    classes: [6, 7, 8],
+    subjects: ["English", "Hindi", "Science", "Maths", "Social Science", "Sanskrit"],
+    exams: {
+      "Term-1 (Objective)": 20,
+      "Term-1 (Theory)": 60
+    }
+  },
+  {
+    classes: [6, 7, 8],
+    subjects: ["GK", "Computer", "Data Science"],
+    exams: {
+      "Term-1 (Theory)": 30
+    }
+  },
+  {
+    classes: [9, 10],
+    subjects: ["English", "Hindi", "Science", "Maths", "Social Science"],
+    exams: {
+      "Term-1 (Theory)": 80
+    }
+  },
+  {
+    classes: [9, 10],
+    subjects: ["Data Science"],
+    exams: {
+      "Term-1 (Theory)": 50,
+      "Term-1 (Practical)": 30
+    }
+  }
+];
+
+
+/* Function designed to return max marks for Term-1 Exam Components */
+function getMMForTerm(examName, classNumber, subject) {
+  // Find the matching configuration
+  for (const config of examMarksConfig) {
+    // Check if class matches
+    if (!config.classes.includes(classNumber)) {
+      continue;
+    }
+    
+    // Check if subject matches
+    if (!config.subjects.includes(subject)) {
+      continue;
+    }
+    
+    // Check if exam exists and return marks
+    if (config.exams.hasOwnProperty(examName)) {
+      return config.exams[examName];
+    }
+  }
+  
+  // Return 0 if no matching configuration found
+  return 0;
+}
+
+
