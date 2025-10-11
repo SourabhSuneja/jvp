@@ -1464,7 +1464,7 @@
          const marksValue = existingRecord ? existingRecord.marks : '';
          const status = existingRecord === undefined ? '' : 
          (marksValue === '' ? 'Absent' : 
-         getPerformanceRemark(marksValue, examName));
+         getPerformanceRemark(marksValue, examName, className, subjectName));
          
          // Roll number cell (index + 1)
          const rollCell = document.createElement('td');
@@ -1507,13 +1507,15 @@
          // Status update on input change
          marksInput.addEventListener('input', (e) => {
             const selectedExam = examSelect.value;
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
             const value = e.target.value.trim();
             const statusCell = e.target.parentNode.nextSibling;
             if (value === '') {
                 statusCell.textContent = 'Absent';
             } else {
                 const mark = parseFloat(value);
-                statusCell.textContent = getPerformanceRemark(mark, selectedExam);
+                statusCell.textContent = getPerformanceRemark(mark, selectedExam, selectedClass, selectedSubject);
             }
          });
          
