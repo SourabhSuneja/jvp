@@ -294,6 +294,14 @@ const examMarksConfig = [
       "Term-1 (Theory)": 50,
       "Term-1 (Practical)": 30
     }
+  },
+  {
+    classes: [11, 12],
+    subjects: ["I.P.", "P.E."],
+    exams: {
+      "Term-1 (Theory)": 70,
+      "Term-1 (Practical)": 30
+    }
   }
 ];
 
