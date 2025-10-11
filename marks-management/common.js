@@ -110,7 +110,17 @@ const colorMap = {
 };
 
 // Function to get max marks considering both regular and custom exams
-function getMaxMarks(examName) {
+function getMaxMarks(examName, className=null, subjectName=null) {
+   // Check if it is a term exam, which requires special component handling
+   if(examName.includes('Term-1') || examName.includes('Term-1')) {
+      if(className && subjectName) {
+        return getMMForTerm(examName, className, subjectName);
+      } else if(globalClassValue && globalSubjectValue) {
+        return getMMForTerm(examName, globalClassValue, globalSubjectValue);
+      } else {
+        return 0;
+      }
+   }
    // First check common exams
    const commonExam = exams.find(e => e.name === examName);
    if (commonExam) return commonExam.mm;
@@ -124,7 +134,7 @@ function getMaxMarks(examName) {
       e.class === selectedClass &&
       e.subject === selectedSubject);
 
-   return customExam ? customExam.mm : 10; // Default to 10 if not found
+   return customExam ? customExam.mm : 0; // Default to 0 if not found
 }
 
 // Function to generate performance remark
@@ -288,7 +298,7 @@ const examMarksConfig = [
 ];
 
 
-/* Function designed to return max marks for Term-1 Exam Components */
+/* Function designed to return max marks for Term Exam Components */
 function getMMForTerm(examName, classNumber, subject) {
   // Find the matching configuration
   for (const config of examMarksConfig) {
