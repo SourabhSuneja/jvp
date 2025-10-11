@@ -1394,9 +1394,6 @@
          
          
          if (selectedClass && selectedExam && selectedSubject) {
-
-         // Get max marks for the selected exam, class and subject
-         maxMarksInput.value = getMaxMarks(selectedExam, selectedClass, selectedSubject);
             
          // Make score insight button visible
          scoreInsightBtn.style.display = 'inline-block';
@@ -1435,8 +1432,8 @@
          renderStudentsList(selectedClass, selectedExam, selectedSubject);
          marksFormContainer.classList.remove('hidden');
          
-         // Display maximum marks
-         const maxMarks = getMaxMarks(selectedExam);
+         // Get and Display maximum marks for the selected exam, class and subject
+         const maxMarks = getMaxMarks(selectedExam, selectedClass, selectedSubject);
          if (maxMarks) {
             maxMarksDisplay.textContent = `Maximum Marks: ${maxMarks}`;
             maxMarksInput.value = maxMarks;
