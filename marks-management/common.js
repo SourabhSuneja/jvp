@@ -112,7 +112,7 @@ const colorMap = {
 // Function to get max marks considering both regular and custom exams
 function getMaxMarks(examName, className=null, subjectName=null) {
    // Check if it is a term exam, which requires special component handling
-   if(examName.includes('Term-1') || examName.includes('Term-1')) {
+   if(examName && (examName.includes('Term-1') || examName.includes('Term-1')) && exams.find(e => e.name === examName)) {
       if(className && subjectName) {
         return getMMForTerm(examName, className, subjectName);
       } else if(globalClassValue && globalSubjectValue) {
