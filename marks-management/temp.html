@@ -1424,6 +1424,8 @@
             maxMarksForSelectedExam = Number(maxMarks);
             renderStudentsList(selectedClass, selectedExam, selectedSubject);
             marksFormContainer.classList.remove('hidden');
+         } else {
+            marksFormContainer.classList.add('hidden');
          }
          } else {
          marksFormContainer.classList.add('hidden');
