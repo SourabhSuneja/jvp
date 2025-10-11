@@ -267,7 +267,7 @@ const examMarksConfig = [
   },
   {
     classes: [6, 7, 8],
-    subjects: ["English", "Hindi", "Science", "Maths", "Social Science", "Sanskrit"],
+    subjects: ["English", "Hindi", "Science", "Maths", "Social Science"],
     exams: {
       "Term-1 (Objective)": 20,
       "Term-1 (Theory)": 60
@@ -278,6 +278,13 @@ const examMarksConfig = [
     subjects: ["GK", "Computer", "Data Science"],
     exams: {
       "Term-1 (Theory)": 30
+    }
+  },
+  {
+    classes: [6, 7, 8],
+    subjects: ["Sanskrit"],
+    exams: {
+      "Term-1 (Theory)": 80
     }
   },
   {
