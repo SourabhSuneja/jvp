@@ -299,7 +299,10 @@ const examMarksConfig = [
 
 
 /* Function designed to return max marks for Term Exam Components */
-function getMMForTerm(examName, classNumber, subject) {
+function getMMForTerm(examName, className, subject) {
+  // Extract the integer part from the class
+  let classNumber = parseInt(className);
+
   // Find the matching configuration
   for (const config of examMarksConfig) {
     // Check if class matches
