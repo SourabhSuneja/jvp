@@ -602,7 +602,7 @@
                   </select>
                   <div class="form-group">
                      <label for="max-marks-input" class="hidden">Maximum Marks</label>
-                     <input type="number" id="max-marks-input" min="1" max="100" value="20" class="hidden">
+                     <input type="number" id="max-marks-input" min="1" max="5000" value="20" class="hidden">
                   </div>
                   <button id="edit-exam-btn" class="btn-secondary" style="display: none">Edit Exam Details</button>
                   <button id="add-exam-btn" class="btn-secondary">Add New Exam</button>
@@ -1071,38 +1071,23 @@
          });
          
          
-         // Update max marks when exam changes
-         examSelect.addEventListener('change', () => {
-         const selectedExam = examSelect.value;
-         const examObj = exams.find(exam => exam.name === selectedExam);
-         if (examObj) {
-         maxMarksInput.value = examObj.mm;
-         }
-         });
-         
          // Update max marks for selected exam
          maxMarksInput.addEventListener('change', () => {
-         const selectedExam = examSelect.value;
-         if (!selectedExam) return;
          
          const maxMarks = parseInt(maxMarksInput.value, 10);
-         if (isNaN(maxMarks) || maxMarks <= 0) {
-         maxMarksInput.value = getMaxMarks(selectedExam);
-         return;
+         if (isNaN(maxMarks)) {
+         maxMarksInput.value = 0;
          }
          
-         // Update exam max marks
-         const examIndex = exams.findIndex(exam => exam.name === selectedExam);
-         if (examIndex !== -1) {
-         exams[examIndex].mm = maxMarks;
+         
          maxMarksDisplay.textContent = `Maximum Marks: ${maxMarks}`;
          
-         // Update input max values
+         // Update max attribute of all mark input boxes
          const inputs = document.querySelectorAll('.marks-input');
          inputs.forEach(input => {
              input.max = maxMarks;
          });
-         }
+         
          });
          
          scoreInsightBtn.addEventListener("click", function () {
@@ -1394,7 +1379,7 @@
          
          
          if (selectedClass && selectedExam && selectedSubject) {
-         
+            
          // Make score insight button visible
          scoreInsightBtn.style.display = 'inline-block';
          
@@ -1429,16 +1414,18 @@
             });
             return;
          }
-         renderStudentsList(selectedClass, selectedExam, selectedSubject);
-         marksFormContainer.classList.remove('hidden');
          
-         // Display maximum marks
-         const maxMarks = getMaxMarks(selectedExam);
+         // Get and Display maximum marks for the selected exam, class and subject
+         const maxMarks = getMaxMarks(selectedExam, selectedClass, selectedSubject);
          if (maxMarks) {
             maxMarksDisplay.textContent = `Maximum Marks: ${maxMarks}`;
             maxMarksInput.value = maxMarks;
             // Also store in the global variable for validation checks
             maxMarksForSelectedExam = Number(maxMarks);
+            renderStudentsList(selectedClass, selectedExam, selectedSubject);
+            marksFormContainer.classList.remove('hidden');
+         } else {
+            marksFormContainer.classList.add('hidden');
          }
          } else {
          marksFormContainer.classList.add('hidden');
@@ -1495,7 +1482,7 @@
          marksInput.name = `marks-${studentName}`;
          marksInput.dataset.student = studentName;
          marksInput.min = 0;
-         marksInput.max = getMaxMarks(examName);
+         marksInput.max = maxMarksForSelectedExam;
          marksInput.step = '0.5'; // Allow decimal values
          if (marksValue !== '') {
             marksInput.value = marksValue;
