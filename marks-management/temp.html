@@ -1071,30 +1071,15 @@
          });
          
          
-         // Update max marks when exam changes
-         examSelect.addEventListener('change', () => {
-         const selectedExam = examSelect.value;
-         const examObj = exams.find(exam => exam.name === selectedExam);
-         if (examObj) {
-         maxMarksInput.value = examObj.mm;
-         }
-         });
-         
          // Update max marks for selected exam
          maxMarksInput.addEventListener('change', () => {
-         const selectedExam = examSelect.value;
-         if (!selectedExam) return;
          
          const maxMarks = parseInt(maxMarksInput.value, 10);
-         if (isNaN(maxMarks) || maxMarks <= 0) {
-         maxMarksInput.value = getMaxMarks(selectedExam);
-         return;
+         if (isNaN(maxMarks)) {
+         maxMarksInput.value = 0;
          }
          
-         // Update exam max marks
-         const examIndex = exams.findIndex(exam => exam.name === selectedExam);
-         if (examIndex !== -1) {
-         exams[examIndex].mm = maxMarks;
+         // Update max attribute of all mark input boxes
          maxMarksDisplay.textContent = `Maximum Marks: ${maxMarks}`;
          
          // Update input max values
@@ -1102,7 +1087,7 @@
          inputs.forEach(input => {
              input.max = maxMarks;
          });
-         }
+         
          });
          
          scoreInsightBtn.addEventListener("click", function () {
