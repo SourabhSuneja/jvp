@@ -138,7 +138,7 @@ function getMaxMarks(examName, className=null, subjectName=null) {
 }
 
 // Function to generate performance remark
-function getPerformanceRemark(marks, examName, computedPercentage = null) {
+function getPerformanceRemark(marks, examName, computedPercentage = null, className, subjectName) {
    let percentage;
 
    // If marks are not available, return 'Absent'
@@ -148,7 +148,7 @@ function getPerformanceRemark(marks, examName, computedPercentage = null) {
    if (computedPercentage) {
       percentage = computedPercentage;
    } else {
-      const maxMarks = getMaxMarks(examName);
+      const maxMarks = getMaxMarks(examName, className, subjectName);
       percentage = (marks / maxMarks) * 100;
    }
 
@@ -170,9 +170,9 @@ function getRemarkClass(remark) {
    return '';
 }
 
-function getPassingMark(examName) {
+function getPassingMark(examName, className, subjectName) {
    // Assuming passing mark is 36% of maximum marks
-   return getMaxMarks(examName) * 0.36;
+   return getMaxMarks(examName, className, subjectName) * 0.36;
 }
 
 function getSubjectsForClass(classValue, useFilteredSubjects=false) {
