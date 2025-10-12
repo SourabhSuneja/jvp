@@ -379,7 +379,7 @@ function getTermExamComponents(examName, classNumber, subject) {
   return result;
 }
 
-function getUniqueTermExamComponents(examName) {
+function getUniqueTermExamNames(examName) {
   if(!examName) return;
 
   let filterWord;
