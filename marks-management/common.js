@@ -379,14 +379,28 @@ function getTermExamComponents(examName, classNumber, subject) {
   return result;
 }
 
-function getUniqueTermExamComponents() {
+function getUniqueTermExamComponents(examName) {
+  if(!examName) return;
+
+  let filterWord;
+
+  if(examName.startsWith('Term-1')) {
+    filterWord = 'Term-1';
+  } else if(examName.startsWith('Term-2')) {
+    filterWord = 'Term-2';
+  }
+
+  if(!filterWord) return;
+
   const examNames = new Set(); // to automatically handle uniqueness
   
   examMarksConfig.forEach(entry => {
     Object.keys(entry.exams).forEach(exam => examNames.add(exam));
   });
 
-  return Array.from(examNames); // convert Set back to array
+  const completeArr = Array.from(examNames); // convert Set back to array
+
+  return completeArr.filter(name => name.startsWith(filterWord));
 }
 
 
