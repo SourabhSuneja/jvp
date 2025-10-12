@@ -340,4 +340,54 @@ function getMMForTerm(examName, className, subject) {
   return 0;
 }
 
+function getTermExamComponents(examName, classNumber, subject) {
+  // Ensure classNumber is an integer
+  classNumber = parseInt(classNumber);
+  
+  // Find the matching configuration
+  const config = examMarksConfig.find(cfg => 
+    cfg.classes.includes(classNumber) && cfg.subjects.includes(subject)
+  );
+  
+  // If no configuration found, return empty object
+  if (!config) {
+    return {};
+  }
+  
+  // Extract exam components that match the exam name (ignoring bracket parts)
+  const result = {};
+  let total = 0;
+  
+  for (const [examKey, marks] of Object.entries(config.exams)) {
+    // Check if the exam key starts with the given exam name
+    if (examKey.startsWith(examName)) {
+      // Extract the component name from brackets (e.g., "Term-1 (Objective)" -> "Objective")
+      const match = examKey.match(/\(([^)]+)\)/);
+      if (match) {
+        const component = match[1];
+        result[component] = marks;
+        total += marks;
+      }
+    }
+  }
+  
+  // Add total if we found any components
+  if (Object.keys(result).length > 0) {
+    result.Total = total;
+  }
+  
+  return result;
+}
+
+function getUniqueTermExamComponents() {
+  const examNames = new Set(); // to automatically handle uniqueness
+  
+  examMarksConfig.forEach(entry => {
+    Object.keys(entry.exams).forEach(exam => examNames.add(exam));
+  });
+
+  return Array.from(examNames); // convert Set back to array
+}
+
+
 
