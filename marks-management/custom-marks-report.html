@@ -609,7 +609,7 @@
          // Calculate total marks if mark is not null
          if (mark !== null) {
            subjectSelect.value = combo.subject;
-           const maxMark = getMaxMarks(combo.exam);
+           const maxMark = getMaxMarks(combo.exam, classSelect.value, subjectSelect.value);
            totalMarks += mark;
            totalMaxMarks += maxMark;
          }
