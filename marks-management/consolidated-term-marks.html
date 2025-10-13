@@ -390,7 +390,7 @@
          
          const subjectHeader = document.createElement('th');
          subjectHeader.textContent = subject;
-         subjectHeader.colSpan = componentCount;
+         subjectHeader.colSpan = componentCount > 2? componentCount : 1;
          subjectHeader.classList.add('subject-header');
          headerRow1.appendChild(subjectHeader);
          
@@ -398,6 +398,10 @@
                         const componentHeader = document.createElement('th');
          componentHeader.innerHTML = getShortForm(key) + "<hr>" + "" + examComponents[key] + "M";
          componentHeader.classList.add('mark-col');
+         
+         if(componentCount === 2 && key === 'Total') {
+               componentHeader.style.display = 'none';
+         }
          headerRow2.appendChild(componentHeader);
          
          }
@@ -491,6 +495,11 @@
             } else {
                 markCell.textContent = '-';
             }
+         
+         if(componentCount === 2 && key === 'Total') {
+               markCell.style.display = 'none';
+         }
+         
             row.appendChild(markCell);
          
             }
