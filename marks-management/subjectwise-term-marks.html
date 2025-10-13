@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <base href="https://myjvp.in/marks-management/">
+      <title>Subject-wise Term Marks Statements</title>
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="supabase-crud.js"></script>
+      <!-- Common JS Functions -->
+      <script src="common.js"></script>
+      <style>
+         :root {
+         --primary: #4f46e5;
+         --primary-dark: #4338ca;
+         --secondary: #10b981;
+         --secondary-dark: #059669;
+         --danger: #ef4444;
+         --danger-dark: #c33c3c;
+         --light: #f9fafb;
+         --dark: #1f2937;
+         --text: #374151;
+         --border: #e5e7eb;
+         --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+         --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+         --transition: all 0.2s ease;
+         }
+         * {
+         max-height: 9999999px;
+         }
+         body {
+         font-family: Arial, sans-serif;
+         margin: 0;
+         padding: 20px;
+         }
+         .container {
+         max-width: 1200px;
+         margin: 0 auto;
+         }
+         .header {
+         text-align: center;
+         margin-bottom: 20px;
+         text-transform: uppercase;
+         }
+         .school-name {
+         font-size: 24px;
+         font-weight: bold;
+         margin-bottom: 5px;
+         display: none;
+         }
+         .exam-session {
+         font-size: 18px;
+         margin-bottom: 3px;
+         display: none;
+         }
+         .class-info {
+         font-size: 16px;
+         margin-bottom: 15px;
+         display: none;
+         }
+         .subject-title {
+         font-size: 16px;
+         font-weight: bold;
+         margin-top: 15px;
+         margin-bottom: 5px;
+         text-align: center;
+         }
+         .subject-tables-row {
+         display: flex;
+         justify-content: space-between;
+         gap: 20px;
+         margin-bottom: 40px;
+         }
+         .subject-table-container {
+         flex: 1;
+         }
+         table {
+         width: 100%;
+         border-collapse: collapse;
+         margin-bottom: 5px;
+         }
+         th, td {
+         border: 1px solid #000;
+         padding: 5px;
+         text-align: center;
+         font-size: 14px;
+         }
+         th {
+         background-color: #f2f2f2;
+         }
+         .roll-col {
+         width: 80px;
+         }
+         .name-col {
+         width: 150px;
+         text-align: left;
+         }
+         .mark-col {
+         width: 50px;
+         }
+         .teacher-info {
+         margin-top: 10px;
+         line-height: 1.8;
+         }
+         .teacher-line, .signature-line {
+         display: flex;
+         }
+         .signature-line {
+         padding-top: 6px;
+         }
+         .teacher-label, .signature-label {
+         min-width: 200px;
+         }
+         .teacher-value {
+         flex: 1;
+         border-bottom: 1px solid #000;
+         }
+         .signature-value {
+         flex: 1;
+         }
+         .print-btn {
+         padding: 10px 20px;
+         background-color: #4CAF50;
+         color: white;
+         border: none;
+         cursor: pointer;
+         font-size: 16px;
+         border-radius: 4px;
+         margin-bottom: 30px;
+         }
+         .print-btn:hover {
+         background-color: #45a049;
+         }
+         @media print {
+         .print-btn {
+         display: none;
+         }
+         body {
+         padding: 0;
+         margin: 0;
+         width: 100%;
+         }
+         .container {
+         width: 100%;
+         max-width: none;
+         }
+         table {
+         page-break-inside: avoid;
+         width: 100%;
+         table-layout: fixed;
+         font-size: 12px;
+         }
+         th, td {
+         padding: 3px;
+         font-size: 12px;
+         }
+         .roll-col {
+         width: 10%;
+         }
+         .name-col {
+         width: 40%;
+         }
+         .mark-col {
+         width: 25%;
+         }
+         @page {
+         size: A4 portrait;
+         margin: 0.5cm;
+         }
+         .subject-tables-row {
+         page-break-inside: avoid;
+         }
+         }
+         .loading-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background-color: rgba(255, 255, 255, 0.8);
+         backdrop-filter: blur(4px);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 9999;
+         }
+         .spinner {
+         width: 60px;
+         height: 60px;
+         border: 6px solid rgba(79, 70, 229, 0.3);
+         border-radius: 50%;
+         border-top-color: var(--primary);
+         animation: spin 1s ease-in-out infinite;
+         }
+         @keyframes spin {
+         to {
+         transform: rotate(360deg);
+         }
+         }
+         .hidden {
+         display: none;
+         }
+      </style>
+   </head>
+   <body>
+      <!-- Loading Overlay -->
+      <div id="loading-overlay" class="loading-overlay">
+         <div class="spinner"></div>
+      </div>
+      <div class="container">
+         <div class="header" id="page-header">
+            <div class="school-name">Jamna Vidyapeeth</div>
+            <div class="exam-session"><span id="exam-name"></span> (Session 2025-26)</div>
+            <div class="class-info">Class: <span id="class-name"></span></div>
+         </div>
+         <div id="subject-tables-container">
+            <!-- Subject tables will be dynamically generated here -->
+         </div>
+         <div style="text-align: center;">
+            <button class="print-btn" onclick="window.print()">Print All Marks Statements</button>
+         </div>
+      </div>
+      <script>
+         // DOM elements
+         const loadingOverlay = document.getElementById('loading-overlay');
+         const subjectTablesContainer = document.getElementById('subject-tables-container');
+         
+         // Marks data (will be loaded from server)
+         let marks = [];
+         
+         // Store unique subject mark signatures 
+         let signatures = {};
+         
+         let selectedSubjects = [];
+         let selectedExam = '';
+         let selectedClass = '';
+         
+         function generateSubjectTables() {
+             // Set header information
+             document.getElementById('exam-name').textContent = selectedExam;
+             document.getElementById('class-name').textContent = selectedClass;
+             
+             // Filter marks based on selection
+             const filteredMarks = marks.filter(mark => 
+                 mark.class === selectedClass && 
+                 selectedSubjects.includes(mark.subject)
+             );
+             
+             // Get unique students
+             const uniqueStudents = [...new Set(filteredMarks.map(mark => mark.student))];
+             
+             // Create roll numbers
+             const classNumber = selectedClass.split('-')[0];
+             const sectionNumber = selectedClass.split('-')[1];
+             const sectionDigit = sectionNumber.charAt(1);
+             
+             // Clear previous content
+             subjectTablesContainer.innerHTML = '';
+             
+             // Process subjects in pairs for two-column layout
+             for (let i = 0; i < selectedSubjects.length; i += 2) {
+                 const rowDiv = document.createElement('div');
+                 rowDiv.className = 'subject-tables-row';
+                 
+                 // Process first subject in the row
+                 const subject1 = selectedSubjects[i];
+                 const subject1Container = createSubjectTable(
+                     subject1, 
+                     uniqueStudents, 
+                     filteredMarks, 
+                     classNumber, 
+                     sectionDigit
+                 );
+                 rowDiv.appendChild(subject1Container);
+                 
+                 // Process second subject in the row (if exists)
+                 if (i + 1 < selectedSubjects.length) {
+                     const subject2 = selectedSubjects[i + 1];
+                     const subject2Container = createSubjectTable(
+                         subject2, 
+                         uniqueStudents, 
+                         filteredMarks, 
+                         classNumber, 
+                         sectionDigit
+                     );
+                     rowDiv.appendChild(subject2Container);
+                 } else {
+                     // Add an empty container for layout balance if odd number of subjects
+                     const emptyContainer = document.createElement('div');
+                     emptyContainer.className = 'subject-table-container';
+                     rowDiv.appendChild(emptyContainer);
+                 }
+                 
+                 subjectTablesContainer.appendChild(rowDiv);
+             }
+         }
+         
+         function createSubjectTable(subject, uniqueStudents, filteredMarks, classNumber, sectionDigit) {
+         
+         // Get exam components applicable for this class, subject and exam
+         const examComponents = getTermExamComponents(selectedExam, classNumber, subject);
+         const componentCount = Object.keys(examComponents).length;
+         const componentKeys = Object.keys(examComponents);
+         
+             const container = document.createElement('div');
+             container.className = 'subject-table-container';
+             
+             // Add subject title
+             const subjectTitle = document.createElement('div');
+             subjectTitle.className = 'subject-title';
+             subjectTitle.textContent = `Class ${selectedClass} | ${selectedExam} (2025-26) | ${subject}`;
+             container.appendChild(subjectTitle);
+             
+             // Create table
+             const table = document.createElement('table');
+             
+             // Create header rows
+             const headerRow1 = document.createElement('tr');
+             const headerRow2 = document.createElement('tr');
+             
+             // Add Roll No and Name headers
+             const rollHeader = document.createElement('th');
+             rollHeader.textContent = 'Roll No.';
+             rollHeader.rowSpan = 2;
+             rollHeader.classList.add('roll-col');
+             headerRow1.appendChild(rollHeader);
+             
+             const nameHeader = document.createElement('th');
+             nameHeader.textContent = 'Student Name';
+             nameHeader.rowSpan = 2;
+             nameHeader.classList.add('name-col');
+             headerRow1.appendChild(nameHeader);
+             
+             // Add marks headers
+             const marksHeader = document.createElement('th');
+             marksHeader.textContent = 'Marks';
+             marksHeader.colSpan = componentCount > 2 ? componentCount : 1;
+             headerRow1.appendChild(marksHeader);
+         
+            for(const key of componentKeys) {
+         
+            const markHeader = document.createElement('th');
+             markHeader.innerHTML = getShortForm(key) + '<hr>' + examComponents[key] + 'M';
+             markHeader.classList.add('mark-col');
+             headerRow2.appendChild(markHeader);
+         
+            if(componentCount === 2) {
+                 break;
+            }
+         
+            }
+             
+             
+             
+             table.appendChild(headerRow1);
+             table.appendChild(headerRow2);
+             
+             // Create student rows
+             uniqueStudents.forEach((student, idx) => {
+                 const row = document.createElement('tr');
+                 
+                 // Generate roll number
+                 const serialNum = (idx + 1).toString().padStart(2, '0');
+                 const rollNo = `${classNumber}${sectionDigit}${serialNum}`;
+                 
+                 // Add roll number cell
+                 const rollCell = document.createElement('td');
+                 rollCell.textContent = rollNo;
+                 row.appendChild(rollCell);
+                 
+                 // Add name cell
+                 const nameCell = document.createElement('td');
+                 nameCell.textContent = student.toUpperCase();
+                 nameCell.style.textAlign = 'left';
+                 row.appendChild(nameCell);
+                 
+                 // Find student's mark for this subject
+                 const studentMarks = filteredMarks.filter(mark => 
+                     mark.student === student && mark.subject === subject
+                 );
+         
+         let total = 0; // start total at 0 for addition
+         
+         for (const key of componentKeys) {
+         const markCell = document.createElement('td');
+         const marksEntry = studentMarks.find(m => m.exam === `${selectedExam} (${key})`);
+         let displayValue = '-';
+         
+         if (marksEntry) {
+         const markValue = marksEntry.marks;
+         
+         if (markValue === null) {
+         displayValue = 'Ab';      // Show 'Ab' in the table
+         total += 0;               // Count it as 0 in the total
+         } else {
+         displayValue = markValue; // Show actual marks
+         total += markValue;       // Add to total
+         }
+         }
+         
+         // For the "Total" column, display the computed total
+         if (key === 'Total') {
+         displayValue = total === 0 ? '-' : total;
+         }
+         
+         markCell.textContent = displayValue;
+         row.appendChild(markCell);
+         
+            if(componentCount === 2) {
+                 break;
+            }
+         
+         }
+                                  
+                 table.appendChild(row);
+             });
+             
+             container.appendChild(table);
+             
+             // Add teacher information section
+             const teacherInfo = document.createElement('div');
+             teacherInfo.className = 'teacher-info';
+             
+             // Name of Subject Teacher
+             const teacherNameLine = document.createElement('div');
+             teacherNameLine.className = 'teacher-line';
+             
+             const teacherNameLabel = document.createElement('div');
+             teacherNameLabel.className = 'teacher-label';
+             teacherNameLabel.textContent = 'Name of Subject Teacher:';
+             
+             const teacherNameValue = document.createElement('div');
+             teacherNameValue.className = 'teacher-value';
+             
+             teacherNameLine.appendChild(teacherNameLabel);
+             teacherNameLine.appendChild(teacherNameValue);
+             teacherInfo.appendChild(teacherNameLine);
+             
+             // Date
+             const dateLine = document.createElement('div');
+             dateLine.className = 'teacher-line';
+             
+             const dateLabel = document.createElement('div');
+             dateLabel.className = 'teacher-label';
+             dateLabel.textContent = 'Date:';
+             
+             const dateValue = document.createElement('div');
+             dateValue.className = 'teacher-value';
+             
+             dateLine.appendChild(dateLabel);
+             dateLine.appendChild(dateValue);
+             teacherInfo.appendChild(dateLine);
+             
+             // Cross-verified by
+             const verifiedLine = document.createElement('div');
+             verifiedLine.className = 'teacher-line';
+             
+             const verifiedLabel = document.createElement('div');
+             verifiedLabel.className = 'teacher-label';
+             verifiedLabel.textContent = 'Cross-verified by:'; 
+             
+             const verifiedValue = document.createElement('div');
+             verifiedValue.className = 'teacher-value';
+             
+             verifiedLine.appendChild(verifiedLabel);
+             verifiedLine.appendChild(verifiedValue);
+             teacherInfo.appendChild(verifiedLine);
+         
+             // Digital signature
+             const signatureLine = document.createElement('div');
+             signatureLine.className = 'signature-line';
+             
+             const signatureLabel = document.createElement('div');
+             signatureLabel.className = 'signature-label';
+             signatureLabel.textContent = 'Digital Signature: ';
+         
+             const signatureValue = document.createElement('div');
+             signatureValue.className = 'signature-value';
+             signatureValue.textContent = signatures[subject];
+         
+             signatureLine.appendChild(signatureLabel);
+             signatureLine.appendChild(signatureValue);
+             
+             container.appendChild(teacherInfo);
+             container.appendChild(signatureLine);
+             
+             return container;
+         }
+         
+         // Check authentication status when the window loads
+         window.addEventListener('load', async () => {
+             showLoading();
+             
+             try {
+                 const isAuthenticated = await checkAuth();
+                 
+                 if (isAuthenticated) {
+                     // Load all marks data for the grade specified in the URL params
+                     await loadMarks();
+                     // Generate subject tables
+                     generateSubjectTables();
+                     // Hide loading screen
+                     hideLoading();
+                 } else {
+                     // User is not logged in, redirect back to dashboard
+                     window.location.href = "https://sourabhsuneja.github.io/redirect/jvp-marks-management/";
+                 }
+             } catch (error) {
+                 console.error('Auth check error:', error);
+             } finally {
+                 
+             }
+         });
+         
+         function showLoading() {
+             loadingOverlay.classList.remove('hidden');
+         }
+         
+         function hideLoading() {
+             loadingOverlay.classList.add('hidden');
+         }
+         
+         async function loadMarks() {
+             // Get the "class" parameter from the URL
+             const urlParams = new URLSearchParams(window.location.search);
+             const classValue = urlParams.get("class") || '4-A4';
+             const exam = urlParams.get("exam") || 'Term-1';
+             
+             // Store in global variables as well
+             selectedExam = exam;
+             selectedClass = classValue;
+         
+             const examArray = getUniqueTermExamNames(selectedExam);
+         
+             // Fetch subject list according to class
+             selectedSubjects = getSubjectsForClass(selectedClass);
+             // Remove All Subjects (Enthusiasm) from the selectedSubjects array
+             selectedSubjects = selectedSubjects.filter(s => s !== 'All Subjects (Enthusiasm)');
+             
+             // If class & exam are present and not falsy
+             if (classValue && exam) {
+                 try {
+                     // Call selectData to get records from "marks_view_with_roll_number" 
+          const results = await selectData(
+         "marks_view_with_roll_number", // tableName
+         false,                         // fetchSingle
+         "*",                           // columns
+         ["class"],                     // matchColumns (only exact match for class)
+         [classValue],                  // matchValues
+         "roll_number",                 // orderByColumn
+         "asc",                         // orderDirection
+         [
+         { operator: "in", column: "exam", value: examArray } // custom filter for exam
+         ]
+         );
+                     marks = results;
+                     signatures = await buildSubjectSignatures();
+                     return true;
+                 } catch (error) {
+                     console.error("Failed to load marks:", error);
+                     return null;
+                 }
+             } else {
+                 // No class or exam parameters found, redirect user back to dashboard
+                 window.location.href = "https://myjvp.in/marks-management/";
+             }
+         }
+         
+         function getFormattedDateTime() {
+         const now = new Date();
+         
+         const options = { 
+         month: 'short',  // "Aug"
+         day: 'numeric',  // "19"
+         year: 'numeric', // "2025"
+         hour: 'numeric', // "7"
+         minute: '2-digit', // "49"
+         hour12: true     // AM/PM format
+         };
+         
+         // Example: "Aug 19, 2025, 7:49 AM"
+         let formatted = now.toLocaleString('en-US', options);
+         
+         return formatted;
+         }
+         
+         async function generateNumericSignature(marksData) {
+         // 1. Sort by id to make order consistent
+         const sorted = [...marksData].sort((a, b) => a.id.localeCompare(b.id));
+         
+         // 2. Extract only id + subject + marks
+         const canonicalString = sorted
+         .map(item => `${item.id}:${item.subject}:${item.marks}`)
+         .join("|");
+         
+         // 3. Create SHA-256 hash
+         const msgBuffer = new TextEncoder().encode(canonicalString);
+         const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+         
+         // 4. Convert hash bytes → BigInt
+         const hashArray = Array.from(new Uint8Array(hashBuffer));
+         let bigNum = 0n;
+         for (let byte of hashArray) {
+         bigNum = (bigNum << 8n) + BigInt(byte);
+         }
+         
+         // 5. Take modulo to shrink to 12-digit number
+         const signature = bigNum % 1000000000000n; // 12 digits
+         
+         // Pad with leading zeros if needed
+         return signature.toString().padStart(12, "0");
+         }
+         
+         async function buildSubjectSignatures() {
+         // Step 1: Group marks by subject
+         const subjectMarks = marks.reduce((acc, item) => {
+         if (!acc[item.subject]) {
+         acc[item.subject] = [];
+         }
+         acc[item.subject].push(item);
+         return acc;
+         }, {});
+         
+         // Step 2: Generate digital signature for each subject
+         const subjectSignature = {};
+         for (const subject of Object.keys(subjectMarks)) {
+         subjectSignature[subject] = await generateNumericSignature(subjectMarks[subject]);
+         }
+         
+         return subjectSignature;
+         }
+         
+         function getShortForm(word) {
+         const map = {
+         "Theory": "Th.",
+         "Practical": "Prac.",
+         "Objective": "Obj.",
+         "Subjective": "Sub."
+         };
+         
+         // Return the mapped short form or the word itself if not found
+         return map[word] || word;
+         }
+      </script>
+   </body>
+</html>
