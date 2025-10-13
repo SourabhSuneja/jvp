@@ -496,7 +496,11 @@
                 markCell.textContent = '-';
             }
          
-         if(componentCount === 2 && key === 'Total') {
+         if(key === 'Total' || componentCount === 2) {
+               markCell.style.fontWeight = 'bold';
+         }
+         
+         if(key === 'Total' && componentCount === 2) {
                markCell.style.display = 'none';
          }
          
