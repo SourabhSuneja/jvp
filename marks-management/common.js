@@ -304,7 +304,7 @@ const examMarksConfig = [
   },
   {
     classes: [11, 12],
-    subjects: ["I.P.", "P.E."],
+    subjects: ["I.P.", "P.E.", "Psychology"],
     exams: {
       "Term-1 (Theory)": 70,
       "Term-1 (Practical)": 30
