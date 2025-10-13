@@ -344,6 +344,10 @@
          
          // Remove All Subjects (Enthusiasm) from the selectedSubjects array
          selectedSubjects = selectedSubjects.filter(s => s !== 'All Subjects (Enthusiasm)');
+
+         if(parseInt(selectedClass) < 9) {
+             selectedSubjects.push('Art');
+         }
          
          // Filter marks based on selection
          const filteredMarks = marks.filter(mark => 
@@ -385,6 +389,11 @@
          selectedSubjects.forEach(subject => {
          // Get exam components applicable for this class, subject and exam
          const examComponents = getTermExamComponents(selectedExam, selectedClass, subject);
+
+         if(subject === 'Art') {
+             examComponents.Grade = '';
+         }
+
          const componentCount = Object.keys(examComponents).length;
          const componentKeys = Object.keys(examComponents);
          
@@ -396,7 +405,7 @@
          
          for(const key of componentKeys) {
                         const componentHeader = document.createElement('th');
-         componentHeader.innerHTML = getShortForm(key) + "<hr>" + "" + examComponents[key] + "M";
+         componentHeader.innerHTML = getShortForm(key) + "<hr>" + "" + examComponents[key] + (key === 'Grade' ? "" : "M");
          componentHeader.classList.add('mark-col');
          
          if(componentCount === 2 && key === 'Total') {
@@ -471,6 +480,11 @@
          
          // Get exam components applicable for this class, subject and exam
          const examComponents = getTermExamComponents(selectedExam, selectedClass, subject);
+
+          if(subject === 'Art') {
+             examComponents.Grade = '';
+         }
+
          const componentCount = Object.keys(examComponents).length;
          const componentKeys = Object.keys(examComponents);
           
@@ -492,7 +506,7 @@
                     subjectTotal += mark;
                     total += mark;
                 }
-            } else {
+            } else if(subject !== 'Art') {
                 markCell.textContent = '-';
             }
          
