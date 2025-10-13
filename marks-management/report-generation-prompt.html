@@ -349,7 +349,7 @@
 
     <script>
         // Global array       
-        let periodicExams = ['PT-1', 'PT-2', 'PT-3', 'PT-4'];
+        let examsArray = ['PT-1', 'PT-2', 'PT-3', 'PT-4', 'Term-1'];
 
         // DOM elements
         const classSelect = document.getElementById('classSelect');
@@ -369,7 +369,7 @@
             });
 
             // Populate exams
-            periodicExams.forEach(exam => {
+            examsArray.forEach(exam => {
                 const option = document.createElement('option');
                 option.value = exam;
                 option.textContent = exam;
@@ -455,7 +455,11 @@
             // Construct URL based on statement type
             let baseUrl;
             if (statementType === 'consolidated') {
-                baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
+                if(examValue.startsWith('Term-')) {
+                    baseUrl = 'https://myjvp.in/marks-management/consolidated-term-marks.html';
+                 } else {
+                   baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
+                 }
             } else {
                 baseUrl = 'https://myjvp.in/marks-management/subjectwise-pt-marks.html';
             }
