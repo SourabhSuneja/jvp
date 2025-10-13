@@ -1799,7 +1799,7 @@
          const marksValues = relevantMarks.map(record => parseFloat(record.marks));
          const maxScore = Math.max(...marksValues);
          const avgScore = marksValues.reduce((a, b) => a + b, 0) / presentStudents;
-         const passingCount = marksValues.filter(mark => mark >= getPassingMark(selectedExam)).length;
+         const passingCount = marksValues.filter(mark => mark >= getPassingMark(selectedExam, selectedClass, selectedSubject)).length;
          const passingRate = (passingCount / presentStudents) * 100;
          const attendanceRate = (presentStudents / totalStudents) * 100;
          
