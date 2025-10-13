@@ -1934,7 +1934,13 @@
          let url;
          switch (selectedReportType) {
          case 'consolidated':
+         if(exam.startsWith('Term-')) {
+         const examName = exam.match(/^[^()]*/)[0].trim();
+         url = `consolidated-term-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(examName)}`;
+         } else if(exam.startsWith('PT-')) {
          url = `consolidated-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
+         }
+         
          break;
          case 'subjectwise':
          url = `subjectwise-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
