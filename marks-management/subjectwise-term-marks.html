@@ -341,7 +341,7 @@
             for(const key of componentKeys) {
          
             const markHeader = document.createElement('th');
-             markHeader.innerHTML = getShortForm(key) + '<hr>' + examComponents[key] + 'M';
+             markHeader.innerHTML = getShortForm(key) + ' (' + examComponents[key] + 'M)';
              markHeader.classList.add('mark-col');
              headerRow2.appendChild(markHeader);
          
