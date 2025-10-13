@@ -455,10 +455,12 @@
          
          // Calculate total marks
          let total = 0;
-         //let total10M = 0;
+         let subjectTotal = '-';
          
          // Add subject marks cells
          selectedSubjects.forEach(subject => {
+         
+            subjectTotal = 0;
             const studentSubjectMark = filteredMarks.filter(mark => 
                 mark.student === student && mark.subject === subject
             );
@@ -475,11 +477,15 @@
             markCell.dataset.subject = subject;
             if (studentSubjectMark.length > 0) {
                 const componentMark = studentSubjectMark.find(component => component.exam === selectedExam + ' (' + key + ')');
-                if (componentMark && componentMark.marks === null) {
+                if(key === 'Total') {
+                    markCell.textContent = subjectTotal;
+                }
+                else if (componentMark && componentMark.marks === null) {
                     markCell.textContent = 'Ab';
                 } else if(componentMark && componentMark.marks !== null) {
                     const mark = Math.ceil(componentMark.marks);
                     markCell.textContent = mark;
+                    subjectTotal += mark;
                     total += mark;
                 }
             } else {
