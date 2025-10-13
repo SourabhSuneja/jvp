@@ -461,7 +461,11 @@
                    baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
                  }
             } else {
-                baseUrl = 'https://myjvp.in/marks-management/subjectwise-pt-marks.html';
+                if(examValue.startsWith('Term-')) {
+                    baseUrl = 'https://myjvp.in/marks-management/subjectwise-term-marks.html';
+                 } else {
+                   baseUrl = 'https://myjvp.in/marks-management/subjectwise-pt-marks.html';
+                 }
             }
 
             const params = new URLSearchParams({
