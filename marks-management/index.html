@@ -1901,11 +1901,22 @@
          
          // Function to open the report dialog
          function openReportDialog() {
+         const selectedExam = examSelect.value;
          reportDialogOverlay.classList.add('active');
          document.body.style.overflow = 'hidden'; // Prevent scrolling behind the dialog
-         
-         // Reset selection to the first button
-         selectReportButton(reportButtons[0]);
+
+         document.querySelectorAll('button[data-report-type="consolidated"], button[data-report-type="subjectwise"]')
+         .forEach(button => {
+            if(selectedExam.startsWith('Term-') || selectedExam.startsWith('PT-')) {
+               button.style.display = 'block';
+               // Reset selection to the first button
+               selectReportButton(reportButtons[0]);
+            } else {
+               button.style.display = 'none';
+               // Reset selection to the last (custom report) button
+               selectReportButton(reportButtons[2]);
+            }
+         });
          }
          
          // Function to close the report dialog
