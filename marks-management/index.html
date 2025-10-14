@@ -1939,12 +1939,18 @@
          url = `consolidated-term-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(examName)}`;
          } else if(exam.startsWith('PT-')) {
          url = `consolidated-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
-         }
-         
+         }         
          break;
+               
          case 'subjectwise':
+         if(exam.startsWith('Term-')) {
+         const examName = exam.match(/^[^()]*/)[0].trim();
+         url = `subjectwise-term-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(examName)}`;
+         } else if(exam.startsWith('PT-')) {
          url = `subjectwise-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
+         }
          break;
+               
          case 'custom':
          url = `custom-marks-report.html?class=${encodeURIComponent(classValue)}`;
          break;
