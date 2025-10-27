@@ -56,7 +56,7 @@ const aggregateMarks = {
   9: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120, 'Term-1': 480},
   10: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120, 'Term-1': 480},
   11: {'PT-1': 100, 'PT-2': 100, 'PT-3': 100, 'PT-4': 100, 'Term-1': 400},
-  12: {'PT-1': 100, 'PT-2': 100, 'PT-3': 100, 'PT-4': 100},
+  12: {'PT-1': 100, 'PT-2': 100, 'PT-3': 100, 'PT-4': 100, 'Term-1': 360},
 };
 
 // Global class-wise list of subjects
@@ -303,9 +303,10 @@ const examMarksConfig = [
       "Term-1 (Practical)": 30
     }
   },
+  // Class 11 Starts
   {
     classes: [11],
-    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Geography"],
+    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
     exams: {
       "Term-1 (Theory)": 70,
       "Term-1 (Internal)": 10
@@ -313,6 +314,21 @@ const examMarksConfig = [
   },
   {
     classes: [11],
+    subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
+    exams: {
+      "Term-1 (Theory)": 80
+    }
+  },
+  // Class 12 Starts
+  {
+    classes: [12],
+    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
+    exams: {
+      "Term-1 (Theory)": 70
+    }
+  },
+  {
+    classes: [12],
     subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
     exams: {
       "Term-1 (Theory)": 80
