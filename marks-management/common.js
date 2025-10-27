@@ -306,7 +306,7 @@ const examMarksConfig = [
   // Class 11 Starts
   {
     classes: [11],
-    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
+    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography", "Fine Arts"],
     exams: {
       "Term-1 (Theory)": 70,
       "Term-1 (Internal)": 10
