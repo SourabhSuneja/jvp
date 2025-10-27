@@ -91,6 +91,7 @@ const exams = [
              {'name': 'Term-1 (SEA)', 'mm': 0},
              {'name': 'Term-1 (PP)', 'mm': 0},
              {'name': 'Term-1 (Practical)', 'mm': 0},
+             {'name': 'Term-1 (Internal)', 'mm': 0},
              {'name': 'PT-3', 'mm': 20},
              {'name': 'PT-4', 'mm': 20},
              {'name': 'Pre-Term Test 1', 'mm': 15},
@@ -303,11 +304,18 @@ const examMarksConfig = [
     }
   },
   {
-    classes: [11, 12],
-    subjects: ["I.P.", "P.E.", "Psychology"],
+    classes: [11],
+    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Geography"],
     exams: {
       "Term-1 (Theory)": 70,
-      "Term-1 (Practical)": 30
+      "Term-1 (Internal)": 10
+    }
+  },
+  {
+    classes: [11],
+    subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
+    exams: {
+      "Term-1 (Theory)": 80
     }
   }
 ];
