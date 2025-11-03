@@ -363,47 +363,10 @@
             { id: 11, game_name: "Volleyball (Girls)", class_category: "9 to 12", game_type: "Team", max_participants: 9, gender_filter: "Girls" },
         ];
 
-        let students = [
-            // Class 7
-            { id: "s001", name: "Aman Khandelwal", class: "7-A1", house: "Emerald", gender: "M" },
-            { id: "s002", name: "Unnati Gupta", class: "7-A1", house: "Topaz", gender: "F" },
-            { id: "s003", name: "Riya Singh", class: "7-A1", house: "Ruby", gender: "F" },
-            { id: "s004", name: "Tilak Sharma", class: "7-A2", house: "Ruby", gender: "M" },
-            { id: "s005", name: "Priya Jain", class: "7-A2", house: "Sapphire", gender: "F" },
-            { id: "s006", name: "Rohan Mehra", class: "7-A3", house: "Emerald", gender: "M" },
-            // Class 8
-            { id: "s007", name: "Karan Verma", class: "8-A1", house: "Ruby", gender: "M" },
-            { id: "s008", name: "Sonia D'souza", class: "8-A1", house: "Topaz", gender: "F" },
-            { id: "s009", name: "Mehak Agarwal", class: "8-A2", house: "Topaz", gender: "F" },
-            { id: "s010", name: "Varun Goel", class: "8-A2", house: "Sapphire", gender: "M" },
-            { id: "s011", name: "Arjun Reddy", class: "8-A3", house: "Ruby", gender: "M" },
-            { id: "s012", name: "Sneha Patil", class: "8-A3", house: "Emerald", gender: "F" },
-            // Class 9
-            { id: "s013", name: "Mohit Kumar", class: "9-A1", house: "Sapphire", gender: "M" },
-            { id: "s014", name: "Ananya Sharma", class: "9-A1", house: "Emerald", gender: "F" },
-            { id: "s015", name: "Vikram Rathore", class: "9-A2", house: "Topaz", gender: "M" },
-            // Class 10
-            { id: "s016", name: "Farah Khan", class: "10-A1", house: "Ruby", gender: "F" },
-            { id: "s017", name: "Rajesh Singh", class: "10-A2", house: "Emerald", gender: "M" },
-            // Class 11
-            { id: "s018", name: "Deepak Mehta", class: "11-SCI", house: "Sapphire", gender: "M" },
-            { id: "s019", name: "Tanya Gupta", class: "11-COM", house: "Topaz", gender: "F" },
-            // Class 12
-            { id: "s020", name: "Vivek Anand", class: "12-SCI", house: "Ruby", gender: "M" },
-            { id: "s021", name: "Nisha Kumari", class: "12-HUM", house: "Emerald", gender: "F" },
-        ];
+        let students = [];
 
         // This is our "database"
-        let participations = [
-            // Pre-populate some data for testing
-            // Tug of War (Event 5) - Emerald Team
-            { student_id: "s001", event_id: 5, participant_group_id: "uuid-tug-emerald" },
-            { student_id: "s006", event_id: 5, participant_group_id: "uuid-tug-emerald" },
-            { student_id: "s014", event_id: 5, participant_group_id: "uuid-tug-emerald" },
-            // 100M Relay (Event 3) - Topaz Pair
-            { student_id: "s008", event_id: 3, participant_group_id: "uuid-relay-topaz" },
-            { student_id: "s009", event_id: 3, participant_group_id: "uuid-relay-topaz" },
-        ];
+        let participations = [];
 
 
         // ---=======================================---
@@ -942,6 +905,8 @@
             } catch (error) {
             console.error('Auth check error:', error);
             }
+            // Fetch student list
+            students = await selectData('students', false, 'id, name, class, house, gender', [], [], 'name');
             hideProcessingDialog();
             initStudentView();
             initGameView();
