@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Sports Meet - Participation</title>
+    <style>
+        /* --- Root Variables --- */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --disabled-color: #e9ecef;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* --- Basic Reset & Typography --- */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* --- Layout & Card --- */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* --- Tabs --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-button.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- Form Elements --- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 16px;
+            background-color: #fff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        select:focus, button:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button.btn-save {
+            background-color: var(--success-color);
+            margin-top: 20px;
+        }
+        
+        button.btn-save:disabled {
+            background-color: var(--secondary-color);
+            cursor: not-allowed;
+        }
+
+        /* --- Lists (Students/Games) --- */
+        .list-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px;
+            background: #fdfdfd;
+        }
+        
+        .list-container:empty::after {
+            content: 'Please make a selection above.';
+            display: block;
+            text-align: center;
+            color: var(--secondary-color);
+            padding: 20px;
+        }
+
+        .list-item {
+            display: block;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .list-item:hover {
+            background-color: #f4f4f4;
+        }
+
+        .list-item input[type="radio"],
+        .list-item input[type="checkbox"] {
+            margin-right: 12px;
+            transform: scale(1.1);
+        }
+
+        .list-item label {
+            font-weight: 500;
+            display: flex; /* Changed to flex for alignment */
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .list-item span.details {
+            font-size: 0.9em;
+            color: var(--secondary-color);
+            margin-left: auto; /* Pushes details to the right */
+            padding-left: 10px;
+        }
+
+        .list-item input:disabled + span.name {
+            color: var(--secondary-color);
+            text-decoration: line-through;
+        }
+
+        .list-item input:disabled + span.name + span.details {
+            color: var(--danger-color);
+            text-decoration: none;
+        }
+
+        /* --- Utility & Responsive --- */
+        .hidden {
+            display: none;
+        }
+        
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success-color);
+            color: white;
+            padding: 16px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            visibility: hidden;
+        }
+        
+        #toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        #toast.error {
+            background-color: var(--danger-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            .tabs {
+                font-size: 14px;
+            }
+            .tab-button {
+                padding: 10px 12px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Annual Sports Meet - Participation Entry</h1>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('student-view')">Student-first Approach</button>
+            <button class="tab-button" onclick="showTab('game-view')">Game-first Approach</button>
+        </div>
+
+        <div id="student-view" class="tab-content active">
+            <div class="card">
+                <h3>Step 1: Select a Class</h3>
+                <div class="form-group">
+                    <select id="student-class-select">
+                        <option value="">-- Select a Class --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="student-view-step-2" class="card hidden">
+                <h3>Step 2: Select a Student</h3>
+                <div id="student-list-container" class="list-container">
+                    </div>
+            </div>
+
+            <div id="student-view-step-3" class="card hidden">
+                <h3>Step 3: Select Games for <span id="selected-student-name" style="color: var(--primary-color);"></span></h3>
+                <p>A student can participate in at most <strong>one individual game</strong> and <strong>one team game</strong>.</p>
+                <div id="student-games-container" class="list-container">
+                    </div>
+                <button id="save-student-participation" class="btn-save">Save Participation</button>
+            </div>
+        </div>
+
+        <div id="game-view" class="tab-content">
+            <div class="card">
+                <h3>Step 1: Select Game and House</h3>
+                <div class="form-group">
+                    <label for="game-event-select">Select a Game</label>
+                    <select id="game-event-select">
+                        <option value="">-- Select a Game --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="game-house-select">Select a House</label>
+                    <select id="game-house-select">
+                        <option value="">-- Select a House --</option>
+                        <option value="Ruby">Ruby</option>
+                        <option value="Emerald">Emerald</option>
+                        <option value="Sapphire">Sapphire</option>
+                        <option value="Topaz">Topaz</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="game-view-step-2" class="card hidden">
+                <h3>Step 2: Select Participants</h3>
+                <h4 id="game-participant-counter" style="color: var(--secondary-color); text-align: center;"></h4>
+                <div id="game-student-list-container" class="list-container">
+                    </div>
+                <button id="save-game-participation" class="btn-save">Save Participants</button>
+            </div>
+        </div>
+
+    </div>
+    
+    <div id="toast"></div>
+
+    <script>
+        // ---=======================================---
+        // ---         GLOBAL DATA (Sample)        ---
+        // ---=======================================---
+
+        const houses = ['Ruby', 'Emerald', 'Sapphire', 'Topaz'];
+
+        const classes = ['1-A1', '1-A2', '1-A3', '2-A1', '2-A2', '2-A3', '3-A1', '3-A2', '3-A3', '3-A4', '4.A1', '4.A2', '4.A3', '4.A4', '5-A1', '5-A2', '5-A3', '5-A4', '6-A1', '6-A2', '6-A3', '6-A4', '7-A1', '7-A2', '7-A3', '7-A4', '8-A1', '8-A2', '8-A3', '9-A1', '9-A2', '9-A3', '10-A1', '10-A2', '11-SCI', '11-COM', '11-HUM', '12-SCI', '12-COM', '12-HUM'];
+
+        const events = [
+            { id: 1, game_name: "100M Race (Boys)", class_category: "7", game_type: "Individual", max_participants: 1, gender_filter: "Boys" },
+            { id: 2, game_name: "100M Race (Girls)", class_category: "7", game_type: "Individual", max_participants: 1, gender_filter: "Girls" },
+            { id: 3, game_name: "100M Relay Race (Girls)", class_category: "8", game_type: "Individual", max_participants: 2, gender_filter: "Girls" },
+            { id: 4, game_name: "100M Relay Race (Boys)", class_category: "8", game_type: "Individual", max_participants: 2, gender_filter: "Boys" },
+            { id: 5, game_name: "Tug of War (Mixed)", class_category: "7 to 10", game_type: "Team", max_participants: 10, gender_filter: "Mixed" },
+            { id: 6, game_name: "Kho Kho (Boys)", class_category: "7 to 8", game_type: "Team", max_participants: 12, gender_filter: "Boys" },
+            { id: 7, game_name: "Kho Kho (Girls)", class_category: "7 to 8", game_type: "Team", max_participants: 12, gender_filter: "Girls" },
+            { id: 8, game_name: "Long Jump (Boys)", class_category: "9", game_type: "Individual", max_participants: 1, gender_filter: "Boys" },
+            { id: 9, game_name: "Long Jump (Girls)", class_category: "9", game_type: "Individual", max_participants: 1, gender_filter: "Girls" },
+            { id: 10, game_name: "Volleyball (Boys)", class_category: "9 to 12", game_type: "Team", max_participants: 9, gender_filter: "Boys" },
+            { id: 11, game_name: "Volleyball (Girls)", class_category: "9 to 12", game_type: "Team", max_participants: 9, gender_filter: "Girls" },
+        ];
+
+        let students = [
+            // Class 7
+            { id: "s001", name: "Aman Khandelwal", class: "7-A1", house: "Emerald", gender: "M" },
+            { id: "s002", name: "Unnati Gupta", class: "7-A1", house: "Topaz", gender: "F" },
+            { id: "s003", name: "Riya Singh", class: "7-A1", house: "Ruby", gender: "F" },
+            { id: "s004", name: "Tilak Sharma", class: "7-A2", house: "Ruby", gender: "M" },
+            { id: "s005", name: "Priya Jain", class: "7-A2", house: "Sapphire", gender: "F" },
+            { id: "s006", name: "Rohan Mehra", class: "7-A3", house: "Emerald", gender: "M" },
+            // Class 8
+            { id: "s007", name: "Karan Verma", class: "8-A1", house: "Ruby", gender: "M" },
+            { id: "s008", name: "Sonia D'souza", class: "8-A1", house: "Topaz", gender: "F" },
+            { id: "s009", name: "Mehak Agarwal", class: "8-A2", house: "Topaz", gender: "F" },
+            { id: "s010", name: "Varun Goel", class: "8-A2", house: "Sapphire", gender: "M" },
+            { id: "s011", name: "Arjun Reddy", class: "8-A3", house: "Ruby", gender: "M" },
+            { id: "s012", name: "Sneha Patil", class: "8-A3", house: "Emerald", gender: "F" },
+            // Class 9
+            { id: "s013", name: "Mohit Kumar", class: "9-A1", house: "Sapphire", gender: "M" },
+            { id: "s014", name: "Ananya Sharma", class: "9-A1", house: "Emerald", gender: "F" },
+            { id: "s015", name: "Vikram Rathore", class: "9-A2", house: "Topaz", gender: "M" },
+            // Class 10
+            { id: "s016", name: "Farah Khan", class: "10-A1", house: "Ruby", gender: "F" },
+            { id: "s017", name: "Rajesh Singh", class: "10-A2", house: "Emerald", gender: "M" },
+            // Class 11
+            { id: "s018", name: "Deepak Mehta", class: "11-SCI", house: "Sapphire", gender: "M" },
+            { id: "s019", name: "Tanya Gupta", class: "11-COM", house: "Topaz", gender: "F" },
+            // Class 12
+            { id: "s020", name: "Vivek Anand", class: "12-SCI", house: "Ruby", gender: "M" },
+            { id: "s021", name: "Nisha Kumari", class: "12-HUM", house: "Emerald", gender: "F" },
+        ];
+
+        // This is our "database"
+        let participations = [
+            // Pre-populate some data for testing
+            // Tug of War (Event 5) - Emerald Team
+            { student_id: "s001", event_id: 5, participant_group_id: "uuid-tug-emerald" },
+            { student_id: "s006", event_id: 5, participant_group_id: "uuid-tug-emerald" },
+            { student_id: "s014", event_id: 5, participant_group_id: "uuid-tug-emerald" },
+            // 100M Relay (Event 3) - Topaz Pair
+            { student_id: "s008", event_id: 3, participant_group_id: "uuid-relay-topaz" },
+            { student_id: "s009", event_id: 3, participant_group_id: "uuid-relay-topaz" },
+        ];
+
+
+        // ---=======================================---
+        // ---         HELPER FUNCTIONS            ---
+        // ---=======================================---
+
+        /** Generates a simple pseudo-UUID */
+        function generateUUID() {
+            return 'xxxx-xxxx-xxxx-xxxx'.replace(/[x]/g, (c) => {
+                const r = Math.random() * 16 | 0;
+                return r.toString(16);
+            });
+        }
+
+        /** Gets the numeric part of a class string, e.g., "7-A1" -> 7, "11-SCI" -> 11 */
+        function getNumericClass(classString) {
+            return parseInt(classString.split('-')[0].split('.')[0], 10);
+        }
+
+        /** Finds a student object by their ID */
+        function getStudentById(studentId) {
+            return students.find(s => s.id === studentId);
+        }
+
+        /** Finds an event object by its ID */
+        function getEventById(eventId) {
+            return events.find(e => e.id === eventId);
+        }
+
+        /**
+         * Checks if a student's class matches a game's class category.
+         * @param {number} studentClass - e.g., 7
+         * @param {string} gameCategory - e.g., "7" or "7 to 10"
+         */
+        function checkClassCategory(studentClass, gameCategory) {
+            if (gameCategory.includes(' to ')) {
+                const [min, max] = gameCategory.split(' to ').map(Number);
+                return studentClass >= min && studentClass <= max;
+            } else {
+                return studentClass === parseInt(gameCategory, 10);
+            }
+        }
+
+        /**
+         * Checks if a student's gender matches a game's gender filter.
+         * @param {string} studentGender - "M" or "F"
+         * @param {string} gameGenderFilter - "Boys", "Girls", or "Mixed"
+         */
+        function checkGender(studentGender, gameGenderFilter) {
+            if (gameGenderFilter === "Mixed") return true;
+            if (gameGenderFilter === "Boys" && studentGender === "M") return true;
+            if (gameGenderFilter === "Girls" && studentGender === "F") return true;
+            return false;
+        }
+
+        /** Gets all participations for a specific student */
+        function getParticipationsByStudent(studentId) {
+            return participations.filter(p => p.student_id === studentId);
+        }
+
+        /** Gets all participations for a specific event AND house */
+        function getParticipationsByEventAndHouse(eventId, house) {
+            return participations.filter(p => {
+                const student = getStudentById(p.student_id);
+                return p.event_id === eventId && student && student.house === house;
+            });
+        }
+        
+        /** Shows a toast notification */
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'show' + (isError ? ' error' : '');
+            setTimeout(() => {
+                toast.className = toast.className.replace('show', '');
+            }, 3000);
+        }
+
+        // ---=======================================---
+        // ---         TAB SWITCHING LOGIC         ---
+        // ---=======================================---
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+
+        // ---=======================================---
+        // ---      STUDENT-FIRST VIEW LOGIC       ---
+        // ---=======================================---
+
+        const studentClassSelect = document.getElementById('student-class-select');
+        const studentListContainer = document.getElementById('student-list-container');
+        const studentViewStep2 = document.getElementById('student-view-step-2');
+        const studentViewStep3 = document.getElementById('student-view-step-3');
+        const studentGamesContainer = document.getElementById('student-games-container');
+        const selectedStudentNameEl = document.getElementById('selected-student-name');
+        const saveStudentButton = document.getElementById('save-student-participation');
+
+        function initStudentView() {
+            // 1. Populate class dropdown
+            studentClassSelect.innerHTML = '<option value="">-- Select a Class --</option>'; // Reset
+            classes.forEach(cls => {
+                studentClassSelect.innerHTML += `<option value="${cls}">${cls}</option>`;
+            });
+
+            // 2. Add event listener
+            studentClassSelect.addEventListener('change', onStudentClassSelect);
+            saveStudentButton.addEventListener('click', onSaveStudentParticipation);
+        }
+
+        function onStudentClassSelect() {
+            const selectedClass = studentClassSelect.value;
+            studentListContainer.innerHTML = ""; // Clear list
+            studentGamesContainer.innerHTML = ""; // Clear games
+            studentViewStep3.classList.add('hidden'); // Hide step 3
+            
+            if (!selectedClass) {
+                studentViewStep2.classList.add('hidden');
+                return;
+            }
+
+            const studentsInClass = students.filter(s => s.class === selectedClass);
+            
+            if (studentsInClass.length === 0) {
+                 studentListContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color);">No students found in this class.</p>';
+            } else {
+                studentsInClass.forEach(student => {
+                    studentListContainer.innerHTML += `
+                        <label class="list-item">
+                            <input type="radio" name="student" value="${student.id}">
+                            <span class="name">${student.name}</span>
+                            <span class="details">${student.house}</span>
+                        </label>
+                    `;
+                });
+            }
+            
+            studentViewStep2.classList.remove('hidden');
+
+            // Add event listeners to new radio buttons
+            document.querySelectorAll('input[name="student"]').forEach(radio => {
+                radio.addEventListener('change', onStudentSelect);
+            });
+        }
+        
+        function onStudentSelect() {
+            const selectedStudentId = document.querySelector('input[name="student"]:checked').value;
+            const student = getStudentById(selectedStudentId);
+            
+            if (!student) return;
+
+            selectedStudentNameEl.textContent = student.name;
+            studentGamesContainer.innerHTML = ""; // Clear old list
+            
+            const studentNumClass = getNumericClass(student.class);
+            const myParticipations = getParticipationsByStudent(student.id);
+
+            // Get counts of games student is already in
+            let individualCount = 0;
+            let teamCount = 0;
+            myParticipations.forEach(p => {
+                const event = getEventById(p.event_id);
+                if (event.game_type === 'Individual') individualCount++;
+                if (event.game_type === 'Team') teamCount++;
+            });
+
+            // Find all eligible games
+            const eligibleGames = events.filter(event => 
+                checkClassCategory(studentNumClass, event.class_category) &&
+                checkGender(student.gender, event.gender_filter)
+            );
+
+            if (eligibleGames.length === 0) {
+                studentGamesContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color);">No eligible games found for this student.</p>';
+            } else {
+                eligibleGames.forEach(event => {
+                    const isParticipating = myParticipations.some(p => p.event_id === event.id);
+                    
+                    // Check house-level participant limit
+                    const eventParticipations = getParticipationsByEventAndHouse(event.id, student.house);
+                    const isGameFull = eventParticipations.length >= event.max_participants;
+                    
+                    // Check student-level game type limit
+                    const reachedIndividualLimit = event.game_type === 'Individual' && individualCount >= 1;
+                    const reachedTeamLimit = event.game_type === 'Team' && teamCount >= 1;
+
+                    let isDisabled = false;
+                    let disabledReason = "";
+
+                    if (!isParticipating) {
+                        if (isGameFull) {
+                            isDisabled = true;
+                            disabledReason = `(Full for ${student.house})`;
+                        } else if (reachedIndividualLimit) {
+                            isDisabled = true;
+                            disabledReason = "(Already in an individual game)";
+                        } else if (reachedTeamLimit) {
+                            isDisabled = true;
+                            disabledReason = "(Already in a team game)";
+                        }
+                    }
+
+                    studentGamesContainer.innerHTML += `
+                        <label class="list-item">
+                            <input type="checkbox" value="${event.id}" data-type="${event.game_type}" 
+                                ${isParticipating ? 'checked' : ''} 
+                                ${isDisabled ? 'disabled' : ''}>
+                            <span class="name">${event.game_name} (${event.game_type})</span>
+                            <span class="details">${event.class_category} ${disabledReason}</span>
+                        </label>
+                    `;
+                });
+            }
+
+            studentViewStep3.classList.remove('hidden');
+        }
+
+        function onSaveStudentParticipation() {
+            const selectedStudentId = document.querySelector('input[name="student"]:checked')?.value;
+            if (!selectedStudentId) {
+                showToast("Please select a student first.", true);
+                return;
+            }
+            
+            const student = getStudentById(selectedStudentId);
+            const gameCheckboxes = studentGamesContainer.querySelectorAll('input[type="checkbox"]');
+            
+            const desiredEventIds = new Set();
+            gameCheckboxes.forEach(cb => {
+                if (cb.checked) {
+                    desiredEventIds.add(parseInt(cb.value, 10));
+                }
+            });
+            
+            const currentEventIds = new Set(getParticipationsByStudent(student.id).map(p => p.event_id));
+
+            // 1. Add new participations
+            desiredEventIds.forEach(eventId => {
+                if (!currentEventIds.has(eventId)) {
+                    // Student wants to join this game, and isn't already in it
+                    const event = getEventById(eventId);
+                    
+                    // Find an existing group ID for this event/house, or create one
+                    let groupId = generateUUID();
+                    if (event.game_type === 'Team' || event.max_participants > 1) {
+                        const existingGroup = participations.find(p => {
+                            const pStudent = getStudentById(p.student_id);
+                            return p.event_id === eventId && pStudent && pStudent.house === student.house;
+                        });
+                        if (existingGroup) {
+                            groupId = existingGroup.participant_group_id;
+                        }
+                    }
+                    
+                    // Add to global array
+                    participations.push({
+                        student_id: student.id,
+                        event_id: eventId,
+                        participant_group_id: groupId
+                    });
+                }
+            });
+
+            // 2. Remove old participations
+            currentEventIds.forEach(eventId => {
+                if (!desiredEventIds.has(eventId)) {
+                    // Student was in this game, but is no longer
+                    participations = participations.filter(p => 
+                        !(p.student_id === student.id && p.event_id === eventId)
+                    );
+                }
+            });
+
+            showToast("Participation updated successfully!");
+            console.log("Updated Participations:", participations);
+
+            // 3. Refresh the view to show updated limits
+            onStudentSelect();
+        }
+
+        // ---=======================================---
+        // ---        GAME-FIRST VIEW LOGIC        ---
+        // ---=======================================---
+
+        const gameEventSelect = document.getElementById('game-event-select');
+        const gameHouseSelect = document.getElementById('game-house-select');
+        const gameViewStep2 = document.getElementById('game-view-step-2');
+        const gameStudentListContainer = document.getElementById('game-student-list-container');
+        const gameParticipantCounter = document.getElementById('game-participant-counter');
+        const saveGameButton = document.getElementById('save-game-participation');
+        
+        function initGameView() {
+            // 1. Populate game dropdown
+            gameEventSelect.innerHTML = '<option value="">-- Select a Game --</option>'; // Reset
+            events.forEach(event => {
+                gameEventSelect.innerHTML += `
+                    <option value="${event.id}">
+                        ${event.game_name} (${event.class_category}, ${event.gender_filter})
+                    </option>
+                `;
+            });
+            
+            // 2. Add event listeners
+            gameEventSelect.addEventListener('change', onGameOrHouseSelect);
+            gameHouseSelect.addEventListener('change', onGameOrHouseSelect);
+            saveGameButton.addEventListener('click', onSaveGameParticipation);
+        }
+
+        function onGameOrHouseSelect() {
+            const selectedEventId = parseInt(gameEventSelect.value, 10);
+            const selectedHouse = gameHouseSelect.value;
+            
+            gameStudentListContainer.innerHTML = ""; // Clear
+            
+            if (!selectedEventId || !selectedHouse) {
+                gameViewStep2.classList.add('hidden');
+                return;
+            }
+            
+            const event = getEventById(selectedEventId);
+            const eventParticipations = getParticipationsByEventAndHouse(event.id, selectedHouse);
+            const currentCount = eventParticipations.length;
+            const maxCount = event.max_participants;
+            
+            gameParticipantCounter.textContent = `(${currentCount} / ${maxCount} participants selected)`;
+
+            // Find all eligible students
+            const eligibleStudents = students.filter(student => 
+                student.house === selectedHouse &&
+                checkGender(student.gender, event.gender_filter) &&
+                checkClassCategory(getNumericClass(student.class), event.class_category)
+            );
+            
+            if (eligibleStudents.length === 0) {
+                 gameStudentListContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color);">No eligible students found for this house and game.</p>';
+            } else {
+                eligibleStudents.forEach(student => {
+                    const isParticipating = eventParticipations.some(p => p.student_id === student.id);
+                    
+                    // Check if game is full
+                    const isGameFull = currentCount >= maxCount;
+                    let isDisabled = false;
+                    let disabledReason = "";
+                    
+                    if (!isParticipating && isGameFull) {
+                        isDisabled = true;
+                        disabledReason = "(Game is full)";
+                    }
+
+                    gameStudentListContainer.innerHTML += `
+                        <label class="list-item">
+                            <input type="checkbox" value="${student.id}" 
+                                ${isParticipating ? 'checked' : ''}
+                                ${isDisabled ? 'disabled' : ''}>
+                            <span class="name">${student.name}</span>
+                            <span class="details">${student.class} ${disabledReason}</span>
+                        </label>
+                    `;
+                });
+            }
+            
+            gameViewStep2.classList.remove('hidden');
+        }
+        
+        function onSaveGameParticipation() {
+            const selectedEventId = parseInt(gameEventSelect.value, 10);
+            const selectedHouse = gameHouseSelect.value;
+            
+            if (!selectedEventId || !selectedHouse) {
+                showToast("Please select both a game and a house.", true);
+                return;
+            }
+            
+            const event = getEventById(selectedEventId);
+            const studentCheckboxes = gameStudentListContainer.querySelectorAll('input[type="checkbox"]');
+            
+            // Find or create the group ID for this team/pair
+            const existingGroup = participations.find(p => {
+                const pStudent = getStudentById(p.student_id);
+                return p.event_id === selectedEventId && pStudent && pStudent.house === selectedHouse;
+            });
+            const groupId = existingGroup ? existingGroup.participant_group_id : generateUUID();
+            
+            const desiredStudentIds = new Set();
+            studentCheckboxes.forEach(cb => {
+                if (cb.checked) {
+                    desiredStudentIds.add(cb.value);
+                }
+            });
+            
+            const currentStudentIds = new Set(
+                getParticipationsByEventAndHouse(selectedEventId, selectedHouse).map(p => p.student_id)
+            );
+
+            let addedCount = 0;
+            let removedCount = 0;
+            let errors = [];
+
+            // 1. Add new participants
+            desiredStudentIds.forEach(studentId => {
+                if (!currentStudentIds.has(studentId)) {
+                    // Check max participant limit *again* before adding
+                    const currentTotal = getParticipationsByEventAndHouse(selectedEventId, selectedHouse).length;
+                    if (currentTotal < event.max_participants) {
+                        participations.push({
+                            student_id: studentId,
+                            event_id: selectedEventId,
+                            participant_group_id: groupId
+                        });
+                        addedCount++;
+                    } else {
+                        // This might happen if user checked more than allowed
+                        errors.push(`Could not add ${getStudentById(studentId).name}: Game is full.`);
+                    }
+                }
+            });
+
+            // 2. Remove old participants
+            currentStudentIds.forEach(studentId => {
+                if (!desiredStudentIds.has(studentId)) {
+                    participations = participations.filter(p => 
+                        !(p.student_id === studentId && p.event_id === selectedEventId)
+                    );
+                    removedCount++;
+                }
+            });
+            
+            if (errors.length > 0) {
+                showToast(errors.join('\n'), true);
+            } else {
+                showToast(`Participation updated: ${addedCount} added, ${removedCount} removed.`);
+            }
+            
+            console.log("Updated Participations:", participations);
+
+            // 3. Refresh the view
+            onGameOrHouseSelect();
+        }
+
+        // ---=======================================---
+        // ---          INITIALIZATION             ---
+        // ---=======================================---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initStudentView();
+            initGameView();
+        });
+
+    </script>
+</body>
+</html>
