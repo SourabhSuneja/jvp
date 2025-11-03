@@ -856,7 +856,7 @@
         // ---          INITIALIZATION             ---
         // ---=======================================---
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             showProcessingDialog();
             try {
             const isAuthenticated = await checkAuth();
