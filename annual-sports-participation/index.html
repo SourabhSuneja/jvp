@@ -410,6 +410,31 @@
         // ---         HELPER FUNCTIONS            ---
         // ---=======================================---
 
+        // Function to sync participation changes with the backend
+        function processParticipationChanges(changes) {
+             if (changes.length === 0) {
+                 console.log("No participation changes detected.");
+                 return;
+             }
+         
+             console.log("Processing participation changes:", changes);
+             
+             // TODO: In the future, you could send these changes to your database
+             // For example:
+             // for (const change of changes) {
+             //     if (change.change === 'add') {
+             //         await supabase.from('participations').insert({ 
+             //             student_id: change.student_id, 
+             //             event_id: change.event_id, 
+             //             participant_group_id: change.participant_group_id 
+             //         });
+             //     } else if (change.change === 'remove') {
+             //         await supabase.from('participations').delete()
+             //             .match({ student_id: change.student_id, event_id: change.event_id });
+             //     }
+             // }
+         }
+
         /** Generates a simple pseudo-UUID */
         function generateUUID() {
             return 'xxxx-xxxx-xxxx-xxxx'.replace(/[x]/g, (c) => {
@@ -630,68 +655,96 @@
             studentViewStep3.classList.remove('hidden');
         }
 
-        function onSaveStudentParticipation() {
-            const selectedStudentId = document.querySelector('input[name="student"]:checked')?.value;
-            if (!selectedStudentId) {
-                showToast("Please select a student first.", true);
-                return;
-            }
-            
-            const student = getStudentById(selectedStudentId);
-            const gameCheckboxes = studentGamesContainer.querySelectorAll('input[type="checkbox"]');
-            
-            const desiredEventIds = new Set();
-            gameCheckboxes.forEach(cb => {
-                if (cb.checked) {
-                    desiredEventIds.add(parseInt(cb.value, 10));
-                }
-            });
-            
-            const currentEventIds = new Set(getParticipationsByStudent(student.id).map(p => p.event_id));
+        async function onSaveStudentParticipation() {
+             const selectedStudentId = document.querySelector('input[name="student"]:checked')?.value;
+             if (!selectedStudentId) {
+                 showToast("Please select a student first.", true);
+                 return;
+             }
+             
+             const student = getStudentById(selectedStudentId);
+             const gameCheckboxes = studentGamesContainer.querySelectorAll('input[type="checkbox"]');
+             
+             const changes = []; // To track participation changes
 
-            // 1. Add new participations
-            desiredEventIds.forEach(eventId => {
-                if (!currentEventIds.has(eventId)) {
-                    // Student wants to join this game, and isn't already in it
-                    const event = getEventById(eventId);
-                    
-                    // Find an existing group ID for this event/house, or create one
-                    let groupId = generateUUID();
-                    if (event.game_type === 'Team' || event.max_participants > 1) {
-                        const existingGroup = participations.find(p => {
-                            const pStudent = getStudentById(p.student_id);
-                            return p.event_id === eventId && pStudent && pStudent.house === student.house;
-                        });
-                        if (existingGroup) {
-                            groupId = existingGroup.participant_group_id;
-                        }
-                    }
-                    
-                    // Add to global array
-                    participations.push({
-                        student_id: student.id,
-                        event_id: eventId,
-                        participant_group_id: groupId
-                    });
-                }
-            });
+             const desiredEventIds = new Set();
+             gameCheckboxes.forEach(cb => {
+                 if (cb.checked) {
+                     desiredEventIds.add(parseInt(cb.value, 10));
+                 }
+             });
+             
+             const currentEventIds = new Set(getParticipationsByStudent(student.id).map(p => p.event_id));
 
-            // 2. Remove old participations
-            currentEventIds.forEach(eventId => {
-                if (!desiredEventIds.has(eventId)) {
-                    // Student was in this game, but is no longer
-                    participations = participations.filter(p => 
-                        !(p.student_id === student.id && p.event_id === eventId)
-                    );
-                }
-            });
+             // 1. Add new participations
+             desiredEventIds.forEach(eventId => {
+                 if (!currentEventIds.has(eventId)) {
+                     // Student wants to join this game, and isn't already in it
+                     const event = getEventById(eventId);
+                     
+                     // Find an existing group ID for this event/house, or create one
+                     let groupId = generateUUID();
+                     if (event.game_type === 'Team' || event.max_participants > 1) {
+                         const existingGroup = participations.find(p => {
+                             const pStudent = getStudentById(p.student_id);
+                             return p.event_id === eventId && pStudent && pStudent.house === student.house;
+                         });
+                         if (existingGroup) {
+                             groupId = existingGroup.participant_group_id;
+                         }
+                     }
+                     
+                     // Add to global array
+                     participations.push({
+                         student_id: student.id,
+                         event_id: eventId,
+                         participant_group_id: groupId
+                     });
+                     
+                     // Add to the changes array
+                     changes.push({
+                         change: "add",
+                         student_id: student.id,
+                         event_id: eventId,
+                         participant_group_id: groupId
+                     });
+                     
+                 }
+             });
 
-            showToast("Participation updated successfully!");
-            console.log("Updated Participations:", participations);
+             // 2. Remove old participations
+             currentEventIds.forEach(eventId => {
+                 if (!desiredEventIds.has(eventId)) {
+                     // Student was in this game, but is no longer
+                     
+                     // Find the participation record before filtering to get the group ID
+                     const participationToRemove = participations.find(p => 
+                         p.student_id === student.id && p.event_id === eventId
+ s                 );
 
-            // 3. Refresh the view to show updated limits
-            onStudentSelect();
-        }
+                     // Add removal changes to the changes array
+                     if (participationToRemove) {
+                         changes.push({
+                             change: "remove",
+                             student_id: student.id,
+                             event_id: eventId,
+                             participant_group_id: participationToRemove.participant_group_id
+                         });
+                     }
+                     
+
+                     participations = participations.filter(p => 
+                         !(p.student_id === student.id && p.event_id === eventId)
+                     );
+                 }
+             });
+
+             await processParticipationChanges(changes); // Send changes to the backend
+             showToast("Participation updated successfully!");
+
+             // 3. Refresh the view to show updated limits
+             onStudentSelect();
+         }
 
         // ---=======================================---
         // ---        GAME-FIRST VIEW LOGIC        ---
