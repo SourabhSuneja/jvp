@@ -830,7 +830,7 @@
             gameViewStep2.classList.remove('hidden');
         }
         
-        function onSaveGameParticipation() {
+        async function onSaveGameParticipation() {
              const selectedEventId = parseInt(gameEventSelect.value, 10);
              const selectedHouse = gameHouseSelect.value;
              
@@ -937,6 +937,7 @@
             const isAuthenticated = await checkAuth();
             if (!isAuthenticated) {
                window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+               return;
             }
             } catch (error) {
             console.error('Auth check error:', error);
