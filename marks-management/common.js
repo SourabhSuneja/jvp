@@ -314,7 +314,7 @@ const examMarksConfig = [
   },
   {
     classes: [11],
-    subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
+    subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
     exams: {
       "Term-1 (Theory)": 80
     }
