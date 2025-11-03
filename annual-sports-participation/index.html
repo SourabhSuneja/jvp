@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Annual Sports Meet - Participation</title>
+    <!-- Supabase CRUD Functions -->
+    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+    <!-- Dialog Box Styles -->
+    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+    <!-- Dialog Box Scripts -->
+    <script src="https://myjvp.in/commons/dialog.js"></script>
     <style>
         /* --- Root Variables --- */
         :root {
@@ -839,6 +845,16 @@
         // ---=======================================---
 
         document.addEventListener('DOMContentLoaded', () => {
+            showProcessingDialog();
+            try {
+            const isAuthenticated = await checkAuth();
+            if (!isAuthenticated) {
+               window.location = "https://myjvp.in/teachers/?ref=" + encodeURIComponent(window.location.href);
+            }
+            } catch (error) {
+            console.error('Auth check error:', error);
+            }
+            hideProcessingDialog();
             initStudentView();
             initGameView();
         });
