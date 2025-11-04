@@ -1,3 +1,6 @@
+-- Clean up first
+DROP TABLE IF EXISTS sport_participations, sport_events, housemasters;
+
 -- events table to store all games
 CREATE TABLE sport_events (
     id SERIAL PRIMARY KEY,
