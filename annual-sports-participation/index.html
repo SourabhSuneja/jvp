@@ -761,60 +761,147 @@
         }
 
         function onGameOrHouseSelect() {
-            const selectedEventId = parseInt(gameEventSelect.value, 10);
-            const selectedHouse = gameHouseSelect.value;
-            
-            gameStudentListContainer.innerHTML = ""; // Clear
-            
-            if (!selectedEventId || !selectedHouse) {
-                gameViewStep2.classList.add('hidden');
-                return;
-            }
-            
-            const event = getEventById(selectedEventId);
-            const eventParticipations = getParticipationsByEventAndHouse(event.id, selectedHouse);
-            const currentCount = eventParticipations.length;
-            const maxCount = event.max_participants;
-            
-            gameParticipantCounter.textContent = `(${currentCount} / ${maxCount} participants selected)`;
+    const selectedEventId = parseInt(gameEventSelect.value, 10);
+    const selectedHouse = gameHouseSelect.value;
+    
+    gameStudentListContainer.innerHTML = ""; // Clear
+    
+    if (!selectedEventId || !selectedHouse) {
+        gameViewStep2.classList.add('hidden');
+        return;
+    }
+    
+    const event = getEventById(selectedEventId);
 
-            // Find all eligible students
-            const eligibleStudents = students.filter(student => 
-                student.house === selectedHouse &&
-                checkGender(student.gender, event.gender_filter) &&
-                checkClassCategory(getNumericClass(student.class), event.class_category)
-            );
-            
-            if (eligibleStudents.length === 0) {
-                 gameStudentListContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color);">No eligible students found for this house and game.</p>';
-            } else {
-                eligibleStudents.forEach(student => {
-                    const isParticipating = eventParticipations.some(p => p.student_id === student.id);
-                    
-                    // Check if game is full
-                    const isGameFull = currentCount >= maxCount;
-                    let isDisabled = false;
-                    let disabledReason = "";
-                    
-                    if (!isParticipating && isGameFull) {
-                        isDisabled = true;
-                        disabledReason = "(Game is full)";
-                    }
-
-                    gameStudentListContainer.innerHTML += `
-                        <label class="list-item">
-                            <input type="checkbox" value="${student.id}" 
-                                ${isParticipating ? 'checked' : ''}
-                                ${isDisabled ? 'disabled' : ''}>
-                            <span class="name">${student.name}</span>
-                            <span class="details">${student.class} ${disabledReason}</span>
-                        </label>
-                    `;
-                });
-            }
-            
-            gameViewStep2.classList.remove('hidden');
+    // --- Main Logic Branch Based on Game Type ---
+    
+    if (event.game_type === 'TEAM' || event.game_type === 'INDIVIDUAL') {
+        // --- LOGIC FOR 'TEAM' and 'INDIVIDUAL' ---
+        
+        const eventParticipations = getParticipationsByEventAndHouse(event.id, selectedHouse);
+        const currentCount = eventParticipations.length;
+        
+        // Handle 'INDIVIDUAL' games (where group_size=1) vs 'TEAM' games
+        const limitApplies = event.game_type === 'TEAM';
+        const displayMaxCount = limitApplies ? event.group_size : 'N/A';
+        
+        // Update counter text based on game type
+        if (event.game_type === 'TEAM') {
+            gameParticipantCounter.textContent = `(${currentCount} / ${displayMaxCount} participants selected)`;
+        } else { // 'INDIVIDUAL'
+            gameParticipantCounter.textContent = `(${currentCount} participants selected)`;
         }
+        
+        // Find all eligible students
+        const eligibleStudents = students.filter(student => 
+            student.house === selectedHouse &&
+            checkGender(student.gender, event.gender_filter) &&
+            checkClassCategory(getNumericClass(student.class), event.class_category)
+        );
+        
+        if (eligibleStudents.length === 0) {
+            gameStudentListContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color);">No eligible students found for this house and game.</p>';
+        } else {
+            eligibleStudents.forEach(student => {
+                const isParticipating = eventParticipations.some(p => p.student_id === student.id);
+                
+                // Check if game is full (only applies to 'TEAM')
+                const isGameFull = limitApplies && currentCount >= event.group_size;
+                let isDisabled = false;
+                let disabledReason = "";
+                
+                if (!isParticipating && isGameFull) {
+                    isDisabled = true;
+                    disabledReason = "(Team is full)";
+                }
+
+                gameStudentListContainer.innerHTML += `
+                    <label class="list-item">
+                        <input type="checkbox" value="${student.id}" 
+                            ${isParticipating ? 'checked' : ''}
+                            ${isDisabled ? 'disabled' : ''}>
+                        <span class="name">${student.name}</span>
+                        <span class="details">${student.class} ${disabledReason}</span>
+                    </label>
+                `;
+            });
+        }
+        
+    } else if (event.game_type === 'GROUPED') {
+        // --- NEW LOGIC FOR 'GROUPED' ---
+        // Render UI for "Group 1", "Group 2", ... "Available Students"
+        
+        const eventParticipations = getParticipationsByEventAndHouse(event.id, selectedHouse);
+        const groupSize = event.group_size;
+        
+        // 1. Group existing participants by their group_id
+        const groups = {}; // Key: group_id, Value: array of student objects
+        eventParticipations.forEach(p => {
+            const student = getStudentById(p.student_id);
+            if (!student) return;
+            
+            if (!groups[p.participant_group_id]) {
+                groups[p.participant_group_id] = [];
+            }
+            groups[p.participant_group_id].push(student);
+        });
+        
+        // 2. Find unassigned students
+        const assignedStudentIds = new Set(eventParticipations.map(p => p.student_id));
+        const eligibleStudents = students.filter(student => 
+            student.house === selectedHouse &&
+            checkGender(student.gender, event.gender_filter) &&
+            checkClassCategory(getNumericClass(student.class), event.class_category)
+        );
+        const unassignedStudents = eligibleStudents.filter(s => !assignedStudentIds.has(s.id));
+
+        // 3. Render existing groups
+        let groupCounter = 1;
+        for (const groupId in groups) {
+            const members = groups[groupId];
+            let groupHTML = `<div class="participant-group" data-group-id="${groupId}">`;
+            
+            // Check if group is full or incomplete
+            let status = members.length === groupSize ? '(Full)' : `(Incomplete: ${members.length} / ${groupSize})`;
+            groupHTML += `<h4>Group ${groupCounter} ${status}</h4>`;
+            
+            members.forEach(student => {
+                groupHTML += `
+                    <label class="list-item">
+                        <input type="checkbox" value="${student.id}" checked>
+                        <span class="name">${student.name}</span>
+                        <span class="details">${student.class}</span>
+                    </label>
+                `;
+            });
+            groupHTML += `</div>`;
+            gameStudentListContainer.innerHTML += groupHTML;
+            groupCounter++;
+        }
+        
+        // 4. Render unassigned students
+        let unassignedHTML = `<div class="participant-group" data-group-id="new">`;
+        unassignedHTML += `<h4>Available Students (to form new groups)</h4>`;
+        if (unassignedStudents.length === 0) {
+            unassignedHTML += `<p class="details" style="padding: 0.75rem;">No more eligible students available.</p>`;
+        }
+        unassignedStudents.forEach(student => {
+            unassignedHTML += `
+                <label class="list-item">
+                    <input type="checkbox" value="${student.id}">
+                    <span class="name">${student.name}</span>
+                    <span class="details">${student.class}</span>
+                </label>
+            `;
+        });
+        unassignedHTML += `</div>`;
+        gameStudentListContainer.innerHTML += unassignedHTML;
+        
+        gameParticipantCounter.textContent = `(${groupCounter-1} groups formed. Each group needs ${groupSize} members.)`;
+    }
+    
+    gameViewStep2.classList.remove('hidden');
+}
         
         async function onSaveGameParticipation() {
              const selectedEventId = parseInt(gameEventSelect.value, 10);
