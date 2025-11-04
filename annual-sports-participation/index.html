@@ -589,7 +589,7 @@
                     if (!isParticipating) {
                         if (isGameFull) {
                             isDisabled = true;
-                            disabledReason = `(Full for ${student.house})`;
+                            disabledReason = `(Team completed for ${student.house})`;
                         } else if (reachedIndividualLimit) {
                             isDisabled = true;
                             disabledReason = "(Already in an individual game)";
@@ -642,16 +642,23 @@
                      const event = getEventById(eventId);
                      
                      // Find an existing group ID for this event/house, or create one
-                     let groupId = generateUUID();
-                     if (event.game_type === 'Team' || event.max_participants > 1) {
-                         const existingGroup = participations.find(p => {
-                             const pStudent = getStudentById(p.student_id);
-                             return p.event_id === eventId && pStudent && pStudent.house === student.house;
-                         });
-                         if (existingGroup) {
-                             groupId = existingGroup.participant_group_id;
-                         }
-                     }
+                     let groupId;
+                     if (event.game_type === 'Individual') {
+                        // Each student is their own group
+                        groupId = generateUUID();
+                    } else if (event.game_type === 'Team') {
+                        // All students from one house share ONE group ID
+                        const existingGroup = participations.find(p => {
+                            const pStudent = getStudentById(p.student_id);
+                            return p.event_id === eventId && pStudent && pStudent.house === student.house;
+                        });
+                        groupId = existingGroup ? existingGroup.participant_group_id : generateUUID();
+                    } else if (event.game_type === 'Grouped') {
+                        // From this view, we just add the student.
+                        // The "Game-First" view will be used to organize them into a pair/group.
+                        // So, we give them their own unique (temporary) group ID.
+                        groupId = generateUUID();
+                    }
                      
                      // Add to global array
                      participations.push({
