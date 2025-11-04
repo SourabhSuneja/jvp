@@ -37,3 +37,15 @@ CREATE TABLE sport_participations (
     -- A student can't be in the same event twice
     CONSTRAINT unique_student_event UNIQUE (student_id, event_id)
 );
+
+--Table to store housemasters
+CREATE TABLE housemasters (
+    id SERIAL PRIMARY KEY,
+    teacher_id UUID NOT NULL REFERENCES teachers(id) ON DELETE CASCADE,
+    house TEXT NOT NULL CHECK (house IN ('Ruby', 'Emerald', 'Topaz', 'Sapphire'))
+);
+
+-- Enable RLS on all tables
+ALTER TABLE sport_events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sport_participations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE housemasters ENABLE ROW LEVEL SECURITY;
