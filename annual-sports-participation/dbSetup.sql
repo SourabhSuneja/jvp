@@ -4,9 +4,15 @@ CREATE TABLE sport_events (
     game_name VARCHAR(255) NOT NULL,
     class_category VARCHAR(255) NOT NULL,
     
-    game_type VARCHAR(50) NOT NULL,
+    -- Used to differentiate between different game types
+    game_type VARCHAR(50) NOT NULL CHECK (game_type IN ('Individual', 'Team', 'Grouped')),
 
-    max_participants INTEGER NOT NULL,
+    -- RENAMED: from max_participants to group_size
+    -- This column's meaning now depends on game_type:
+    -- - INDIVIDUAL: 1 (by convention, one person is a group of 1)
+    -- - TEAM: The max participants per house (e.g., 10 for Kho Kho)
+    -- - GROUPED: The size of one group/pair (e.g., 2 for games that are played in pairs, such as relay races)
+    group_size INTEGER NOT NULL, 
     
     gender_filter VARCHAR(50) CHECK (gender_filter IN ('Boys', 'Girls', 'Mixed')),
     
