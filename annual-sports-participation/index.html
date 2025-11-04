@@ -775,20 +775,20 @@
 
     // --- Main Logic Branch Based on Game Type ---
     
-    if (event.game_type === 'TEAM' || event.game_type === 'INDIVIDUAL') {
-        // --- LOGIC FOR 'TEAM' and 'INDIVIDUAL' ---
+    if (event.game_type === 'Team' || event.game_type === 'Individual') {
+        // --- LOGIC FOR 'Team' and 'Individual' ---
         
         const eventParticipations = getParticipationsByEventAndHouse(event.id, selectedHouse);
         const currentCount = eventParticipations.length;
         
-        // Handle 'INDIVIDUAL' games (where group_size=1) vs 'TEAM' games
-        const limitApplies = event.game_type === 'TEAM';
+        // Handle 'Individual' games (where group_size=1) vs 'Team' games
+        const limitApplies = event.game_type === 'Team';
         const displayMaxCount = limitApplies ? event.group_size : 'N/A';
         
         // Update counter text based on game type
-        if (event.game_type === 'TEAM') {
+        if (event.game_type === 'Team') {
             gameParticipantCounter.textContent = `(${currentCount} / ${displayMaxCount} participants selected)`;
-        } else { // 'INDIVIDUAL'
+        } else { // 'Individual'
             gameParticipantCounter.textContent = `(${currentCount} participants selected)`;
         }
         
@@ -805,7 +805,7 @@
             eligibleStudents.forEach(student => {
                 const isParticipating = eventParticipations.some(p => p.student_id === student.id);
                 
-                // Check if game is full (only applies to 'TEAM')
+                // Check if game is full (only applies to 'Team')
                 const isGameFull = limitApplies && currentCount >= event.group_size;
                 let isDisabled = false;
                 let disabledReason = "";
@@ -827,8 +827,8 @@
             });
         }
         
-    } else if (event.game_type === 'GROUPED') {
-        // --- NEW LOGIC FOR 'GROUPED' ---
+    } else if (event.game_type === 'Grouped') {
+        // --- NEW LOGIC FOR 'Grouped' ---
         // Render UI for "Group 1", "Group 2", ... "Available Students"
         
         const eventParticipations = getParticipationsByEventAndHouse(event.id, selectedHouse);
@@ -904,101 +904,181 @@
 }
         
         async function onSaveGameParticipation() {
-             const selectedEventId = parseInt(gameEventSelect.value, 10);
-             const selectedHouse = gameHouseSelect.value;
-             
-             if (!selectedEventId || !selectedHouse) {
-                 showToast("Please select both a game and a house.", true);
-                 return;
-             }
-             
-             const event = getEventById(selectedEventId);
-             const studentCheckboxes = gameStudentListContainer.querySelectorAll('input[type="checkbox"]');
-             
-             const changes = []; // To track participation changes
-             
-             // Find or create the group ID for this team/pair
-             const existingGroup = participations.find(p => {
-                 const pStudent = getStudentById(p.student_id);
-                 return p.event_id === selectedEventId && pStudent && pStudent.house === selectedHouse;
-             });
-             const groupId = existingGroup ? existingGroup.participant_group_id : generateUUID();
-             
-             const desiredStudentIds = new Set();
-             studentCheckboxes.forEach(cb => {
-                 if (cb.checked) {
-                     desiredStudentIds.add(cb.value);
-                 }
-             });
-             
-             const currentStudentIds = new Set(
-                 getParticipationsByEventAndHouse(selectedEventId, selectedHouse).map(p => p.student_id)
-             );
+    const selectedEventId = parseInt(gameEventSelect.value, 10);
+    const selectedHouse = gameHouseSelect.value;
+    
+    if (!selectedEventId || !selectedHouse) {
+        showToast("Please select both a game and a house.", true);
+        return;
+    }
+    
+    const event = getEventById(selectedEventId);
+    const changes = []; // To track participation changes
+    
+    // --- Main Logic Branch based on game type ---
+    
+    if (event.game_type === 'Team' || event.game_type === 'Individual') {
+        // --- Original logic with tweaks for Team/Individual ---
+        const studentCheckboxes = gameStudentListContainer.querySelectorAll('input[type="checkbox"]');
+        
+        // Find or create the group ID for this Team/pair
+        const existingGroup = participations.find(p => {
+            const pStudent = getStudentById(p.student_id);
+            return p.event_id === selectedEventId && pStudent && pStudent.house === selectedHouse;
+        });
+        const groupId = existingGroup ? existingGroup.participant_group_id : generateUUID();
+        
+        const desiredStudentIds = new Set();
+        studentCheckboxes.forEach(cb => {
+            if (cb.checked) {
+                desiredStudentIds.add(cb.value);
+            }
+        });
+        
+        const currentStudentIds = new Set(
+            getParticipationsByEventAndHouse(selectedEventId, selectedHouse).map(p => p.student_id)
+        );
 
-             let addedCount = 0;
-             let removedCount = 0;
-             let errors = [];
+        let addedCount = 0;
+        let removedCount = 0;
+        let errors = [];
 
-             // 1. Add new participants
-             desiredStudentIds.forEach(studentId => {
-                 if (!currentStudentIds.has(studentId)) {
-                     // Check max participant limit *again* before adding
-                     const currentTotal = getParticipationsByEventAndHouse(selectedEventId, selectedHouse).length;
-                     if (currentTotal < event.max_participants) {
-                         participations.push({
-                             student_id: studentId,
-                             event_id: selectedEventId,
-                             participant_group_id: groupId
-                         });
-                         
-                         // Save participant additions in the changes array
-                         changes.push({
-                             change: "add",
-                             student_id: studentId,
-                             event_id: selectedEventId,
-                             participant_group_id: groupId
-                         });
-                         
-                         
-                         addedCount++;
-                     } else {
-                         // This might happen if user checked more than allowed
-                         errors.push(`Could not add ${getStudentById(studentId).name}: Game is full.`);
-                     }
-                 }
-             });
+        // 1. Add new participants
+        desiredStudentIds.forEach(studentId => {
+            if (!currentStudentIds.has(studentId)) {
+                // Check max participant limit *again* before adding
+                const currentTotal = getParticipationsByEventAndHouse(selectedEventId, selectedHouse).length;
+                
+                // UPDATED: Only check limit for 'Team' type
+                if (event.game_type === 'Team' && currentTotal >= event.group_size) {
+                    errors.push(`Could not add ${getStudentById(studentId).name}: Team is full.`);
+                } else {
+                    participations.push({
+                        student_id: studentId,
+                        event_id: selectedEventId,
+                        participant_group_id: groupId
+                    });
+                    
+                    // Save participant additions in the changes array
+                    changes.push({
+                        change: "add",
+                        student_id: studentId,
+                        event_id: selectedEventId,
+                        participant_group_id: groupId
+                    });
+                    
+                    addedCount++;
+                }
+            }
+        });
 
-             // 2. Remove old participants
-             currentStudentIds.forEach(studentId => {
-                 if (!desiredStudentIds.has(studentId)) {
-                     // Add removals to the changes array
-                     changes.push({
-                         change: "remove",
-                         student_id: studentId,
-                         event_id: selectedEventId,
-                         participant_group_id: groupId // All students in this view share the same group ID
-                     });
-                     
-
-                     participations = participations.filter(p => 
-                         !(p.student_id === studentId && p.event_id === selectedEventId)
-                     );
-                     removedCount++;
-                 }
-             });
-             
-             await syncParticipationChanges(changes); // Send changes to the backend
+        // 2. Remove old participants
+        currentStudentIds.forEach(studentId => {
+            if (!desiredStudentIds.has(studentId)) {
+                // Add removals to the changes array
+                changes.push({
+                    change: "remove",
+                    student_id: studentId,
+                    event_id: selectedEventId,
+                    participant_group_id: groupId // All students in this view share the same group ID
+                });
+                
+                participations = participations.filter(p => 
+                    !(p.student_id === studentId && p.event_id === selectedEventId)
+                );
+                removedCount++;
+            }
+        });
+        
+        await syncParticipationChanges(changes); // Send changes to the backend
+        
+        if (errors.length > 0) {
+            showToast(errors.join('\n'), true);
+        } else {
+            showToast(`Participation updated: ${addedCount} added, ${removedCount} removed.`);
+        }
+        
+    } else if (event.game_type === 'Grouped') {
+        // --- NEW LOGIC FOR 'Grouped' game type ---
+        
+        const groupSize = event.group_size;
+        
+        // 1. Process existing groups (to find removals)
+        // Any student *unchecked* from an existing group is removed.
+        const groupContainers = gameStudentListContainer.querySelectorAll('.participant-group[data-group-id]:not([data-group-id="new"])');
+        
+        groupContainers.forEach(container => {
+            const groupId = container.dataset.groupId;
+            const desiredStudentIdsInGroup = new Set();
+            container.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+                desiredStudentIdsInGroup.add(cb.value);
+            });
             
-             if (errors.length > 0) {
-                 showToast(errors.join('\n'), true);
-             } else {
-                 showToast(`Participation updated: ${addedCount} added, ${removedCount} removed.`);
-             }
-             
+            // Find all students *currently* in this group in our data
+            const currentStudentIdsInGroup = new Set(
+                participations.filter(p => p.participant_group_id === groupId).map(p => p.student_id)
+            );
+            
+            currentStudentIdsInGroup.forEach(studentId => {
+                if (!desiredStudentIdsInGroup.has(studentId)) {
+                    // This student was removed (unchecked) from this group
+                    changes.push({
+                        change: "remove",
+                        student_id: studentId,
+                        event_id: selectedEventId,
+                        participant_group_id: groupId
+                    });
+                    participations = participations.filter(p => 
+                        !(p.student_id === studentId && p.event_id === selectedEventId)
+                    );
+                }
+            });
+        });
+        
+        // 2. Process the "new" students
+        // We create new groups from them
+        const newStudentsContainer = gameStudentListContainer.querySelector('.participant-group[data-group-id="new"]');
+        const newStudentCheckboxes = newStudentsContainer.querySelectorAll('input[type="checkbox"]:checked');
+        const newStudentIds = Array.from(newStudentCheckboxes).map(cb => cb.value);
+        
+        // Create new groups for them, respecting groupSize
+        for (let i = 0; i < newStudentIds.length; i += groupSize) {
+            const newGroupId = generateUUID();
+            const groupMembers = newStudentIds.slice(i, i + groupSize);
+            
+            if (groupMembers.length > 0 && groupMembers.length < groupSize) {
+                showToast(`Warning: You created an incomplete group of ${groupMembers.length} student(s).`, true);
+            }
 
-             // 3. Refresh the view
-             onGameOrHouseSelect();
-         }
+            groupMembers.forEach(studentId => {
+                // Check if student is already in (this shouldn't happen, but good to check)
+                const alreadyIn = participations.some(p => 
+                    p.student_id === studentId && p.event_id === selectedEventId
+                );
+                
+                if (!alreadyIn) {
+                    participations.push({
+                        student_id: studentId,
+                        event_id: selectedEventId,
+                        participant_group_id: newGroupId
+                    });
+                    changes.push({
+                        change: "add",
+                        student_id: studentId,
+                        event_id: selectedEventId,
+                        participant_group_id: newGroupId
+                    });
+                }
+            });
+        }
+        
+        await syncParticipationChanges(changes);
+        showToast(`Grouped participation updated!`);
+    }
+    
+    // 3. Refresh the view (works for all cases)
+    onGameOrHouseSelect();
+}
 
         // ---=======================================---
         // ---          INITIALIZATION             ---
