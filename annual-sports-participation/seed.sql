@@ -151,3 +151,14 @@ INSERT INTO sport_events (game_name, class_category, game_type, group_size, gend
 ('Long Jump (Girls)', '12', 'Individual', 1, 'Girls');
 
 
+
+
+-- Insert housemasters for all houses
+INSERT INTO housemasters (teacher_id, house) VALUES
+('89c38b30-4a75-47c9-84c8-c003469ff200', 'Ruby'),
+('370d96b6-2d10-4be7-b738-5b4b30fe2a12', 'Ruby'),
+('9222218b-cf3c-4547-af5a-9b3f29650c22', 'Emerald'),
+('32d8a514-4823-4e91-af92-ac474972823e', 'Emerald'),
+('4c6daa5d-a9cf-4f48-9f94-8a89c3205a28', 'Topaz'),
+('f5afe502-bbfb-4ba4-97c5-af01c7fa9870', 'Sapphire'),
+('c3b492ca-3b39-4d00-9543-32ed3f4cd283', 'Sapphire');
