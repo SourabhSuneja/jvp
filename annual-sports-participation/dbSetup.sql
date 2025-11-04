@@ -52,3 +52,17 @@ CREATE TABLE housemasters (
 ALTER TABLE sport_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sport_participations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE housemasters ENABLE ROW LEVEL SECURITY;
+
+-- Create a policy that allows both authenticated and anon users to select sport events (games)
+CREATE POLICY select_sport_events_policy
+ON sport_events
+FOR SELECT
+TO authenticated, anon
+USING (true);
+
+-- Create a policy that allows both authenticated and anon users to select sport participation details
+CREATE POLICY select_sport_participations_policy
+ON sport_participations
+FOR SELECT
+TO authenticated, anon
+USING (true);
