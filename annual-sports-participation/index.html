@@ -551,7 +551,8 @@
             let teamCount = 0;
             myParticipations.forEach(p => {
                 const event = getEventById(p.event_id);
-                if (event.game_type === 'Individual') individualCount++;
+                if (!event) return; // Safety check
+                if (event.game_type === 'Individual' || event.game_type === 'Grouped') individualCount++;
                 if (event.game_type === 'Team') teamCount++;
             });
 
@@ -569,10 +570,17 @@
                     
                     // Check house-level participant limit
                     const eventParticipations = getParticipationsByEventAndHouse(event.id, student.house);
-                    const isGameFull = eventParticipations.length >= event.max_participants;
+
+                    // Limit logic
+                    let isGameFull = false;
+                    if (event.game_type === 'Team') {
+                    // Only 'Team' games have a "full" limit for the whole house
+                    isGameFull = eventParticipations.length >= event.group_size; // Use group_size
+                    }
+                    // 'Individual' and 'Grouped' games do not have a "full" limit per house
                     
                     // Check student-level game type limit
-                    const reachedIndividualLimit = event.game_type === 'Individual' && individualCount >= 1;
+                    const reachedIndividualLimit = (event.game_type === 'Individual' || event.game_type === 'Grouped') && individualCount >= 1;
                     const reachedTeamLimit = event.game_type === 'Team' && teamCount >= 1;
 
                     let isDisabled = false;
