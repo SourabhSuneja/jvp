@@ -335,29 +335,21 @@
          // ---=======================================---
          
          // Function to sync participation changes with the backend
-         function syncParticipationChanges(changes) {
-                     if (changes.length === 0) {
+         async function syncParticipationChanges(changes) {
+if (changes.length === 0) {
                          console.log("No participation changes detected.");
                          return;
                      }
-                 
-                     console.log("Processing participation changes:", changes);
-                     
-                     // TODO: In the future, you could send these changes to your database
-                     // For example:
-                     // for (const change of changes) {
-                     //     if (change.change === 'add') {
-                     //         await supabase.from('participations').insert({ 
-                     //             student_id: change.student_id, 
-                     //             event_id: change.event_id, 
-                     //             participant_group_id: change.participant_group_id 
-                     //         });
-                     //     } else if (change.change === 'remove') {
-                     //         await supabase.from('participations').delete()
-                     //             .match({ student_id: change.student_id, event_id: change.event_id });
-                     //     }
-                     // }
-                 }
+      try {
+         const syncResult = await invokeFunction('manage_sport_participations', {
+            changes_json: changes
+         }, true);
+         return syncResult || null;
+      } catch (err) {
+         console.error("Error updating participations:", err);
+         return null;
+      }
+   }
          
          /** Generates a UUID for linking participants in a group/team together */
          function generateUUID() {
