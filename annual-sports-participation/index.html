@@ -1313,7 +1313,7 @@ function revalidateGroupedGameView() {
              // Fetch student list
              students = await selectData('students', false, 'id, name, class, house, gender', [], [], 'name');
              // Fetch events list
-             events = await selectData('sport_events', false, '*', [], [], 'class_category');
+             events = await selectData('sport_events', false, '*', [], [], 'id');
              // Fetch participation data
              participations = await selectData('sport_participations', false, '*');
              hideProcessingDialog();
