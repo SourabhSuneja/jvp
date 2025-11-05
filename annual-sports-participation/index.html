@@ -351,7 +351,157 @@
          return null;
          }
          }
-         
+
+         /**
+ * Re-validates all game checkboxes in the student view based on UI state.
+ * Disables/enables checkboxes based on student-level limits (1 team, 1 individual).
+ */
+function onStudentCheckboxChange() {
+    const gameCheckboxes = studentGamesContainer.querySelectorAll('input[type="checkbox"]');
+    if (gameCheckboxes.length === 0) return; // No checkboxes to check
+
+    // 1. Get current counts from the UI
+    let individualCount = 0;
+    let teamCount = 0;
+    gameCheckboxes.forEach(cb => {
+        if (cb.checked) {
+            const type = cb.dataset.type;
+            if (type === 'Individual' || type === 'Grouped') individualCount++;
+            if (type === 'Team') teamCount++;
+        }
+    });
+
+    // 2. Loop and re-validate all checkboxes
+    gameCheckboxes.forEach(cb => {
+        const detailsEl = cb.closest('.list-item').querySelector('.details');
+        // Get the base text (e.g., "9 to 12") that we stored in data-base-text
+        const baseText = cb.dataset.baseText || detailsEl.textContent.replace(/\(.*\)/, '').trim();
+        if (!cb.dataset.baseText) {
+             cb.dataset.baseText = baseText; // Store it for next time
+        }
+
+        let disabledReason = "";
+        let isDisabled = false;
+
+        // Get the "hard" limits we stored
+        const isGameFull = cb.dataset.gameFull === 'true';
+        const isParticipating = cb.dataset.participating === 'true';
+
+        // A user can always UN-check a box.
+        // We only apply rules to boxes that are NOT checked.
+        if (!cb.checked) { 
+            // Check 1: Game Full (House-level, static)
+            // This is a "hard" disable. If the team is full, student can't join.
+            if (isGameFull && !isParticipating) { 
+                isDisabled = true;
+                disabledReason = `(Team completed)`;
+            } else {
+                // Check 2: Student-level limits (dynamic)
+                const type = cb.dataset.type;
+                const reachedIndividualLimit = (type === 'Individual' || type === 'Grouped') && individualCount >= 1;
+                const reachedTeamLimit = type === 'Team' && teamCount >= 1;
+                
+                if (reachedIndividualLimit) {
+                    isDisabled = true;
+                    disabledReason = "(Already in an individual game)";
+                } else if (reachedTeamLimit) {
+                    isDisabled = true;
+                    disabledReason = "(Already in a team game)";
+                }
+            }
+        }
+        
+        cb.disabled = isDisabled;
+        detailsEl.textContent = `${baseText} ${disabledReason}`.trim();
+    });
+}     
+
+         /**
+ * Re-validates checkboxes in the Game-First view for 'Team' and 'Individual' games.
+ * Updates counters and disables boxes if a team limit is reached.
+ */
+function revalidateGameViewCheckboxes() {
+    const selectedEventId = parseInt(gameEventSelect.value, 10);
+    if (!selectedEventId) return;
+    const event = getEventById(selectedEventId);
+
+    const checkboxes = gameStudentListContainer.querySelectorAll('input[type="checkbox"]');
+    let currentCount = 0;
+    checkboxes.forEach(cb => {
+        if (cb.checked) currentCount++;
+    });
+
+    // This validation only applies to 'Team' games
+    if (event.game_type === 'Team') {
+        const limit = event.group_size;
+        
+        // Update counter
+        gameParticipantCounter.textContent = `(${currentCount} / ${limit} participants selected)`;
+
+        const limitReached = currentCount >= limit;
+
+        // Loop again to disable/enable
+        checkboxes.forEach(cb => {
+            const detailsEl = cb.closest('.list-item').querySelector('.details');
+            const baseText = cb.dataset.baseText || detailsEl.textContent.replace(/\(.*\)/, '').trim();
+            if (!cb.dataset.baseText) {
+                cb.dataset.baseText = baseText; // Store it
+            }
+            
+            if (cb.checked) {
+                cb.disabled = false; // Always allow unchecking
+                detailsEl.textContent = baseText; // Clear reason
+            } else {
+                // This is an unchecked box
+                cb.disabled = limitReached;
+                detailsEl.textContent = limitReached ? `${baseText} (Team is full)` : baseText;
+            }
+        });
+    } else {
+        // Just update counter for 'Individual'
+        gameParticipantCounter.textContent = `(${currentCount} participants selected)`;
+    }
+}
+
+/**
+ * Re-validates the 'Grouped' game view, updating counters for each group.
+ */
+function revalidateGroupedGameView() {
+    const selectedEventId = parseInt(gameEventSelect.value, 10);
+    if (!selectedEventId) return;
+    const event = getEventById(selectedEventId);
+    const groupSize = event.group_size;
+
+    let totalGroups = 0;
+
+    // 1. Update existing groups
+    const groupContainers = gameStudentListContainer.querySelectorAll('.participant-group[data-group-id]:not([data-group-id="new"])');
+    groupContainers.forEach(container => {
+        totalGroups++;
+        const members = container.querySelectorAll('input[type="checkbox"]:checked').length;
+        const header = container.querySelector('h4');
+        let status = members === groupSize ? '(Full)' : `(Incomplete: ${members} / ${groupSize})`;
+        
+        // Update header text, preserving group number
+        let headerText = header.dataset.baseText;
+        if (!headerText) {
+            headerText = header.textContent.replace(/\(.*\)/, '').trim();
+            header.dataset.baseText = headerText;
+        }
+        header.textContent = `${headerText} ${status}`;
+    });
+    
+    // 2. Update "new" group
+    const newContainer = gameStudentListContainer.querySelector('.participant-group[data-group-id="new"]');
+    if (newContainer) {
+        const newMembersCount = newContainer.querySelectorAll('input[type="checkbox"]:checked').length;
+        const newHeader = newContainer.querySelector('h4');
+        newHeader.textContent = `Available Students (${newMembersCount} selected to form new groups)`;
+    }
+    
+    // Update main counter
+    gameParticipantCounter.textContent = `(${totalGroups} groups formed. Each group needs ${groupSize} members.)`;
+}
          /** Generates a UUID for linking participants in a group/team together */
          function generateUUID() {
          const bytes = crypto.getRandomValues(new Uint8Array(16));
@@ -542,54 +692,59 @@
              if (eligibleGames.length === 0) {
                  studentGamesContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color);">No eligible games found for this student.</p>';
              } else {
-                 eligibleGames.forEach(event => {
-                     const isParticipating = myParticipations.some(p => p.event_id === event.id);
-                     
-                     // Check house-level participant limit
-                     const eventParticipations = getParticipationsByEventAndHouse(event.id, student.house);
-         
-                     // Limit logic
-                     let isGameFull = false;
-                     if (event.game_type === 'Team') {
-                     // Only 'Team' games have a "full" limit for the whole house
-                     isGameFull = eventParticipations.length >= event.group_size; // Use group_size
-                     }
-                     // 'Individual' and 'Grouped' games do not have a "full" limit per house
-                     
-                     // Check student-level game type limit
-                     const reachedIndividualLimit = (event.game_type === 'Individual' || event.game_type === 'Grouped') && individualCount >= 1;
-                     const reachedTeamLimit = event.game_type === 'Team' && teamCount >= 1;
-         
-                     let isDisabled = false;
-                     let disabledReason = "";
-         
-                     if (!isParticipating) {
-                         if (isGameFull) {
-                             isDisabled = true;
-                             disabledReason = `(Team completed for ${student.house})`;
-                         } else if (reachedIndividualLimit) {
-                             isDisabled = true;
-                             disabledReason = "(Already in an individual game)";
-                         } else if (reachedTeamLimit) {
-                             isDisabled = true;
-                             disabledReason = "(Already in a team game)";
-                         }
-                     }
-         
-                     studentGamesContainer.innerHTML += `
-                         <label class="list-item">
-                             <input type="checkbox" value="${event.id}" data-type="${event.game_type}" 
-                                 ${isParticipating ? 'checked' : ''} 
-                                 ${isDisabled ? 'disabled' : ''}>
-                             <span class="name">${event.game_name} (${event.game_type})</span>
-                             <span class="details">${event.class_category} ${disabledReason}</span>
-                         </label>
-                     `;
-                 });
-             }
-         
-             studentViewStep3.classList.remove('hidden');
-         }
+            eligibleGames.forEach(event => {
+                const isParticipating = myParticipations.some(p => p.event_id === event.id);
+                
+                // Check house-level participant limit
+                const eventParticipations = getParticipationsByEventAndHouse(event.id, student.house);
+    
+                // Limit logic
+                let isGameFull = false;
+                if (event.game_type === 'Team') {
+                isGameFull = eventParticipations.length >= event.group_size; // Use group_size
+                }
+                
+                // Check student-level game type limit
+                const reachedIndividualLimit = (event.game_type === 'Individual' || event.game_type === 'Grouped') && individualCount >= 1;
+                const reachedTeamLimit = event.game_type === 'Team' && teamCount >= 1;
+    
+                let isDisabled = false;
+                let disabledReason = "";
+    
+                if (!isParticipating) {
+                    if (isGameFull) {
+                        isDisabled = true;
+                        disabledReason = `(Team completed for ${student.house})`;
+                    } else if (reachedIndividualLimit) {
+                        isDisabled = true;
+                        disabledReason = "(Already in an individual game)";
+                    } else if (reachedTeamLimit) {
+                        isDisabled = true;
+                        disabledReason = "(Already in a team game)";
+                    }
+                }
+        
+                studentGamesContainer.innerHTML += `
+                    <label class="list-item">
+                        <input type="checkbox" value="${event.id}" data-type="${event.game_type}" 
+                            data-participating="${isParticipating}"
+                            data-game-full="${isGameFull}"
+                            ${isParticipating ? 'checked' : ''} 
+                            ${isDisabled ? 'disabled' : ''}>
+                        <span class="name">${event.game_name} (${event.game_type})</span>
+                        <span class="details" data-base-text="${event.class_category}">${event.class_category} ${disabledReason}</span>
+                    </label>
+                `;
+            });
+        }
+        
+        // Add change listeners to all new checkboxes
+        studentGamesContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', onStudentCheckboxChange);
+        });
+
+        studentViewStep3.classList.remove('hidden');
+    }
          
          async function onSaveStudentParticipation() {
     const selectedStudentId = document.querySelector('input[name="student"]:checked')?.value;
@@ -802,15 +957,18 @@
                  }
          
                  gameStudentListContainer.innerHTML += `
-                     <label class="list-item">
-                         <input type="checkbox" value="${student.id}" 
-                             ${isParticipating ? 'checked' : ''}
-                             ${isDisabled ? 'disabled' : ''}>
-                         <span class="name">${student.name}</span>
-                         <span class="details">${student.class} ${disabledReason}</span>
-                     </label>
-                 `;
+                    <label class="list-item">
+                        <input type="checkbox" value="${student.id}" 
+                            ${isParticipating ? 'checked' : ''}
+                            ${isDisabled ? 'disabled' : ''}>
+                        <span class="name">${student.name}</span>
+                        <span class="details" data-base-text="${student.class}">${student.class} ${disabledReason}</span>
+                    </label>
+                `;
              });
+            gameStudentListContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', revalidateGameViewCheckboxes);
+            });
          }
          
          } else if (event.game_type === 'Grouped') {
@@ -884,6 +1042,10 @@
          gameStudentListContainer.innerHTML += unassignedHTML;
          
          gameParticipantCounter.textContent = `(${groupCounter-1} groups formed. Each group needs ${groupSize} members.)`;
+
+         gameStudentListContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', revalidateGroupedGameView);
+        });
          }
          
          gameViewStep2.classList.remove('hidden');
