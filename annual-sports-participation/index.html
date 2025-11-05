@@ -1098,7 +1098,9 @@
              // Fetch student list
              students = await selectData('students', false, 'id, name, class, house, gender', [], [], 'name');
              // Fetch events list
-             events = await selectData('sport_events', false, '*', [], [], 'game_name');
+             events = await selectData('sport_events', false, '*', [], [], 'class_category');
+             // Fetch participation data
+             participations = await selectData('sport_participations', false, '*');
              hideProcessingDialog();
              initStudentView();
              initGameView();
