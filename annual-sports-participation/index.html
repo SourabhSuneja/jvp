@@ -682,8 +682,22 @@
                          }
                      });
          
-                     await syncParticipationChanges(changes); // Send changes to the backend
-                     showToast("Participation updated successfully!");
+                     showProcessingDialog();
+         const updated = await syncParticipationChanges(changes);
+         hideProcessingDialog();
+         if(updated) {
+                    await showDialog({
+                    title: 'Success',
+                    message: 'Participation updated: Added ' + updated.added + ' students. Removed: ' + updated.removed + ' students.',
+                    type: 'alert'
+                    });
+                } else {
+                    await showDialog({
+                    title: 'Error',
+                    message: 'Error updating participation. You may be trying to change participation for the students you are not authorized to. Some students may not be in the class/house you manage.',
+                    type: 'alert'
+                    });
+                }
          
                      // 3. Refresh the view to show updated limits
                      onStudentSelect();
@@ -947,7 +961,22 @@
              }
          });
          
-         await syncParticipationChanges(changes); // Send changes to the backend
+         showProcessingDialog();
+         const updated = await syncParticipationChanges(changes);
+         hideProcessingDialog();
+         if(updated) {
+                    await showDialog({
+                    title: 'Success',
+                    message: 'Participation updated: Added ' + updated.added + ' students. Removed: ' + updated.removed + ' students.',
+                    type: 'alert'
+                    });
+                } else {
+                    await showDialog({
+                    title: 'Error',
+                    message: 'Error updating participation. You may be trying to change participation for the students you are not authorized to. Some students may not be in the class/house you manage.',
+                    type: 'alert'
+                    });
+                }
          
          if (errors.length > 0) {
              showToast(errors.join('\n'), true);
@@ -1028,9 +1057,23 @@
                  }
              });
          }
-         
-         await syncParticipationChanges(changes);
-         showToast(`Grouped participation updated!`);
+
+         showProcessingDialog();
+         const updated = await syncParticipationChanges(changes);
+         hideProcessingDialog();
+         if(updated) {
+                    await showDialog({
+                    title: 'Success',
+                    message: 'Participation updated: Added ' + updated.added + ' students. Removed: ' + updated.removed + ' students.',
+                    type: 'alert'
+                    });
+                } else {
+                    await showDialog({
+                    title: 'Error',
+                    message: 'Error updating participation. You may be trying to change participation for the students you are not authorized to. Some students may not be in the class/house you manage.',
+                    type: 'alert'
+                    });
+                }
          }
          
          // 3. Refresh the view (works for all cases)
