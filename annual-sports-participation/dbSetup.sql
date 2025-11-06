@@ -2,6 +2,7 @@
 DROP TABLE IF EXISTS sport_participations, sport_events, housemasters;
 
 DROP FUNCTION IF EXISTS public.manage_sport_participations(jsonb);
+DROP FUNCTION IF EXISTS get_sport_participants();
 
 -- events table to store all games
 CREATE TABLE sport_events (
@@ -216,6 +217,41 @@ BEGIN
     RETURN;
     
 END;
+$$;
+
+-- Function to get participants of all games from all houses
+CREATE OR REPLACE FUNCTION get_sport_participants()
+RETURNS TABLE (
+    student_name TEXT,
+    student_class TEXT,
+    student_house TEXT,
+    student_gender TEXT,
+    game_name VARCHAR(255),
+    class_category VARCHAR(255),
+    gender_filter VARCHAR(50),
+    game_type VARCHAR(50),
+    participant_group_id UUID,
+    access_token UUID
+)
+SECURITY INVOKER
+LANGUAGE sql
+STABLE
+AS $$
+    SELECT 
+        s.name AS student_name,
+        s.class AS student_class,
+        s.house AS student_house,
+        s.gender AS student_gender,
+        se.game_name,
+        se.class_category,
+        se.gender_filter,
+        se.game_type,
+        sp.participant_group_id,
+        s.access_token
+    FROM sport_events se
+    LEFT JOIN sport_participations sp ON se.id = sp.event_id
+    LEFT JOIN students s ON sp.student_id = s.id
+    ORDER BY se.id, sp.participant_group_id, s.name;
 $$;
 
 -- Enable RLS on all tables
