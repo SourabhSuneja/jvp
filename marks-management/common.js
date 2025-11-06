@@ -45,8 +45,8 @@ let optionalSubjects = {
 
 // Class and exam-wise aggregate maximum marks, considering all subjects
 const aggregateMarks = {
-  1: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120, 'Term-1': 350},
-  2: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120, 'Term-1': 350},
+  1: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120, 'Term-1': 380},
+  2: {'PT-1': 120, 'PT-2': 120, 'PT-3': 120, 'PT-4': 120, 'Term-1': 380},
   3: {'PT-1': 140, 'PT-2': 140, 'PT-3': 140, 'PT-4': 140, 'Term-1': 460},
   4: {'PT-1': 140, 'PT-2': 140, 'PT-3': 140, 'PT-4': 140, 'Term-1': 460},
   5: {'PT-1': 140, 'PT-2': 140, 'PT-3': 140, 'PT-4': 140, 'Term-1': 460},
