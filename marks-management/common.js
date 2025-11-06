@@ -306,7 +306,7 @@ const examMarksConfig = [
   // Class 11 Starts
   {
     classes: [11],
-    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography", "Fine Arts"],
+    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
     exams: {
       "Term-1 (Theory)": 70,
       "Term-1 (Internal)": 10
@@ -317,6 +317,14 @@ const examMarksConfig = [
     subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
     exams: {
       "Term-1 (Theory)": 80
+    }
+  },
+  {
+    classes: [11],
+    subjects: ["Fine Arts"],
+    exams: {
+      "Term-1 (Theory)": 30,
+      "Term-1 (Practical)": 70
     }
   },
   // Class 12 Starts
