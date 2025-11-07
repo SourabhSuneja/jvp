@@ -854,6 +854,10 @@ async function processQRCode(decodedText) {
     
     showProcessingDialog();
 
+    participants = await invokeFunction('get_student_participations', {
+            p_access_token: accessToken
+         }, false);
+
     // Find all valid participations for this student
     const studentParticipations = participants.filter(p => 
         p.access_token === accessToken && p.student_name !== null
