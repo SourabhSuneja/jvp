@@ -3,482 +3,1302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports Meet Participant Lists</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <title>Jamna Vidyapeeth - Sports Meet Winner Submission</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
     <!-- Supabase CRUD Functions -->
     <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
     <!-- Dialog Box Styles -->
     <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
     <!-- Dialog Box Scripts -->
     <script src="https://myjvp.in/commons/dialog.js"></script>
-    
+
     <style>
-        /* --- General Styles --- */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        :root {
+            --primary-color: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary-color: #0ea5e9;
+            --success-color: #10b981;
+            --success-dark: #059669;
+            --danger-color: #ef4444;
+            --danger-dark: #dc2626;
+            --warning-color: #f59e0b;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --dark-text: #0f172a;
+            --medium-text: #475569;
+            --light-text: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+            
+            /* House Colors */
+            --ruby: #dc2626;
+            --emerald: #059669;
+            --sapphire: #2563eb;
+            --topaz: #f59e0b;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            color: #333;
+            box-sizing: border-box;
         }
 
-        #main-container {
-            max-width: 210mm; /* A4 Width */
-            margin: 20px auto;
-            padding: 10px;
-            box-sizing: border-box;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light-bg);
+            color: var(--dark-text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 60000;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        header h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        header h1 i {
+            margin-right: 12px;
+            color: var(--warning-color);
+            font-size: 2.2rem;
+            vertical-align: middle;
+        }
+
+        header h2 {
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--medium-text);
+            letter-spacing: 0.3px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 32px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
         }
         
-        h1.page-title {
-            text-align: center;
-            border-bottom: 2px solid #0056b3;
-            padding-bottom: 10px;
-            color: #0056b3;
+        .card:hover {
+            box-shadow: var(--shadow-lg);
         }
-
-        /* --- Game Section --- */
-        .game-section {
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            padding: 20mm; /* A4 padding */
-            box-sizing: border-box;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .game-header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
-
-        .game-header h2 {
-            margin: 0;
-            font-size: 1.8rem;
-            color: #004a99;
-        }
-
-        .game-header h3 {
-            margin: 5px 0;
-            font-size: 1.5rem;
+        
+        .card h3 {
+            font-size: 1.4rem;
             font-weight: 600;
-        }
-
-        .game-header p {
-            margin: 5px 0 0;
-            font-style: italic;
-            color: #555;
-            font-size: 1.1rem;
-        }
-
-        .print-btn-single {
-            float: right;
-            margin: -15px 0 10px 10px;
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
-        }
-
-        .print-btn-single:hover {
-            background-color: #0056b3;
-        }
-
-        /* --- Participant Table --- */
-        .participant-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        .participant-table th,
-        .participant-table td {
-            border: 1px solid #000; /* Solid black for print clarity */
-            padding: 10px;
-            text-align: left;
-            vertical-align: top;
-            font-size: 0.95rem;
-        }
-
-        .participant-table th {
-            background-color: #e9ecef;
-            color: #212529;
-            font-size: 1rem;
-            text-transform: uppercase;
-        }
-
-        /* Sr. No. column */
-        .participant-table th:first-child,
-        .participant-table td:first-child {
-            text-align: center;
-            width: 5%;
-            font-weight: bold;
-        }
-
-        /* --- Participant Entry (Inside Cell) --- */
-        .participant-entry {
+            color: var(--primary-color);
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            margin-bottom: 8px; /* Space between grouped participants */
+            gap: 12px;
+        }
+        
+        .card h3 i {
+            font-size: 1.6rem;
+            color: var(--secondary-color);
+        }
+        
+        /* QR Section */
+        #qr-reader {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            background: var(--light-bg);
+        }
+        
+        #qr-scanner-container {
+            position: relative;
+            margin-bottom: 20px;
         }
 
-        .participant-entry:last-child {
-            margin-bottom: 0;
+        .qr-close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .qr-close-btn:hover {
+            background: var(--danger-dark);
+            transform: scale(1.05);
+        }
+        
+        .qr-scanner-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .participant-entry canvas {
-            margin-right: 10px;
-            flex-shrink: 0; /* Prevent QR from shrinking */
-        }
-
-        .participant-name {
+        .qr-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px 24px;
+            border: 2px solid transparent;
+            border-radius: 12px;
             font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .qr-action-btn i {
+            font-size: 1.3rem;
+        }
+
+        #qr-camera-btn {
+            background: var(--primary-color);
+            color: var(--light-text);
+        }
+        #qr-camera-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        #qr-camera-btn:active {
+            transform: translateY(0);
+        }
+
+        .qr-action-btn[for="qr-file-input"] {
+            background: var(--medium-text);
+            color: var(--light-text);
+        }
+        .qr-action-btn[for="qr-file-input"]:hover {
+            background: var(--dark-text);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        #qr-file-input {
+            display: none;
+        }
+
+        .error-text {
+            color: var(--danger-color);
+            text-align: center;
+            margin-top: 16px;
+            font-weight: 500;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--danger-color);
+        }
+
+        /* Details Section */
+        #student-info {
+            background: var(--light-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 28px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px 24px;
+            font-size: 1rem;
+        }
+
+        #student-info strong {
+            font-weight: 600;
+            color: var(--medium-text);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+        
+        #student-info span {
+            color: var(--dark-text);
             font-weight: 500;
         }
 
-        .no-participants {
-            text-align: center;
-            font-style: italic;
-            color: #888;
-            padding: 20px;
+        #student-house {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        /* Dynamic House Colors */
+        .house-Ruby { color: var(--ruby); }
+        .house-Emerald { color: var(--emerald); }
+        .house-Sapphire { color: var(--sapphire); }
+        .house-Topaz { color: var(--topaz); }
+
+        #winner-form h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 24px;
+            margin-bottom: 16px;
+            color: var(--dark-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+        
+        .radio-list label {
+            display: block;
+            padding: 16px 20px 16px 56px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            background: var(--card-bg);
+            font-weight: 500;
+        }
+        
+        .radio-list label:hover {
+            border-color: var(--primary-light);
+            background: rgba(59, 130, 246, 0.05);
+            transform: translateX(4px);
+        }
+        
+        .radio-list label:before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            background: var(--card-bg);
+            transition: all 0.2s ease;
+        }
+        
+        .radio-list label:after {
+            content: '';
+            position: absolute;
+            left: 26px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            transition: all 0.2s ease;
         }
 
-        /* --- Print Styles --- */
-        @media print {
+        .radio-list input[type="radio"] {
+            display: none;
+        }
+
+        .radio-list input[type="radio"]:checked + label {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--primary-color);
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .radio-list input[type="radio"]:checked + label:before {
+            border-color: var(--primary-color);
+        }
+        
+        .radio-list input[type="radio"]:checked + label:after {
+            transform: translateY(-50%) scale(1);
+        }
+        
+        .radio-list .game-details {
+            font-size: 0.85rem;
+            color: var(--medium-text);
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        /* Position Selector */
+        .position-selector {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        
+        .position-selector label {
+            flex: 1;
+            text-align: center;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .position-selector label:before,
+        .position-selector label:after {
+            display: none;
+        }
+        
+        .position-selector label i {
+            font-size: 1.8rem;
+        }
+        
+        .position-selector input[type="radio"]:checked + label {
+            font-weight: 700;
+            color: var(--light-text);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+        
+        #pos-first:checked + label { 
+            background: #fbbf24; 
+            color: #78350f; 
+            border-color: #fbbf24;
+        }
+        #pos-second:checked + label { 
+            background: #94a3b8; 
+            color: #1e293b; 
+            border-color: #94a3b8;
+        }
+        #pos-third:checked + label { 
+            background: #fb923c; 
+            color: #7c2d12; 
+            border-color: #fb923c;
+        }
+
+        .group-info {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--warning-color);
+            color: #78350f;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 20px;
+            line-height: 1.7;
+            border-left: 6px solid var(--warning-color);
+            font-weight: 500;
+        }
+        
+        .group-info.team-info {
+            background: rgba(14, 165, 233, 0.1);
+            border-color: var(--secondary-color);
+            color: #0c4a6e;
+            border-left-color: var(--secondary-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+            box-shadow: var(--shadow-sm);
+            letter-spacing: 0.3px;
+        }
+        
+        .btn i {
+            font-size: 1.2rem;
+        }
+
+        .submit-btn {
+            background: var(--success-color);
+            color: var(--light-text);
+        }
+        .submit-btn:hover:not(:disabled) {
+            background: var(--success-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        .submit-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .cancel-btn {
+            background: var(--danger-color);
+            color: var(--light-text);
+            margin-top: 12px;
+        }
+        .cancel-btn:hover {
+            background: var(--danger-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .cancel-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Modal / Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            position: relative;
+            max-width: 450px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-overlay.show .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content.processing i {
+            font-size: 48px;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 20px;
+        }
+        .modal-content.processing p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        #confirmation-dialog .modal-content i.fa-award {
+            font-size: 4.5rem;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+        
+        #confirmation-dialog h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+        
+        #confirmation-message {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 28px;
+            color: var(--medium-text);
+        }
+        
+        #confirmation-message strong {
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #94a3b8;
+            line-height: 1;
+            transition: all 0.2s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        .modal-close-btn:hover {
+            color: var(--dark-text);
+            background: var(--light-bg);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--medium-text);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
             body {
-                background-color: #ffffff;
-                margin: 0;
-                padding: 0;
-                -webkit-print-color-adjust: exact; /* Force print colors in Chrome */
-                print-color-adjust: exact; /* Standard */
+                padding: 12px;
             }
-
-            @page {
-                size: A4;
-                margin: 10mm; /* Standard A4 margin */
+            header {
+                padding: 24px 16px;
+                margin-bottom: 24px;
             }
-
-            #main-container {
-                max-width: 100%;
-                margin: 0;
-                padding: 0;
+            header h1 {
+                font-size: 1.6rem;
             }
-            
-            h1.page-title,
-            .print-btn-single {
-                display: none; /* Hide global title and all print buttons */
+            header h1 i {
+                font-size: 1.8rem;
             }
-
-            .game-section {
-                border: none;
-                box-shadow: none;
-                border-radius: 0;
-                margin: 0;
-                padding: 0;
-                width: 100% !important;
-                page-break-after: always; /* Each game on a new page */
-            }
-
-            .game-section:last-child {
-                page-break-after: auto;
-            }
-            
-            .participant-table {
-                font-size: 10pt; /* Optimize for print density */
-            }
-            
-            .participant-table th,
-            .participant-table td {
-                padding: 6px;
-            }
-
-            .participant-name {
+            header h2 {
                 font-size: 0.9rem;
             }
-
-            /* --- Logic for "Print This List" button --- */
-            
-            /* By default, hide all game sections when printing */
-            body.printing-single .game-section {
-                display: none;
+            .card {
+                padding: 24px 20px;
+                margin-bottom: 16px;
+            }
+            .card h3 {
+                font-size: 1.2rem;
+            }
+            #student-info {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                padding: 20px;
+            }
+            #student-info strong {
+                grid-column: 1 / 2;
+            }
+            #student-info span {
+                grid-column: 2 / 3;
+                text-align: right;
+            }
+            #student-info br { 
+                display: none; 
+            }
+            #student-info > * {
+                display: inline-block;
+                width: auto;
+            }
+            #student-info {
+                display: block;
+                line-height: 2;
+            }
+            #student-info strong::after {
+                content: ':';
+                margin-right: 8px;
+            }
+            #student-info span {
+                float: right;
             }
             
-            /* Only show the section explicitly marked for printing */
-            body.printing-single .game-section.show-print {
-                display: block;
-                page-break-after: auto; /* Don't add a page break after the single item */
+            .position-selector {
+                flex-direction: column;
+            }
+            .position-selector label {
+                padding: 16px;
+            }
+            .modal-content {
+                padding: 32px 24px;
             }
         }
-
+        
     </style>
 </head>
 <body>
 
-    <div id="main-container">
-        <h1 class="page-title">Annual Sports Meet - Participant Lists</h1>
-        </div>
+    <canvas id="confetti-canvas"></canvas>
 
-    <script>
-        // --- 1. DATA (Extended as requested) ---
-        const participants = [
-            // Game 1: Kho-Kho (Boys) - Team (from example)
-            { "student_name": "AMAN PAREEK", "student_class": "4-A2", "student_house": "Ruby", "student_gender": "M", "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-ruby", "access_token": "cfeda684-9989-495b-8350-2e079494d0c8" },
-            { "student_name": "HITESH SHARMA", "student_class": "3-A1", "student_house": "Ruby", "student_gender": "M", "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-ruby", "access_token": "6776aff8-1fd2-4b2c-a0c5-2966fea4ab2e" },
-            { "student_name": "ROHAN MEHTA", "student_class": "4-B1", "student_house": "Sapphire", "student_gender": "M", "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-sapphire", "access_token": "a1b2c3d4-e5f6-7890-1234-567890abcdef" },
-            { "student_name": "VIVEK SINGH", "student_class": "3-C2", "student_house": "Topaz", "student_gender": "M", "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-topaz", "access_token": "b2c3d4e5-f6a7-8901-2345-678901bcdefa" },
-            { "student_name": "ARJUN JAIN", "student_class": "4-A1", "student_house": "Emerald", "student_gender": "M", "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-emerald", "access_token": "c3d4e5f6-a7b8-9012-3456-789012cdefab" },
+    <header>
+        <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
+        <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
+    </header>
+
+    <main class="container">
+
+        <section id="scan-section" class="card">
+            <h3><i class="fas fa-qrcode"></i> Scan Participant QR</h3>
             
-            // Game 2: Kho-Kho (Girls) - Team (Empty, from example)
-            { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": null, "access_token": null },
-
-            // Game 3: 100M Race (Boys) - Individual (from example)
-            { "student_name": "GARVIT JOSHI", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "M", "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "f999c2ea-22e0-4df5-a350-ee34696b2620", "access_token": "f58b81bf-c667-43f8-9428-b3a85e19839b" },
-            { "student_name": "MOHIT AGARWAL", "student_class": "3-B1", "student_house": "Ruby", "student_gender": "M", "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "a123c2ea-22e0-4df5-a350-ee34696b2620", "access_token": "e47a70af-c667-43f8-9428-b3a85e19839b" },
-
-            // Game 4: 100M Race (Girls) - Individual (Unbalanced)
-            { "student_name": "PRIYA SHARMA", "student_class": "5-A1", "student_house": "Ruby", "student_gender": "F", "game_name": "100M Race (Girls)", "class_category": "5", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "g1", "access_token": "g1-token-priya" },
-            { "student_name": "ANJALI VERMA", "student_class": "5-B2", "student_house": "Ruby", "student_gender": "F", "game_name": "100M Race (Girls)", "class_category": "5", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "g2", "access_token": "g2-token-anjali" },
-            { "student_name": "SNEHA GUPTA", "student_class": "5-C1", "student_house": "Sapphire", "student_gender": "F", "game_name": "100M Race (Girls)", "class_category": "5", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "g3", "access_token": "g3-token-sneha" },
-            { "student_name": "RITU KUMARI", "student_class": "5-A2", "student_house": "Emerald", "student_gender": "F", "game_name": "100M Race (Girls)", "class_category": "5", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "g4", "access_token": "g4-token-ritu" },
-            { "student_name": "POOJA MEENA", "student_class": "5-B1", "student_house": "Sapphire", "student_gender": "F", "game_name": "100M Race (Girls)", "class_category": "5", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "g5", "access_token": "g5-token-pooja" },
-            { "student_name": "NIDHI JAIN", "student_class": "5-C2", "student_house": "Sapphire", "student_gender": "F", "game_name": "100M Race (Girls)", "class_category": "5", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "g6", "access_token": "g6-token-nidhi" },
-
-            // Game 5: 4x100M Relay (Boys) - Grouped
-            { "student_name": "RAVI KUMAR", "student_class": "6-A1", "student_house": "Topaz", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-topaz-g1", "access_token": "r1-token-ravi" },
-            { "student_name": "SANJAY BISHT", "student_class": "7-B1", "student_house": "Topaz", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-topaz-g1", "access_token": "r2-token-sanjay" },
-            { "student_name": "TARUN NEGI", "student_class": "8-A2", "student_house": "Topaz", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-topaz-g1", "access_token": "r3-token-tarun" },
-            { "student_name": "VARUN RAWAT", "student_class": "6-C1", "student_house": "Topaz", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-topaz-g1", "access_token": "r4-token-varun" },
-            
-            { "student_name": "AKASH VERMA", "student_class": "7-A3", "student_house": "Ruby", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-ruby-g1", "access_token": "r5-token-akash" },
-            { "student_name": "ROHAN GUPTA", "student_class": "8-A1", "student_house": "Ruby", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-ruby-g1", "access_token": "r6-token-rohan" },
-            { "student_name": "SUMIT JINDAL", "student_class": "7-B2", "student_house": "Ruby", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-ruby-g1", "access_token": "r7-token-sumit" },
-            { "student_name": "KUNAL PATEL", "student_class": "6-B1", "student_house": "Ruby", "student_gender": "M", "game_name": "4x100M Relay (Boys)", "class_category": "6 to 8", "group_size": 4, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "relay-boys-ruby-g1", "access_token": "r8-token-kunal" },
-
-            // Game 6: Tug of War (Mixed) - Team
-            { "student_name": "DAVID WILLIAMS", "student_class": "9-A", "student_house": "Emerald", "student_gender": "M", "game_name": "Tug of War (Mixed)", "class_category": "9 to 10", "group_size": 10, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-tug-mixed-emerald", "access_token": "t1-token-david" },
-            { "student_name": "SARAH KHAN", "student_class": "10-B", "student_house": "Emerald", "student_gender": "F", "game_name": "Tug of War (Mixed)", "class_category": "9 to 10", "group_size": 10, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-tug-mixed-emerald", "access_token": "t2-token-sarah" },
-            { "student_name": "MICHAEL BROWN", "student_class": "9-C", "student_house": "Ruby", "student_gender": "M", "game_name": "Tug of War (Mixed)", "class_category": "9 to 10", "group_size": 10, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-tug-mixed-ruby", "access_token": "t3-token-michael" },
-            { "student_name": "JESSICA LEE", "student_class": "10-A", "student_house": "Sapphire", "student_gender": "F", "game_name": "Tug of War (Mixed)", "class_category": "9 to 10", "group_size": 10, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-tug-mixed-sapphire", "access_token": "t4-token-jessica" }
-        ];
-
-        // --- 2. CONFIGURATION ---
-        const qrCodeSize = 50; // Size in pixels for the QR code canvas
-        const houses = ["Ruby", "Emerald", "Sapphire", "Topaz"];
-
-        // --- 3. HELPER FUNCTIONS ---
-
-        /**
-         * Formats a single participant object into an HTML string.
-         */
-        function formatParticipantCell(participant) {
-            if (!participant || !participant.student_name) {
-                return ''; // Return empty string for blank cells
-            }
-            
-            // Use access_token as data attribute to find canvas later
-            return `
-                <div class="participant-entry">
-                  <canvas class="qr-canvas" data-token="${participant.access_token}"></canvas>
-                  <div class="participant-name">
-                    ${participant.student_name} (${participant.student_class})
-                  </div>
+            <div class="qr-section">
+                <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
+                    <div id="qr-reader"></div>
+                    <button class="qr-close-btn" id="qr-close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
-            `;
-        }
-        
-        /**
-         * Formats an array of participants (a group) into an HTML string.
-         */
-        function formatGroupCell(group) {
-            if (!group || group.length === 0) {
-                return ''; // Return empty string for blank cells
-            }
-            // Map each participant in the group to their cell format and join
-            return group.map(formatParticipantCell).join('');
-        }
-
-        /**
-         * Attaches a "print this list" event handler to a button.
-         */
-        function addPrintHandler(button) {
-            button.addEventListener('click', () => {
-                const sectionToPrint = button.closest('.game-section');
-                
-                // Add classes to body and the specific section
-                document.body.classList.add('printing-single');
-                sectionToPrint.classList.add('show-print');
-                
-                window.print(); // Trigger print dialog
-            });
-        }
-        
-        /**
-         * Cleans up print-specific classes after printing is done or cancelled.
-         */
-        window.onafterprint = () => {
-            document.body.classList.remove('printing-single');
-            const printedSection = document.querySelector('.game-section.show-print');
-            if (printedSection) {
-                printedSection.classList.remove('show-print');
-            }
-        };
-
-        // --- 4. CORE LOGIC ---
-
-        /**
-         * Main function to generate all participant lists.
-         */
-        function generateAllLists() {
-            const container = document.getElementById('main-container');
-            container.innerHTML = '<h1>... Loading Lists ...</h1>'; // Clear and show loading
+                <div class="qr-scanner-actions" id="qr-scanner-actions">
+                    <button class="qr-action-btn" id="qr-camera-btn">
+                        <i class="fas fa-camera"></i> Scan with Camera
+                    </button>
+                    <label for="qr-file-input" class="qr-action-btn">
+                        <i class="fas fa-image"></i> Upload QR Image
+                        <input type="file" id="qr-file-input" accept="image/*">
+                    </label>
+                </div>
+            </div>
             
-            // Step 1: Group participants by game
-            const games = {};
-            for (const p of participants) {
-                // Unique key for each game
-                const gameKey = `${p.game_name}_${p.class_category}_${p.gender_filter}`;
-                
-                if (!games[gameKey]) {
-                    games[gameKey] = {
-                        game_name: p.game_name,
-                        class_category: p.class_category,
-                        gender_filter: p.gender_filter,
-                        game_type: p.game_type,
-                        participants: { Ruby: [], Emerald: [], Sapphire: [], Topaz: [] }
-                    };
-                }
-                
-                // Only add participants who have a name (i.e., not null)
-                if (p.student_name && p.student_house) {
-                    games[gameKey].participants[p.student_house].push(p);
-                }
-            }
+            <p id="error-message" class="error-text"></p>
+
+        </section>
+
+        <section id="details-section" class="card" style="display: none;">
+            <h3><i class="fas fa-user-check"></i> Participant Details</h3>
             
-            // Clear loading message
-            container.innerHTML = '<h1 class="page-title">Annual Sports Meet - Participant Lists</h1>';
+            <div id="student-info">
+                <strong>Name:</strong> <span id="student-name"></span>
+                <strong>Class:</strong> <span id="student-class"></span>
+                <strong>House:</strong> <span id="student-house"></span>
+                <strong>Gender:</strong> <span id="student-gender"></span>
+            </div>
 
-            // Step 2: Create a table for each game
-            for (const game of Object.values(games)) {
-                const tableHtml = createGameTable(game);
-                container.insertAdjacentHTML('beforeend', tableHtml);
-            }
-            
-            // Step 3: Add event listeners to all new print buttons
-            document.querySelectorAll('.print-btn-single').forEach(addPrintHandler);
-
-            // Step 4: Render all QR codes
-            renderAllQRCodes();
-        }
-
-        /**
-         * Creates the HTML string for a single game's section and table.
-         */
-        function createGameTable(game) {
-            let tableBodyHtml = '';
-            let maxRows = 0;
-            let processedData = { Ruby: [], Emerald: [], Sapphire: [], Topaz: [] };
-            
-            if (game.game_type === 'Individual' || game.game_type === 'Team') {
-                // Data is already in the right format
-                processedData = game.participants;
-                maxRows = Math.max(...houses.map(h => processedData[h].length));
+            <form id="winner-form">
+                <h4>Select Game:</h4>
+                <div id="game-list" class="radio-list">
+                </div>
                 
-            } else if (game.game_type === 'Grouped') {
-                // Need to group participants by participant_group_id within each house
-                for (const house of houses) {
-                    const groups = {};
-                    for (const p of game.participants[house]) {
-                        if (!groups[p.participant_group_id]) {
-                            groups[p.participant_group_id] = [];
-                        }
-                        groups[p.participant_group_id].push(p);
-                    }
-                    processedData[house] = Object.values(groups); // Now an array of arrays
-                }
-                maxRows = Math.max(...houses.map(h => processedData[h].length));
-            }
+                <div id="group-info" class="group-info" style="display: none;">
+                </div>
 
-            // Build the table rows
-            if (maxRows > 0) {
-                for (let i = 0; i < maxRows; i++) {
-                    const rowFormatter = (game.game_type === 'Grouped') ? formatGroupCell : formatParticipantCell;
-                    
-                    tableBodyHtml += `
-                        <tr>
-                            <td>${i + 1}</td>
-                            <td>${rowFormatter(processedData.Ruby[i])}</td>
-                            <td>${rowFormatter(processedData.Emerald[i])}</td>
-                            <td>${rowFormatter(processedData.Sapphire[i])}</td>
-                            <td>${rowFormatter(processedData.Topaz[i])}</td>
-                        </tr>
-                    `;
-                }
-            } else {
-                tableBodyHtml = '<tr><td colspan="5" class="no-participants">No participants registered for this event yet.</td></tr>';
-            }
-
-            // Assemble the full section HTML
-            return `
-                <section class="game-section">
-                    <button class="print-btn-single" title="Print this list">🖨️ Print</button>
-                    <div class="game-header">
-                        <h2>Jamna Vidyapeeth</h2>
-                        <h3>${game.game_name}</h3>
-                        <p>
-                            <strong>Class Category:</strong> ${game.class_category} | 
-                            <strong>Gender:</strong> ${game.gender_filter} | 
-                            <strong>Type:</strong> ${game.game_type}
-                        </p>
+                <div id="position-selector-wrapper" style="display: none;">
+                    <h4>Select Position:</h4>
+                    <div id="position-selector" class="radio-list position-selector">
+                        <input type="radio" id="pos-first" name="position" value="First">
+                        <label for="pos-first"><i class="fas fa-award"></i> First</label>
+                        
+                        <input type="radio" id="pos-second" name="position" value="Second">
+                        <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
+                        
+                        <input type="radio" id="pos-third" name="position" value="Third">
+                        <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
                     </div>
-                    
-                    <table class="participant-table">
-                        <thead>
-                            <tr>
-                                <th>Sr. No.</th>
-                                <th>Ruby</th>
-                                <th>Emerald</th>
-                                <th>Sapphire</th>
-                                <th>Topaz</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableBodyHtml}
-                        </tbody>
-                    </table>
-                </section>
-            `;
-        }
-        
-        /**
-         * Finds all canvas elements and generates QR codes for them.
-         */
-        function renderAllQRCodes() {
-            const canvases = document.querySelectorAll('.qr-canvas');
-            
-            canvases.forEach(canvas => {
-                const token = canvas.dataset.token;
-                if (token) {
-                    QRCode.toCanvas(canvas, token, { 
-                        width: qrCodeSize, 
-                        margin: 1,
-                        errorCorrectionLevel: 'L' // Use 'L' for smallest, dense QR
-                    }, (error) => {
-                        if (error) console.error("QR Code Error for token " + token, error);
-                    });
-                }
-            });
-        }
+                </div>
 
-        // --- 5. INITIALIZATION ---
-        // Run the main function when the document is ready
-        document.addEventListener('DOMContentLoaded', generateAllLists);
+                <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
+                    <i class="fas fa-check-circle"></i> Submit Winner
+                </button>
+                <button type="button" id="cancel-btn" class="btn cancel-btn">
+                    <i class="fas fa-times-circle"></i> Cancel
+                </button>
+            </form>
+
+        </section>
         
+    </main>
+    
+    <footer>
+        &copy; 2025 Jamna Vidyapeeth. All rights reserved.
+    </footer>
+
+    <div id="processing-dialog" class="modal-overlay">
+        <div class="modal-content processing">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <div id="confirmation-dialog" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="modal-close-btn">&times;</span>
+            <i class="fas fa-award"></i>
+            <h3>Success!</h3>
+            <p id="confirmation-message"></p>
+            <button id="record-another-btn" class="btn submit-btn">
+                <i class="fas fa-qrcode"></i> Record Another Winner
+            </button>
+        </div>
+    </div>
+    <script>
+        
+// ==================================================
+// 1. GLOBAL DATA & VARIABLES
+// ==================================================
+
+/**
+ * Global participants array.
+ * This array is expanded to include various game types and scenarios
+ * as requested for demonstration.
+ */
+let participants = [];
+
+// QR Code Scanner Variable
+let html5QrCode;
+// Global state
+let currentStudentParticipations = [];
+let selectedGame = null;
+
+// ==================================================
+// 2. DOM ELEMENT SELECTORS
+// ==================================================
+const scanSection = document.getElementById('scan-section');
+const detailsSection = document.getElementById('details-section');
+const qrScannerContainer = document.getElementById('qr-scanner-container');
+const qrScannerActions = document.getElementById('qr-scanner-actions');
+const qrReader = document.getElementById('qr-reader');
+const errorMessage = document.getElementById('error-message');
+
+// Details Form
+const studentNameEl = document.getElementById('student-name');
+const studentClassEl = document.getElementById('student-class');
+const studentHouseEl = document.getElementById('student-house');
+const studentGenderEl = document.getElementById('student-gender');
+const winnerForm = document.getElementById('winner-form');
+const gameListEl = document.getElementById('game-list');
+const groupInfoEl = document.getElementById('group-info');
+const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
+const positionSelectorEl = document.getElementById('position-selector');
+const submitBtn = document.getElementById('submit-btn');
+
+// Modals
+const processingDialog = document.getElementById('processing-dialog');
+const confirmationDialog = document.getElementById('confirmation-dialog');
+const confirmationMessageEl = document.getElementById('confirmation-message');
+
+// ==================================================
+// 3. QR SCANNER LOGIC (from snippet, integrated)
+// ==================================================
+
+/**
+ * Starts the camera-based QR scanner.
+ */
+function startQRScanner() {
+    qrScannerContainer.style.display = 'block';
+    qrScannerActions.style.display = 'none';
+    clearError();
+
+    // Use Html5QrcodeScannerState if available, otherwise fallback
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+
+    html5QrCode = new Html5Qrcode("qr-reader");
+    const qrConfig = {
+      fps: 60,
+      qrbox: {
+           width: 250,
+           height: 250
+      },
+      aspectRatio: 1.0
+    };
+
+    html5QrCode.start({
+         facingMode: "environment"
+      },
+      qrConfig,
+      onQRScanSuccess,
+      onQRScanFailure
+    ).catch((err) => {
+      console.error("Error starting QR scanner:", err);
+      showError("Couldn't access camera. Please check permissions and try again.");
+      closeQRScanner();
+    });
+}
+
+/**
+ * Handles QR file selection from device storage.
+ */
+function handleQRFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    qrScannerActions.style.display = 'none';
+    showProcessingDialog();
+    clearError();
+
+    if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("qr-reader");
+    }
+
+    html5QrCode.scanFile(file, true)
+      .then(decodedText => {
+          hideProcessingDialog();
+          processQRCode(decodedText);
+      })
+      .catch(err => {
+          hideProcessingDialog();
+          console.error("Error scanning QR file:", err);
+          showError("Could not read QR code. Please try another image or use camera.");
+          resetQRScannerActions();
+      });
+
+    // Reset file input
+    event.target.value = '';
+}
+
+/**
+ * Callback for successful QR code scan (from camera).
+ */
+function onQRScanSuccess(decodedText, decodedResult) {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            console.log("QR Code scanning stopped");
+            processQRCode(decodedText);
+        }).catch((err) => {
+            console.error("Error stopping QR scanner:", err);
+            processQRCode(decodedText); // Process anyway
+        });
+    }
+}
+
+/**
+ * Callback for QR scan failure (silent).
+ */
+function onQRScanFailure(error) {
+    // This fires constantly when no QR code is detected.
+    // console.warn("QR Scan Failure:", error);
+}
+
+/**
+ * Closes the QR scanner and resets the UI.
+ */
+function closeQRScanner() {
+    // Use Html5QrcodeScannerState if available, otherwise fallback
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+
+    if (html5QrCode) {
+      try {
+        if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+            html5QrCode.stop().then(() => {
+                html5QrCode.clear();
+                html5QrCode = null;
+                resetQRScannerActions();
+            }).catch(err => {
+                console.error("Error stopping scanner:", err);
+                html5QrCode.clear(); // Force clear
+                html5QrCode = null;
+                resetQRScannerActions();
+            });
+        } else {
+            html5QrCode.clear();
+            html5QrCode = null;
+            resetQRScannerActions();
+        }
+      } catch (err) {
+           console.error("Error clearing scanner:", err);
+           html5QrCode = null;
+           resetQRScannerActions();
+      }
+    } else {
+         resetQRScannerActions();
+    }
+}
+
+/**
+ * Resets the QR scanner UI elements to their initial state.
+ * (Renamed from snippet's `resetUI` to avoid conflicts).
+ */
+function resetQRScannerActions() {
+    qrScannerContainer.style.display = 'none';
+    qrScannerActions.style.display = 'flex';
+    hideProcessingDialog();
+    qrReader.innerHTML = ''; // Clear the reader div
+}
+
+// Cleanup listeners from snippet
+window.addEventListener('beforeunload', function () {
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+    if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+        html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
+    }
+});
+
+document.addEventListener('visibilitychange', function () {
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+    if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+        html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
+    }
+});
+
+// ==================================================
+// 4. CORE APPLICATION LOGIC
+// ==================================================
+
+/**
+ * Extracts the token from a URL or returns the original string.
+ */
+function extractTokenOrReturn(input) {
+    try {
+      const url = new URL(input);
+      const token = url.searchParams.get("token");
+      return token !== null ? token : input;
+    } catch (error) {
+      // Not a valid URL, return the input as is
+      return input;
+    }
+}
+
+/**
+ * Processes the decoded QR code text.
+ * Finds the student and displays their details and games.
+ */
+async function processQRCode(decodedText) {
+    console.log("QR Code detected:", decodedText);
+
+    const accessToken = extractTokenOrReturn(decodedText);
+    
+    showProcessingDialog();
+
+    participants = await invokeFunction('get_student_participations', {
+            p_access_token: accessToken
+         }, false);
+
+    // Find all valid participations for this student
+    const studentParticipations = participants.filter(p => 
+        p.access_token === accessToken && p.student_name !== null
+    );
+
+    closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
+    hideProcessingDialog(); // Call it again to be sure
+
+    if (studentParticipations.length === 0) {
+      showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
+      resetQRScannerActions();
+      return;
+    }
+    
+    // Store participations globally
+    currentStudentParticipations = studentParticipations;
+    
+    // Display student info (from the first record, it's all the same student)
+    displayStudentDetails(studentParticipations[0]);
+    
+    // Display game options
+    displayGameOptions(studentParticipations);
+
+    // Show the details section
+    scanSection.style.display = 'none';
+    detailsSection.style.display = 'block';
+}
+
+/**
+ * Populates the student details card.
+ */
+function displayStudentDetails(student) {
+    studentNameEl.textContent = student.student_name;
+    studentClassEl.textContent = 'Class ' + student.student_class;
+    studentHouseEl.textContent = student.student_house;
+    studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
+    
+    // Set dynamic house color
+    studentHouseEl.className = `house-${student.student_house}`;
+}
+
+/**
+ * Populates the list of games for the student.
+ */
+function displayGameOptions(participations) {
+    gameListEl.innerHTML = ''; // Clear previous list
+    participations.forEach(game => {
+        const inputId = `game-${game.event_id}`;
+        
+        const gameItem = document.createElement('div');
+        gameItem.innerHTML = `
+            <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
+            <label for="${inputId}">
+                ${game.game_name}
+                <div class="game-details">${game.class_category} / ${game.game_type}</div>
+            </label>
+        `;
+        gameListEl.appendChild(gameItem);
+    });
+    
+    // Add event listener to the list
+    gameListEl.addEventListener('change', handleGameSelection);
+}
+
+/**
+ * Handles the logic when a user selects a game.
+ */
+function handleGameSelection(event) {
+    const eventId = parseInt(event.target.value);
+    selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
+    
+    // Reset position selection and group info
+    winnerForm.reset(); // This clears radio buttons
+    event.target.checked = true; // Re-check the game radio
+    submitBtn.disabled = true;
+    groupInfoEl.style.display = 'none';
+    groupInfoEl.innerHTML = '';
+    groupInfoEl.className = 'group-info'; // Reset class
+    
+    if (!selectedGame) return;
+
+    // Show position selector
+    positionSelectorWrapper.style.display = 'block';
+
+    // Handle Grouped games
+    if (selectedGame.game_type === 'Grouped') {
+        const groupMembers = participants.filter(p => 
+            p.event_id === selectedGame.event_id &&
+            p.participant_group_id === selectedGame.participant_group_id &&
+            p.student_name !== null
+        );
+        const memberNames = groupMembers.map(m => m.student_name).join(', ');
+        groupInfoEl.innerHTML = `
+            <strong><i class="fas fa-users"></i> Grouped Game:</strong>
+            <p>This entry is for a group. All members listed below will receive the same position.</p>
+            <p><strong>Members:</strong> ${memberNames}</p>
+        `;
+        groupInfoEl.style.display = 'block';
+    }
+    // Handle Team games
+    else if (selectedGame.game_type === 'Team') {
+        const house = selectedGame.student_house;
+        groupInfoEl.innerHTML = `
+            <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
+            <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
+        `;
+        groupInfoEl.className = 'group-info team-info'; // Add team-specific class
+        groupInfoEl.style.display = 'block';
+    }
+    // Individual game: no info box needed.
+}
+
+/**
+ * Main form submission handler.
+ */
+async function handleSubmit(event) {
+    event.preventDefault();
+    
+    const selectedPositionEl = document.querySelector('input[name="position"]:checked');
+    
+    if (!selectedGame || !selectedPositionEl) {
+        showError("Please select a game and a position.");
+        return;
+    }
+    
+    const position = selectedPositionEl.value;
+    
+    // Build the data object to be "sent"
+    let submissionData = {
+        event_id: selectedGame.event_id,
+        game_name: selectedGame.game_name,
+        game_type: selectedGame.game_type,
+        position: position,
+        target: {}
+    };
+
+    let confirmationMessage = '';
+
+    // --- Handle logic based on game type ---
+    
+    if (selectedGame.game_type === 'Individual') {
+        submissionData.target = {
+            type: 'student',
+            access_token: selectedGame.access_token,
+            student_name: selectedGame.student_name
+        };
+        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+    
+    } else if (selectedGame.game_type === 'Grouped') {
+        const groupMembers = participants.filter(p => 
+            p.event_id === selectedGame.event_id &&
+            p.participant_group_id === selectedGame.participant_group_id &&
+            p.student_name !== null
+        );
+        
+        submissionData.target = {
+            type: 'group',
+            participant_group_id: selectedGame.participant_group_id,
+            members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
+        };
+        const memberNames = groupMembers.map(m => m.student_name).join(' & ');
+        confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
+
+    } else if (selectedGame.game_type === 'Team') {
+        submissionData.target = {
+            type: 'team',
+            house: selectedGame.student_house
+        };
+        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+    }
+    
+    // Show processing, simulate server call
+    showProcessingDialog();
+    await handleServerSubmission(submissionData); // Placeholder function
+    hideProcessingDialog();
+    
+    // Show success
+    showConfirmation(confirmationMessage);
+    launchConfetti();
+}
+
+/**
+ * Placeholder function to simulate server submission.
+ * @param {object} data - The data to be sent.
+ */
+function handleServerSubmission(data) {
+    console.log("Submitting to server (mock):", JSON.stringify(data, null, 2));
+    
+    // In a real application, this would be a fetch() POST request.
+    // e.g., fetch('/api/record-winner', { method: 'POST', body: JSON.stringify(data), ... })
+    
+    return new Promise(resolve => setTimeout(resolve, 750)); // Simulate network delay
+}
+
+/**
+ * Resets the entire application to the initial scanning state.
+ */
+function resetApp() {
+    // Hide modals and details section
+    confirmationDialog.classList.remove('show');
+    detailsSection.style.display = 'none';
+    
+    // Show scan section
+    scanSection.style.display = 'block';
+    
+    // Reset form and state
+    winnerForm.reset();
+    gameListEl.innerHTML = '';
+    groupInfoEl.style.display = 'none';
+    positionSelectorWrapper.style.display = 'none';
+    submitBtn.disabled = true;
+    
+    currentStudentParticipations = [];
+    selectedGame = null;
+    
+    clearError();
+    resetQRScannerActions();
+}
+
+// ==================================================
+// 5. UTILITY & HELPER FUNCTIONS
+// ==================================================
+
+// --- Modal Controls ---
+function showProcessingDialog() {
+    processingDialog.classList.add('show');
+}
+function hideProcessingDialog() {
+    processingDialog.classList.remove('show');
+}
+function showConfirmation(message) {
+    confirmationMessageEl.innerHTML = message;
+    detailsSection.style.display = 'none';
+    confirmationDialog.classList.add('show');
+}
+
+// --- Error Messaging ---
+function showError(message) {
+    errorMessage.textContent = message;
+}
+function clearError() {
+    errorMessage.textContent = '';
+}
+
+// --- Confetti (from snippet) ---
+function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const myConfetti = confetti.create(canvas, {
+        resize: true,
+        useWorker: true
+    });
+    
+    const count = 200;
+    const defaults = {
+        origin: { y: 0.7 }
+    };
+
+    function fire(particleRatio, opts) {
+        myConfetti(Object.assign({}, defaults, opts, {
+            particleCount: Math.floor(count * particleRatio)
+        }));
+    }
+
+    fire(0.25, { spread: 26, startVelocity: 55 });
+    fire(0.2, { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1, { spread: 120, startVelocity: 45 });
+}
+
+
+// ==================================================
+// 6. EVENT LISTENERS
+// ==================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // QR Scanner Buttons
+    document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
+    document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
+    document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
+
+    // Form Listeners
+    winnerForm.addEventListener('submit', handleSubmit);
+    document.getElementById('cancel-btn').addEventListener('click', resetApp);
+    
+    // Enable submit button only when a position is selected
+    positionSelectorEl.addEventListener('change', () => {
+        if (document.querySelector('input[name="position"]:checked')) {
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Modal Close Buttons
+    document.getElementById('modal-close-btn').addEventListener('click', resetApp);
+    document.getElementById('record-another-btn').addEventListener('click', resetApp);
+});
+
+
     </script>
 </body>
 </html>
