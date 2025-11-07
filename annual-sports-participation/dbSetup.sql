@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS sport_participations, sport_events, housemasters;
 
 DROP FUNCTION IF EXISTS public.manage_sport_participations(jsonb);
 DROP FUNCTION IF EXISTS get_sport_participants();
+DROP FUNCTION IF EXISTS get_student_participations(UUID);
 
 -- events table to store all games
 CREATE TABLE sport_events (
@@ -255,6 +256,65 @@ AS $$
     LEFT JOIN students s ON sp.student_id = s.id
     ORDER BY se.id, sp.participant_group_id, s.name;
 $$;
+
+-- Function to get participations for a specific student and their teammates
+CREATE OR REPLACE FUNCTION get_student_participations(p_access_token UUID)
+RETURNS TABLE(
+    student_id UUID,
+    student_name TEXT,
+    student_class TEXT,
+    student_house TEXT,
+    student_gender TEXT,
+    event_id INT,
+    game_name VARCHAR(255),
+    class_category VARCHAR(255),
+    group_size INTEGER,
+    gender_filter VARCHAR(50),
+    game_type VARCHAR(50),
+    participant_group_id UUID,
+    access_token UUID
+)
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH student_groups AS (
+        SELECT
+            sp.participant_group_id
+        FROM sport_participations AS sp
+        JOIN students AS s
+            ON sp.student_id = s.id
+        WHERE
+            s.access_token = p_access_token
+    )
+    SELECT
+        s.id AS student_id,
+        s.name AS student_name,
+        s.class AS student_class,
+        s.house AS student_house,
+        s.gender AS student_gender,
+        se.id AS event_id,
+        se.game_name,
+        se.class_category,
+        se.group_size,
+        se.gender_filter,
+        se.game_type,
+        sp.participant_group_id,
+        s.access_token
+    FROM
+        sport_participations AS sp
+    JOIN
+        students AS s ON sp.student_id = s.id
+    JOIN
+        sport_events AS se ON sp.event_id = se.id
+    WHERE
+        sp.participant_group_id IN (
+            SELECT sg.participant_group_id FROM student_groups AS sg
+        );
+END;
+$$;
+
 
 -- Enable RLS on all tables
 ALTER TABLE sport_events ENABLE ROW LEVEL SECURITY;
