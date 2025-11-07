@@ -689,7 +689,7 @@ function startQRScanner() {
 
     html5QrCode = new Html5Qrcode("qr-reader");
     const qrConfig = {
-      fps: 10,
+      fps: 60,
       qrbox: {
            width: 250,
            height: 250
@@ -891,7 +891,7 @@ async function processQRCode(decodedText) {
  */
 function displayStudentDetails(student) {
     studentNameEl.textContent = student.student_name;
-    studentClassEl.textContent = student.student_class;
+    studentClassEl.textContent = 'Class ' + student.student_class;
     studentHouseEl.textContent = student.student_house;
     studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
     
