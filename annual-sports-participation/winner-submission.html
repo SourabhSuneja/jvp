@@ -235,7 +235,7 @@
             box-shadow: var(--shadow-md);
         }
         
-        #qr-file-input {
+        #qr-file-input, #error-message {
             display: none;
         }
 
@@ -1240,9 +1240,11 @@ function showConfirmation(message) {
 // --- Error Messaging ---
 function showError(message) {
     errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
 }
 function clearError() {
     errorMessage.textContent = '';
+    errorMessage.style.display = 'none';
 }
 
 // --- Confetti (from snippet) ---
