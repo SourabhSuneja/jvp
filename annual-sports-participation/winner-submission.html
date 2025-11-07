@@ -15,6 +15,13 @@
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
+    <!-- Supabase CRUD Functions -->
+    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+    <!-- Dialog Box Styles -->
+    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+    <!-- Dialog Box Scripts -->
+    <script src="https://myjvp.in/commons/dialog.js"></script>
+
     <style>
         :root {
             --primary-color: #0056b3; /* School Blue */
@@ -521,7 +528,7 @@
 
     <header>
         <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
-        <h2>Annual Sports Meet 2025-26 - Winner Recording</h2>
+        <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
     </header>
 
     <main class="container">
@@ -630,66 +637,7 @@
  * This array is expanded to include various game types and scenarios
  * as requested for demonstration.
  */
-const participants = [
-    // --- Team Games (Kho-Kho Boys, Class 3-4) ---
-    { "student_name": "AMAN PAREEK", "student_class": "4-A2", "student_house": "Ruby", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-ruby", "access_token": "token-aman-pareek" },
-    { "student_name": "HITESH SHARMA", "student_class": "3-A1", "student_house": "Ruby", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-ruby", "access_token": "token-hitesh-sharma" },
-    // (add more Ruby players...)
-    { "student_name": "RAJAT VERMA", "student_class": "4-A1", "student_house": "Emerald", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-emerald", "access_token": "token-rajat-verma" },
-    { "student_name": "SUMIT JAIN", "student_class": "3-A2", "student_house": "Emerald", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-emerald", "access_token": "token-sumit-jain" },
-    // (Sapphire team)
-    { "student_name": "MOHIT AGARWAL", "student_class": "4-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-sapphire", "access_token": "token-mohit-agarwal" },
-    // (Topaz team)
-    { "student_name": "KARAN SINGH", "student_class": "3-A3", "student_house": "Topaz", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-topaz", "access_token": "token-karan-singh" },
-
-    // --- Team Games (Kho-Kho Girls, Class 3-4) ---
-    // (Unbalanced: Only Ruby and Sapphire have participants)
-    { "student_name": "PRIYA GUPTA", "student_class": "4-A1", "student_house": "Ruby", "student_gender": "F", "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-ruby", "access_token": "token-priya-gupta" },
-    { "student_name": "RIYA SHARMA", "student_class": "3-A2", "student_house": "Sapphire", "student_gender": "F", "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-sapphire", "access_token": "token-riya-sharma" },
-    // (Empty slot for Emerald)
-    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-emerald", "access_token": null },
-    // (Empty slot for Topaz)
-     { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-topaz", "access_token": null },
-
-    // --- Individual Games (100M Race Boys, Class 3) ---
-    { "student_name": "GARVIT", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-garvit", "access_token": "token-garvit" },
-    { "student_name": "ROHAN MEHTA", "student_class": "3-A1", "student_house": "Ruby", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-rohan", "access_token": "token-rohan-mehta" },
-    { "student_name": "VIVEK GARG", "student_class": "3-A2", "student_house": "Emerald", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-vivek", "access_token": "token-vivek-garg" },
-    { "student_name": "KARAN SINGH", "student_class": "3-A3", "student_house": "Topaz", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-karan", "access_token": "token-karan-singh" }, // Karan is in two games
-
-    // --- Individual Games (100M Race Girls, Class 3) ---
-    { "student_name": "ANIKA JAIN", "student_class": "3-A1", "student_house": "Topaz", "student_gender": "F", "event_id": 6, "game_name": "100M Race (Girls)", "class_category": "3", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "ind-100m-girls-3-anika", "access_token": "token-anika-jain" },
-    { "student_name": "MEERA KUMAR", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "F", "event_id": 6, "game_name": "100M Race (Girls)", "class_category": "3", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "ind-100m-girls-3-meera", "access_token": "token-meera-kumar" },
-    { "student_name": "PRIYA GUPTA", "student_class": "4-A1", "student_house": "Ruby", "student_gender": "F", "event_id": 6, "game_name": "100M Race (Girls)", "class_category": "3", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "ind-100m-girls-3-priya", "access_token": "token-priya-gupta" }, // Priya is in two games
-
-    // --- Grouped Games (Relay Race Boys, Class 5-6) ---
-    // Group 1 (Ruby)
-    { "student_name": "ARJUN RATHORE", "student_class": "5-A1", "student_house": "Ruby", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-ruby-1", "access_token": "token-arjun-rathore" },
-    { "student_name": "BHAVESH JOSHI", "student_class": "6-A2", "student_house": "Ruby", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-ruby-1", "access_token": "token-bhavesh-joshi" },
-    // Group 2 (Emerald)
-    { "student_name": "CHIRAG MEENA", "student_class": "5-A2", "student_house": "Emerald", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-emerald-1", "access_token": "token-chirag-meena" },
-    { "student_name": "DEEPAK KUMAR", "student_class": "6-A1", "student_house": "Emerald", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-emerald-1", "access_token": "token-deepak-kumar" },
-    // Group 3 (Sapphire)
-    { "student_name": "GARVIT", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-sapphire-1", "access_token": "token-garvit" }, // Garvit in 2nd game, but wrong class category (demonstration)
-    { "student_name": "FARHAN ALI", "student_class": "5-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-sapphire-1", "access_token": "token-farhan-ali" },
-
-    // --- Grouped Games (Relay Race Girls, Class 5-6) ---
-    // Group 1 (Topaz)
-    { "student_name": "ISHIKA SHARMA", "student_class": "5-A1", "student_house": "Topaz", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-topaz-1", "access_token": "token-ishika-sharma" },
-    { "student_name": "JIA MEHTA", "student_class": "6-A2", "student_house": "Topaz", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-topaz-1", "access_token": "token-jia-mehta" },
-    // Group 2 (Ruby)
-    { "student_name": "KAVYA NAIR", "student_class": "5-A2", "student_house": "Ruby", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-ruby-1", "access_token": "token-kavya-nair" },
-    { "student_name": "LATIKA VERMA", "student_class": "6-A1", "student_house": "Ruby", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-ruby-1", "access_token": "token-latika-verma" },
-
-    // --- Team Game (Volleyball - Mixed) ---
-    // (Only Topaz has participants)
-    { "student_name": "ANIKA JAIN", "student_class": "3-A1", "student_house": "Topaz", "student_gender": "F", "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-topaz", "access_token": "token-anika-jain" }, // Anika in 2nd game
-    { "student_name": "MANISH PAUL", "student_class": "9-A1", "student_house": "Topaz", "student_gender": "M", "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-topaz", "access_token": "token-manish-paul" },
-    // (Empty slots for other houses)
-    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-ruby", "access_token": null },
-    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-emerald", "access_token": null },
-    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-sapphire", "access_token": null },
-];
+let participants = [];
 
 // QR Code Scanner Variable
 let html5QrCode;
