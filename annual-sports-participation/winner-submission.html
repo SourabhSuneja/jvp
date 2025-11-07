@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jamna Vidyapeeth - Sports Meet Winners</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #0056b3; /* School Blue */
+            --secondary-color: #007bff;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --light-bg: #f8f9fa;
+            --dark-text: #343a40;
+            --light-text: #ffffff;
+            --border-color: #dee2e6;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            
+            /* House Colors */
+            --ruby: #d90429;
+            --emerald: #00a878;
+            --sapphire: #0077b6;
+            --topaz: #ffc300;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark-text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+
+        header h1 i {
+            margin-right: 10px;
+            color: var(--topaz);
+        }
+
+        header h2 {
+            font-weight: 400;
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--light-text);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+        }
+        
+        .card h3 i {
+            margin-right: 10px;
+        }
+        
+        /* QR Section */
+        #qr-reader {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px dashed var(--border-color);
+        }
+        
+        #qr-scanner-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .qr-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .qr-scanner-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .qr-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .qr-action-btn i {
+            font-size: 1.2rem;
+        }
+
+        #qr-camera-btn {
+            background: var(--primary-color);
+            color: var(--light-text);
+        }
+        #qr-camera-btn:hover {
+            background: #004080;
+        }
+
+        .qr-action-btn[for="qr-file-input"] {
+            background: #6c757d;
+            color: var(--light-text);
+        }
+        .qr-action-btn[for="qr-file-input"]:hover {
+             background: #5a6268;
+        }
+        
+        #qr-file-input {
+            display: none;
+        }
+
+        .error-text {
+            color: var(--danger-color);
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        /* Details Section */
+        #student-info {
+            background: var(--light-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px 20px;
+            font-size: 1.1rem;
+        }
+
+        #student-info strong {
+            font-weight: 600;
+            color: #555;
+        }
+
+        #student-house {
+            font-weight: 700;
+        }
+        
+        /* Dynamic House Colors */
+        .house-Ruby { color: var(--ruby); }
+        .house-Emerald { color: var(--emerald); }
+        .house-Sapphire { color: var(--sapphire); }
+        .house-Topaz { color: var(--topaz); }
+
+        #winner-form h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+        
+        .radio-list label {
+            display: block;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 45px;
+        }
+        
+        .radio-list label:before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            background: var(--light-text);
+        }
+        
+        .radio-list label:after {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%) scale(0);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            transition: all 0.2s ease;
+        }
+
+        .radio-list input[type="radio"] {
+            display: none;
+        }
+
+        .radio-list input[type="radio"]:checked + label {
+            background: #e6f7ff;
+            border-color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        .radio-list input[type="radio"]:checked + label:after {
+             transform: translateY(-50%) scale(1);
+        }
+        
+        .radio-list .game-details {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Position Selector */
+        .position-selector {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        
+        .position-selector label {
+            flex: 1;
+            text-align: center;
+            padding: 15px 10px;
+        }
+        
+        .position-selector label:before,
+        .position-selector label:after {
+            display: none; /* Hide default radio visual */
+        }
+        
+        .position-selector input[type="radio"]:checked + label {
+            font-weight: 600;
+            color: var(--light-text);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        #pos-first:checked + label { background: #FFD700; color: #333; border-color: #FFD700; }
+        #pos-second:checked + label { background: #C0C0C0; color: #333; border-color: #C0C0C0; }
+        #pos-third:checked + label { background: #CD7F32; border-color: #CD7F32; }
+
+
+        .group-info {
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            color: #664d03;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+        
+        .group-info.team-info {
+            background: #e6f7ff;
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .submit-btn {
+            background: var(--success-color);
+            color: var(--light-text);
+        }
+        .submit-btn:hover:not(:disabled) {
+            background: #218838;
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .cancel-btn {
+            background: var(--danger-color);
+            color: var(--light-text);
+            margin-top: 10px;
+        }
+        .cancel-btn:hover {
+            background: #c82333;
+        }
+
+        /* Modal / Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--light-text);
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            position: relative;
+            max-width: 450px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.show .modal-content {
+             transform: scale(1);
+        }
+
+        .modal-content.processing i {
+            font-size: 40px;
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 15px;
+        }
+        .modal-content.processing p {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        #confirmation-dialog .modal-content i.fa-award {
+            font-size: 4rem;
+            color: var(--success-color);
+            margin-bottom: 15px;
+        }
+        
+        #confirmation-dialog h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        #confirmation-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        #confirmation-message strong {
+            font-weight: 600;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+            line-height: 1;
+        }
+        .modal-close-btn:hover {
+            color: #777;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+            header h1 {
+                font-size: 2rem;
+            }
+            header h2 {
+                font-size: 1rem;
+            }
+            .card {
+                padding: 20px;
+            }
+            #student-info {
+                grid-template-columns: 1fr;
+                gap: 5px;
+                padding: 15px;
+            }
+            #student-info strong {
+                grid-column: 1 / 2;
+            }
+            #student-info span {
+                 grid-column: 2 / 3;
+                 text-align: right;
+            }
+            /* Force strong/span on same line */
+             #student-info br { 
+                 display: none; 
+             }
+             #student-info > * {
+                 display: inline-block;
+                 width: auto;
+             }
+             #student-info {
+                 display: block;
+                 line-height: 1.8;
+             }
+             #student-info strong::after {
+                 content: ':';
+                 margin-right: 5px;
+             }
+             #student-info span {
+                 float: right;
+             }
+            
+            .position-selector {
+                flex-direction: column;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <header>
+        <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
+        <h2>Annual Sports Meet 2025-26 - Winner Recording</h2>
+    </header>
+
+    <main class="container">
+
+        <section id="scan-section" class="card">
+            <h3><i class="fas fa-qrcode"></i> Scan Participant QR</h3>
+            
+            <div class="qr-section">
+                <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
+                    <div id="qr-reader"></div>
+                    <button class="qr-close-btn" id="qr-close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="qr-scanner-actions" id="qr-scanner-actions">
+                    <button class="qr-action-btn" id="qr-camera-btn">
+                        <i class="fas fa-camera"></i> Scan with Camera
+                    </button>
+                    <label for="qr-file-input" class="qr-action-btn">
+                        <i class="fas fa-image"></i> Upload QR Image
+                        <input type="file" id="qr-file-input" accept="image/*">
+                    </label>
+                </div>
+            </div>
+            
+            <p id="error-message" class="error-text"></p>
+
+        </section>
+
+        <section id="details-section" class="card" style="display: none;">
+            <h3><i class="fas fa-user-check"></i> Participant Details</h3>
+            
+            <div id="student-info">
+                <strong>Name:</strong> <span id="student-name"></span>
+                <strong>Class:</strong> <span id="student-class"></span>
+                <strong>House:</strong> <span id="student-house"></span>
+                <strong>Gender:</strong> <span id="student-gender"></span>
+            </div>
+
+            <form id="winner-form">
+                <h4>Select Game:</h4>
+                <div id="game-list" class="radio-list">
+                    </div>
+                
+                <div id="group-info" class="group-info" style="display: none;">
+                    </div>
+
+                <div id="position-selector-wrapper" style="display: none;">
+                    <h4>Select Position:</h4>
+                    <div id="position-selector" class="radio-list position-selector">
+                        <input type="radio" id="pos-first" name="position" value="First">
+                        <label for="pos-first"><i class="fas fa-award"></i> First</label>
+                        
+                        <input type="radio" id="pos-second" name="position" value="Second">
+                        <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
+                        
+                        <input type="radio" id="pos-third" name="position" value="Third">
+                        <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
+                    <i class="fas fa-check-circle"></i> Submit Winner
+                </button>
+                <button type="button" id="cancel-btn" class="btn cancel-btn">
+                    <i class="fas fa-times-circle"></i> Cancel
+                </button>
+            </form>
+
+        </section>
+        
+    </main>
+    
+    <footer>
+        &copy; 2025 Jamna Vidyapeeth. All rights reserved.
+    </footer>
+
+    <div id="processing-dialog" class="modal-overlay">
+        <div class="modal-content processing">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <div id="confirmation-dialog" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-btn" id="modal-close-btn">&times;</span>
+            <i class="fas fa-award"></i>
+            <h3>Success!</h3>
+            <p id="confirmation-message"></p>
+            <button id="record-another-btn" class="btn submit-btn">
+                <i class="fas fa-qrcode"></i> Record Another Winner
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        
+// ==================================================
+// 1. GLOBAL DATA & VARIABLES
+// ==================================================
+
+/**
+ * Global participants array.
+ * This array is expanded to include various game types and scenarios
+ * as requested for demonstration.
+ */
+const participants = [
+    // --- Team Games (Kho-Kho Boys, Class 3-4) ---
+    { "student_name": "AMAN PAREEK", "student_class": "4-A2", "student_house": "Ruby", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-ruby", "access_token": "token-aman-pareek" },
+    { "student_name": "HITESH SHARMA", "student_class": "3-A1", "student_house": "Ruby", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-ruby", "access_token": "token-hitesh-sharma" },
+    // (add more Ruby players...)
+    { "student_name": "RAJAT VERMA", "student_class": "4-A1", "student_house": "Emerald", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-emerald", "access_token": "token-rajat-verma" },
+    { "student_name": "SUMIT JAIN", "student_class": "3-A2", "student_house": "Emerald", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-emerald", "access_token": "token-sumit-jain" },
+    // (Sapphire team)
+    { "student_name": "MOHIT AGARWAL", "student_class": "4-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-sapphire", "access_token": "token-mohit-agarwal" },
+    // (Topaz team)
+    { "student_name": "KARAN SINGH", "student_class": "3-A3", "student_house": "Topaz", "student_gender": "M", "event_id": 1, "game_name": "Kho-Kho (Boys)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Boys", "game_type": "Team", "participant_group_id": "team-kho-kho-boys-topaz", "access_token": "token-karan-singh" },
+
+    // --- Team Games (Kho-Kho Girls, Class 3-4) ---
+    // (Unbalanced: Only Ruby and Sapphire have participants)
+    { "student_name": "PRIYA GUPTA", "student_class": "4-A1", "student_house": "Ruby", "student_gender": "F", "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-ruby", "access_token": "token-priya-gupta" },
+    { "student_name": "RIYA SHARMA", "student_class": "3-A2", "student_house": "Sapphire", "student_gender": "F", "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-sapphire", "access_token": "token-riya-sharma" },
+    // (Empty slot for Emerald)
+    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-emerald", "access_token": null },
+    // (Empty slot for Topaz)
+     { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 2, "game_name": "Kho-Kho (Girls)", "class_category": "3 to 4", "group_size": 11, "gender_filter": "Girls", "game_type": "Team", "participant_group_id": "team-kho-kho-girls-topaz", "access_token": null },
+
+    // --- Individual Games (100M Race Boys, Class 3) ---
+    { "student_name": "GARVIT", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-garvit", "access_token": "token-garvit" },
+    { "student_name": "ROHAN MEHTA", "student_class": "3-A1", "student_house": "Ruby", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-rohan", "access_token": "token-rohan-mehta" },
+    { "student_name": "VIVEK GARG", "student_class": "3-A2", "student_house": "Emerald", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-vivek", "access_token": "token-vivek-garg" },
+    { "student_name": "KARAN SINGH", "student_class": "3-A3", "student_house": "Topaz", "student_gender": "M", "event_id": 5, "game_name": "100M Race (Boys)", "class_category": "3", "group_size": 1, "gender_filter": "Boys", "game_type": "Individual", "participant_group_id": "ind-100m-boys-3-karan", "access_token": "token-karan-singh" }, // Karan is in two games
+
+    // --- Individual Games (100M Race Girls, Class 3) ---
+    { "student_name": "ANIKA JAIN", "student_class": "3-A1", "student_house": "Topaz", "student_gender": "F", "event_id": 6, "game_name": "100M Race (Girls)", "class_category": "3", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "ind-100m-girls-3-anika", "access_token": "token-anika-jain" },
+    { "student_name": "MEERA KUMAR", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "F", "event_id": 6, "game_name": "100M Race (Girls)", "class_category": "3", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "ind-100m-girls-3-meera", "access_token": "token-meera-kumar" },
+    { "student_name": "PRIYA GUPTA", "student_class": "4-A1", "student_house": "Ruby", "student_gender": "F", "event_id": 6, "game_name": "100M Race (Girls)", "class_category": "3", "group_size": 1, "gender_filter": "Girls", "game_type": "Individual", "participant_group_id": "ind-100m-girls-3-priya", "access_token": "token-priya-gupta" }, // Priya is in two games
+
+    // --- Grouped Games (Relay Race Boys, Class 5-6) ---
+    // Group 1 (Ruby)
+    { "student_name": "ARJUN RATHORE", "student_class": "5-A1", "student_house": "Ruby", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-ruby-1", "access_token": "token-arjun-rathore" },
+    { "student_name": "BHAVESH JOSHI", "student_class": "6-A2", "student_house": "Ruby", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-ruby-1", "access_token": "token-bhavesh-joshi" },
+    // Group 2 (Emerald)
+    { "student_name": "CHIRAG MEENA", "student_class": "5-A2", "student_house": "Emerald", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-emerald-1", "access_token": "token-chirag-meena" },
+    { "student_name": "DEEPAK KUMAR", "student_class": "6-A1", "student_house": "Emerald", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-emerald-1", "access_token": "token-deepak-kumar" },
+    // Group 3 (Sapphire)
+    { "student_name": "GARVIT", "student_class": "3-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-sapphire-1", "access_token": "token-garvit" }, // Garvit in 2nd game, but wrong class category (demonstration)
+    { "student_name": "FARHAN ALI", "student_class": "5-A3", "student_house": "Sapphire", "student_gender": "M", "event_id": 10, "game_name": "Relay Race (Boys)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Boys", "game_type": "Grouped", "participant_group_id": "group-relay-boys-sapphire-1", "access_token": "token-farhan-ali" },
+
+    // --- Grouped Games (Relay Race Girls, Class 5-6) ---
+    // Group 1 (Topaz)
+    { "student_name": "ISHIKA SHARMA", "student_class": "5-A1", "student_house": "Topaz", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-topaz-1", "access_token": "token-ishika-sharma" },
+    { "student_name": "JIA MEHTA", "student_class": "6-A2", "student_house": "Topaz", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-topaz-1", "access_token": "token-jia-mehta" },
+    // Group 2 (Ruby)
+    { "student_name": "KAVYA NAIR", "student_class": "5-A2", "student_house": "Ruby", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-ruby-1", "access_token": "token-kavya-nair" },
+    { "student_name": "LATIKA VERMA", "student_class": "6-A1", "student_house": "Ruby", "student_gender": "F", "event_id": 11, "game_name": "Relay Race (Girls)", "class_category": "5 to 6", "group_size": 2, "gender_filter": "Girls", "game_type": "Grouped", "participant_group_id": "group-relay-girls-ruby-1", "access_token": "token-latika-verma" },
+
+    // --- Team Game (Volleyball - Mixed) ---
+    // (Only Topaz has participants)
+    { "student_name": "ANIKA JAIN", "student_class": "3-A1", "student_house": "Topaz", "student_gender": "F", "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-topaz", "access_token": "token-anika-jain" }, // Anika in 2nd game
+    { "student_name": "MANISH PAUL", "student_class": "9-A1", "student_house": "Topaz", "student_gender": "M", "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-topaz", "access_token": "token-manish-paul" },
+    // (Empty slots for other houses)
+    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-ruby", "access_token": null },
+    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-emerald", "access_token": null },
+    { "student_name": null, "student_class": null, "student_house": null, "student_gender": null, "event_id": 15, "game_name": "Volleyball (Mixed)", "class_category": "Senior", "group_size": 6, "gender_filter": "Mixed", "game_type": "Team", "participant_group_id": "team-volleyball-mixed-sapphire", "access_token": null },
+];
+
+// QR Code Scanner Variable
+let html5QrCode;
+// Global state
+let currentStudentParticipations = [];
+let selectedGame = null;
+
+// ==================================================
+// 2. DOM ELEMENT SELECTORS
+// ==================================================
+const scanSection = document.getElementById('scan-section');
+const detailsSection = document.getElementById('details-section');
+const qrScannerContainer = document.getElementById('qr-scanner-container');
+const qrScannerActions = document.getElementById('qr-scanner-actions');
+const qrReader = document.getElementById('qr-reader');
+const errorMessage = document.getElementById('error-message');
+
+// Details Form
+const studentNameEl = document.getElementById('student-name');
+const studentClassEl = document.getElementById('student-class');
+const studentHouseEl = document.getElementById('student-house');
+const studentGenderEl = document.getElementById('student-gender');
+const winnerForm = document.getElementById('winner-form');
+const gameListEl = document.getElementById('game-list');
+const groupInfoEl = document.getElementById('group-info');
+const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
+const positionSelectorEl = document.getElementById('position-selector');
+const submitBtn = document.getElementById('submit-btn');
+
+// Modals
+const processingDialog = document.getElementById('processing-dialog');
+const confirmationDialog = document.getElementById('confirmation-dialog');
+const confirmationMessageEl = document.getElementById('confirmation-message');
+
+// ==================================================
+// 3. QR SCANNER LOGIC (from snippet, integrated)
+// ==================================================
+
+/**
+ * Starts the camera-based QR scanner.
+ */
+function startQRScanner() {
+    qrScannerContainer.style.display = 'block';
+    qrScannerActions.style.display = 'none';
+    clearError();
+
+    // Use Html5QrcodeScannerState if available, otherwise fallback
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+
+    html5QrCode = new Html5Qrcode("qr-reader");
+    const qrConfig = {
+      fps: 10,
+      qrbox: {
+           width: 250,
+           height: 250
+      },
+      aspectRatio: 1.0
+    };
+
+    html5QrCode.start({
+         facingMode: "environment"
+      },
+      qrConfig,
+      onQRScanSuccess,
+      onQRScanFailure
+    ).catch((err) => {
+      console.error("Error starting QR scanner:", err);
+      showError("Couldn't access camera. Please check permissions and try again.");
+      closeQRScanner();
+    });
+}
+
+/**
+ * Handles QR file selection from device storage.
+ */
+function handleQRFileSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    qrScannerActions.style.display = 'none';
+    showProcessingDialog();
+    clearError();
+
+    if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("qr-reader");
+    }
+
+    html5QrCode.scanFile(file, true)
+      .then(decodedText => {
+          hideProcessingDialog();
+          processQRCode(decodedText);
+      })
+      .catch(err => {
+          hideProcessingDialog();
+          console.error("Error scanning QR file:", err);
+          showError("Could not read QR code. Please try another image or use camera.");
+          resetQRScannerActions();
+      });
+
+    // Reset file input
+    event.target.value = '';
+}
+
+/**
+ * Callback for successful QR code scan (from camera).
+ */
+function onQRScanSuccess(decodedText, decodedResult) {
+    if (html5QrCode) {
+        html5QrCode.stop().then(() => {
+            console.log("QR Code scanning stopped");
+            processQRCode(decodedText);
+        }).catch((err) => {
+            console.error("Error stopping QR scanner:", err);
+            processQRCode(decodedText); // Process anyway
+        });
+    }
+}
+
+/**
+ * Callback for QR scan failure (silent).
+ */
+function onQRScanFailure(error) {
+    // This fires constantly when no QR code is detected.
+    // console.warn("QR Scan Failure:", error);
+}
+
+/**
+ * Closes the QR scanner and resets the UI.
+ */
+function closeQRScanner() {
+    // Use Html5QrcodeScannerState if available, otherwise fallback
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+
+    if (html5QrCode) {
+      try {
+        if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+            html5QrCode.stop().then(() => {
+                html5QrCode.clear();
+                html5QrCode = null;
+                resetQRScannerActions();
+            }).catch(err => {
+                console.error("Error stopping scanner:", err);
+                html5QrCode.clear(); // Force clear
+                html5QrCode = null;
+                resetQRScannerActions();
+            });
+        } else {
+            html5QrCode.clear();
+            html5QrCode = null;
+            resetQRScannerActions();
+        }
+      } catch (err) {
+           console.error("Error clearing scanner:", err);
+           html5QrCode = null;
+           resetQRScannerActions();
+      }
+    } else {
+         resetQRScannerActions();
+    }
+}
+
+/**
+ * Resets the QR scanner UI elements to their initial state.
+ * (Renamed from snippet's `resetUI` to avoid conflicts).
+ */
+function resetQRScannerActions() {
+    qrScannerContainer.style.display = 'none';
+    qrScannerActions.style.display = 'flex';
+    hideProcessingDialog();
+    qrReader.innerHTML = ''; // Clear the reader div
+}
+
+// Cleanup listeners from snippet
+window.addEventListener('beforeunload', function () {
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+    if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+        html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
+    }
+});
+
+document.addEventListener('visibilitychange', function () {
+    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+    if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+        html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
+    }
+});
+
+// ==================================================
+// 4. CORE APPLICATION LOGIC
+// ==================================================
+
+/**
+ * Extracts the token from a URL or returns the original string.
+ */
+function extractTokenOrReturn(input) {
+    try {
+      const url = new URL(input);
+      const token = url.searchParams.get("token");
+      return token !== null ? token : input;
+    } catch (error) {
+      // Not a valid URL, return the input as is
+      return input;
+    }
+}
+
+/**
+ * Processes the decoded QR code text.
+ * Finds the student and displays their details and games.
+ */
+async function processQRCode(decodedText) {
+    console.log("QR Code detected:", decodedText);
+
+    const accessToken = extractTokenOrReturn(decodedText);
+    
+    showProcessingDialog();
+
+    // Find all valid participations for this student
+    const studentParticipations = participants.filter(p => 
+        p.access_token === accessToken && p.student_name !== null
+    );
+
+    closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
+    hideProcessingDialog(); // Call it again to be sure
+
+    if (studentParticipations.length === 0) {
+      showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
+      resetQRScannerActions();
+      return;
+    }
+    
+    // Store participations globally
+    currentStudentParticipations = studentParticipations;
+    
+    // Display student info (from the first record, it's all the same student)
+    displayStudentDetails(studentParticipations[0]);
+    
+    // Display game options
+    displayGameOptions(studentParticipations);
+
+    // Show the details section
+    scanSection.style.display = 'none';
+    detailsSection.style.display = 'block';
+}
+
+/**
+ * Populates the student details card.
+ */
+function displayStudentDetails(student) {
+    studentNameEl.textContent = student.student_name;
+    studentClassEl.textContent = student.student_class;
+    studentHouseEl.textContent = student.student_house;
+    studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
+    
+    // Set dynamic house color
+    studentHouseEl.className = `house-${student.student_house}`;
+}
+
+/**
+ * Populates the list of games for the student.
+ */
+function displayGameOptions(participations) {
+    gameListEl.innerHTML = ''; // Clear previous list
+    participations.forEach(game => {
+        const inputId = `game-${game.event_id}`;
+        
+        const gameItem = document.createElement('div');
+        gameItem.innerHTML = `
+            <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
+            <label for="${inputId}">
+                ${game.game_name}
+                <div class="game-details">${game.class_category} / ${game.game_type}</div>
+            </label>
+        `;
+        gameListEl.appendChild(gameItem);
+    });
+    
+    // Add event listener to the list
+    gameListEl.addEventListener('change', handleGameSelection);
+}
+
+/**
+ * Handles the logic when a user selects a game.
+ */
+function handleGameSelection(event) {
+    const eventId = parseInt(event.target.value);
+    selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
+    
+    // Reset position selection and group info
+    winnerForm.reset(); // This clears radio buttons
+    event.target.checked = true; // Re-check the game radio
+    submitBtn.disabled = true;
+    groupInfoEl.style.display = 'none';
+    groupInfoEl.innerHTML = '';
+    groupInfoEl.className = 'group-info'; // Reset class
+    
+    if (!selectedGame) return;
+
+    // Show position selector
+    positionSelectorWrapper.style.display = 'block';
+
+    // Handle Grouped games
+    if (selectedGame.game_type === 'Grouped') {
+        const groupMembers = participants.filter(p => 
+            p.event_id === selectedGame.event_id &&
+            p.participant_group_id === selectedGame.participant_group_id &&
+            p.student_name !== null
+        );
+        const memberNames = groupMembers.map(m => m.student_name).join(', ');
+        groupInfoEl.innerHTML = `
+            <strong><i class="fas fa-users"></i> Grouped Game:</strong>
+            <p>This entry is for a group. All members listed below will receive the same position.</p>
+            <p><strong>Members:</strong> ${memberNames}</p>
+        `;
+        groupInfoEl.style.display = 'block';
+    }
+    // Handle Team games
+    else if (selectedGame.game_type === 'Team') {
+        const house = selectedGame.student_house;
+        groupInfoEl.innerHTML = `
+            <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
+            <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
+        `;
+        groupInfoEl.className = 'group-info team-info'; // Add team-specific class
+        groupInfoEl.style.display = 'block';
+    }
+    // Individual game: no info box needed.
+}
+
+/**
+ * Main form submission handler.
+ */
+async function handleSubmit(event) {
+    event.preventDefault();
+    
+    const selectedPositionEl = document.querySelector('input[name="position"]:checked');
+    
+    if (!selectedGame || !selectedPositionEl) {
+        showError("Please select a game and a position.");
+        return;
+    }
+    
+    const position = selectedPositionEl.value;
+    
+    // Build the data object to be "sent"
+    let submissionData = {
+        event_id: selectedGame.event_id,
+        game_name: selectedGame.game_name,
+        game_type: selectedGame.game_type,
+        position: position,
+        target: {}
+    };
+
+    let confirmationMessage = '';
+
+    // --- Handle logic based on game type ---
+    
+    if (selectedGame.game_type === 'Individual') {
+        submissionData.target = {
+            type: 'student',
+            access_token: selectedGame.access_token,
+            student_name: selectedGame.student_name
+        };
+        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+    
+    } else if (selectedGame.game_type === 'Grouped') {
+        const groupMembers = participants.filter(p => 
+            p.event_id === selectedGame.event_id &&
+            p.participant_group_id === selectedGame.participant_group_id &&
+            p.student_name !== null
+        );
+        
+        submissionData.target = {
+            type: 'group',
+            participant_group_id: selectedGame.participant_group_id,
+            members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
+        };
+        const memberNames = groupMembers.map(m => m.student_name).join(' & ');
+        confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
+
+    } else if (selectedGame.game_type === 'Team') {
+        submissionData.target = {
+            type: 'team',
+            house: selectedGame.student_house
+        };
+        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+    }
+    
+    // Show processing, simulate server call
+    showProcessingDialog();
+    await handleServerSubmission(submissionData); // Placeholder function
+    hideProcessingDialog();
+    
+    // Show success
+    showConfirmation(confirmationMessage);
+    launchConfetti();
+}
+
+/**
+ * Placeholder function to simulate server submission.
+ * @param {object} data - The data to be sent.
+ */
+function handleServerSubmission(data) {
+    console.log("Submitting to server (mock):", JSON.stringify(data, null, 2));
+    
+    // In a real application, this would be a fetch() POST request.
+    // e.g., fetch('/api/record-winner', { method: 'POST', body: JSON.stringify(data), ... })
+    
+    return new Promise(resolve => setTimeout(resolve, 750)); // Simulate network delay
+}
+
+/**
+ * Resets the entire application to the initial scanning state.
+ */
+function resetApp() {
+    // Hide modals and details section
+    confirmationDialog.classList.remove('show');
+    detailsSection.style.display = 'none';
+    
+    // Show scan section
+    scanSection.style.display = 'block';
+    
+    // Reset form and state
+    winnerForm.reset();
+    gameListEl.innerHTML = '';
+    groupInfoEl.style.display = 'none';
+    positionSelectorWrapper.style.display = 'none';
+    submitBtn.disabled = true;
+    
+    currentStudentParticipations = [];
+    selectedGame = null;
+    
+    clearError();
+    resetQRScannerActions();
+}
+
+// ==================================================
+// 5. UTILITY & HELPER FUNCTIONS
+// ==================================================
+
+// --- Modal Controls ---
+function showProcessingDialog() {
+    processingDialog.classList.add('show');
+}
+function hideProcessingDialog() {
+    processingDialog.classList.remove('show');
+}
+function showConfirmation(message) {
+    confirmationMessageEl.innerHTML = message;
+    detailsSection.style.display = 'none';
+    confirmationDialog.classList.add('show');
+}
+
+// --- Error Messaging ---
+function showError(message) {
+    errorMessage.textContent = message;
+}
+function clearError() {
+    errorMessage.textContent = '';
+}
+
+// --- Confetti (from snippet) ---
+function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    const myConfetti = confetti.create(canvas, {
+        resize: true,
+        useWorker: true
+    });
+    
+    const count = 200;
+    const defaults = {
+        origin: { y: 0.7 }
+    };
+
+    function fire(particleRatio, opts) {
+        myConfetti(Object.assign({}, defaults, opts, {
+            particleCount: Math.floor(count * particleRatio)
+        }));
+    }
+
+    fire(0.25, { spread: 26, startVelocity: 55 });
+    fire(0.2, { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.1, { spread: 120, startVelocity: 45 });
+}
+
+
+// ==================================================
+// 6. EVENT LISTENERS
+// ==================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // QR Scanner Buttons
+    document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
+    document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
+    document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
+
+    // Form Listeners
+    winnerForm.addEventListener('submit', handleSubmit);
+    document.getElementById('cancel-btn').addEventListener('click', resetApp);
+    
+    // Enable submit button only when a position is selected
+    positionSelectorEl.addEventListener('change', () => {
+        if (document.querySelector('input[name="position"]:checked')) {
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Modal Close Buttons
+    document.getElementById('modal-close-btn').addEventListener('click', resetApp);
+    document.getElementById('record-another-btn').addEventListener('click', resetApp);
+});
+
+
+    </script>
+</body>
+</html>
