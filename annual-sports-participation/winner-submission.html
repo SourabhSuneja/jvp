@@ -590,7 +590,7 @@
                     </div>
                 </div>
 
-                <button type="submit" id="submit-btn" class="btn submit-btn">
+                <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
                     <i class="fas fa-check-circle"></i> Submit Winner
                 </button>
                 <button type="button" id="cancel-btn" class="btn cancel-btn">
@@ -917,12 +917,6 @@ function displayGameOptions(participations) {
         `;
         gameListEl.appendChild(gameItem);
     });
-
-    // Always keep the first radio button selected
-    const firstRadio = gameListEl.querySelector('input[type="radio"]');
-    if (firstRadio) {
-        firstRadio.checked = true;
-    }
     
     // Add event listener to the list
     gameListEl.addEventListener('change', handleGameSelection);
