@@ -917,6 +917,12 @@ function displayGameOptions(participations) {
         `;
         gameListEl.appendChild(gameItem);
     });
+
+    // Always keep the first radio button selected
+    const firstRadio = gameListEl.querySelector('input[type="radio"]');
+    if (firstRadio) {
+        firstRadio.checked = true;
+    }
     
     // Add event listener to the list
     gameListEl.addEventListener('change', handleGameSelection);
