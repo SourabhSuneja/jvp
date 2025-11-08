@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_no
 DROP FUNCTION IF EXISTS public.manage_sport_participations(jsonb);
 DROP FUNCTION IF EXISTS get_sport_participants();
 DROP FUNCTION IF EXISTS get_student_participations(UUID);
+DROP FUNCTION IF EXISTS record_sport_winner(data JSONB, operation TEXT);
 
 -- events table to store all games
 CREATE TABLE sport_events (
@@ -345,6 +346,223 @@ BEGIN
         );
 END;
 $$;
+
+-- Function to record winners
+CREATE OR REPLACE FUNCTION record_sport_winner(
+    data JSONB,
+    operation TEXT
+)
+RETURNS sport_winners AS $$
+DECLARE
+    -- Event and Position Variables
+    v_event_id INT := (data->>'event_id')::INT;
+    v_position TEXT := data->>'position';
+    v_game_type TEXT := data->>'game_type';
+    v_game_name TEXT;
+    v_class_category TEXT;
+
+    -- Target Column Variables
+    v_target_winner_col TEXT;
+    v_target_house_col TEXT;
+
+    -- Payload-Specific Variables
+    v_access_token UUID;
+    v_participant_group_id UUID;
+    v_team_house TEXT;
+
+    -- Winner String Variables
+    v_winner_name TEXT;
+    v_winner_house TEXT;
+    v_existing_winner_name TEXT;
+    v_existing_winner_house TEXT;
+
+    -- Record/Loop Variables
+    v_student_record RECORD;
+    v_group_member_record RECORD;
+    
+    -- Row to return
+    v_affected_row sport_winners;
+BEGIN
+    -- 1. Look up event details
+    SELECT game_name, class_category
+    INTO v_game_name, v_class_category
+    FROM sport_events
+    WHERE id = v_event_id;
+
+    IF v_game_name IS NULL THEN
+        RAISE EXCEPTION 'Event not found for event_id: %', v_event_id;
+    END IF;
+
+    -- 2. Determine target columns based on position
+    CASE v_position
+        WHEN 'First' THEN
+            v_target_winner_col := 'winner1';
+            v_target_house_col := 'winnerhouse1';
+        WHEN 'Second' THEN
+            v_target_winner_col := 'winner2';
+            v_target_house_col := 'winnerhouse2';
+        WHEN 'Third' THEN
+            v_target_winner_col := 'winner3';
+            v_target_house_col := 'winnerhouse3';
+        ELSE
+            RAISE EXCEPTION 'Invalid position: %', v_position;
+    END CASE;
+
+    -- 3. Build winner name and house strings based on game_type
+    IF v_game_type = 'Individual' THEN
+        v_access_token := (data->'target'->>'access_token')::UUID;
+
+        SELECT name, class, house
+        INTO v_student_record
+        FROM students
+        WHERE access_token = v_access_token;
+
+        IF v_student_record IS NULL THEN
+            RAISE EXCEPTION 'Invalid access_token: %', v_access_token;
+        END IF;
+
+        v_winner_name := v_student_record.name || ' (' || v_student_record.class || ')';
+        v_winner_house := v_student_record.house;
+
+    ELSIF v_game_type = 'Grouped' THEN
+        v_participant_group_id := (data->'target'->>'participant_group_id')::UUID;
+        v_winner_name := '';
+
+        FOR v_group_member_record IN
+            SELECT s.name, s.class, s.house
+            FROM sport_participations sp
+            JOIN students s ON sp.student_id = s.id
+            WHERE sp.event_id = v_event_id
+              AND sp.participant_group_id = v_participant_group_id
+        LOOP
+            IF v_winner_name != '' THEN
+                v_winner_name := v_winner_name || ' / ';
+            END IF;
+            v_winner_name := v_winner_name || v_group_member_record.name || ' (' || v_group_member_record.class || ')';
+
+            -- House is the same for all group members
+            IF v_winner_house IS NULL THEN
+                v_winner_house := v_group_member_record.house;
+            END IF;
+        END LOOP;
+
+        IF v_winner_name = '' THEN
+            RAISE EXCEPTION 'No members found for group_id: % at event_id: %', v_participant_group_id, v_event_id;
+        END IF;
+
+    ELSIF v_game_type = 'Team' THEN
+        -- Note: Handles potential "hosue" typo from example JSON, defaults to "house"
+        v_team_house := COALESCE(data->'target'->>'house', data->'target'->>'hosue');
+
+        IF v_team_house IS NULL THEN
+             RAISE EXCEPTION 'Team house not provided for Team game.';
+        END IF;
+
+        v_winner_name := 'Team ' || v_team_house;
+        v_winner_house := v_team_house;
+
+    ELSE
+        RAISE EXCEPTION 'Invalid game_type: %', v_game_type;
+    END IF;
+
+    -- 4. Perform the database operation ('write' or 'update')
+
+    IF operation = 'write' THEN
+        -- "Write" means insert or overwrite a specific position, leaving others.
+        INSERT INTO sport_winners (
+            game, gametype, classcategory,
+            winner1, winnerhouse1,
+            winner2, winnerhouse2,
+            winner3, winnerhouse3
+        )
+        VALUES (
+            v_game_name, v_game_type, v_class_category,
+            -- Set the target position or NIL
+            CASE WHEN v_position = 'First' THEN v_winner_name ELSE 'NIL' END,
+            CASE WHEN v_position = 'First' THEN v_winner_house ELSE 'NIL' END,
+            CASE WHEN v_position = 'Second' THEN v_winner_name ELSE 'NIL' END,
+            CASE WHEN v_position = 'Second' THEN v_winner_house ELSE 'NIL' END,
+            CASE WHEN v_position = 'Third' THEN v_winner_name ELSE 'NIL' END,
+            CASE WHEN v_position = 'Third' THEN v_winner_house ELSE 'NIL' END
+        )
+        ON CONFLICT (game, classcategory)
+        DO UPDATE SET
+            winner1 = CASE
+                WHEN excluded.winner1 != 'NIL' THEN excluded.winner1
+                ELSE sport_winners.winner1
+            END,
+            winnerhouse1 = CASE
+                WHEN excluded.winnerhouse1 != 'NIL' THEN excluded.winnerhouse1
+                ELSE sport_winners.winnerhouse1
+            END,
+            winner2 = CASE
+                WHEN excluded.winner2 != 'NIL' THEN excluded.winner2
+                ELSE sport_winners.winner2
+            END,
+            winnerhouse2 = CASE
+                WHEN excluded.winnerhouse2 != 'NIL' THEN excluded.winnerhouse2
+                ELSE sport_winners.winnerhouse2
+            END,
+            winner3 = CASE
+                WHEN excluded.winner3 != 'NIL' THEN excluded.winner3
+                ELSE sport_winners.winner3
+            END,
+            winnerhouse3 = CASE
+                WHEN excluded.winnerhouse3 != 'NIL' THEN excluded.winnerhouse3
+                ELSE sport_winners.winnerhouse3
+            END,
+            timestamp = CURRENT_TIMESTAMP
+        RETURNING * INTO v_affected_row; -- Capture the inserted/updated row
+
+    ELSIF operation = 'update' THEN
+        -- "Update" means append for a tie. This requires dynamic SQL.
+
+        -- Step 1: Ensure the row exists, or we can't update it.
+        INSERT INTO sport_winners (game, gametype, classcategory, winner1, winnerhouse1, winner2, winnerhouse2, winner3, winnerhouse3)
+        VALUES (
+            v_game_name, v_game_type, v_class_category,
+            'NIL', 'NIL', 'NIL', 'NIL', 'NIL', 'NIL'
+        )
+        ON CONFLICT (game, classcategory) DO NOTHING;
+
+        -- Step 2: Get the current values using dynamic SQL
+        EXECUTE format(
+            'SELECT %I, %I FROM sport_winners WHERE game = %L AND classcategory = %L',
+            v_target_winner_col, v_target_house_col, v_game_name, v_class_category
+        )
+        INTO v_existing_winner_name, v_existing_winner_house;
+
+        -- Step 3: Build the new appended strings
+        IF v_existing_winner_name IS NULL OR v_existing_winner_name = 'NIL' OR v_existing_winner_name = '' THEN
+            v_winner_name := v_winner_name; -- Use the new value directly
+        ELSE
+            v_winner_name := v_existing_winner_name || ' / ' || v_winner_name; -- Append
+        END IF;
+
+        IF v_existing_winner_house IS NULL OR v_existing_winner_house = 'NIL' OR v_existing_winner_house = '' THEN
+            v_winner_house := v_winner_house; -- Use the new value directly
+        ELSE
+            v_winner_house := v_existing_winner_house || '/' || v_winner_house; -- Append with "/"
+        END IF;
+
+        -- Step 4: Update the row with the new appended values and return it
+        EXECUTE format(
+            'UPDATE sport_winners SET %I = %L, %I = %L, timestamp = CURRENT_TIMESTAMP WHERE game = %L AND classcategory = %L RETURNING *',
+            v_target_winner_col, v_winner_name,
+            v_target_house_col, v_winner_house,
+            v_game_name, v_class_category
+        )
+        INTO v_affected_row; -- Capture the updated row
+
+    ELSE
+        RAISE EXCEPTION 'Invalid operation: %', operation;
+    END IF;
+
+    -- 5. Return the captured row
+    RETURN v_affected_row;
+    
+END;
+$$ LANGUAGE plpgsql SECURITY INVOKER;
 
 
 -- Enable RLS on all tables
