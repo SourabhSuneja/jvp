@@ -1,5 +1,5 @@
 -- Clean up first
-DROP TABLE IF EXISTS sport_participations, sport_events, housemasters, sport_winners, sport_notifications, sport_score_managers;
+DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_notifications, sport_score_managers, housemasters;
 
 DROP FUNCTION IF EXISTS public.manage_sport_participations(jsonb);
 DROP FUNCTION IF EXISTS get_sport_participants();
