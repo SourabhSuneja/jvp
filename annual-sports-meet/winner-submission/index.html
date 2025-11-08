@@ -1186,13 +1186,11 @@ async function handleSubmit(event) {
  * Placeholder function to simulate server submission.
  * @param {object} data - The data to be sent.
  */
-function handleServerSubmission(data) {
-    console.log("Submitting to server (mock):", JSON.stringify(data, null, 2));
-    
-    // In a real application, this would be a fetch() POST request.
-    // e.g., fetch('/api/record-winner', { method: 'POST', body: JSON.stringify(data), ... })
-    
-    return new Promise(resolve => setTimeout(resolve, 750)); // Simulate network delay
+async function handleServerSubmission(data) {
+    return await invokeFunction('record_sport_winner', {
+            data,
+            operation: 'write'
+        }, true);
 }
 
 /**
