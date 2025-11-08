@@ -1,5 +1,5 @@
 -- Clean up first
-DROP TABLE IF EXISTS sport_participations, sport_events, housemasters;
+DROP TABLE IF EXISTS sport_participations, sport_events, housemasters, sport_winners, sport_notifications, sport_score_managers;
 
 DROP FUNCTION IF EXISTS public.manage_sport_participations(jsonb);
 DROP FUNCTION IF EXISTS get_sport_participants();
@@ -43,6 +43,37 @@ CREATE TABLE sport_participations (
     
     -- A student can't be in the same event twice
     CONSTRAINT unique_student_event UNIQUE (student_id, event_id)
+);
+
+-- Create table "sport_winners"
+CREATE TABLE sport_winners (
+    row_id SERIAL PRIMARY KEY,
+    game VARCHAR(255) NOT NULL,
+    gametype VARCHAR(50) NOT NULL CHECK (gametype IN ('Individual', 'Team', 'Grouped')),
+    classcategory VARCHAR(255) NOT NULL,
+    winner1 VARCHAR(255),
+    winner2 VARCHAR(255),
+    winner3 VARCHAR(255),
+    winnerhouse1 VARCHAR(255),
+    winnerhouse2 VARCHAR(255),
+    winnerhouse3 VARCHAR(255),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_game_class_category UNIQUE (game, classcategory)
+);
+
+-- Create table "sport_notifications"
+CREATE TABLE sport_notifications (
+    notification_id SERIAL PRIMARY KEY,
+    type VARCHAR(255),
+    heading TEXT,
+    content TEXT NOT NULL,
+    generated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create "sport_score_managers"
+CREATE TABLE sport_score_managers (
+    id SERIAL PRIMARY KEY,
+    teacher_id UUID NOT NULL REFERENCES teachers(id) ON DELETE CASCADE
 );
 
 --Table to store housemasters
@@ -320,6 +351,8 @@ $$;
 ALTER TABLE sport_events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sport_participations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE housemasters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sport_winners ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sport_notifications ENABLE ROW LEVEL SECURITY;
 
 -- Create a policy that allows both authenticated and anon users to select sport events (games)
 CREATE POLICY select_sport_events_policy
@@ -335,8 +368,73 @@ FOR SELECT
 TO authenticated, anon
 USING (true);
 
+-- Create a policy that allows both authenticated and anon users to select sport winners
+CREATE POLICY "Allow all to read sport_winners"
+ON sport_winners
+FOR SELECT
+USING (true);
+
+-- Create a policy that allows ONLY designated score managers to insert winners
+CREATE POLICY "Allow score managers to insert sport_winners"
+ON sport_winners
+FOR INSERT
+WITH CHECK (
+    auth.uid() IN (SELECT teacher_id FROM sport_score_managers)
+);
+
+-- Create a policy that allows ONLY designated score managers to update winners
+CREATE POLICY "Allow score managers to update sport_winners"
+ON sport_winners
+FOR UPDATE
+USING (
+    auth.uid() IN (SELECT teacher_id FROM sport_score_managers)
+)
+WITH CHECK (
+    auth.uid() IN (SELECT teacher_id FROM sport_score_managers)
+);
+
+-- Create a policy that allows ONLY designated score managers to delete winners
+CREATE POLICY "Allow score managers to delete sport_winners"
+ON sport_winners
+FOR DELETE
+USING (
+    auth.uid() IN (SELECT teacher_id FROM sport_score_managers)
+);
+
+-- Create a policy that allows both authenticated and anon users to select sport notifications
+CREATE POLICY "Allow all to read sport_notifications"
+ON sport_notifications
+FOR SELECT
+USING (true);
+
+-- Create a policy that allows ONLY designated score managers to insert notifications
+CREATE POLICY "Allow score managers to insert sport_notifications"
+ON sport_notifications
+FOR INSERT
+WITH CHECK (
+    auth.uid() IN (SELECT teacher_id FROM sport_score_managers)
+);
+
 
 -- Seed Data (Game entries, housemasters etc)
+
+-- #############################################
+-- ###      DESIGNATED SCORE MANAGERS        ###
+-- #############################################
+INSERT INTO sport_score_managers (teacher_id)
+VALUES ('e37fd3ed-d9b7-44f4-90e1-96fadac54684');
+
+-- #############################################
+-- ###        DESIGNATED HOUSEMASTERS        ###
+-- #############################################
+INSERT INTO housemasters (teacher_id, house) VALUES
+('89c38b30-4a75-47c9-84c8-c003469ff200', 'Ruby'),
+('370d96b6-2d10-4be7-b738-5b4b30fe2a12', 'Ruby'),
+('9222218b-cf3c-4547-af5a-9b3f29650c22', 'Emerald'),
+('32d8a514-4823-4e91-af92-ac474972823e', 'Emerald'),
+('4c6daa5d-a9cf-4f48-9f94-8a89c3205a28', 'Topaz'),
+('f5afe502-bbfb-4ba4-97c5-af01c7fa9870', 'Sapphire'),
+('c3b492ca-3b39-4d00-9543-32ed3f4cd283', 'Sapphire');
 
 
 -- #############################################
@@ -698,15 +796,3 @@ INSERT INTO sport_events (game_name, class_category, game_type, group_size, gend
 ('Table Tennis (Girls)', '11', 'Individual', 1, 'Girls'),
 ('Table Tennis (Boys)', '12', 'Individual', 1, 'Boys'),
 ('Table Tennis (Girls)', '12', 'Individual', 1, 'Girls');
-
-
-
--- Insert housemasters for all houses
-INSERT INTO housemasters (teacher_id, house) VALUES
-('89c38b30-4a75-47c9-84c8-c003469ff200', 'Ruby'),
-('370d96b6-2d10-4be7-b738-5b4b30fe2a12', 'Ruby'),
-('9222218b-cf3c-4547-af5a-9b3f29650c22', 'Emerald'),
-('32d8a514-4823-4e91-af92-ac474972823e', 'Emerald'),
-('4c6daa5d-a9cf-4f48-9f94-8a89c3205a28', 'Topaz'),
-('f5afe502-bbfb-4ba4-97c5-af01c7fa9870', 'Sapphire'),
-('c3b492ca-3b39-4d00-9543-32ed3f4cd283', 'Sapphire');
