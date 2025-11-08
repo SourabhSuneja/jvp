@@ -355,6 +355,10 @@ ALTER TABLE sport_score_managers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sport_winners ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sport_notifications ENABLE ROW LEVEL SECURITY;
 
+-- Create a policy that allows sport score managers to select their own data
+CREATE POLICY "sport score managers can select their own data" ON sport_score_managers
+FOR SELECT USING (teacher_id = auth.uid());
+
 -- Create a policy that allows both authenticated and anon users to select sport events (games)
 CREATE POLICY select_sport_events_policy
 ON sport_events
