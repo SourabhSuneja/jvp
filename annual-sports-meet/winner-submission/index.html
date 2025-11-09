@@ -997,7 +997,7 @@ async function processQRCode(decodedText) {
     
     showProcessingDialog();
 
-    participants = await invokeFunction('temporary_get_student_participations', {
+    participants = await invokeFunction('get_student_participations', {
             p_access_token: accessToken
          }, false);
 
