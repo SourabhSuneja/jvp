@@ -1,10 +1,13 @@
 -- Clean up first
-DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_notifications, sport_score_managers, housemasters;
 
+-- Drop functions
 DROP FUNCTION IF EXISTS public.manage_sport_participations(JSONB);
 DROP FUNCTION IF EXISTS get_sport_participants();
 DROP FUNCTION IF EXISTS get_student_participations(UUID);
 DROP FUNCTION IF EXISTS record_sport_winner(JSONB, TEXT);
+
+-- Drop tables
+DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_notifications, sport_score_managers, housemasters;
 
 -- events table to store all games
 CREATE TABLE sport_events (
