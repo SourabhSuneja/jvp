@@ -589,6 +589,56 @@
             color: var(--dark-text);
             background: var(--light-bg);
         }
+
+#conflict-prompt .modal-content i.fa-exclamation-triangle {
+    font-size: 4.5rem; /* Matches your .fa-award size */
+    color: var(--warning-color, #f59e0b); /* Using a warning color */
+    margin-bottom: 20px;
+}
+
+/* Styles the new prompt's heading */
+#conflict-prompt h3 {
+    font-size: 2rem; /* Matches your existing h3 */
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--dark-text);
+}
+
+/* Styles the new prompt's message area */
+#conflict-prompt #conflict-message {
+    font-size: 1.05rem; /* Matches your #confirmation-message */
+    line-height: 1.7;
+    margin-bottom: 28px;
+    color: var(--medium-text);
+}
+
+/* Styles the dynamic <strong> tags we'll add with JavaScript */
+#conflict-prompt #conflict-message strong {
+    font-weight: 600;
+    color: var(--dark-text);
+}
+
+/* New layout class for the button container */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; /* Aligns buttons to the right */
+    gap: 12px;
+    margin-top: 20px;
+}
+
+/* * This rule makes the "Treat as Tie" button look secondary,
+ * assuming your base .btn has a transparent or different
+ * background than the .submit-btn.
+*/
+.modal-actions .btn:not(.submit-btn) {
+    background: var(--light-bg, #f1f5f9);
+    color: var(--dark-text, #333);
+    border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.modal-actions .btn:not(.submit-btn):hover {
+    background: var(--border-color, #e2e8f0);
+}
         
         footer {
             text-align: center;
@@ -769,6 +819,30 @@
             </button>
         </div>
     </div>
+
+<div id="conflict-prompt" class="modal-overlay">
+    <div class="modal-content">
+
+        <span class="modal-close-btn" id="conflict-close-btn">&times;</span>
+
+        <i class="fas fa-exclamation-triangle"></i>
+
+        <h3>Conflict Detected</h3>
+
+        <p id="conflict-message"></p>
+
+        <div class="modal-actions">
+            <button id="tie-btn" class="btn">
+                Treat as Tie
+            </button>
+            <button id="overwrite-btn" class="btn submit-btn">
+                Overwrite
+            </button>
+        </div>
+
+    </div>
+</div>
+
     <script>
         
 // ==================================================
@@ -1111,6 +1185,58 @@ function handleGameSelection(event) {
         groupInfoEl.style.display = 'block';
     }
     // Individual game: no info box needed.
+}
+
+function showConflictPrompt(winnerName, gameName, positionName) {
+    // Get all the required elements
+    const prompt = document.getElementById('conflict-prompt');
+    const messageEl = document.getElementById('conflict-message');
+    const overwriteBtn = document.getElementById('overwrite-btn');
+    const tieBtn = document.getElementById('tie-btn');
+    const closeBtn = document.getElementById('conflict-close-btn');
+
+    // Simple validation
+    if (!prompt || !messageEl || !overwriteBtn || !tieBtn || !closeBtn) {
+        console.error("Conflict prompt DOM elements not found.");
+        return Promise.reject(new Error("Missing conflict prompt elements."));
+    }
+
+    // 1. Set the refined, dynamic message
+    messageEl.innerHTML = `
+        <strong>${winnerName}</strong> is already set as the 
+        <strong>${positionName}</strong> winner for <strong>${gameName}</strong>.
+        What would you like to do?
+    `;
+
+    // 2. Show the modal
+    prompt.classList.add('show');
+
+    // 3. Return a promise that handles the user's choice
+    return new Promise((resolve) => {
+        
+        // Single cleanup function
+        const closePrompt = (resolution) => {
+            prompt.classList.remove('show');
+            
+            // Remove all listeners to prevent memory leaks
+            overwriteBtn.removeEventListener('click', onOverwrite);
+            tieBtn.removeEventListener('click', onTie);
+            closeBtn.removeEventListener('click', onClose);
+            
+            // Resolve the promise with the user's choice
+            resolve(resolution);
+        };
+
+        // Define handlers
+        const onOverwrite = () => closePrompt('overwrite');
+        const onTie = () => closePrompt('tie');
+        const onClose = () => closePrompt(false); // Closing resolves to false
+
+        // Attach listeners
+        overwriteBtn.addEventListener('click', onOverwrite);
+        tieBtn.addEventListener('click', onTie);
+        closeBtn.addEventListener('click', onClose);
+    });
 }
 
 /**
