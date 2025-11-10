@@ -1137,6 +1137,9 @@
           */
          async function handleSubmit(event) {
              event.preventDefault();
+
+             // Show processing
+             showProcessingDialog();
              
              const selectedPositionEl = document.querySelector('input[name="position"]:checked');
              
@@ -1210,8 +1213,6 @@
                  confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
              }
              
-             // Show processing
-             showProcessingDialog();
              await handleServerSubmission(submissionData, conflictChoice);
              hideProcessingDialog();
              
