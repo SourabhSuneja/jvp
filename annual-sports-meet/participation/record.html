@@ -447,14 +447,27 @@ function revalidateGameViewCheckboxes() {
             if (!cb.dataset.baseText) {
                 cb.dataset.baseText = baseText; // Store it
             }
-            
+
+            // Check "hard" student limit we stored at render
+            const studentLimit = cb.dataset.studentLimitReached === 'true';
+
             if (cb.checked) {
                 cb.disabled = false; // Always allow unchecking
-                detailsEl.textContent = baseText; // Clear reason
+                if (!studentLimit) { // Don't clear reason if it's a student limit
+                   detailsEl.textContent = baseText; 
+                }
             } else {
-                // This is an unchecked box
-                cb.disabled = limitReached;
-                detailsEl.textContent = limitReached ? `${baseText} (Team is full)` : baseText;
+                // This is an unchecked box. Disable it if EITHER limit is met.
+                if (studentLimit) {
+                    cb.disabled = true;
+                    // The reason is already set from the render, so do nothing to text
+                } else if (limitReached) {
+                    cb.disabled = true;
+                    detailsEl.textContent = `${baseText} (Team is full)`;
+                } else {
+                    cb.disabled = false;
+                    detailsEl.textContent = baseText;
+                }
             }
         });
     } else {
@@ -946,19 +959,56 @@ function revalidateGroupedGameView() {
              eligibleStudents.forEach(student => {
                  const isParticipating = eventParticipations.some(p => p.student_id === student.id);
                  
-                 // Check if game is full (only applies to 'Team')
-                 const isGameFull = limitApplies && currentCount >= event.group_size;
-                 let isDisabled = false;
-                 let disabledReason = "";
-                 
-                 if (!isParticipating && isGameFull) {
+                 // --- Get student's personal limits FOR OTHER GAMES ---
+         // We check what other games the student is in, *excluding* this one.
+         const myOtherParticipations = getParticipationsByStudent(student.id).filter(p => p.event_id !== event.id);
+         let studentIndividualCount = 0;
+         let studentTeamCount = 0;
+         myOtherParticipations.forEach(p => {
+             const pEvent = getEventById(p.event_id);
+             if (!pEvent) return;
+             if (pEvent.game_type === 'Individual' || pEvent.game_type === 'Grouped') studentIndividualCount++;
+             if (pEvent.game_type === 'Team') studentTeamCount++;
+         });
+
+         // Get the type of the game we are CURRENTLY viewing
+         const currentEventType = event.game_type;
+
+         // Check if game is full (only applies to 'Team')
+         const isGameFull = limitApplies && currentCount >= event.group_size;
+         
+         let isDisabled = false;
+         let disabledReason = "";
+         let studentLimitReached = false; // This is the new "lock"
+
+         // Apply rules only if the student is NOT already in this game.
+         if (!isParticipating) { 
+             // Rule 1: Game-level limit (Team Full)
+             if (isGameFull) {
+                 isDisabled = true;
+                 disabledReason = "(Team is full)";
+             } else {
+                 // Rule 2: Student-level limits
+                 const reachedIndividualLimit = (currentEventType === 'Individual' || currentEventType === 'Grouped') && studentIndividualCount >= 1;
+                 const reachedTeamLimit = currentEventType === 'Team' && studentTeamCount >= 1;
+
+                 if (reachedIndividualLimit) {
                      isDisabled = true;
-                     disabledReason = "(Team is full)";
+                     studentLimitReached = true; // Set the lock
+                     disabledReason = "(Already in an individual game)";
+                 } else if (reachedTeamLimit) {
+                     isDisabled = true;
+                     studentLimitReached = true; // Set the lock
+                     disabledReason = "(Already in a team game)";
                  }
+             }
+         }
          
                  gameStudentListContainer.innerHTML += `
                     <label class="list-item">
                         <input type="checkbox" value="${student.id}" 
+                            data-type="${currentEventType}"
+                            data-student-limit-reached="${studentLimitReached}"
                             ${isParticipating ? 'checked' : ''}
                             ${isDisabled ? 'disabled' : ''}>
                         <span class="name">${student.name}</span>
@@ -1030,11 +1080,35 @@ function revalidateGroupedGameView() {
              unassignedHTML += `<p class="details" style="padding: 0.75rem;">No more eligible students available.</p>`;
          }
          unassignedStudents.forEach(student => {
+             // --- Get student's personal limits FOR OTHER GAMES ---
+             const myOtherParticipations = getParticipationsByStudent(student.id).filter(p => p.event_id !== event.id);
+             let studentIndividualCount = 0;
+             myOtherParticipations.forEach(p => {
+                 const pEvent = getEventById(p.event_id);
+                 if (!pEvent) return;
+                 if (pEvent.game_type === 'Individual' || pEvent.game_type === 'Grouped') studentIndividualCount++;
+             });
+
+             const currentEventType = event.game_type; // 'Grouped'
+             let isDisabled = false;
+             let disabledReason = "";
+             let studentLimitReached = false; // The lock
+
+             // Rule: Student-level limits (Grouped counts as Individual)
+             if (studentIndividualCount >= 1) {
+                 isDisabled = true;
+                 studentLimitReached = true;
+                 disabledReason = "(Already in an individual game)";
+             }
+
              unassignedHTML += `
                  <label class="list-item">
-                     <input type="checkbox" value="${student.id}">
+                     <input type="checkbox" value="${student.id}" 
+                            data-type="${currentEventType}"
+                            data-student-limit-reached="${studentLimitReached}"
+                            ${isDisabled ? 'disabled' : ''}>
                      <span class="name">${student.name}</span>
-                     <span class="details">${student.class}</span>
+                     <span class="details" data-base-text="${student.class}">${student.class} ${disabledReason}</span>
                  </label>
              `;
          });
