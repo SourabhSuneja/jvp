@@ -1,1443 +1,1341 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jamna Vidyapeeth - Sports Meet Winner Submission</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-
-    <!-- Supabase CRUD Functions -->
-    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
-    <!-- Dialog Box Styles -->
-    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
-    <!-- Dialog Box Scripts -->
-    <script src="https://myjvp.in/commons/dialog.js"></script>
-
-    <style>
-        :root {
-            --primary-color: #1e40af;
-            --primary-dark: #1e3a8a;
-            --primary-light: #3b82f6;
-            --secondary-color: #0ea5e9;
-            --success-color: #10b981;
-            --success-dark: #059669;
-            --danger-color: #ef4444;
-            --danger-dark: #dc2626;
-            --warning-color: #f59e0b;
-            --light-bg: #f8fafc;
-            --card-bg: #ffffff;
-            --dark-text: #0f172a;
-            --medium-text: #475569;
-            --light-text: #ffffff;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-            
-            /* House Colors */
-            --ruby: #dc2626;
-            --emerald: #059669;
-            --sapphire: #2563eb;
-            --topaz: #f59e0b;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--light-bg);
-            color: var(--dark-text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 60000;
-            pointer-events: none;
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 20px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            max-width: 600px;
-            width: 100%;
-        }
-
-        header h1 {
-            font-weight: 700;
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        header h1 i {
-            margin-right: 12px;
-            color: var(--warning-color);
-            font-size: 2.2rem;
-            vertical-align: middle;
-        }
-
-        header h2 {
-            font-weight: 500;
-            font-size: 1rem;
-            color: var(--medium-text);
-            letter-spacing: 0.3px;
-        }
-
-        .container {
-            max-width: 600px;
-            width: 100%;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            padding: 32px;
-            margin-bottom: 24px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .card h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .card h3 i {
-            font-size: 1.6rem;
-            color: var(--secondary-color);
-        }
-        
-        /* QR Section */
-        #qr-reader {
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid var(--border-color);
-            background: var(--light-bg);
-        }
-        
-        #qr-scanner-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .qr-close-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--danger-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            width: 36px;
-            height: 36px;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .qr-close-btn:hover {
-            background: var(--danger-dark);
-            transform: scale(1.05);
-        }
-        
-        .qr-scanner-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .qr-action-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 16px 24px;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .qr-action-btn i {
-            font-size: 1.3rem;
-        }
-
-        #qr-camera-btn {
-            background: var(--primary-color);
-            color: var(--light-text);
-        }
-        #qr-camera-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        #qr-camera-btn:active {
-            transform: translateY(0);
-        }
-
-        .qr-action-btn[for="qr-file-input"] {
-            background: var(--medium-text);
-            color: var(--light-text);
-        }
-        .qr-action-btn[for="qr-file-input"]:hover {
-            background: var(--dark-text);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        #qr-file-input, #error-message {
-            display: none;
-        }
-
-        .error-text {
-            color: var(--danger-color);
-            text-align: center;
-            margin-top: 16px;
-            font-weight: 500;
-            padding: 12px;
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid var(--danger-color);
-        }
-
-        /* Details Section */
-        #student-info {
-            background: var(--light-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 28px;
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 14px 24px;
-            font-size: 1rem;
-        }
-
-        #student-info strong {
-            font-weight: 600;
-            color: var(--medium-text);
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-        }
-        
-        #student-info span {
-            color: var(--dark-text);
-            font-weight: 500;
-        }
-
-        #student-house {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        /* Dynamic House Colors */
-        .house-Ruby { color: var(--ruby); }
-        .house-Emerald { color: var(--emerald); }
-        .house-Sapphire { color: var(--sapphire); }
-        .house-Topaz { color: var(--topaz); }
-
-        #winner-form h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 16px;
-            color: var(--dark-text);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.9rem;
-        }
-        
-        .radio-list label {
-            display: block;
-            padding: 16px 20px 16px 56px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            background: var(--card-bg);
-            font-weight: 500;
-        }
-        
-        .radio-list label:hover {
-            border-color: var(--primary-light);
-            background: rgba(59, 130, 246, 0.05);
-            transform: translateX(4px);
-        }
-        
-        .radio-list label:before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--border-color);
-            border-radius: 50%;
-            background: var(--card-bg);
-            transition: all 0.2s ease;
-        }
-        
-        .radio-list label:after {
-            content: '';
-            position: absolute;
-            left: 26px;
-            top: 50%;
-            transform: translateY(-50%) scale(0);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            transition: all 0.2s ease;
-        }
-
-        .radio-list input[type="radio"] {
-            display: none;
-        }
-
-        .radio-list input[type="radio"]:checked + label {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: var(--primary-color);
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .radio-list input[type="radio"]:checked + label:before {
-            border-color: var(--primary-color);
-        }
-        
-        .radio-list input[type="radio"]:checked + label:after {
-            transform: translateY(-50%) scale(1);
-        }
-        
-        .radio-list .game-details {
-            font-size: 0.85rem;
-            color: var(--medium-text);
-            margin-top: 4px;
-            font-weight: 400;
-        }
-
-        /* Position Selector */
-        .position-selector {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-        }
-        
-        .position-selector label {
-            flex: 1;
-            text-align: center;
-            padding: 20px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-        }
-        
-        .position-selector label:before,
-        .position-selector label:after {
-            display: none;
-        }
-        
-        .position-selector label i {
-            font-size: 1.8rem;
-        }
-        
-        .position-selector input[type="radio"]:checked + label {
-            font-weight: 700;
-            color: var(--light-text);
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
-        
-        #pos-first:checked + label { 
-            background: #fbbf24; 
-            color: #78350f; 
-            border-color: #fbbf24;
-        }
-        #pos-second:checked + label { 
-            background: #94a3b8; 
-            color: #1e293b; 
-            border-color: #94a3b8;
-        }
-        #pos-third:checked + label { 
-            background: #fb923c; 
-            color: #7c2d12; 
-            border-color: #fb923c;
-        }
-
-        .group-info {
-            background: rgba(245, 158, 11, 0.1);
-            border: 2px solid var(--warning-color);
-            color: #78350f;
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-top: 20px;
-            line-height: 1.7;
-            border-left: 6px solid var(--warning-color);
-            font-weight: 500;
-        }
-        
-        .group-info.team-info {
-            background: rgba(14, 165, 233, 0.1);
-            border-color: var(--secondary-color);
-            color: #0c4a6e;
-            border-left-color: var(--secondary-color);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 16px 24px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 28px;
-            box-shadow: var(--shadow-sm);
-            letter-spacing: 0.3px;
-        }
-        
-        .btn i {
-            font-size: 1.2rem;
-        }
-
-        .submit-btn {
-            background: var(--success-color);
-            color: var(--light-text);
-        }
-        .submit-btn:hover:not(:disabled) {
-            background: var(--success-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .submit-btn:active:not(:disabled) {
-            transform: translateY(0);
-        }
-        .submit-btn:disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .cancel-btn {
-            background: var(--danger-color);
-            color: var(--light-text);
-            margin-top: 12px;
-        }
-        .cancel-btn:hover {
-            background: var(--danger-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .cancel-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Modal / Overlay */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
-
-        .modal-content {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            text-align: center;
-            position: relative;
-            max-width: 450px;
-            width: 90%;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        }
-        
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-content.processing i {
-            font-size: 48px;
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 20px;
-        }
-        .modal-content.processing p {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark-text);
-        }
-
-        #confirmation-dialog .modal-content i.fa-award {
-            font-size: 4.5rem;
-            color: var(--success-color);
-            margin-bottom: 20px;
-        }
-        
-        #confirmation-dialog h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--dark-text);
-        }
-        
-        #confirmation-message {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: 28px;
-            color: var(--medium-text);
-        }
-        
-        #confirmation-message strong {
-            font-weight: 600;
-            color: var(--dark-text);
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #94a3b8;
-            line-height: 1;
-            transition: all 0.2s ease;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-        }
-        .modal-close-btn:hover {
-            color: var(--dark-text);
-            background: var(--light-bg);
-        }
-
-#conflict-prompt .modal-content i.fa-exclamation-triangle {
-    font-size: 4.5rem; /* Matches your .fa-award size */
-    color: var(--warning-color, #f59e0b); /* Using a warning color */
-    margin-bottom: 20px;
-}
-
-/* Styles the new prompt's heading */
-#conflict-prompt h3 {
-    font-size: 2rem; /* Matches your existing h3 */
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--dark-text);
-}
-
-/* Styles the new prompt's message area */
-#conflict-prompt #conflict-message {
-    font-size: 1.05rem; /* Matches your #confirmation-message */
-    line-height: 1.7;
-    margin-bottom: 28px;
-    color: var(--medium-text);
-}
-
-/* Styles the dynamic <strong> tags we'll add with JavaScript */
-#conflict-prompt #conflict-message strong {
-    font-weight: 600;
-    color: var(--dark-text);
-}
-
-/* New layout class for the button container */
-.modal-actions {
-    display: flex;
-    justify-content: flex-end; /* Aligns buttons to the right */
-    gap: 12px;
-    margin-top: 20px;
-}
-
-/* * This rule makes the "Treat as Tie" button look secondary,
- * assuming your base .btn has a transparent or different
- * background than the .submit-btn.
-*/
-.modal-actions .btn:not(.submit-btn) {
-    background: var(--light-bg, #f1f5f9);
-    color: var(--dark-text, #333);
-    border: 1px solid var(--border-color, #e2e8f0);
-}
-
-.modal-actions .btn:not(.submit-btn):hover {
-    background: var(--border-color, #e2e8f0);
-}
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: var(--medium-text);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* Responsive */
-        @media (max-width: 640px) {
-            body {
-                padding: 12px;
-            }
-            header {
-                padding: 24px 16px;
-                margin-bottom: 24px;
-            }
-            header h1 {
-                font-size: 1.6rem;
-            }
-            header h1 i {
-                font-size: 1.8rem;
-            }
-            header h2 {
-                font-size: 0.9rem;
-            }
-            .card {
-                padding: 24px 20px;
-                margin-bottom: 16px;
-            }
-            .card h3 {
-                font-size: 1.2rem;
-            }
-            #student-info {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 20px;
-            }
-            #student-info strong {
-                grid-column: 1 / 2;
-            }
-            #student-info span {
-                grid-column: 2 / 3;
-                text-align: right;
-            }
-            #student-info br { 
-                display: none; 
-            }
-            #student-info > * {
-                display: inline-block;
-                width: auto;
-            }
-            #student-info {
-                display: block;
-                line-height: 2;
-            }
-            #student-info strong::after {
-                content: ':';
-                margin-right: 8px;
-            }
-            #student-info span {
-                float: right;
-            }
-            
-            .position-selector {
-                flex-direction: column;
-            }
-            .position-selector label {
-                padding: 16px;
-            }
-            .modal-content {
-                padding: 32px 24px;
-            }
-        }
-        
-    </style>
-</head>
-<body>
-
-    <canvas id="confetti-canvas"></canvas>
-
-    <header>
-        <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
-        <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
-    </header>
-
-    <main class="container">
-
-        <section id="scan-section" class="card">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Jamna Vidyapeeth - Sports Meet Winner Submission</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+      <!-- Supabase CRUD Functions -->
+      <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+      <!-- Dialog Box Styles -->
+      <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+      <!-- Dialog Box Scripts -->
+      <script src="https://myjvp.in/commons/dialog.js"></script>
+      <style>
+         :root {
+         --primary-color: #1e40af;
+         --primary-dark: #1e3a8a;
+         --primary-light: #3b82f6;
+         --secondary-color: #0ea5e9;
+         --success-color: #10b981;
+         --success-dark: #059669;
+         --danger-color: #ef4444;
+         --danger-dark: #dc2626;
+         --warning-color: #f59e0b;
+         --light-bg: #f8fafc;
+         --card-bg: #ffffff;
+         --dark-text: #0f172a;
+         --medium-text: #475569;
+         --light-text: #ffffff;
+         --border-color: #e2e8f0;
+         --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+         --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+         --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+         /* House Colors */
+         --ruby: #dc2626;
+         --emerald: #059669;
+         --sapphire: #2563eb;
+         --topaz: #f59e0b;
+         }
+         * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         }
+         body {
+         font-family: 'Poppins', sans-serif;
+         background: var(--light-bg);
+         color: var(--dark-text);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         min-height: 100vh;
+         padding: 20px;
+         line-height: 1.6;
+         }
+         #confetti-canvas {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         z-index: 60000;
+         pointer-events: none;
+         }
+         header {
+         text-align: center;
+         margin-bottom: 40px;
+         padding: 30px 20px;
+         background: var(--card-bg);
+         border-radius: 16px;
+         box-shadow: var(--shadow-md);
+         max-width: 600px;
+         width: 100%;
+         }
+         header h1 {
+         font-weight: 700;
+         font-size: 2rem;
+         color: var(--primary-color);
+         margin-bottom: 8px;
+         letter-spacing: -0.5px;
+         }
+         header h1 i {
+         margin-right: 12px;
+         color: var(--warning-color);
+         font-size: 2.2rem;
+         vertical-align: middle;
+         }
+         header h2 {
+         font-weight: 500;
+         font-size: 1rem;
+         color: var(--medium-text);
+         letter-spacing: 0.3px;
+         }
+         .container {
+         max-width: 600px;
+         width: 100%;
+         }
+         .card {
+         background: var(--card-bg);
+         border-radius: 16px;
+         box-shadow: var(--shadow-md);
+         padding: 32px;
+         margin-bottom: 24px;
+         overflow: hidden;
+         transition: all 0.3s ease;
+         border: 1px solid var(--border-color);
+         }
+         .card:hover {
+         box-shadow: var(--shadow-lg);
+         }
+         .card h3 {
+         font-size: 1.4rem;
+         font-weight: 600;
+         color: var(--primary-color);
+         margin-bottom: 24px;
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         }
+         .card h3 i {
+         font-size: 1.6rem;
+         color: var(--secondary-color);
+         }
+         /* QR Section */
+         #qr-reader {
+         width: 100%;
+         border-radius: 12px;
+         overflow: hidden;
+         border: 2px solid var(--border-color);
+         background: var(--light-bg);
+         }
+         #qr-scanner-container {
+         position: relative;
+         margin-bottom: 20px;
+         }
+         .qr-close-btn {
+         position: absolute;
+         top: 12px;
+         right: 12px;
+         background: var(--danger-color);
+         color: white;
+         border: none;
+         border-radius: 8px;
+         width: 36px;
+         height: 36px;
+         font-size: 18px;
+         cursor: pointer;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         z-index: 10;
+         transition: all 0.2s ease;
+         box-shadow: var(--shadow-md);
+         }
+         .qr-close-btn:hover {
+         background: var(--danger-dark);
+         transform: scale(1.05);
+         }
+         .qr-scanner-actions {
+         display: flex;
+         flex-direction: column;
+         gap: 12px;
+         }
+         .qr-action-btn {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 12px;
+         width: 100%;
+         padding: 16px 24px;
+         border: 2px solid transparent;
+         border-radius: 12px;
+         font-size: 1rem;
+         font-weight: 600;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         text-align: center;
+         box-shadow: var(--shadow-sm);
+         }
+         .qr-action-btn i {
+         font-size: 1.3rem;
+         }
+         #qr-camera-btn {
+         background: var(--primary-color);
+         color: var(--light-text);
+         }
+         #qr-camera-btn:hover {
+         background: var(--primary-dark);
+         transform: translateY(-2px);
+         box-shadow: var(--shadow-md);
+         }
+         #qr-camera-btn:active {
+         transform: translateY(0);
+         }
+         .qr-action-btn[for="qr-file-input"] {
+         background: var(--medium-text);
+         color: var(--light-text);
+         }
+         .qr-action-btn[for="qr-file-input"]:hover {
+         background: var(--dark-text);
+         transform: translateY(-2px);
+         box-shadow: var(--shadow-md);
+         }
+         #qr-file-input, #error-message {
+         display: none;
+         }
+         .error-text {
+         color: var(--danger-color);
+         text-align: center;
+         margin-top: 16px;
+         font-weight: 500;
+         padding: 12px;
+         background: rgba(239, 68, 68, 0.1);
+         border-radius: 8px;
+         border-left: 4px solid var(--danger-color);
+         }
+         /* Details Section */
+         #student-info {
+         background: var(--light-bg);
+         border: 2px solid var(--border-color);
+         border-radius: 12px;
+         padding: 24px;
+         margin-bottom: 28px;
+         display: grid;
+         grid-template-columns: auto 1fr;
+         gap: 14px 24px;
+         font-size: 1rem;
+         }
+         #student-info strong {
+         font-weight: 600;
+         color: var(--medium-text);
+         text-transform: uppercase;
+         font-size: 0.85rem;
+         letter-spacing: 0.5px;
+         }
+         #student-info span {
+         color: var(--dark-text);
+         font-weight: 500;
+         }
+         #student-house {
+         font-weight: 700;
+         font-size: 1.1rem;
+         }
+         /* Dynamic House Colors */
+         .house-Ruby { color: var(--ruby); }
+         .house-Emerald { color: var(--emerald); }
+         .house-Sapphire { color: var(--sapphire); }
+         .house-Topaz { color: var(--topaz); }
+         #winner-form h4 {
+         font-size: 1.1rem;
+         font-weight: 600;
+         margin-top: 24px;
+         margin-bottom: 16px;
+         color: var(--dark-text);
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+         font-size: 0.9rem;
+         }
+         .radio-list label {
+         display: block;
+         padding: 16px 20px 16px 56px;
+         border: 2px solid var(--border-color);
+         border-radius: 12px;
+         margin-bottom: 12px;
+         cursor: pointer;
+         transition: all 0.2s ease;
+         position: relative;
+         background: var(--card-bg);
+         font-weight: 500;
+         }
+         .radio-list label:hover {
+         border-color: var(--primary-light);
+         background: rgba(59, 130, 246, 0.05);
+         transform: translateX(4px);
+         }
+         .radio-list label:before {
+         content: '';
+         position: absolute;
+         left: 20px;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 22px;
+         height: 22px;
+         border: 2px solid var(--border-color);
+         border-radius: 50%;
+         background: var(--card-bg);
+         transition: all 0.2s ease;
+         }
+         .radio-list label:after {
+         content: '';
+         position: absolute;
+         left: 26px;
+         top: 50%;
+         transform: translateY(-50%) scale(0);
+         width: 10px;
+         height: 10px;
+         border-radius: 50%;
+         background: var(--primary-color);
+         transition: all 0.2s ease;
+         }
+         .radio-list input[type="radio"] {
+         display: none;
+         }
+         .radio-list input[type="radio"]:checked + label {
+         background: rgba(59, 130, 246, 0.1);
+         border-color: var(--primary-color);
+         font-weight: 600;
+         color: var(--primary-color);
+         }
+         .radio-list input[type="radio"]:checked + label:before {
+         border-color: var(--primary-color);
+         }
+         .radio-list input[type="radio"]:checked + label:after {
+         transform: translateY(-50%) scale(1);
+         }
+         .radio-list .game-details {
+         font-size: 0.85rem;
+         color: var(--medium-text);
+         margin-top: 4px;
+         font-weight: 400;
+         }
+         /* Position Selector */
+         .position-selector {
+         display: flex;
+         justify-content: space-between;
+         gap: 12px;
+         }
+         .position-selector label {
+         flex: 1;
+         text-align: center;
+         padding: 20px 12px;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 8px;
+         font-size: 0.95rem;
+         }
+         .position-selector label:before,
+         .position-selector label:after {
+         display: none;
+         }
+         .position-selector label i {
+         font-size: 1.8rem;
+         }
+         .position-selector input[type="radio"]:checked + label {
+         font-weight: 700;
+         color: var(--light-text);
+         box-shadow: var(--shadow-lg);
+         transform: translateY(-4px);
+         }
+         #pos-first:checked + label { 
+         background: #fbbf24; 
+         color: #78350f; 
+         border-color: #fbbf24;
+         }
+         #pos-second:checked + label { 
+         background: #94a3b8; 
+         color: #1e293b; 
+         border-color: #94a3b8;
+         }
+         #pos-third:checked + label { 
+         background: #fb923c; 
+         color: #7c2d12; 
+         border-color: #fb923c;
+         }
+         .group-info {
+         background: rgba(245, 158, 11, 0.1);
+         border: 2px solid var(--warning-color);
+         color: #78350f;
+         border-radius: 12px;
+         padding: 16px 20px;
+         margin-top: 20px;
+         line-height: 1.7;
+         border-left: 6px solid var(--warning-color);
+         font-weight: 500;
+         }
+         .group-info.team-info {
+         background: rgba(14, 165, 233, 0.1);
+         border-color: var(--secondary-color);
+         color: #0c4a6e;
+         border-left-color: var(--secondary-color);
+         }
+         .btn {
+         width: 100%;
+         padding: 16px 24px;
+         font-size: 1.05rem;
+         font-weight: 600;
+         border-radius: 12px;
+         border: none;
+         cursor: pointer;
+         transition: all 0.3s ease;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         gap: 10px;
+         margin-top: 28px;
+         box-shadow: var(--shadow-sm);
+         letter-spacing: 0.3px;
+         }
+         .btn i {
+         font-size: 1.2rem;
+         }
+         .submit-btn {
+         background: var(--success-color);
+         color: var(--light-text);
+         }
+         .submit-btn:hover:not(:disabled) {
+         background: var(--success-dark);
+         transform: translateY(-2px);
+         box-shadow: var(--shadow-md);
+         }
+         .submit-btn:active:not(:disabled) {
+         transform: translateY(0);
+         }
+         .submit-btn:disabled {
+         background: #cbd5e1;
+         cursor: not-allowed;
+         opacity: 0.6;
+         }
+         .cancel-btn {
+         background: var(--danger-color);
+         color: var(--light-text);
+         margin-top: 12px;
+         }
+         .cancel-btn:hover {
+         background: var(--danger-dark);
+         transform: translateY(-2px);
+         box-shadow: var(--shadow-md);
+         }
+         .cancel-btn:active {
+         transform: translateY(0);
+         }
+         /* Modal / Overlay */
+         .modal-overlay {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
+         background: rgba(15, 23, 42, 0.75);
+         backdrop-filter: blur(4px);
+         display: none;
+         align-items: center;
+         justify-content: center;
+         z-index: 2000;
+         opacity: 0;
+         transition: opacity 0.3s ease;
+         }
+         .modal-overlay.show {
+         display: flex;
+         opacity: 1;
+         }
+         .modal-content {
+         background: var(--card-bg);
+         padding: 40px;
+         border-radius: 16px;
+         text-align: center;
+         position: relative;
+         max-width: 450px;
+         width: 90%;
+         transform: scale(0.9);
+         transition: transform 0.3s ease;
+         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+         }
+         .modal-overlay.show .modal-content {
+         transform: scale(1);
+         }
+         .modal-content.processing i {
+         font-size: 48px;
+         color: var(--primary-color);
+         display: block;
+         margin-bottom: 20px;
+         }
+         .modal-content.processing p {
+         font-size: 1.2rem;
+         font-weight: 600;
+         color: var(--dark-text);
+         }
+         #confirmation-dialog .modal-content i.fa-award {
+         font-size: 4.5rem;
+         color: var(--success-color);
+         margin-bottom: 20px;
+         }
+         #confirmation-dialog h3 {
+         font-size: 2rem;
+         font-weight: 700;
+         margin-bottom: 12px;
+         color: var(--dark-text);
+         }
+         #confirmation-message {
+         font-size: 1.05rem;
+         line-height: 1.7;
+         margin-bottom: 28px;
+         color: var(--medium-text);
+         }
+         #confirmation-message strong {
+         font-weight: 600;
+         color: var(--dark-text);
+         }
+         .modal-close-btn {
+         position: absolute;
+         top: 16px;
+         right: 16px;
+         font-size: 28px;
+         cursor: pointer;
+         color: #94a3b8;
+         line-height: 1;
+         transition: all 0.2s ease;
+         width: 36px;
+         height: 36px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         border-radius: 8px;
+         }
+         .modal-close-btn:hover {
+         color: var(--dark-text);
+         background: var(--light-bg);
+         }
+         #conflict-prompt .modal-content i.fa-exclamation-triangle {
+         font-size: 4.5rem; /* Matches your .fa-award size */
+         color: var(--warning-color, #f59e0b); /* Using a warning color */
+         margin-bottom: 20px;
+         }
+         /* Styles the new prompt's heading */
+         #conflict-prompt h3 {
+         font-size: 2rem; /* Matches your existing h3 */
+         font-weight: 700;
+         margin-bottom: 12px;
+         color: var(--dark-text);
+         }
+         /* Styles the new prompt's message area */
+         #conflict-prompt #conflict-message {
+         font-size: 1.05rem; /* Matches your #confirmation-message */
+         line-height: 1.7;
+         margin-bottom: 28px;
+         color: var(--medium-text);
+         }
+         /* Styles the dynamic <strong> tags we'll add with JavaScript */
+         #conflict-prompt #conflict-message strong {
+         font-weight: 600;
+         color: var(--dark-text);
+         }
+         /* New layout class for the button container */
+         .modal-actions {
+         display: flex;
+         justify-content: flex-end; /* Aligns buttons to the right */
+         gap: 12px;
+         margin-top: 20px;
+         }
+         /* * This rule makes the "Treat as Tie" button look secondary,
+         * assuming your base .btn has a transparent or different
+         * background than the .submit-btn.
+         */
+         .modal-actions .btn:not(.submit-btn) {
+         background: var(--light-bg, #f1f5f9);
+         color: var(--dark-text, #333);
+         border: 1px solid var(--border-color, #e2e8f0);
+         }
+         .modal-actions .btn:not(.submit-btn):hover {
+         background: var(--border-color, #e2e8f0);
+         }
+         footer {
+         text-align: center;
+         margin-top: 40px;
+         color: var(--medium-text);
+         font-size: 0.9rem;
+         font-weight: 500;
+         }
+         /* Responsive */
+         @media (max-width: 640px) {
+         body {
+         padding: 12px;
+         }
+         header {
+         padding: 24px 16px;
+         margin-bottom: 24px;
+         }
+         header h1 {
+         font-size: 1.6rem;
+         }
+         header h1 i {
+         font-size: 1.8rem;
+         }
+         header h2 {
+         font-size: 0.9rem;
+         }
+         .card {
+         padding: 24px 20px;
+         margin-bottom: 16px;
+         }
+         .card h3 {
+         font-size: 1.2rem;
+         }
+         #student-info {
+         grid-template-columns: 1fr;
+         gap: 8px;
+         padding: 20px;
+         }
+         #student-info strong {
+         grid-column: 1 / 2;
+         }
+         #student-info span {
+         grid-column: 2 / 3;
+         text-align: right;
+         }
+         #student-info br { 
+         display: none; 
+         }
+         #student-info > * {
+         display: inline-block;
+         width: auto;
+         }
+         #student-info {
+         display: block;
+         line-height: 2;
+         }
+         #student-info strong::after {
+         content: ':';
+         margin-right: 8px;
+         }
+         #student-info span {
+         float: right;
+         }
+         .position-selector {
+         flex-direction: column;
+         }
+         .position-selector label {
+         padding: 16px;
+         }
+         .modal-content {
+         padding: 32px 24px;
+         }
+         }
+      </style>
+   </head>
+   <body>
+      <canvas id="confetti-canvas"></canvas>
+      <header>
+         <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
+         <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
+      </header>
+      <main class="container">
+         <section id="scan-section" class="card">
             <h3><i class="fas fa-qrcode"></i> Scan Participant QR</h3>
-            
             <div class="qr-section">
-                <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
-                    <div id="qr-reader"></div>
-                    <button class="qr-close-btn" id="qr-close-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="qr-scanner-actions" id="qr-scanner-actions">
-                    <button class="qr-action-btn" id="qr-camera-btn">
-                        <i class="fas fa-camera"></i> Scan with Camera
-                    </button>
-                    <label for="qr-file-input" class="qr-action-btn">
-                        <i class="fas fa-image"></i> Upload QR Image
-                        <input type="file" id="qr-file-input" accept="image/*">
-                    </label>
-                </div>
+               <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
+                  <div id="qr-reader"></div>
+                  <button class="qr-close-btn" id="qr-close-btn">
+                  <i class="fas fa-times"></i>
+                  </button>
+               </div>
+               <div class="qr-scanner-actions" id="qr-scanner-actions">
+                  <button class="qr-action-btn" id="qr-camera-btn">
+                  <i class="fas fa-camera"></i> Scan with Camera
+                  </button>
+                  <label for="qr-file-input" class="qr-action-btn">
+                  <i class="fas fa-image"></i> Upload QR Image
+                  <input type="file" id="qr-file-input" accept="image/*">
+                  </label>
+               </div>
             </div>
-            
             <p id="error-message" class="error-text"></p>
-
-        </section>
-
-        <section id="details-section" class="card" style="display: none;">
+         </section>
+         <section id="details-section" class="card" style="display: none;">
             <h3><i class="fas fa-user-check"></i> Participant Details</h3>
-            
             <div id="student-info">
-                <strong>Name:</strong> <span id="student-name"></span>
-                <strong>Class:</strong> <span id="student-class"></span>
-                <strong>House:</strong> <span id="student-house"></span>
-                <strong>Gender:</strong> <span id="student-gender"></span>
+               <strong>Name:</strong> <span id="student-name"></span>
+               <strong>Class:</strong> <span id="student-class"></span>
+               <strong>House:</strong> <span id="student-house"></span>
+               <strong>Gender:</strong> <span id="student-gender"></span>
             </div>
-
             <form id="winner-form">
-                <h4>Select Game:</h4>
-                <div id="game-list" class="radio-list">
-                </div>
-                
-                <div id="group-info" class="group-info" style="display: none;">
-                </div>
-
-                <div id="position-selector-wrapper" style="display: none;">
-                    <h4>Select Position:</h4>
-                    <div id="position-selector" class="radio-list position-selector">
-                        <input type="radio" id="pos-first" name="position" value="First">
-                        <label for="pos-first"><i class="fas fa-award"></i> First</label>
-                        
-                        <input type="radio" id="pos-second" name="position" value="Second">
-                        <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
-                        
-                        <input type="radio" id="pos-third" name="position" value="Third">
-                        <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
-                    </div>
-                </div>
-
-                <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
-                    <i class="fas fa-check-circle"></i> Submit Winner
-                </button>
-                <button type="button" id="cancel-btn" class="btn cancel-btn">
-                    <i class="fas fa-times-circle"></i> Cancel
-                </button>
+               <h4>Select Game:</h4>
+               <div id="game-list" class="radio-list">
+               </div>
+               <div id="group-info" class="group-info" style="display: none;">
+               </div>
+               <div id="position-selector-wrapper" style="display: none;">
+                  <h4>Select Position:</h4>
+                  <div id="position-selector" class="radio-list position-selector">
+                     <input type="radio" id="pos-first" name="position" value="First">
+                     <label for="pos-first"><i class="fas fa-award"></i> First</label>
+                     <input type="radio" id="pos-second" name="position" value="Second">
+                     <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
+                     <input type="radio" id="pos-third" name="position" value="Third">
+                     <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
+                  </div>
+               </div>
+               <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
+               <i class="fas fa-check-circle"></i> Submit Winner
+               </button>
+               <button type="button" id="cancel-btn" class="btn cancel-btn">
+               <i class="fas fa-times-circle"></i> Cancel
+               </button>
             </form>
-
-        </section>
-        
-    </main>
-    
-    <footer>
-        &copy; 2025 Jamna Vidyapeeth. All rights reserved.
-    </footer>
-
-    <div id="processing-dialog" class="modal-overlay">
-        <div class="modal-content processing">
+         </section>
+      </main>
+      <footer>
+         &copy; 2025 Jamna Vidyapeeth. All rights reserved.
+      </footer>
+      <div id="processing-dialog" class="modal-overlay">
+         <div class="modal-content processing">
             <i class="fas fa-spinner fa-spin"></i>
             <p>Processing...</p>
-        </div>
-    </div>
-
-    <div id="confirmation-dialog" class="modal-overlay">
-        <div class="modal-content">
+         </div>
+      </div>
+      <div id="confirmation-dialog" class="modal-overlay">
+         <div class="modal-content">
             <span class="modal-close-btn" id="modal-close-btn">&times;</span>
             <i class="fas fa-award"></i>
             <h3>Success!</h3>
             <p id="confirmation-message"></p>
             <button id="record-another-btn" class="btn submit-btn">
-                <i class="fas fa-qrcode"></i> Record Another Winner
+            <i class="fas fa-qrcode"></i> Record Another Winner
             </button>
-        </div>
-    </div>
-
-<div id="conflict-prompt" class="modal-overlay">
-    <div class="modal-content">
-
-        <span class="modal-close-btn" id="conflict-close-btn">&times;</span>
-
-        <i class="fas fa-exclamation-triangle"></i>
-
-        <h3>Conflict Detected</h3>
-
-        <p id="conflict-message"></p>
-
-        <div class="modal-actions">
-            <button id="tie-btn" class="btn">
-                Treat as Tie
-            </button>
-            <button id="overwrite-btn" class="btn submit-btn">
-                Overwrite
-            </button>
-        </div>
-
-    </div>
-</div>
-
-    <script>
-        
-// ==================================================
-// 1. GLOBAL DATA & VARIABLES
-// ==================================================
-
-/**
- * Global participants array.
- * This array is expanded to include various game types and scenarios
- * as requested for demonstration.
- */
-let participants = [];
-
-// QR Code Scanner Variable
-let html5QrCode;
-// Global state
-let currentStudentParticipations = [];
-let selectedGame = null;
-
-// ==================================================
-// 2. DOM ELEMENT SELECTORS
-// ==================================================
-const scanSection = document.getElementById('scan-section');
-const detailsSection = document.getElementById('details-section');
-const qrScannerContainer = document.getElementById('qr-scanner-container');
-const qrScannerActions = document.getElementById('qr-scanner-actions');
-const qrReader = document.getElementById('qr-reader');
-const errorMessage = document.getElementById('error-message');
-
-// Details Form
-const studentNameEl = document.getElementById('student-name');
-const studentClassEl = document.getElementById('student-class');
-const studentHouseEl = document.getElementById('student-house');
-const studentGenderEl = document.getElementById('student-gender');
-const winnerForm = document.getElementById('winner-form');
-const gameListEl = document.getElementById('game-list');
-const groupInfoEl = document.getElementById('group-info');
-const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
-const positionSelectorEl = document.getElementById('position-selector');
-const submitBtn = document.getElementById('submit-btn');
-
-// Modals
-const processingDialog = document.getElementById('processing-dialog');
-const confirmationDialog = document.getElementById('confirmation-dialog');
-const confirmationMessageEl = document.getElementById('confirmation-message');
-
-// ==================================================
-// 3. QR SCANNER LOGIC (from snippet, integrated)
-// ==================================================
-
-/**
- * Starts the camera-based QR scanner.
- */
-function startQRScanner() {
-    qrScannerContainer.style.display = 'block';
-    qrScannerActions.style.display = 'none';
-    clearError();
-
-    // Use Html5QrcodeScannerState if available, otherwise fallback
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
-
-    html5QrCode = new Html5Qrcode("qr-reader");
-    const qrConfig = {
-      fps: 60,
-      qrbox: {
-           width: 250,
-           height: 250
-      },
-      aspectRatio: 1.0
-    };
-
-    html5QrCode.start({
-         facingMode: "environment"
-      },
-      qrConfig,
-      onQRScanSuccess,
-      onQRScanFailure
-    ).catch((err) => {
-      console.error("Error starting QR scanner:", err);
-      showError("Couldn't access camera. Please check permissions and try again.");
-      closeQRScanner();
-    });
-}
-
-/**
- * Handles QR file selection from device storage.
- */
-function handleQRFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    qrScannerActions.style.display = 'none';
-    showProcessingDialog();
-    clearError();
-
-    if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("qr-reader");
-    }
-
-    html5QrCode.scanFile(file, true)
-      .then(decodedText => {
-          hideProcessingDialog();
-          processQRCode(decodedText);
-      })
-      .catch(err => {
-          hideProcessingDialog();
-          console.error("Error scanning QR file:", err);
-          showError("Could not read QR code. Please try another image or use camera.");
-          resetQRScannerActions();
-      });
-
-    // Reset file input
-    event.target.value = '';
-}
-
-/**
- * Callback for successful QR code scan (from camera).
- */
-function onQRScanSuccess(decodedText, decodedResult) {
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            console.log("QR Code scanning stopped");
-            processQRCode(decodedText);
-        }).catch((err) => {
-            console.error("Error stopping QR scanner:", err);
-            processQRCode(decodedText); // Process anyway
-        });
-    }
-}
-
-/**
- * Callback for QR scan failure (silent).
- */
-function onQRScanFailure(error) {
-    // This fires constantly when no QR code is detected.
-    // console.warn("QR Scan Failure:", error);
-}
-
-/**
- * Closes the QR scanner and resets the UI.
- */
-function closeQRScanner() {
-    // Use Html5QrcodeScannerState if available, otherwise fallback
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
-
-    if (html5QrCode) {
-      try {
-        if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-            html5QrCode.stop().then(() => {
-                html5QrCode.clear();
-                html5QrCode = null;
-                resetQRScannerActions();
-            }).catch(err => {
-                console.error("Error stopping scanner:", err);
-                html5QrCode.clear(); // Force clear
-                html5QrCode = null;
-                resetQRScannerActions();
-            });
-        } else {
-            html5QrCode.clear();
-            html5QrCode = null;
-            resetQRScannerActions();
-        }
-      } catch (err) {
-           console.error("Error clearing scanner:", err);
-           html5QrCode = null;
-           resetQRScannerActions();
-      }
-    } else {
-         resetQRScannerActions();
-    }
-}
-
-/**
- * Resets the QR scanner UI elements to their initial state.
- * (Renamed from snippet's `resetUI` to avoid conflicts).
- */
-function resetQRScannerActions() {
-    qrScannerContainer.style.display = 'none';
-    qrScannerActions.style.display = 'flex';
-    hideProcessingDialog();
-    qrReader.innerHTML = ''; // Clear the reader div
-}
-
-// Cleanup listeners from snippet
-window.addEventListener('beforeunload', function () {
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
-    if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-        html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
-    }
-});
-
-document.addEventListener('visibilitychange', function () {
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
-    if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-        html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
-    }
-});
-
-// ==================================================
-// 4. CORE APPLICATION LOGIC
-// ==================================================
-
-/**
- * Extracts the token from a URL or returns the original string.
- */
-function extractTokenOrReturn(input) {
-    try {
-      const url = new URL(input);
-      const token = url.searchParams.get("token");
-      return token !== null ? token : input;
-    } catch (error) {
-      // Not a valid URL, return the input as is
-      return input;
-    }
-}
-
-/**
- * Processes the decoded QR code text.
- * Finds the student and displays their details and games.
- */
-async function processQRCode(decodedText) {
-    console.log("QR Code detected:", decodedText);
-
-    const accessToken = extractTokenOrReturn(decodedText);
-    
-    showProcessingDialog();
-
-    participants = await invokeFunction('get_student_participations', {
-            p_access_token: accessToken
-         }, false);
-
-    // Find all valid participations for this student
-    const studentParticipations = participants.filter(p => 
-        p.access_token === accessToken && p.student_name !== null
-    );
-
-    closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
-    hideProcessingDialog(); // Call it again to be sure
-
-    if (studentParticipations.length === 0) {
-      showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
-      resetQRScannerActions();
-      return;
-    }
-    
-    // Store participations globally
-    currentStudentParticipations = studentParticipations;
-    
-    // Display student info (from the first record, it's all the same student)
-    displayStudentDetails(studentParticipations[0]);
-    
-    // Display game options
-    displayGameOptions(studentParticipations);
-
-    // Show the details section
-    scanSection.style.display = 'none';
-    detailsSection.style.display = 'block';
-}
-
-/**
- * Populates the student details card.
- */
-function displayStudentDetails(student) {
-    studentNameEl.textContent = student.student_name;
-    studentClassEl.textContent = 'Class ' + student.student_class;
-    studentHouseEl.textContent = student.student_house;
-    studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
-    
-    // Set dynamic house color
-    studentHouseEl.className = `house-${student.student_house}`;
-}
-
-/**
- * Populates the list of games for the student.
- */
-function displayGameOptions(participations) {
-    gameListEl.innerHTML = ''; // Clear previous list
-    participations.forEach(game => {
-        const inputId = `game-${game.event_id}`;
-        
-        const gameItem = document.createElement('div');
-        gameItem.innerHTML = `
-            <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
-            <label for="${inputId}">
-                ${game.game_name}
-                <div class="game-details">${game.class_category} / ${game.game_type}</div>
-            </label>
-        `;
-        gameListEl.appendChild(gameItem);
-    });
-    
-    // Add event listener to the list
-    gameListEl.addEventListener('change', handleGameSelection);
-}
-
-/**
- * Handles the logic when a user selects a game.
- */
-function handleGameSelection(event) {
-    const eventId = parseInt(event.target.value);
-    selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
-    
-    // Reset position selection and group info
-    winnerForm.reset(); // This clears radio buttons
-    event.target.checked = true; // Re-check the game radio
-    submitBtn.disabled = true;
-    groupInfoEl.style.display = 'none';
-    groupInfoEl.innerHTML = '';
-    groupInfoEl.className = 'group-info'; // Reset class
-    
-    if (!selectedGame) return;
-
-    // Show position selector
-    positionSelectorWrapper.style.display = 'block';
-
-    // Handle Grouped games
-    if (selectedGame.game_type === 'Grouped') {
-        const groupMembers = participants.filter(p => 
-            p.event_id === selectedGame.event_id &&
-            p.participant_group_id === selectedGame.participant_group_id &&
-            p.student_name !== null
-        );
-        const memberNames = groupMembers.map(m => m.student_name).join(', ');
-        groupInfoEl.innerHTML = `
-            <strong><i class="fas fa-users"></i> Grouped Game:</strong>
-            <p>This entry is for a group. All members listed below will receive the same position.</p>
-            <p><strong>Members:</strong> ${memberNames}</p>
-        `;
-        groupInfoEl.style.display = 'block';
-    }
-    // Handle Team games
-    else if (selectedGame.game_type === 'Team') {
-        const house = selectedGame.student_house;
-        groupInfoEl.innerHTML = `
-            <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
-            <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
-        `;
-        groupInfoEl.className = 'group-info team-info'; // Add team-specific class
-        groupInfoEl.style.display = 'block';
-    }
-    // Individual game: no info box needed.
-}
-
-function showConflictPrompt(winnerName, gameName, positionName) {
-    // Get all the required elements
-    const prompt = document.getElementById('conflict-prompt');
-    const messageEl = document.getElementById('conflict-message');
-    const overwriteBtn = document.getElementById('overwrite-btn');
-    const tieBtn = document.getElementById('tie-btn');
-    const closeBtn = document.getElementById('conflict-close-btn');
-
-    // Simple validation
-    if (!prompt || !messageEl || !overwriteBtn || !tieBtn || !closeBtn) {
-        console.error("Conflict prompt DOM elements not found.");
-        return Promise.reject(new Error("Missing conflict prompt elements."));
-    }
-
-    // 1. Set the refined, dynamic message
-    messageEl.innerHTML = `
-        <strong>${winnerName}</strong> is already set as the 
-        <strong>${positionName}</strong> winner for <strong>${gameName}</strong>.
-        What would you like to do?
-    `;
-
-    // 2. Show the modal
-    prompt.classList.add('show');
-
-    // 3. Return a promise that handles the user's choice
-    return new Promise((resolve) => {
-        
-        // Single cleanup function
-        const closePrompt = (resolution) => {
-            prompt.classList.remove('show');
-            
-            // Remove all listeners to prevent memory leaks
-            overwriteBtn.removeEventListener('click', onOverwrite);
-            tieBtn.removeEventListener('click', onTie);
-            closeBtn.removeEventListener('click', onClose);
-            
-            // Resolve the promise with the user's choice
-            resolve(resolution);
-        };
-
-        // Define handlers
-        const onOverwrite = () => closePrompt('overwrite');
-        const onTie = () => closePrompt('tie');
-        const onClose = () => closePrompt(false); // Closing resolves to false
-
-        // Attach listeners
-        overwriteBtn.addEventListener('click', onOverwrite);
-        tieBtn.addEventListener('click', onTie);
-        closeBtn.addEventListener('click', onClose);
-    });
-}
-
-/**
- * Main form submission handler.
- */
-async function handleSubmit(event) {
-    event.preventDefault();
-    
-    const selectedPositionEl = document.querySelector('input[name="position"]:checked');
-    
-    if (!selectedGame || !selectedPositionEl) {
-        showError("Please select a game and a position.");
-        return;
-    }
-    
-    const position = selectedPositionEl.value;
-
-    // First, check if a winner has already been submitted for this game for this position
-    const existing = await invokeFunction(
-        'get_sport_winner_by_position', 
-        {
-            'p_game_id': selectedGame.event_id,
-            'p_position_to_look_up': position
-        }, true
-        );
-
-    if(existing && existing.winner) {
-        console.log('A winner was found for this position:', existing.winner);
-    }
-    
-    // Build the data object to be "sent"
-    let submissionData = {
-        event_id: selectedGame.event_id,
-        game_name: selectedGame.game_name,
-        game_type: selectedGame.game_type,
-        position: position,
-        target: {}
-    };
-
-    let confirmationMessage = '';
-
-    // --- Handle logic based on game type ---
-    
-    if (selectedGame.game_type === 'Individual') {
-        submissionData.target = {
-            type: 'student',
-            access_token: selectedGame.access_token,
-            student_name: selectedGame.student_name
-        };
-        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
-    
-    } else if (selectedGame.game_type === 'Grouped') {
-        const groupMembers = participants.filter(p => 
-            p.event_id === selectedGame.event_id &&
-            p.participant_group_id === selectedGame.participant_group_id &&
-            p.student_name !== null
-        );
-        
-        submissionData.target = {
-            type: 'group',
-            participant_group_id: selectedGame.participant_group_id,
-            members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
-        };
-        const memberNames = groupMembers.map(m => m.student_name).join(' & ');
-        confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
-
-    } else if (selectedGame.game_type === 'Team') {
-        submissionData.target = {
-            type: 'team',
-            house: selectedGame.student_house
-        };
-        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
-    }
-    
-    // Show processing, simulate server call
-    showProcessingDialog();
-    await handleServerSubmission(submissionData); // Placeholder function
-    hideProcessingDialog();
-    
-    // Show success
-    showConfirmation(confirmationMessage);
-    launchConfetti();
-}
-
-/**
- * Placeholder function to simulate server submission.
- * @param {object} data - The data to be sent.
- */
-async function handleServerSubmission(data) {
-    return await invokeFunction('record_sport_winner', {
-            data,
-            operation: 'write'
-        }, true);
-}
-
-/**
- * Resets the entire application to the initial scanning state.
- */
-function resetApp() {
-    // Hide modals and details section
-    confirmationDialog.classList.remove('show');
-    detailsSection.style.display = 'none';
-    
-    // Show scan section
-    scanSection.style.display = 'block';
-    
-    // Reset form and state
-    winnerForm.reset();
-    gameListEl.innerHTML = '';
-    groupInfoEl.style.display = 'none';
-    positionSelectorWrapper.style.display = 'none';
-    submitBtn.disabled = true;
-    
-    currentStudentParticipations = [];
-    selectedGame = null;
-    
-    clearError();
-    resetQRScannerActions();
-}
-
-// ==================================================
-// 5. UTILITY & HELPER FUNCTIONS
-// ==================================================
-
-// --- Modal Controls ---
-function showProcessingDialog() {
-    processingDialog.classList.add('show');
-}
-function hideProcessingDialog() {
-    processingDialog.classList.remove('show');
-}
-function showConfirmation(message) {
-    confirmationMessageEl.innerHTML = message;
-    detailsSection.style.display = 'none';
-    confirmationDialog.classList.add('show');
-}
-
-// --- Error Messaging ---
-function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.style.display = 'block';
-}
-function clearError() {
-    errorMessage.textContent = '';
-    errorMessage.style.display = 'none';
-}
-
-// --- Confetti (from snippet) ---
-function launchConfetti() {
-    const canvas = document.getElementById('confetti-canvas');
-    const myConfetti = confetti.create(canvas, {
-        resize: true,
-        useWorker: true
-    });
-    
-    const count = 200;
-    const defaults = {
-        origin: { y: 0.7 }
-    };
-
-    function fire(particleRatio, opts) {
-        myConfetti(Object.assign({}, defaults, opts, {
-            particleCount: Math.floor(count * particleRatio)
-        }));
-    }
-
-    fire(0.25, { spread: 26, startVelocity: 55 });
-    fire(0.2, { spread: 60 });
-    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-    fire(0.1, { spread: 120, startVelocity: 45 });
-}
-
-
-// ==================================================
-// 6. EVENT LISTENERS
-// ==================================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    // QR Scanner Buttons
-    document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
-    document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
-    document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
-
-    // Form Listeners
-    winnerForm.addEventListener('submit', handleSubmit);
-    document.getElementById('cancel-btn').addEventListener('click', resetApp);
-    
-    // Enable submit button only when a position is selected
-    positionSelectorEl.addEventListener('change', () => {
-        if (document.querySelector('input[name="position"]:checked')) {
-            submitBtn.disabled = false;
-        }
-    });
-
-    // Modal Close Buttons
-    document.getElementById('modal-close-btn').addEventListener('click', resetApp);
-    document.getElementById('record-another-btn').addEventListener('click', resetApp);
-});
-
-
-    </script>
-</body>
+         </div>
+      </div>
+      <div id="conflict-prompt" class="modal-overlay">
+         <div class="modal-content">
+            <span class="modal-close-btn" id="conflict-close-btn">&times;</span>
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Conflict Detected</h3>
+            <p id="conflict-message"></p>
+            <div class="modal-actions">
+               <button id="tie-btn" class="btn">
+               Treat as Tie
+               </button>
+               <button id="overwrite-btn" class="btn submit-btn">
+               Overwrite
+               </button>
+            </div>
+         </div>
+      </div>
+      <script>
+         // ==================================================
+         // 1. GLOBAL DATA & VARIABLES
+         // ==================================================
+         
+         /**
+          * Global participants array.
+          * This array is expanded to include various game types and scenarios
+          * as requested for demonstration.
+          */
+         let participants = [];
+         
+         // QR Code Scanner Variable
+         let html5QrCode;
+         // Global state
+         let currentStudentParticipations = [];
+         let selectedGame = null;
+         
+         // ==================================================
+         // 2. DOM ELEMENT SELECTORS
+         // ==================================================
+         const scanSection = document.getElementById('scan-section');
+         const detailsSection = document.getElementById('details-section');
+         const qrScannerContainer = document.getElementById('qr-scanner-container');
+         const qrScannerActions = document.getElementById('qr-scanner-actions');
+         const qrReader = document.getElementById('qr-reader');
+         const errorMessage = document.getElementById('error-message');
+         
+         // Details Form
+         const studentNameEl = document.getElementById('student-name');
+         const studentClassEl = document.getElementById('student-class');
+         const studentHouseEl = document.getElementById('student-house');
+         const studentGenderEl = document.getElementById('student-gender');
+         const winnerForm = document.getElementById('winner-form');
+         const gameListEl = document.getElementById('game-list');
+         const groupInfoEl = document.getElementById('group-info');
+         const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
+         const positionSelectorEl = document.getElementById('position-selector');
+         const submitBtn = document.getElementById('submit-btn');
+         
+         // Modals
+         const processingDialog = document.getElementById('processing-dialog');
+         const confirmationDialog = document.getElementById('confirmation-dialog');
+         const confirmationMessageEl = document.getElementById('confirmation-message');
+         
+         // ==================================================
+         // 3. QR SCANNER LOGIC (from snippet, integrated)
+         // ==================================================
+         
+         /**
+          * Starts the camera-based QR scanner.
+          */
+         function startQRScanner() {
+             qrScannerContainer.style.display = 'block';
+             qrScannerActions.style.display = 'none';
+             clearError();
+         
+             // Use Html5QrcodeScannerState if available, otherwise fallback
+             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+         
+             html5QrCode = new Html5Qrcode("qr-reader");
+             const qrConfig = {
+               fps: 60,
+               qrbox: {
+                    width: 250,
+                    height: 250
+               },
+               aspectRatio: 1.0
+             };
+         
+             html5QrCode.start({
+                  facingMode: "environment"
+               },
+               qrConfig,
+               onQRScanSuccess,
+               onQRScanFailure
+             ).catch((err) => {
+               console.error("Error starting QR scanner:", err);
+               showError("Couldn't access camera. Please check permissions and try again.");
+               closeQRScanner();
+             });
+         }
+         
+         /**
+          * Handles QR file selection from device storage.
+          */
+         function handleQRFileSelect(event) {
+             const file = event.target.files[0];
+             if (!file) return;
+         
+             qrScannerActions.style.display = 'none';
+             showProcessingDialog();
+             clearError();
+         
+             if (!html5QrCode) {
+                 html5QrCode = new Html5Qrcode("qr-reader");
+             }
+         
+             html5QrCode.scanFile(file, true)
+               .then(decodedText => {
+                   hideProcessingDialog();
+                   processQRCode(decodedText);
+               })
+               .catch(err => {
+                   hideProcessingDialog();
+                   console.error("Error scanning QR file:", err);
+                   showError("Could not read QR code. Please try another image or use camera.");
+                   resetQRScannerActions();
+               });
+         
+             // Reset file input
+             event.target.value = '';
+         }
+         
+         /**
+          * Callback for successful QR code scan (from camera).
+          */
+         function onQRScanSuccess(decodedText, decodedResult) {
+             if (html5QrCode) {
+                 html5QrCode.stop().then(() => {
+                     console.log("QR Code scanning stopped");
+                     processQRCode(decodedText);
+                 }).catch((err) => {
+                     console.error("Error stopping QR scanner:", err);
+                     processQRCode(decodedText); // Process anyway
+                 });
+             }
+         }
+         
+         /**
+          * Callback for QR scan failure (silent).
+          */
+         function onQRScanFailure(error) {
+             // This fires constantly when no QR code is detected.
+             // console.warn("QR Scan Failure:", error);
+         }
+         
+         /**
+          * Closes the QR scanner and resets the UI.
+          */
+         function closeQRScanner() {
+             // Use Html5QrcodeScannerState if available, otherwise fallback
+             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+         
+             if (html5QrCode) {
+               try {
+                 if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+                     html5QrCode.stop().then(() => {
+                         html5QrCode.clear();
+                         html5QrCode = null;
+                         resetQRScannerActions();
+                     }).catch(err => {
+                         console.error("Error stopping scanner:", err);
+                         html5QrCode.clear(); // Force clear
+                         html5QrCode = null;
+                         resetQRScannerActions();
+                     });
+                 } else {
+                     html5QrCode.clear();
+                     html5QrCode = null;
+                     resetQRScannerActions();
+                 }
+               } catch (err) {
+                    console.error("Error clearing scanner:", err);
+                    html5QrCode = null;
+                    resetQRScannerActions();
+               }
+             } else {
+                  resetQRScannerActions();
+             }
+         }
+         
+         /**
+          * Resets the QR scanner UI elements to their initial state.
+          * (Renamed from snippet's `resetUI` to avoid conflicts).
+          */
+         function resetQRScannerActions() {
+             qrScannerContainer.style.display = 'none';
+             qrScannerActions.style.display = 'flex';
+             hideProcessingDialog();
+             qrReader.innerHTML = ''; // Clear the reader div
+         }
+         
+         // Cleanup listeners from snippet
+         window.addEventListener('beforeunload', function () {
+             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+             if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+                 html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
+             }
+         });
+         
+         document.addEventListener('visibilitychange', function () {
+             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+             if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+                 html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
+             }
+         });
+         
+         // ==================================================
+         // 4. CORE APPLICATION LOGIC
+         // ==================================================
+         
+         /**
+          * Extracts the token from a URL or returns the original string.
+          */
+         function extractTokenOrReturn(input) {
+             try {
+               const url = new URL(input);
+               const token = url.searchParams.get("token");
+               return token !== null ? token : input;
+             } catch (error) {
+               // Not a valid URL, return the input as is
+               return input;
+             }
+         }
+         
+         /**
+          * Processes the decoded QR code text.
+          * Finds the student and displays their details and games.
+          */
+         async function processQRCode(decodedText) {
+             console.log("QR Code detected:", decodedText);
+         
+             const accessToken = extractTokenOrReturn(decodedText);
+             
+             showProcessingDialog();
+         
+             participants = await invokeFunction('get_student_participations', {
+                     p_access_token: accessToken
+                  }, false);
+         
+             // Find all valid participations for this student
+             const studentParticipations = participants.filter(p => 
+                 p.access_token === accessToken && p.student_name !== null
+             );
+         
+             closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
+             hideProcessingDialog(); // Call it again to be sure
+         
+             if (studentParticipations.length === 0) {
+               showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
+               resetQRScannerActions();
+               return;
+             }
+             
+             // Store participations globally
+             currentStudentParticipations = studentParticipations;
+             
+             // Display student info (from the first record, it's all the same student)
+             displayStudentDetails(studentParticipations[0]);
+             
+             // Display game options
+             displayGameOptions(studentParticipations);
+         
+             // Show the details section
+             scanSection.style.display = 'none';
+             detailsSection.style.display = 'block';
+         }
+         
+         /**
+          * Populates the student details card.
+          */
+         function displayStudentDetails(student) {
+             studentNameEl.textContent = student.student_name;
+             studentClassEl.textContent = 'Class ' + student.student_class;
+             studentHouseEl.textContent = student.student_house;
+             studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
+             
+             // Set dynamic house color
+             studentHouseEl.className = `house-${student.student_house}`;
+         }
+         
+         /**
+          * Populates the list of games for the student.
+          */
+         function displayGameOptions(participations) {
+             gameListEl.innerHTML = ''; // Clear previous list
+             participations.forEach(game => {
+                 const inputId = `game-${game.event_id}`;
+                 
+                 const gameItem = document.createElement('div');
+                 gameItem.innerHTML = `
+                     <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
+                     <label for="${inputId}">
+                         ${game.game_name}
+                         <div class="game-details">${game.class_category} / ${game.game_type}</div>
+                     </label>
+                 `;
+                 gameListEl.appendChild(gameItem);
+             });
+             
+             // Add event listener to the list
+             gameListEl.addEventListener('change', handleGameSelection);
+         }
+         
+         /**
+          * Handles the logic when a user selects a game.
+          */
+         function handleGameSelection(event) {
+             const eventId = parseInt(event.target.value);
+             selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
+             
+             // Reset position selection and group info
+             winnerForm.reset(); // This clears radio buttons
+             event.target.checked = true; // Re-check the game radio
+             submitBtn.disabled = true;
+             groupInfoEl.style.display = 'none';
+             groupInfoEl.innerHTML = '';
+             groupInfoEl.className = 'group-info'; // Reset class
+             
+             if (!selectedGame) return;
+         
+             // Show position selector
+             positionSelectorWrapper.style.display = 'block';
+         
+             // Handle Grouped games
+             if (selectedGame.game_type === 'Grouped') {
+                 const groupMembers = participants.filter(p => 
+                     p.event_id === selectedGame.event_id &&
+                     p.participant_group_id === selectedGame.participant_group_id &&
+                     p.student_name !== null
+                 );
+                 const memberNames = groupMembers.map(m => m.student_name).join(', ');
+                 groupInfoEl.innerHTML = `
+                     <strong><i class="fas fa-users"></i> Grouped Game:</strong>
+                     <p>This entry is for a group. All members listed below will receive the same position.</p>
+                     <p><strong>Members:</strong> ${memberNames}</p>
+                 `;
+                 groupInfoEl.style.display = 'block';
+             }
+             // Handle Team games
+             else if (selectedGame.game_type === 'Team') {
+                 const house = selectedGame.student_house;
+                 groupInfoEl.innerHTML = `
+                     <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
+                     <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
+                 `;
+                 groupInfoEl.className = 'group-info team-info'; // Add team-specific class
+                 groupInfoEl.style.display = 'block';
+             }
+             // Individual game: no info box needed.
+         }
+         
+         function showConflictPrompt(winnerName, gameName, positionName) {
+             // Get all the required elements
+             const prompt = document.getElementById('conflict-prompt');
+             const messageEl = document.getElementById('conflict-message');
+             const overwriteBtn = document.getElementById('overwrite-btn');
+             const tieBtn = document.getElementById('tie-btn');
+             const closeBtn = document.getElementById('conflict-close-btn');
+         
+             // Simple validation
+             if (!prompt || !messageEl || !overwriteBtn || !tieBtn || !closeBtn) {
+                 console.error("Conflict prompt DOM elements not found.");
+                 return Promise.reject(new Error("Missing conflict prompt elements."));
+             }
+         
+             // 1. Set the refined, dynamic message
+             messageEl.innerHTML = `
+                 <strong>${winnerName}</strong> is already set as the 
+                 <strong>${positionName}</strong> winner for <strong>${gameName}</strong>.
+                 What would you like to do?
+             `;
+         
+             // 2. Show the modal
+             prompt.classList.add('show');
+         
+             // 3. Return a promise that handles the user's choice
+             return new Promise((resolve) => {
+                 
+                 // Single cleanup function
+                 const closePrompt = (resolution) => {
+                     prompt.classList.remove('show');
+                     
+                     // Remove all listeners to prevent memory leaks
+                     overwriteBtn.removeEventListener('click', onOverwrite);
+                     tieBtn.removeEventListener('click', onTie);
+                     closeBtn.removeEventListener('click', onClose);
+                     
+                     // Resolve the promise with the user's choice
+                     resolve(resolution);
+                 };
+         
+                 // Define handlers
+                 const onOverwrite = () => closePrompt('write');
+                 const onTie = () => closePrompt('update');
+                 const onClose = () => closePrompt(false); // Closing resolves to false
+         
+                 // Attach listeners
+                 overwriteBtn.addEventListener('click', onOverwrite);
+                 tieBtn.addEventListener('click', onTie);
+                 closeBtn.addEventListener('click', onClose);
+             });
+         }
+         
+         /**
+          * Main form submission handler.
+          */
+         async function handleSubmit(event) {
+             event.preventDefault();
+             
+             const selectedPositionEl = document.querySelector('input[name="position"]:checked');
+             
+             if (!selectedGame || !selectedPositionEl) {
+                 showError("Please select a game and a position.");
+                 return;
+             }
+             
+             const position = selectedPositionEl.value;
+         
+             // First, check if a winner has already been submitted for this game for this position
+             let conflictChoice = 'write';
+             const existing = await invokeFunction(
+                 'get_sport_winner_by_position', 
+                 {
+                     'p_game_id': selectedGame.event_id,
+                     'p_position_to_look_up': position
+                 }, true
+                 );
+         
+             if(existing && existing.winner) {
+                 conflictChoice = await showConflictPrompt(existing.winner, selectedGame.game_name, position);
+             }
+
+             // If no choice made, return without doing anything
+             if(!conflictChoice) {
+                  return;
+             }
+             
+             // Build the data object to be "sent"
+             let submissionData = {
+                 event_id: selectedGame.event_id,
+                 game_name: selectedGame.game_name,
+                 game_type: selectedGame.game_type,
+                 position: position,
+                 target: {}
+             };
+         
+             let confirmationMessage = '';
+         
+             // --- Handle logic based on game type ---
+             
+             if (selectedGame.game_type === 'Individual') {
+                 submissionData.target = {
+                     type: 'student',
+                     access_token: selectedGame.access_token,
+                     student_name: selectedGame.student_name
+                 };
+                 confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+             
+             } else if (selectedGame.game_type === 'Grouped') {
+                 const groupMembers = participants.filter(p => 
+                     p.event_id === selectedGame.event_id &&
+                     p.participant_group_id === selectedGame.participant_group_id &&
+                     p.student_name !== null
+                 );
+                 
+                 submissionData.target = {
+                     type: 'group',
+                     participant_group_id: selectedGame.participant_group_id,
+                     members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
+                 };
+                 const memberNames = groupMembers.map(m => m.student_name).join(' & ');
+                 confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
+         
+             } else if (selectedGame.game_type === 'Team') {
+                 submissionData.target = {
+                     type: 'team',
+                     house: selectedGame.student_house
+                 };
+                 confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+             }
+             
+             // Show processing
+             showProcessingDialog();
+             await handleServerSubmission(submissionData, conflictChoice);
+             hideProcessingDialog();
+             
+             // Show success
+             showConfirmation(confirmationMessage);
+             launchConfetti();
+         }
+         
+         /**
+          * Placeholder function to simulate server submission.
+          * @param {object} data - The data to be sent.
+          */
+         async function handleServerSubmission(data, operation='write') {
+             return await invokeFunction('record_sport_winner', {
+                     data,
+                     operation: operation
+                 }, true);
+         }
+         
+         /**
+          * Resets the entire application to the initial scanning state.
+          */
+         function resetApp() {
+             // Hide modals and details section
+             confirmationDialog.classList.remove('show');
+             detailsSection.style.display = 'none';
+             
+             // Show scan section
+             scanSection.style.display = 'block';
+             
+             // Reset form and state
+             winnerForm.reset();
+             gameListEl.innerHTML = '';
+             groupInfoEl.style.display = 'none';
+             positionSelectorWrapper.style.display = 'none';
+             submitBtn.disabled = true;
+             
+             currentStudentParticipations = [];
+             selectedGame = null;
+             
+             clearError();
+             resetQRScannerActions();
+         }
+         
+         // ==================================================
+         // 5. UTILITY & HELPER FUNCTIONS
+         // ==================================================
+         
+         // --- Modal Controls ---
+         function showProcessingDialog() {
+             processingDialog.classList.add('show');
+         }
+         function hideProcessingDialog() {
+             processingDialog.classList.remove('show');
+         }
+         function showConfirmation(message) {
+             confirmationMessageEl.innerHTML = message;
+             detailsSection.style.display = 'none';
+             confirmationDialog.classList.add('show');
+         }
+         
+         // --- Error Messaging ---
+         function showError(message) {
+             errorMessage.textContent = message;
+             errorMessage.style.display = 'block';
+         }
+         function clearError() {
+             errorMessage.textContent = '';
+             errorMessage.style.display = 'none';
+         }
+         
+         // --- Confetti (from snippet) ---
+         function launchConfetti() {
+             const canvas = document.getElementById('confetti-canvas');
+             const myConfetti = confetti.create(canvas, {
+                 resize: true,
+                 useWorker: true
+             });
+             
+             const count = 200;
+             const defaults = {
+                 origin: { y: 0.7 }
+             };
+         
+             function fire(particleRatio, opts) {
+                 myConfetti(Object.assign({}, defaults, opts, {
+                     particleCount: Math.floor(count * particleRatio)
+                 }));
+             }
+         
+             fire(0.25, { spread: 26, startVelocity: 55 });
+             fire(0.2, { spread: 60 });
+             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+             fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+             fire(0.1, { spread: 120, startVelocity: 45 });
+         }
+         
+         
+         // ==================================================
+         // 6. EVENT LISTENERS
+         // ==================================================
+         
+         document.addEventListener('DOMContentLoaded', () => {
+             // QR Scanner Buttons
+             document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
+             document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
+             document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
+         
+             // Form Listeners
+             winnerForm.addEventListener('submit', handleSubmit);
+             document.getElementById('cancel-btn').addEventListener('click', resetApp);
+             
+             // Enable submit button only when a position is selected
+             positionSelectorEl.addEventListener('change', () => {
+                 if (document.querySelector('input[name="position"]:checked')) {
+                     submitBtn.disabled = false;
+                 }
+             });
+         
+             // Modal Close Buttons
+             document.getElementById('modal-close-btn').addEventListener('click', resetApp);
+             document.getElementById('record-another-btn').addEventListener('click', resetApp);
+         });
+                      
+      </script>
+   </body>
 </html>
