@@ -1127,6 +1127,19 @@ async function handleSubmit(event) {
     }
     
     const position = selectedPositionEl.value;
+
+    // First, check if a winner has already been submitted for this game for this position
+    const existing = await invokeFunction(
+        'get_sport_winner_by_position', 
+        {
+            'p_game_id': selectedGame.event_id,
+            'p_position_to_look_up': position
+        }, true
+        );
+
+    if(existing && existing.winner) {
+        console.log('A winner was found for this position:', existing.winner);
+    }
     
     // Build the data object to be "sent"
     let submissionData = {
