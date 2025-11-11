@@ -935,7 +935,7 @@
             <div class="form-group">
                <label for="notificationHeadline">AI-Generated Headline:</label> 
                <textarea id="notificationHeadline" rows="5"></textarea>
-               <div id="error-message-notification" class="error-message" style="display: block"></div>
+               <div id="error-message-notification" class="error-message" style="display: none"></div>
             </div>
             <button type="submit" class="btn-submit">Push to Screen</button>
          </form>
@@ -1596,7 +1596,7 @@
 
           showProcessingDialog(false);
 
-               const result = await insertData('notifications', {type, heading, content});
+               const result = await insertData('sport_notifications', {type, heading, content});
                hideProcessingDialog();
                if(result) {
                    showDialog({
@@ -1619,11 +1619,13 @@
          document.getElementById('generateHeadline').addEventListener('click', async function (e) {
               e.preventDefault();
               document.getElementById('error-message-notification').innerText = '';
+document.getElementById('error-message-notification').style.display = 'none';
 
 
               const keywords = document.getElementById('notificationKeywords').value.trim();
               if(keywords === '') {
                   document.getElementById('error-message-notification').innerText = 'Please provide a few keywords for AI to generate a headline.' ;
+document.getElementById('error-message-notification').style.display = 'block';
                   return;
               }
               showProcessingDialog(false);
