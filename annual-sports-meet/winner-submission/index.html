@@ -637,6 +637,214 @@
          padding: 32px 24px;
          }
          }
+/* ===============================================
+  Push Notification Form Styles
+===============================================
+*/
+
+/**
+ * 1. Style the main form wrapper (.form-container)
+ * to look identical to your existing .card elements.
+ */
+.form-container {
+  background: var(--card-bg);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.form-container:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/**
+ * 2. Style the form's heading (h2) to match
+ * your existing card headings (.card h3).
+ */
+.form-container h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/**
+ * 3. Add spacing to each .form-group wrapper.
+ */
+.form-group {
+  margin-bottom: 20px;
+}
+
+/**
+ * 4. Style the labels to be consistent with
+ * other labels in your app (like #student-info strong).
+ */
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--medium-text);
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/**
+ * 5. Create styles for text inputs, select dropdowns,
+ * and textareas. These are based on your .radio-list
+ * and button styles for a consistent feel.
+ */
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--light-bg); /* Use light-bg for a slight inset feel */
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  color: var(--dark-text);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Style the focus state for accessibility and polish */
+.form-group input[type="text"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: var(--card-bg);
+  /* Add a subtle glow matching the primary color */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Make the <select> arrow visible */
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 1.2em;
+  padding-right: 40px;
+}
+
+/**
+ * 6. Style the helper text (.input-hint) to match
+ * other small text (like .radio-list .game-details).
+ */
+.input-hint {
+  font-size: 0.85rem;
+  color: var(--medium-text);
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+/**
+ * 7. Style the "Generate Headline" button.
+ * This mimics your .qr-action-btn (#qr-camera-btn)
+ * for a primary, non-submit action.
+ */
+.btn-generate {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+  background: var(--primary-color);
+  color: var(--light-text);
+  box-shadow: var(--shadow-sm);
+  /* Remove flex properties if it's not full-width */
+  display: inline-block;
+  width: auto;
+}
+
+.btn-generate:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-generate:active {
+  transform: translateY(0);
+}
+
+/**
+ * 8. Style the "Push to Screen" button (.btn-submit)
+ * to be identical to your existing .submit-btn.
+ */
+.btn-submit {
+  /* Base .btn styles */
+  width: 100%;
+  padding: 16px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 28px;
+  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.3px;
+
+  /* .submit-btn specific styles */
+  background: var(--success-color);
+  color: var(--light-text);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background: var(--success-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-submit:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/**
+ * 9. Style the new .error-message class to be
+ * identical to your existing .error-text class.
+ */
+#error-message-notification.error-message {
+  color: var(--danger-color);
+  text-align: center;
+  margin-top: 16px;
+  font-weight: 500;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid var(--danger-color);
+  /* Ensure it's hidden by default, like your other error message */
+  display: none;
+}
+
       </style>
    </head>
    <body>
