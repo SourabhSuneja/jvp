@@ -5,6 +5,7 @@ DROP FUNCTION IF EXISTS public.manage_sport_participations(JSONB);
 DROP FUNCTION IF EXISTS get_sport_participants();
 DROP FUNCTION IF EXISTS get_student_participations(UUID);
 DROP FUNCTION IF EXISTS record_sport_winner(JSONB, TEXT);
+DROP FUNCTION IF EXISTS get_sport_winner_by_position(INTEGER, VARCHAR);
 
 -- Drop tables
 DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_notifications, sport_score_managers, housemasters;
@@ -566,6 +567,47 @@ BEGIN
     
 END;
 $$ LANGUAGE plpgsql SECURITY INVOKER;
+
+-- Function to retrive winner for a specific position in a specific game by using event_id and position (First, Second, Third)
+CREATE OR REPLACE FUNCTION get_sport_winner_by_position(
+    p_game_id INTEGER,
+    p_position_to_look_up VARCHAR(10) -- 'First', 'Second', or 'Third'
+)
+RETURNS TABLE (winner VARCHAR, winnerhouse VARCHAR) AS $$
+WITH SelectedWinner AS (
+    -- 1. Join tables and select the correct columns based on the position
+    SELECT
+        CASE p_position_to_look_up
+            WHEN 'First' THEN sw.winner1
+            WHEN 'Second' THEN sw.winner2
+            WHEN 'Third' THEN sw.winner3
+        END AS potential_winner,
+        
+        CASE p_position_to_look_up
+            WHEN 'First' THEN sw.winnerhouse1
+            WHEN 'Second' THEN sw.winnerhouse2
+            WHEN 'Third' THEN sw.winnerhouse3
+        END AS potential_winnerhouse
+    FROM
+        sport_events se
+    JOIN
+        sport_winners sw ON se.game_name = sw.game 
+                        AND se.class_category = sw.classcategory
+    WHERE
+        se.id = p_game_id
+)
+-- 2. Filter the result to exclude NULL or 'NIL' entries
+SELECT
+    potential_winner AS winner,
+    potential_winnerhouse AS winnerhouse
+FROM
+    SelectedWinner
+WHERE
+    potential_winner IS NOT NULL
+    AND potential_winner <> 'NIL'
+    AND potential_winnerhouse IS NOT NULL
+    AND potential_winnerhouse <> 'NIL';
+$$ LANGUAGE sql SECURITY INVOKER;
 
 
 -- Enable RLS on all tables
