@@ -908,6 +908,37 @@
                </button>
             </form>
          </section>
+      <!-- Push Notification Form Container Starts -->
+      <div class="form-container">
+         <h2>Push Notification</h2>
+         <form id="notificationForm">
+            <div class="form-group">
+               <label for="notificationType">Notification Type:</label>
+               <select id="notificationType" name="notificationType">
+                  <option value="popup">Pop-up</option>
+                  <option value="headline">Scrolling Headline</option>
+                  <option value="both" selected>Both</option>
+               </select>
+            </div>
+            <div class="form-group">
+               <label for="notificationHeading">Notification Heading:</label>
+               <input type="text" id="notificationHeading" placeholder="E.g. Announcement">
+            </div>
+            <div class="form-group">
+               <label for="notificationKeywords">Notification Keywords:</label> 
+               <input type="text" id="notificationKeywords" placeholder="E.g. Ruby into kabaddi semi-finals">
+               <div class="input-hint">AI will use these keywords to generate a perfect notification for you.</div>
+               <button id="generateHeadline" type="button" class="btn-generate">Generate Headline</button>
+            </div>
+            <div class="form-group">
+               <label for="notificationHeadline">AI-Generated Headline:</label> 
+               <textarea id="notificationHeadline" rows="5"></textarea>
+               <div id="error-message-notification" class="error-message" style="display: block"></div>
+            </div>
+            <button type="submit" class="btn-submit">Push to Screen</button>
+         </form>
+      </div>
+      <!-- Push Notification Form Container Ends -->
       </main>
       <footer>
          &copy; 2025 Jamna Vidyapeeth. All rights reserved.
