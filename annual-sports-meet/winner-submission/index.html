@@ -1578,5 +1578,57 @@
          });
                       
       </script>
+      <script>
+         // Handle notification sending
+         document.getElementById('notificationForm').addEventListener('submit', async function (e) {
+              e.preventDefault();
+
+              const heading = document.getElementById('notificationHeading').value.trim() || 'Announcement' ;
+              const content = document.getElementById('notificationHeadline').value.trim();
+              const type = document.getElementById('notificationType').value || 'popup';
+
+               if(heading === '' || content === '') {
+                  document.getElementById('error-message-notification').innerText = 'Notification heading and content are required.' ;
+                  return;
+               }
+
+          showProcessingDialog(false);
+
+               const result = await insertData('notifications', {type, heading, content});
+               hideProcessingDialog();
+               if(result) {
+                   showDialog({
+                     title: 'Success',
+                     message: 'Notification pushed to live screen!',
+                     type: 'alert'
+                  });
+                  notificationForm.reset();
+               } else {
+                   showDialog({
+                     title: 'Error',
+                     message: 'Error sending notification to live screen!',
+                     type: 'alert'
+                  });
+               }
+
+         });
+
+         // Generate headlines with AI
+         document.getElementById('generateHeadline').addEventListener('click', async function (e) {
+              e.preventDefault();
+              document.getElementById('error-message-notification').innerText = '';
+
+
+              const keywords = document.getElementById('notificationKeywords').value.trim();
+              if(keywords === '') {
+                  document.getElementById('error-message-notification').innerText = 'Please provide a few keywords for AI to generate a headline.' ;
+                  return;
+              }
+              showProcessingDialog(false);
+              const response = await generateHeadline(keywords);
+              hideProcessingDialog();
+              document.getElementById('notificationHeadline').value = response.trim();
+         });               
+      </script>
    </body>
 </html>
