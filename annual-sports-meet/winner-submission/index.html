@@ -644,1123 +644,1090 @@
          padding: 32px 24px;
          }
          }
-/* ===============================================
-  Push Notification Form Styles
-===============================================
-*/
-
-/**
- * 1. Style the main form wrapper (.form-container)
- * to look identical to your existing .card elements.
- */
-.form-container {
-  background: var(--card-bg);
-  border-radius: 16px;
-  box-shadow: var(--shadow-md);
-  padding: 32px;
-  margin-bottom: 24px;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-  transition: all 0.3s ease;
-}
-
-.form-container:hover {
-  box-shadow: var(--shadow-lg);
-}
-
-/**
- * 2. Style the form's heading (h2) to match
- * your existing card headings (.card h3).
- */
-.form-container h2 {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/**
- * 3. Add spacing to each .form-group wrapper.
- */
-.form-group {
-  margin-bottom: 20px;
-}
-
-/**
- * 4. Style the labels to be consistent with
- * other labels in your app (like #student-info strong).
- */
-.form-group label {
-  display: block;
-  font-weight: 600;
-  color: var(--medium-text);
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/**
- * 5. Create styles for text inputs, select dropdowns,
- * and textareas. These are based on your .radio-list
- * and button styles for a consistent feel.
- */
-.form-group input[type="text"],
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 14px 18px;
-  border: 2px solid var(--border-color);
-  border-radius: 12px;
-  background: var(--light-bg); /* Use light-bg for a slight inset feel */
-  font-size: 1rem;
-  font-family: 'Poppins', sans-serif;
-  color: var(--dark-text);
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-/* Style the focus state for accessibility and polish */
-.form-group input[type="text"]:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  background: var(--card-bg);
-  /* Add a subtle glow matching the primary color */
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-/* Make the <select> arrow visible */
-.form-group select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 18px center;
-  background-size: 1.2em;
-  padding-right: 40px;
-}
-
-/**
- * 6. Style the helper text (.input-hint) to match
- * other small text (like .radio-list .game-details).
- */
-.input-hint {
-  font-size: 0.85rem;
-  color: var(--medium-text);
-  margin-top: 8px;
-  font-weight: 400;
-}
-
-/**
- * 7. Style the "Generate Headline" button.
- * This mimics your .qr-action-btn (#qr-camera-btn)
- * for a primary, non-submit action.
- */
-.btn-generate {
-  padding: 12px 20px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 12px;
-  background: var(--primary-color);
-  color: var(--light-text);
-  box-shadow: var(--shadow-sm);
-  /* Remove flex properties if it's not full-width */
-  display: inline-block;
-  width: auto;
-}
-
-.btn-generate:hover {
-  background: var(--primary-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn-generate:active {
-  transform: translateY(0);
-}
-
-/**
- * 8. Style the "Push to Screen" button (.btn-submit)
- * to be identical to your existing .submit-btn.
- */
-.btn-submit {
-  /* Base .btn styles */
-  width: 100%;
-  padding: 16px 24px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 28px;
-  box-shadow: var(--shadow-sm);
-  letter-spacing: 0.3px;
-
-  /* .submit-btn specific styles */
-  background: var(--success-color);
-  color: var(--light-text);
-}
-
-.btn-submit:hover:not(:disabled) {
-  background: var(--success-dark);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-}
-
-.btn-submit:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.btn-submit:disabled {
-  background: #cbd5e1;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/**
- * 9. Style the new .error-message class to be
- * identical to your existing .error-text class.
- */
-#error-message-notification.error-message {
-  color: var(--danger-color);
-  text-align: center;
-  margin-top: 16px;
-  font-weight: 500;
-  padding: 12px;
-  background: rgba(239, 68, 68, 0.1);
-  border-radius: 8px;
-  border-left: 4px solid var(--danger-color);
-  /* Ensure it's hidden by default, like your other error message */
-  display: none;
-}
-
-/* --- New CSS for Prompt Box --- */
-
-        /* Style for the icons in the new prompt */
-        #prompt-dialog .modal-content i {
+         /* ===============================================
+         Push Notification Form Styles
+         ===============================================
+         */
+         /**
+         * 1. Style the main form wrapper (.form-container)
+         * to look identical to your existing .card elements.
+         */
+         .form-container {
+         background: var(--card-bg);
+         border-radius: 16px;
+         box-shadow: var(--shadow-md);
+         padding: 32px;
+         margin-bottom: 24px;
+         overflow: hidden;
+         border: 1px solid var(--border-color);
+         transition: all 0.3s ease;
+         }
+         .form-container:hover {
+         box-shadow: var(--shadow-lg);
+         }
+         /**
+         * 2. Style the form's heading (h2) to match
+         * your existing card headings (.card h3).
+         */
+         .form-container h2 {
+         font-size: 1.4rem;
+         font-weight: 600;
+         color: var(--primary-color);
+         margin-bottom: 24px;
+         display: flex;
+         align-items: center;
+         gap: 12px;
+         }
+         /**
+         * 3. Add spacing to each .form-group wrapper.
+         */
+         .form-group {
+         margin-bottom: 20px;
+         }
+         /**
+         * 4. Style the labels to be consistent with
+         * other labels in your app (like #student-info strong).
+         */
+         .form-group label {
+         display: block;
+         font-weight: 600;
+         color: var(--medium-text);
+         margin-bottom: 8px;
+         font-size: 0.9rem;
+         text-transform: uppercase;
+         letter-spacing: 0.5px;
+         }
+         /**
+         * 5. Create styles for text inputs, select dropdowns,
+         * and textareas. These are based on your .radio-list
+         * and button styles for a consistent feel.
+         */
+         .form-group input[type="text"],
+         .form-group select,
+         .form-group textarea {
+         width: 100%;
+         padding: 14px 18px;
+         border: 2px solid var(--border-color);
+         border-radius: 12px;
+         background: var(--light-bg); /* Use light-bg for a slight inset feel */
+         font-size: 1rem;
+         font-family: 'Poppins', sans-serif;
+         color: var(--dark-text);
+         transition: all 0.2s ease;
+         box-shadow: var(--shadow-sm);
+         }
+         /* Style the focus state for accessibility and polish */
+         .form-group input[type="text"]:focus,
+         .form-group select:focus,
+         .form-group textarea:focus {
+         outline: none;
+         border-color: var(--primary-color);
+         background: var(--card-bg);
+         /* Add a subtle glow matching the primary color */
+         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+         }
+         .form-group textarea {
+         resize: vertical;
+         min-height: 120px;
+         }
+         /* Make the 
+         <select>
+            arrow visible */
+            .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            background-size: 1.2em;
+            padding-right: 40px;
+            }
+            /**
+            * 6. Style the helper text (.input-hint) to match
+            * other small text (like .radio-list .game-details).
+            */
+            .input-hint {
+            font-size: 0.85rem;
+            color: var(--medium-text);
+            margin-top: 8px;
+            font-weight: 400;
+            }
+            /**
+            * 7. Style the "Generate Headline" button.
+            * This mimics your .qr-action-btn (#qr-camera-btn)
+            * for a primary, non-submit action.
+            */
+            .btn-generate {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+            background: var(--primary-color);
+            color: var(--light-text);
+            box-shadow: var(--shadow-sm);
+            /* Remove flex properties if it's not full-width */
+            display: inline-block;
+            width: auto;
+            }
+            .btn-generate:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            }
+            .btn-generate:active {
+            transform: translateY(0);
+            }
+            /**
+            * 8. Style the "Push to Screen" button (.btn-submit)
+            * to be identical to your existing .submit-btn.
+            */
+            .btn-submit {
+            /* Base .btn styles */
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+            box-shadow: var(--shadow-sm);
+            letter-spacing: 0.3px;
+            /* .submit-btn specific styles */
+            background: var(--success-color);
+            color: var(--light-text);
+            }
+            .btn-submit:hover:not(:disabled) {
+            background: var(--success-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            }
+            .btn-submit:active:not(:disabled) {
+            transform: translateY(0);
+            }
+            .btn-submit:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            opacity: 0.6;
+            }
+            /**
+            * 9. Style the new .error-message class to be
+            * identical to your existing .error-text class.
+            */
+            #error-message-notification.error-message {
+            color: var(--danger-color);
+            text-align: center;
+            margin-top: 16px;
+            font-weight: 500;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--danger-color);
+            /* Ensure it's hidden by default, like your other error message */
+            display: none;
+            }
+            /* --- New CSS for Prompt Box --- */
+            /* Style for the icons in the new prompt */
+            #prompt-dialog .modal-content i {
             font-size: 4.5rem; /* Match existing icon size */
             margin-bottom: 20px;
             display: block; /* Make sure it's a block element */
-        }
-
-        /* Icon color classes */
-        #prompt-dialog .modal-content i.success {
+            }
+            /* Icon color classes */
+            #prompt-dialog .modal-content i.success {
             color: var(--success-color);
-        }
-
-        #prompt-dialog .modal-content i.error {
+            }
+            #prompt-dialog .modal-content i.error {
             color: var(--error-color);
-        }
-
-        #prompt-dialog .modal-content i.info {
+            }
+            #prompt-dialog .modal-content i.info {
             color: var(--info-color);
-        }
-
-        /* Title style (reuses confirmation h3 style) */
-        #prompt-dialog h3 {
+            }
+            /* Title style (reuses confirmation h3 style) */
+            #prompt-dialog h3 {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 12px;
             color: var(--dark-text);
-        }
-
-        /* Message text style (reuses confirmation p style) */
-        #prompt-message {
+            }
+            /* Message text style (reuses confirmation p style) */
+            #prompt-message {
             font-size: 1.05rem;
             line-height: 1.7;
             margin-bottom: 28px;
             color: var(--medium-text);
             /* Allow HTML for line breaks */
             white-space: pre-line;
-        }
-        
-        /* New close button style */
-        .btn-secondary {
+            }
+            /* New close button style */
+            .btn-secondary {
             background-color: var(--button-secondary-bg);
             color: var(--button-secondary-text);
-        }
-        .btn-secondary:hover {
-             background-color: var(--button-secondary-hover-bg);
-        }
+            }
+            .btn-secondary:hover {
+            background-color: var(--button-secondary-hover-bg);
+            }
       </style>
    </head>
    <body>
-      <canvas id="confetti-canvas"></canvas>
-      <header>
-         <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
-         <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
-      </header>
-      <main class="container">
-         <section id="scan-section" class="card">
-            <h3><i class="fas fa-qrcode"></i> Scan Participant QR</h3>
-            <div class="qr-section">
-               <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
-                  <div id="qr-reader"></div>
-                  <button class="qr-close-btn" id="qr-close-btn">
-                  <i class="fas fa-times"></i>
-                  </button>
-               </div>
-               <div class="qr-scanner-actions" id="qr-scanner-actions">
-                  <button class="qr-action-btn" id="qr-camera-btn">
-                  <i class="fas fa-camera"></i> Scan with Camera
-                  </button>
-                  <label for="qr-file-input" class="qr-action-btn">
-                  <i class="fas fa-image"></i> Upload QR Image
-                  <input type="file" id="qr-file-input" accept="image/*">
-                  </label>
-               </div>
-            </div>
-            <p id="error-message" class="error-text"></p>
-         </section>
-         <section id="details-section" class="card" style="display: none;">
-            <h3><i class="fas fa-user-check"></i> Participant Details</h3>
-            <div id="student-info">
-               <strong>Name:</strong> <span id="student-name"></span>
-               <strong>Class:</strong> <span id="student-class"></span>
-               <strong>House:</strong> <span id="student-house"></span>
-               <strong>Gender:</strong> <span id="student-gender"></span>
-            </div>
-            <form id="winner-form">
-               <h4>Select Game:</h4>
-               <div id="game-list" class="radio-list">
-               </div>
-               <div id="group-info" class="group-info" style="display: none;">
-               </div>
-               <div id="position-selector-wrapper" style="display: none;">
-                  <h4>Select Position:</h4>
-                  <div id="position-selector" class="radio-list position-selector">
-                     <input type="radio" id="pos-first" name="position" value="First">
-                     <label for="pos-first"><i class="fas fa-award"></i> First</label>
-                     <input type="radio" id="pos-second" name="position" value="Second">
-                     <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
-                     <input type="radio" id="pos-third" name="position" value="Third">
-                     <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
-                  </div>
-               </div>
-               <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
-               <i class="fas fa-check-circle"></i> Submit Winner
-               </button>
-               <button type="button" id="cancel-btn" class="btn cancel-btn">
-               <i class="fas fa-times-circle"></i> Cancel
-               </button>
-            </form>
-         </section>
-      <!-- Push Notification Form Container Starts -->
-      <div class="form-container">
-         <h2>Push Notification</h2>
-         <form id="notificationForm">
-            <div class="form-group">
-               <label for="notificationType">Notification Type:</label>
-               <select id="notificationType" name="notificationType">
-                  <option value="popup">Pop-up</option>
-                  <option value="headline">Scrolling Headline</option>
-                  <option value="both" selected>Both</option>
-               </select>
-            </div>
-            <div class="form-group">
-               <label for="notificationHeading">Notification Heading:</label>
-               <input type="text" id="notificationHeading" placeholder="E.g. Announcement">
-            </div>
-            <div class="form-group">
-               <label for="notificationKeywords">Notification Keywords:</label> 
-               <input type="text" id="notificationKeywords" placeholder="E.g. Ruby into kabaddi semi-finals">
-               <div class="input-hint">AI will use these keywords to generate a perfect notification for you.</div>
-               <button id="generateHeadline" type="button" class="btn-generate">Generate Headline</button>
-            </div>
-            <div class="form-group">
-               <label for="notificationHeadline">AI-Generated Headline:</label> 
-               <textarea id="notificationHeadline" rows="5"></textarea>
-               <div id="error-message-notification" class="error-message" style="display: none"></div>
-            </div>
-            <button type="submit" class="btn-submit">Push to Screen</button>
-         </form>
-      </div>
-      <!-- Push Notification Form Container Ends -->
-      </main>
-      <footer>
-         &copy; 2025 Jamna Vidyapeeth. All rights reserved.
-      </footer>
-      <div id="processing-dialog" class="modal-overlay">
-         <div class="modal-content processing">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Processing...</p>
-         </div>
-      </div>
-      <div id="confirmation-dialog" class="modal-overlay">
-         <div class="modal-content">
-            <span class="modal-close-btn" id="modal-close-btn">&times;</span>
-            <i class="fas fa-award"></i>
-            <h3>Success!</h3>
-            <p id="confirmation-message"></p>
-            <button id="record-another-btn" class="btn submit-btn">
-            <i class="fas fa-qrcode"></i> Record Another Winner
-            </button>
-         </div>
-      </div>
-      <div id="conflict-prompt" class="modal-overlay">
-         <div class="modal-content">
-            <span class="modal-close-btn" id="conflict-close-btn">&times;</span>
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>Conflict Detected</h3>
-            <p id="conflict-message"></p>
-            <div class="modal-actions">
-               <button id="tie-btn" class="btn">
-               Treat as Tie
-               </button>
-               <button id="overwrite-btn" class="btn submit-btn">
-               Overwrite
-               </button>
-            </div>
-         </div>
-      </div>
-      <!-- --- Custom Prompt Box Starts --- -->
-    <div id="prompt-dialog" class="modal-overlay">
-        <div class="modal-content">
-            <!-- Reuses .modal-close-btn class -->
-            <span class="modal-close-btn" id="prompt-close-icon-btn">&times;</span>
-            
-            <!-- Icon will be set by JS -->
-            <i id="prompt-icon"></i> 
-            
-            <!-- Title will be set by JS -->
-            <h3 id="prompt-title"></h3>
-            
-            <!-- Message will be set by JS -->
-            <p id="prompt-message"></p>
-            
-            <!-- New "Close" button -->
-            <button id="prompt-close-action-btn" class="btn btn-secondary">
-                Close
-            </button>
-        </div>
-    </div>
-      <!-- --- Custom Prompt Box Ends --- -->
-      <script>
-         // ==================================================
-         // 1. GLOBAL DATA & VARIABLES
-         // ==================================================
-         
-         /**
-          * Global participants array.
-          * This array is expanded to include various game types and scenarios
-          * as requested for demonstration.
-          */
-         let participants = [];
-         
-         // QR Code Scanner Variable
-         let html5QrCode;
-         // Global state
-         let currentStudentParticipations = [];
-         let selectedGame = null;
-         
-         // ==================================================
-         // 2. DOM ELEMENT SELECTORS
-         // ==================================================
-         const scanSection = document.getElementById('scan-section');
-         const detailsSection = document.getElementById('details-section');
-         const qrScannerContainer = document.getElementById('qr-scanner-container');
-         const qrScannerActions = document.getElementById('qr-scanner-actions');
-         const qrReader = document.getElementById('qr-reader');
-         const errorMessage = document.getElementById('error-message');
-         
-         // Details Form
-         const studentNameEl = document.getElementById('student-name');
-         const studentClassEl = document.getElementById('student-class');
-         const studentHouseEl = document.getElementById('student-house');
-         const studentGenderEl = document.getElementById('student-gender');
-         const winnerForm = document.getElementById('winner-form');
-         const gameListEl = document.getElementById('game-list');
-         const groupInfoEl = document.getElementById('group-info');
-         const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
-         const positionSelectorEl = document.getElementById('position-selector');
-         const submitBtn = document.getElementById('submit-btn');
-         
-         // Modals
-         const processingDialog = document.getElementById('processing-dialog');
-         const confirmationDialog = document.getElementById('confirmation-dialog');
-         const confirmationMessageEl = document.getElementById('confirmation-message');
-
-         // Get all elements for the custom prompt dialog
-        const promptDialog = document.getElementById('prompt-dialog');
-        const promptIcon = document.getElementById('prompt-icon');
-        const promptTitle = document.getElementById('prompt-title');
-        const promptMessage = document.getElementById('prompt-message');
-        const promptCloseIconBtn = document.getElementById('prompt-close-icon-btn');
-        const promptCloseActionBtn = document.getElementById('prompt-close-action-btn');
-         
-         // ==================================================
-         // 3. QR SCANNER LOGIC (from snippet, integrated)
-         // ==================================================
-         
-         /**
-          * Starts the camera-based QR scanner.
-          */
-         function startQRScanner() {
-             qrScannerContainer.style.display = 'block';
-             qrScannerActions.style.display = 'none';
-             clearError();
-         
-             // Use Html5QrcodeScannerState if available, otherwise fallback
-             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
-         
-             html5QrCode = new Html5Qrcode("qr-reader");
-             const qrConfig = {
-               fps: 60,
-               qrbox: {
-                    width: 250,
-                    height: 250
-               },
-               aspectRatio: 1.0
-             };
-         
-             html5QrCode.start({
-                  facingMode: "environment"
-               },
-               qrConfig,
-               onQRScanSuccess,
-               onQRScanFailure
-             ).catch((err) => {
-               console.error("Error starting QR scanner:", err);
-               showError("Couldn't access camera. Please check permissions and try again.");
-               closeQRScanner();
-             });
-         }
-         
-         /**
-          * Handles QR file selection from device storage.
-          */
-         function handleQRFileSelect(event) {
-             const file = event.target.files[0];
-             if (!file) return;
-         
-             qrScannerActions.style.display = 'none';
-             showProcessingDialog();
-             clearError();
-         
-             if (!html5QrCode) {
-                 html5QrCode = new Html5Qrcode("qr-reader");
-             }
-         
-             html5QrCode.scanFile(file, true)
-               .then(decodedText => {
-                   hideProcessingDialog();
-                   processQRCode(decodedText);
-               })
-               .catch(err => {
-                   hideProcessingDialog();
-                   console.error("Error scanning QR file:", err);
-                   showError("Could not read QR code. Please try another image or use camera.");
-                   resetQRScannerActions();
-               });
-         
-             // Reset file input
-             event.target.value = '';
-         }
-         
-         /**
-          * Callback for successful QR code scan (from camera).
-          */
-         function onQRScanSuccess(decodedText, decodedResult) {
-             if (html5QrCode) {
-                 html5QrCode.stop().then(() => {
-                     console.log("QR Code scanning stopped");
-                     processQRCode(decodedText);
-                 }).catch((err) => {
-                     console.error("Error stopping QR scanner:", err);
-                     processQRCode(decodedText); // Process anyway
-                 });
-             }
-         }
-         
-         /**
-          * Callback for QR scan failure (silent).
-          */
-         function onQRScanFailure(error) {
-             // This fires constantly when no QR code is detected.
-             // console.warn("QR Scan Failure:", error);
-         }
-         
-         /**
-          * Closes the QR scanner and resets the UI.
-          */
-         function closeQRScanner() {
-             // Use Html5QrcodeScannerState if available, otherwise fallback
-             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
-         
-             if (html5QrCode) {
-               try {
-                 if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-                     html5QrCode.stop().then(() => {
-                         html5QrCode.clear();
-                         html5QrCode = null;
-                         resetQRScannerActions();
-                     }).catch(err => {
-                         console.error("Error stopping scanner:", err);
-                         html5QrCode.clear(); // Force clear
-                         html5QrCode = null;
-                         resetQRScannerActions();
-                     });
-                 } else {
-                     html5QrCode.clear();
-                     html5QrCode = null;
-                     resetQRScannerActions();
-                 }
-               } catch (err) {
-                    console.error("Error clearing scanner:", err);
-                    html5QrCode = null;
-                    resetQRScannerActions();
-               }
-             } else {
+   <canvas id="confetti-canvas"></canvas>
+   <header>
+   <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
+   <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
+   </header>
+   <main class="container">
+   <section id="scan-section" class="card">
+   <h3><i class="fas fa-qrcode"></i> Scan Participant QR</h3>
+   <div class="qr-section">
+   <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
+   <div id="qr-reader"></div>
+   <button class="qr-close-btn" id="qr-close-btn">
+   <i class="fas fa-times"></i>
+   </button>
+   </div>
+   <div class="qr-scanner-actions" id="qr-scanner-actions">
+   <button class="qr-action-btn" id="qr-camera-btn">
+   <i class="fas fa-camera"></i> Scan with Camera
+   </button>
+   <label for="qr-file-input" class="qr-action-btn">
+   <i class="fas fa-image"></i> Upload QR Image
+   <input type="file" id="qr-file-input" accept="image/*">
+   </label>
+   </div>
+   </div>
+   <p id="error-message" class="error-text"></p>
+   </section>
+   <section id="details-section" class="card" style="display: none;">
+   <h3><i class="fas fa-user-check"></i> Participant Details</h3>
+   <div id="student-info">
+   <strong>Name:</strong> <span id="student-name"></span>
+   <strong>Class:</strong> <span id="student-class"></span>
+   <strong>House:</strong> <span id="student-house"></span>
+   <strong>Gender:</strong> <span id="student-gender"></span>
+   </div>
+   <form id="winner-form">
+   <h4>Select Game:</h4>
+   <div id="game-list" class="radio-list">
+   </div>
+   <div id="group-info" class="group-info" style="display: none;">
+   </div>
+   <div id="position-selector-wrapper" style="display: none;">
+   <h4>Select Position:</h4>
+   <div id="position-selector" class="radio-list position-selector">
+   <input type="radio" id="pos-first" name="position" value="First">
+   <label for="pos-first"><i class="fas fa-award"></i> First</label>
+   <input type="radio" id="pos-second" name="position" value="Second">
+   <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
+   <input type="radio" id="pos-third" name="position" value="Third">
+   <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
+   </div>
+   </div>
+   <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
+   <i class="fas fa-check-circle"></i> Submit Winner
+   </button>
+   <button type="button" id="cancel-btn" class="btn cancel-btn">
+   <i class="fas fa-times-circle"></i> Cancel
+   </button>
+   </form>
+   </section>
+   <!-- Push Notification Form Container Starts -->
+   <div class="form-container">
+   <h2>Push Notification</h2>
+   <form id="notificationForm">
+   <div class="form-group">
+   <label for="notificationType">Notification Type:</label>
+   <select id="notificationType" name="notificationType">
+   <option value="popup">Pop-up</option>
+   <option value="headline">Scrolling Headline</option>
+   <option value="both" selected>Both</option>
+   </select>
+   </div>
+   <div class="form-group">
+   <label for="notificationHeading">Notification Heading:</label>
+   <input type="text" id="notificationHeading" placeholder="E.g. Announcement">
+   </div>
+   <div class="form-group">
+   <label for="notificationKeywords">Notification Keywords:</label> 
+   <input type="text" id="notificationKeywords" placeholder="E.g. Ruby into kabaddi semi-finals">
+   <div class="input-hint">AI will use these keywords to generate a perfect notification for you.</div>
+   <button id="generateHeadline" type="button" class="btn-generate">Generate Headline</button>
+   </div>
+   <div class="form-group">
+   <label for="notificationHeadline">AI-Generated Headline:</label> 
+   <textarea id="notificationHeadline" rows="5"></textarea>
+   <div id="error-message-notification" class="error-message" style="display: none"></div>
+   </div>
+   <button type="submit" class="btn-submit">Push to Screen</button>
+   </form>
+   </div>
+   <!-- Push Notification Form Container Ends -->
+   </main>
+   <footer>
+   &copy; 2025 Jamna Vidyapeeth. All rights reserved.
+   </footer>
+   <div id="processing-dialog" class="modal-overlay">
+   <div class="modal-content processing">
+   <i class="fas fa-spinner fa-spin"></i>
+   <p>Processing...</p>
+   </div>
+   </div>
+   <div id="confirmation-dialog" class="modal-overlay">
+   <div class="modal-content">
+   <span class="modal-close-btn" id="modal-close-btn">&times;</span>
+   <i class="fas fa-award"></i>
+   <h3>Success!</h3>
+   <p id="confirmation-message"></p>
+   <button id="record-another-btn" class="btn submit-btn">
+   <i class="fas fa-qrcode"></i> Record Another Winner
+   </button>
+   </div>
+   </div>
+   <div id="conflict-prompt" class="modal-overlay">
+   <div class="modal-content">
+   <span class="modal-close-btn" id="conflict-close-btn">&times;</span>
+   <i class="fas fa-exclamation-triangle"></i>
+   <h3>Conflict Detected</h3>
+   <p id="conflict-message"></p>
+   <div class="modal-actions">
+   <button id="tie-btn" class="btn">
+   Treat as Tie
+   </button>
+   <button id="overwrite-btn" class="btn submit-btn">
+   Overwrite
+   </button>
+   </div>
+   </div>
+   </div>
+   <!-- --- Custom Prompt Box Starts --- -->
+   <div id="prompt-dialog" class="modal-overlay">
+   <div class="modal-content">
+   <!-- Reuses .modal-close-btn class -->
+   <span class="modal-close-btn" id="prompt-close-icon-btn">&times;</span>
+   <!-- Icon will be set by JS -->
+   <i id="prompt-icon"></i> 
+   <!-- Title will be set by JS -->
+   <h3 id="prompt-title"></h3>
+   <!-- Message will be set by JS -->
+   <p id="prompt-message"></p>
+   <!-- New "Close" button -->
+   <button id="prompt-close-action-btn" class="btn btn-secondary">
+   Close
+   </button>
+   </div>
+   </div>
+   <!-- --- Custom Prompt Box Ends --- -->
+   <script>
+      // ==================================================
+      // 1. GLOBAL DATA & VARIABLES
+      // ==================================================
+      
+      /**
+       * Global participants array.
+       * This array is expanded to include various game types and scenarios
+       * as requested for demonstration.
+       */
+      let participants = [];
+      
+      // QR Code Scanner Variable
+      let html5QrCode;
+      // Global state
+      let currentStudentParticipations = [];
+      let selectedGame = null;
+      
+      // ==================================================
+      // 2. DOM ELEMENT SELECTORS
+      // ==================================================
+      const scanSection = document.getElementById('scan-section');
+      const detailsSection = document.getElementById('details-section');
+      const qrScannerContainer = document.getElementById('qr-scanner-container');
+      const qrScannerActions = document.getElementById('qr-scanner-actions');
+      const qrReader = document.getElementById('qr-reader');
+      const errorMessage = document.getElementById('error-message');
+      
+      // Details Form
+      const studentNameEl = document.getElementById('student-name');
+      const studentClassEl = document.getElementById('student-class');
+      const studentHouseEl = document.getElementById('student-house');
+      const studentGenderEl = document.getElementById('student-gender');
+      const winnerForm = document.getElementById('winner-form');
+      const gameListEl = document.getElementById('game-list');
+      const groupInfoEl = document.getElementById('group-info');
+      const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
+      const positionSelectorEl = document.getElementById('position-selector');
+      const submitBtn = document.getElementById('submit-btn');
+      
+      // Modals
+      const processingDialog = document.getElementById('processing-dialog');
+      const confirmationDialog = document.getElementById('confirmation-dialog');
+      const confirmationMessageEl = document.getElementById('confirmation-message');
+      
+      // Get all elements for the custom prompt dialog
+      const promptDialog = document.getElementById('prompt-dialog');
+      const promptIcon = document.getElementById('prompt-icon');
+      const promptTitle = document.getElementById('prompt-title');
+      const promptMessage = document.getElementById('prompt-message');
+      const promptCloseIconBtn = document.getElementById('prompt-close-icon-btn');
+      const promptCloseActionBtn = document.getElementById('prompt-close-action-btn');
+      
+      // ==================================================
+      // 3. QR SCANNER LOGIC (from snippet, integrated)
+      // ==================================================
+      
+      /**
+       * Starts the camera-based QR scanner.
+       */
+      function startQRScanner() {
+          qrScannerContainer.style.display = 'block';
+          qrScannerActions.style.display = 'none';
+          clearError();
+      
+          // Use Html5QrcodeScannerState if available, otherwise fallback
+          const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+      
+          html5QrCode = new Html5Qrcode("qr-reader");
+          const qrConfig = {
+            fps: 60,
+            qrbox: {
+                 width: 250,
+                 height: 250
+            },
+            aspectRatio: 1.0
+          };
+      
+          html5QrCode.start({
+               facingMode: "environment"
+            },
+            qrConfig,
+            onQRScanSuccess,
+            onQRScanFailure
+          ).catch((err) => {
+            console.error("Error starting QR scanner:", err);
+            showError("Couldn't access camera. Please check permissions and try again.");
+            closeQRScanner();
+          });
+      }
+      
+      /**
+       * Handles QR file selection from device storage.
+       */
+      function handleQRFileSelect(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+      
+          qrScannerActions.style.display = 'none';
+          showProcessingDialog();
+          clearError();
+      
+          if (!html5QrCode) {
+              html5QrCode = new Html5Qrcode("qr-reader");
+          }
+      
+          html5QrCode.scanFile(file, true)
+            .then(decodedText => {
+                hideProcessingDialog();
+                processQRCode(decodedText);
+            })
+            .catch(err => {
+                hideProcessingDialog();
+                console.error("Error scanning QR file:", err);
+                showError("Could not read QR code. Please try another image or use camera.");
+                resetQRScannerActions();
+            });
+      
+          // Reset file input
+          event.target.value = '';
+      }
+      
+      /**
+       * Callback for successful QR code scan (from camera).
+       */
+      function onQRScanSuccess(decodedText, decodedResult) {
+          if (html5QrCode) {
+              html5QrCode.stop().then(() => {
+                  console.log("QR Code scanning stopped");
+                  processQRCode(decodedText);
+              }).catch((err) => {
+                  console.error("Error stopping QR scanner:", err);
+                  processQRCode(decodedText); // Process anyway
+              });
+          }
+      }
+      
+      /**
+       * Callback for QR scan failure (silent).
+       */
+      function onQRScanFailure(error) {
+          // This fires constantly when no QR code is detected.
+          // console.warn("QR Scan Failure:", error);
+      }
+      
+      /**
+       * Closes the QR scanner and resets the UI.
+       */
+      function closeQRScanner() {
+          // Use Html5QrcodeScannerState if available, otherwise fallback
+          const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+      
+          if (html5QrCode) {
+            try {
+              if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+                  html5QrCode.stop().then(() => {
+                      html5QrCode.clear();
+                      html5QrCode = null;
+                      resetQRScannerActions();
+                  }).catch(err => {
+                      console.error("Error stopping scanner:", err);
+                      html5QrCode.clear(); // Force clear
+                      html5QrCode = null;
+                      resetQRScannerActions();
+                  });
+              } else {
+                  html5QrCode.clear();
+                  html5QrCode = null;
                   resetQRScannerActions();
-             }
-         }
-         
-         /**
-          * Resets the QR scanner UI elements to their initial state.
-          * (Renamed from snippet's `resetUI` to avoid conflicts).
-          */
-         function resetQRScannerActions() {
-             qrScannerContainer.style.display = 'none';
-             qrScannerActions.style.display = 'flex';
-             hideProcessingDialog();
-             qrReader.innerHTML = ''; // Clear the reader div
-         }
-         
-         // Cleanup listeners from snippet
-         window.addEventListener('beforeunload', function () {
-             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
-             if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-                 html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
-             }
-         });
-         
-         document.addEventListener('visibilitychange', function () {
-             const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
-             if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-                 html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
-             }
-         });
-         
-         // ==================================================
-         // 4. CORE APPLICATION LOGIC
-         // ==================================================
-         
-         /**
-          * Extracts the token from a URL or returns the original string.
-          */
-         function extractTokenOrReturn(input) {
-             try {
-               const url = new URL(input);
-               const token = url.searchParams.get("token");
-               return token !== null ? token : input;
-             } catch (error) {
-               // Not a valid URL, return the input as is
-               return input;
-             }
-         }
-         
-         /**
-          * Processes the decoded QR code text.
-          * Finds the student and displays their details and games.
-          */
-         async function processQRCode(decodedText) {
-             console.log("QR Code detected:", decodedText);
-         
-             const accessToken = extractTokenOrReturn(decodedText);
-             
-             showProcessingDialog();
-         
-             participants = await invokeFunction('get_student_participations', {
-                     p_access_token: accessToken
-                  }, false);
-         
-             // Find all valid participations for this student
-             const studentParticipations = participants.filter(p => 
-                 p.access_token === accessToken && p.student_name !== null
-             );
-         
-             closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
-             hideProcessingDialog(); // Call it again to be sure
-         
-             if (studentParticipations.length === 0) {
-               showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
-               resetQRScannerActions();
-               return;
-             }
-             
-             // Store participations globally
-             currentStudentParticipations = studentParticipations;
-             
-             // Display student info (from the first record, it's all the same student)
-             displayStudentDetails(studentParticipations[0]);
-             
-             // Display game options
-             displayGameOptions(studentParticipations);
-         
-             // Show the details section
-             scanSection.style.display = 'none';
-             detailsSection.style.display = 'block';
-         }
-         
-         /**
-          * Populates the student details card.
-          */
-         function displayStudentDetails(student) {
-             studentNameEl.textContent = student.student_name;
-             studentClassEl.textContent = 'Class ' + student.student_class;
-             studentHouseEl.textContent = student.student_house;
-             studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
-             
-             // Set dynamic house color
-             studentHouseEl.className = `house-${student.student_house}`;
-         }
-         
-         /**
-          * Populates the list of games for the student.
-          */
-         function displayGameOptions(participations) {
-             gameListEl.innerHTML = ''; // Clear previous list
-             participations.forEach(game => {
-                 const inputId = `game-${game.event_id}`;
-                 
-                 const gameItem = document.createElement('div');
-                 gameItem.innerHTML = `
-                     <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
-                     <label for="${inputId}">
-                         ${game.game_name}
-                         <div class="game-details">${game.class_category} / ${game.game_type}</div>
-                     </label>
-                 `;
-                 gameListEl.appendChild(gameItem);
-             });
-             
-             // Add event listener to the list
-             gameListEl.addEventListener('change', handleGameSelection);
-         }
-         
-         /**
-          * Handles the logic when a user selects a game.
-          */
-         function handleGameSelection(event) {
-             const eventId = parseInt(event.target.value);
-             selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
-             
-             // Reset position selection and group info
-             winnerForm.reset(); // This clears radio buttons
-             event.target.checked = true; // Re-check the game radio
-             submitBtn.disabled = true;
-             groupInfoEl.style.display = 'none';
-             groupInfoEl.innerHTML = '';
-             groupInfoEl.className = 'group-info'; // Reset class
-             
-             if (!selectedGame) return;
-         
-             // Show position selector
-             positionSelectorWrapper.style.display = 'block';
-         
-             // Handle Grouped games
-             if (selectedGame.game_type === 'Grouped') {
-                 const groupMembers = participants.filter(p => 
-                     p.event_id === selectedGame.event_id &&
-                     p.participant_group_id === selectedGame.participant_group_id &&
-                     p.student_name !== null
-                 );
-                 const memberNames = groupMembers.map(m => m.student_name).join(', ');
-                 groupInfoEl.innerHTML = `
-                     <strong><i class="fas fa-users"></i> Grouped Game:</strong>
-                     <p>This entry is for a group. All members listed below will receive the same position.</p>
-                     <p><strong>Members:</strong> ${memberNames}</p>
-                 `;
-                 groupInfoEl.style.display = 'block';
-             }
-             // Handle Team games
-             else if (selectedGame.game_type === 'Team') {
-                 const house = selectedGame.student_house;
-                 groupInfoEl.innerHTML = `
-                     <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
-                     <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
-                 `;
-                 groupInfoEl.className = 'group-info team-info'; // Add team-specific class
-                 groupInfoEl.style.display = 'block';
-             }
-             // Individual game: no info box needed.
-         }
-         
-         function showConflictPrompt(winnerName, gameName, positionName) {
-             // Get all the required elements
-             const prompt = document.getElementById('conflict-prompt');
-             const messageEl = document.getElementById('conflict-message');
-             const overwriteBtn = document.getElementById('overwrite-btn');
-             const tieBtn = document.getElementById('tie-btn');
-             const closeBtn = document.getElementById('conflict-close-btn');
-         
-             // Simple validation
-             if (!prompt || !messageEl || !overwriteBtn || !tieBtn || !closeBtn) {
-                 console.error("Conflict prompt DOM elements not found.");
-                 return Promise.reject(new Error("Missing conflict prompt elements."));
-             }
-         
-             // 1. Set the refined, dynamic message
-             messageEl.innerHTML = `
-                 <strong>${winnerName}</strong> is already set as the 
-                 <strong>${positionName}</strong> winner for <strong>${gameName}</strong>.
-                 What would you like to do?
-             `;
-         
-             // 2. Show the modal
-             prompt.classList.add('show');
-         
-             // 3. Return a promise that handles the user's choice
-             return new Promise((resolve) => {
-                 
-                 // Single cleanup function
-                 const closePrompt = (resolution) => {
-                     prompt.classList.remove('show');
-                     
-                     // Remove all listeners to prevent memory leaks
-                     overwriteBtn.removeEventListener('click', onOverwrite);
-                     tieBtn.removeEventListener('click', onTie);
-                     closeBtn.removeEventListener('click', onClose);
-                     
-                     // Resolve the promise with the user's choice
-                     resolve(resolution);
-                 };
-         
-                 // Define handlers
-                 const onOverwrite = () => closePrompt('write');
-                 const onTie = () => closePrompt('update');
-                 const onClose = () => closePrompt(false); // Closing resolves to false
-         
-                 // Attach listeners
-                 overwriteBtn.addEventListener('click', onOverwrite);
-                 tieBtn.addEventListener('click', onTie);
-                 closeBtn.addEventListener('click', onClose);
-             });
-         }
-         
-         /**
-          * Main form submission handler.
-          */
-         async function handleSubmit(event) {
-             event.preventDefault();
-
-             // Show processing
-             showProcessingDialog();
-             
-             const selectedPositionEl = document.querySelector('input[name="position"]:checked');
-             
-             if (!selectedGame || !selectedPositionEl) {
-                 showError("Please select a game and a position.");
-                 return;
-             }
-             
-             const position = selectedPositionEl.value;
-         
-             // First, check if a winner has already been submitted for this game for this position
-             let conflictChoice = 'write';
-             const existing = await invokeFunction(
-                 'get_sport_winner_by_position', 
-                 {
-                     'p_game_id': selectedGame.event_id,
-                     'p_position_to_look_up': position
-                 }, true
-                 );
-         
-             if(existing && existing.winner) {
-                 conflictChoice = await showConflictPrompt(existing.winner, selectedGame.game_name, position);
-             }
-
-             // If no choice made, return without doing anything
-             if(!conflictChoice) {
-                  hideProcessingDialog();
-                  return;
-             }
-             
-             // Build the data object to be "sent"
-             let submissionData = {
-                 event_id: selectedGame.event_id,
-                 game_name: selectedGame.game_name,
-                 game_type: selectedGame.game_type,
-                 position: position,
-                 target: {}
-             };
-         
-             let confirmationMessage = '';
-         
-             // --- Handle logic based on game type ---
-             
-             if (selectedGame.game_type === 'Individual') {
-                 submissionData.target = {
-                     type: 'student',
-                     access_token: selectedGame.access_token,
-                     student_name: selectedGame.student_name
-                 };
-                 confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
-             
-             } else if (selectedGame.game_type === 'Grouped') {
-                 const groupMembers = participants.filter(p => 
-                     p.event_id === selectedGame.event_id &&
-                     p.participant_group_id === selectedGame.participant_group_id &&
-                     p.student_name !== null
-                 );
-                 
-                 submissionData.target = {
-                     type: 'group',
-                     participant_group_id: selectedGame.participant_group_id,
-                     members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
-                 };
-                 const memberNames = groupMembers.map(m => m.student_name).join(' & ');
-                 confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
-         
-             } else if (selectedGame.game_type === 'Team') {
-                 submissionData.target = {
-                     type: 'team',
-                     house: selectedGame.student_house
-                 };
-                 confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
-             }
-             
-             await handleServerSubmission(submissionData, conflictChoice);
-             hideProcessingDialog();
-             
-             // Show success
-             showConfirmation(confirmationMessage);
-             launchConfetti();
-         }
-         
-         /**
-          * Placeholder function to simulate server submission.
-          * @param {object} data - The data to be sent.
-          */
-         async function handleServerSubmission(data, operation='write') {
-             return await invokeFunction('record_sport_winner', {
-                     data,
-                     operation: operation
-                 }, true);
-         }
-         
-         /**
-          * Resets the entire application to the initial scanning state.
-          */
-         function resetApp() {
-             // Hide modals and details section
-             confirmationDialog.classList.remove('show');
-             detailsSection.style.display = 'none';
-             
-             // Show scan section
-             scanSection.style.display = 'block';
-             
-             // Reset form and state
-             winnerForm.reset();
-             gameListEl.innerHTML = '';
-             groupInfoEl.style.display = 'none';
-             positionSelectorWrapper.style.display = 'none';
-             submitBtn.disabled = true;
-             
-             currentStudentParticipations = [];
-             selectedGame = null;
-             
-             clearError();
-             resetQRScannerActions();
-         }
-         
-         // ==================================================
-         // 5. UTILITY & HELPER FUNCTIONS
-         // ==================================================
-         
-         // --- Modal Controls ---
-         function showProcessingDialog() {
-             processingDialog.classList.add('show');
-         }
-         function hideProcessingDialog() {
-             processingDialog.classList.remove('show');
-         }
-         function showConfirmation(message) {
-             confirmationMessageEl.innerHTML = message;
-             detailsSection.style.display = 'none';
-             confirmationDialog.classList.add('show');
-         }
-         
-         // --- Error Messaging ---
-         function showError(message) {
-             errorMessage.textContent = message;
-             errorMessage.style.display = 'block';
-         }
-         function clearError() {
-             errorMessage.textContent = '';
-             errorMessage.style.display = 'none';
-         }
-         
-         // --- Confetti (from snippet) ---
-         function launchConfetti() {
-             const canvas = document.getElementById('confetti-canvas');
-             const myConfetti = confetti.create(canvas, {
-                 resize: true,
-                 useWorker: true
-             });
-             
-             const count = 200;
-             const defaults = {
-                 origin: { y: 0.7 }
-             };
-         
-             function fire(particleRatio, opts) {
-                 myConfetti(Object.assign({}, defaults, opts, {
-                     particleCount: Math.floor(count * particleRatio)
-                 }));
-             }
-         
-             fire(0.25, { spread: 26, startVelocity: 55 });
-             fire(0.2, { spread: 60 });
-             fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-             fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-             fire(0.1, { spread: 120, startVelocity: 45 });
-         }
-         
-         
-         // ==================================================
-         // 6. EVENT LISTENERS
-         // ==================================================
-         
-         document.addEventListener('DOMContentLoaded', () => {
-             // QR Scanner Buttons
-             document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
-             document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
-             document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
-         
-             // Form Listeners
-             winnerForm.addEventListener('submit', handleSubmit);
-             document.getElementById('cancel-btn').addEventListener('click', resetApp);
-             
-             // Enable submit button only when a position is selected
-             positionSelectorEl.addEventListener('change', () => {
-                 if (document.querySelector('input[name="position"]:checked')) {
-                     submitBtn.disabled = false;
-                 }
-             });
-         
-             // Modal Close Buttons
-             document.getElementById('modal-close-btn').addEventListener('click', resetApp);
-             document.getElementById('record-another-btn').addEventListener('click', resetApp);
-         });
-
-         // Code for the custom prompt box
-         function showPrompt(message, message_type = 'info') {
-            // Set the message content
-            promptMessage.textContent = message;
-
-            // Set icon and title based on message_type
-            switch (message_type) {
-                case 'success':
-                    promptIcon.className = 'fas fa-check-circle success';
-                    promptTitle.textContent = 'Success!';
-                    break;
-                case 'error':
-                    promptIcon.className = 'fas fa-times-circle error';
-                    promptTitle.textContent = 'Error';
-                    break;
-                case 'info':
-                default:
-                    promptIcon.className = 'fas fa-info-circle info';
-                    promptTitle.textContent = 'Notice';
-                    break;
-            }
-            
-            // Show the modal
-            promptDialog.classList.add('show');
-        }
-
-        /**
-         * Hides the custom prompt box.
-         */
-        function hidePrompt() {
-            promptDialog.classList.remove('show');
-        }
-
-        // --- Event Listeners ---
-        // Add listeners to close the prompt
-        promptCloseIconBtn.addEventListener('click', hidePrompt);
-        promptCloseActionBtn.addEventListener('click', hidePrompt);
-
-        // Add listener to close when clicking on the overlay background
-        promptDialog.addEventListener('click', (event) => {
-            // Check if the click is on the overlay itself, not the content
-            if (event.target === promptDialog) {
-                hidePrompt();
-            }
-        });
-      </script>
-      <script>
-         // Handle notification sending
-         document.getElementById('notificationForm').addEventListener('submit', async function (e) {
-              e.preventDefault();
-
-              const heading = document.getElementById('notificationHeading').value.trim() || 'Announcement' ;
-              const content = document.getElementById('notificationHeadline').value.trim();
-              const type = document.getElementById('notificationType').value || 'popup';
-
-               if(heading === '' || content === '') {
-                  document.getElementById('error-message-notification').innerText = 'Notification heading and content are required.' ;
-                  return;
-               }
-
-          showProcessingDialog(false);
-
-               const result = await insertData('sport_notifications', {type, heading, content});
-               hideProcessingDialog();
-               if(result) {
-                   showDialog({
-                     title: 'Success',
-                     message: 'Notification pushed to live screen!',
-                     type: 'alert'
-                  });
-                  notificationForm.reset();
-               } else {
-                   showDialog({
-                     title: 'Error',
-                     message: 'Error sending notification to live screen!',
-                     type: 'alert'
-                  });
-               }
-
-         });
-
-         // Generate headlines with AI
-         document.getElementById('generateHeadline').addEventListener('click', async function (e) {
-              e.preventDefault();
-              document.getElementById('error-message-notification').innerText = '';
-document.getElementById('error-message-notification').style.display = 'none';
-
-
-              const keywords = document.getElementById('notificationKeywords').value.trim();
-              if(keywords === '') {
-                  document.getElementById('error-message-notification').innerText = 'Please provide a few keywords for AI to generate a headline.' ;
-document.getElementById('error-message-notification').style.display = 'block';
-                  return;
               }
-              showProcessingDialog(false);
-              const response = await generateHeadline(keywords);
-              hideProcessingDialog();
-              document.getElementById('notificationHeadline').value = response.trim();
-         });               
-      </script>
+            } catch (err) {
+                 console.error("Error clearing scanner:", err);
+                 html5QrCode = null;
+                 resetQRScannerActions();
+            }
+          } else {
+               resetQRScannerActions();
+          }
+      }
+      
+      /**
+       * Resets the QR scanner UI elements to their initial state.
+       * (Renamed from snippet's `resetUI` to avoid conflicts).
+       */
+      function resetQRScannerActions() {
+          qrScannerContainer.style.display = 'none';
+          qrScannerActions.style.display = 'flex';
+          hideProcessingDialog();
+          qrReader.innerHTML = ''; // Clear the reader div
+      }
+      
+      // Cleanup listeners from snippet
+      window.addEventListener('beforeunload', function () {
+          const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+          if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+              html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
+          }
+      });
+      
+      document.addEventListener('visibilitychange', function () {
+          const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
+          if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
+              html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
+          }
+      });
+      
+      // ==================================================
+      // 4. CORE APPLICATION LOGIC
+      // ==================================================
+      
+      /**
+       * Extracts the token from a URL or returns the original string.
+       */
+      function extractTokenOrReturn(input) {
+          try {
+            const url = new URL(input);
+            const token = url.searchParams.get("token");
+            return token !== null ? token : input;
+          } catch (error) {
+            // Not a valid URL, return the input as is
+            return input;
+          }
+      }
+      
+      /**
+       * Processes the decoded QR code text.
+       * Finds the student and displays their details and games.
+       */
+      async function processQRCode(decodedText) {
+          console.log("QR Code detected:", decodedText);
+      
+          const accessToken = extractTokenOrReturn(decodedText);
+          
+          showProcessingDialog();
+      
+          participants = await invokeFunction('get_student_participations', {
+                  p_access_token: accessToken
+               }, false);
+      
+          // Find all valid participations for this student
+          const studentParticipations = participants.filter(p => 
+              p.access_token === accessToken && p.student_name !== null
+          );
+      
+          closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
+          hideProcessingDialog(); // Call it again to be sure
+      
+          if (studentParticipations.length === 0) {
+            showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
+            resetQRScannerActions();
+            return;
+          }
+          
+          // Store participations globally
+          currentStudentParticipations = studentParticipations;
+          
+          // Display student info (from the first record, it's all the same student)
+          displayStudentDetails(studentParticipations[0]);
+          
+          // Display game options
+          displayGameOptions(studentParticipations);
+      
+          // Show the details section
+          scanSection.style.display = 'none';
+          detailsSection.style.display = 'block';
+      }
+      
+      /**
+       * Populates the student details card.
+       */
+      function displayStudentDetails(student) {
+          studentNameEl.textContent = student.student_name;
+          studentClassEl.textContent = 'Class ' + student.student_class;
+          studentHouseEl.textContent = student.student_house;
+          studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
+          
+          // Set dynamic house color
+          studentHouseEl.className = `house-${student.student_house}`;
+      }
+      
+      /**
+       * Populates the list of games for the student.
+       */
+      function displayGameOptions(participations) {
+          gameListEl.innerHTML = ''; // Clear previous list
+          participations.forEach(game => {
+              const inputId = `game-${game.event_id}`;
+              
+              const gameItem = document.createElement('div');
+              gameItem.innerHTML = `
+                  <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
+                  <label for="${inputId}">
+                      ${game.game_name}
+                      <div class="game-details">${game.class_category} / ${game.game_type}</div>
+                  </label>
+              `;
+              gameListEl.appendChild(gameItem);
+          });
+          
+          // Add event listener to the list
+          gameListEl.addEventListener('change', handleGameSelection);
+      }
+      
+      /**
+       * Handles the logic when a user selects a game.
+       */
+      function handleGameSelection(event) {
+          const eventId = parseInt(event.target.value);
+          selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
+          
+          // Reset position selection and group info
+          winnerForm.reset(); // This clears radio buttons
+          event.target.checked = true; // Re-check the game radio
+          submitBtn.disabled = true;
+          groupInfoEl.style.display = 'none';
+          groupInfoEl.innerHTML = '';
+          groupInfoEl.className = 'group-info'; // Reset class
+          
+          if (!selectedGame) return;
+      
+          // Show position selector
+          positionSelectorWrapper.style.display = 'block';
+      
+          // Handle Grouped games
+          if (selectedGame.game_type === 'Grouped') {
+              const groupMembers = participants.filter(p => 
+                  p.event_id === selectedGame.event_id &&
+                  p.participant_group_id === selectedGame.participant_group_id &&
+                  p.student_name !== null
+              );
+              const memberNames = groupMembers.map(m => m.student_name).join(', ');
+              groupInfoEl.innerHTML = `
+                  <strong><i class="fas fa-users"></i> Grouped Game:</strong>
+                  <p>This entry is for a group. All members listed below will receive the same position.</p>
+                  <p><strong>Members:</strong> ${memberNames}</p>
+              `;
+              groupInfoEl.style.display = 'block';
+          }
+          // Handle Team games
+          else if (selectedGame.game_type === 'Team') {
+              const house = selectedGame.student_house;
+              groupInfoEl.innerHTML = `
+                  <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
+                  <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
+              `;
+              groupInfoEl.className = 'group-info team-info'; // Add team-specific class
+              groupInfoEl.style.display = 'block';
+          }
+          // Individual game: no info box needed.
+      }
+      
+      function showConflictPrompt(winnerName, gameName, positionName) {
+          // Get all the required elements
+          const prompt = document.getElementById('conflict-prompt');
+          const messageEl = document.getElementById('conflict-message');
+          const overwriteBtn = document.getElementById('overwrite-btn');
+          const tieBtn = document.getElementById('tie-btn');
+          const closeBtn = document.getElementById('conflict-close-btn');
+      
+          // Simple validation
+          if (!prompt || !messageEl || !overwriteBtn || !tieBtn || !closeBtn) {
+              console.error("Conflict prompt DOM elements not found.");
+              return Promise.reject(new Error("Missing conflict prompt elements."));
+          }
+      
+          // 1. Set the refined, dynamic message
+          messageEl.innerHTML = `
+              <strong>${winnerName}</strong> is already set as the 
+              <strong>${positionName}</strong> winner for <strong>${gameName}</strong>.
+              What would you like to do?
+          `;
+      
+          // 2. Show the modal
+          prompt.classList.add('show');
+      
+          // 3. Return a promise that handles the user's choice
+          return new Promise((resolve) => {
+              
+              // Single cleanup function
+              const closePrompt = (resolution) => {
+                  prompt.classList.remove('show');
+                  
+                  // Remove all listeners to prevent memory leaks
+                  overwriteBtn.removeEventListener('click', onOverwrite);
+                  tieBtn.removeEventListener('click', onTie);
+                  closeBtn.removeEventListener('click', onClose);
+                  
+                  // Resolve the promise with the user's choice
+                  resolve(resolution);
+              };
+      
+              // Define handlers
+              const onOverwrite = () => closePrompt('write');
+              const onTie = () => closePrompt('update');
+              const onClose = () => closePrompt(false); // Closing resolves to false
+      
+              // Attach listeners
+              overwriteBtn.addEventListener('click', onOverwrite);
+              tieBtn.addEventListener('click', onTie);
+              closeBtn.addEventListener('click', onClose);
+          });
+      }
+      
+      /**
+       * Main form submission handler.
+       */
+      async function handleSubmit(event) {
+          event.preventDefault();
+      
+          // Show processing
+          showProcessingDialog();
+          
+          const selectedPositionEl = document.querySelector('input[name="position"]:checked');
+          
+          if (!selectedGame || !selectedPositionEl) {
+              showError("Please select a game and a position.");
+              return;
+          }
+          
+          const position = selectedPositionEl.value;
+      
+          // First, check if a winner has already been submitted for this game for this position
+          let conflictChoice = 'write';
+          const existing = await invokeFunction(
+              'get_sport_winner_by_position', 
+              {
+                  'p_game_id': selectedGame.event_id,
+                  'p_position_to_look_up': position
+              }, true
+              );
+      
+          if(existing && existing.winner) {
+              conflictChoice = await showConflictPrompt(existing.winner, selectedGame.game_name, position);
+          }
+      
+          // If no choice made, return without doing anything
+          if(!conflictChoice) {
+               hideProcessingDialog();
+               return;
+          }
+          
+          // Build the data object to be "sent"
+          let submissionData = {
+              event_id: selectedGame.event_id,
+              game_name: selectedGame.game_name,
+              game_type: selectedGame.game_type,
+              position: position,
+              target: {}
+          };
+      
+          let confirmationMessage = '';
+      
+          // --- Handle logic based on game type ---
+          
+          if (selectedGame.game_type === 'Individual') {
+              submissionData.target = {
+                  type: 'student',
+                  access_token: selectedGame.access_token,
+                  student_name: selectedGame.student_name
+              };
+              confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+          
+          } else if (selectedGame.game_type === 'Grouped') {
+              const groupMembers = participants.filter(p => 
+                  p.event_id === selectedGame.event_id &&
+                  p.participant_group_id === selectedGame.participant_group_id &&
+                  p.student_name !== null
+              );
+              
+              submissionData.target = {
+                  type: 'group',
+                  participant_group_id: selectedGame.participant_group_id,
+                  members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
+              };
+              const memberNames = groupMembers.map(m => m.student_name).join(' & ');
+              confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
+      
+          } else if (selectedGame.game_type === 'Team') {
+              submissionData.target = {
+                  type: 'team',
+                  house: selectedGame.student_house
+              };
+              confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
+          }
+          
+          const success = await handleServerSubmission(submissionData, conflictChoice);
+          hideProcessingDialog();
+
+          if(success) {
+            // Show success
+            showConfirmation(confirmationMessage);
+            launchConfetti();
+          } else {
+            showPrompt('Failed to update winners! You may not be authorized to submit winners or there may be an internal server issue.', 'error');
+          }
+      }
+      
+      /**
+       * Placeholder function to simulate server submission.
+       * @param {object} data - The data to be sent.
+       */
+      async function handleServerSubmission(data, operation='write') {
+          return await invokeFunction('record_sport_winner', {
+                  data,
+                  operation: operation
+              }, true);
+      }
+      
+      /**
+       * Resets the entire application to the initial scanning state.
+       */
+      function resetApp() {
+          // Hide modals and details section
+          confirmationDialog.classList.remove('show');
+          detailsSection.style.display = 'none';
+          
+          // Show scan section
+          scanSection.style.display = 'block';
+          
+          // Reset form and state
+          winnerForm.reset();
+          gameListEl.innerHTML = '';
+          groupInfoEl.style.display = 'none';
+          positionSelectorWrapper.style.display = 'none';
+          submitBtn.disabled = true;
+          
+          currentStudentParticipations = [];
+          selectedGame = null;
+          
+          clearError();
+          resetQRScannerActions();
+      }
+      
+      // ==================================================
+      // 5. UTILITY & HELPER FUNCTIONS
+      // ==================================================
+      
+      // --- Modal Controls ---
+      function showProcessingDialog() {
+          processingDialog.classList.add('show');
+      }
+      function hideProcessingDialog() {
+          processingDialog.classList.remove('show');
+      }
+      function showConfirmation(message) {
+          confirmationMessageEl.innerHTML = message;
+          detailsSection.style.display = 'none';
+          confirmationDialog.classList.add('show');
+      }
+      
+      // --- Error Messaging ---
+      function showError(message) {
+          errorMessage.textContent = message;
+          errorMessage.style.display = 'block';
+      }
+      function clearError() {
+          errorMessage.textContent = '';
+          errorMessage.style.display = 'none';
+      }
+      
+      // --- Confetti (from snippet) ---
+      function launchConfetti() {
+          const canvas = document.getElementById('confetti-canvas');
+          const myConfetti = confetti.create(canvas, {
+              resize: true,
+              useWorker: true
+          });
+          
+          const count = 200;
+          const defaults = {
+              origin: { y: 0.7 }
+          };
+      
+          function fire(particleRatio, opts) {
+              myConfetti(Object.assign({}, defaults, opts, {
+                  particleCount: Math.floor(count * particleRatio)
+              }));
+          }
+      
+          fire(0.25, { spread: 26, startVelocity: 55 });
+          fire(0.2, { spread: 60 });
+          fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+          fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+          fire(0.1, { spread: 120, startVelocity: 45 });
+      }
+      
+      
+      // ==================================================
+      // 6. EVENT LISTENERS
+      // ==================================================
+      
+      document.addEventListener('DOMContentLoaded', () => {
+          // QR Scanner Buttons
+          document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
+          document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
+          document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
+      
+          // Form Listeners
+          winnerForm.addEventListener('submit', handleSubmit);
+          document.getElementById('cancel-btn').addEventListener('click', resetApp);
+          
+          // Enable submit button only when a position is selected
+          positionSelectorEl.addEventListener('change', () => {
+              if (document.querySelector('input[name="position"]:checked')) {
+                  submitBtn.disabled = false;
+              }
+          });
+      
+          // Modal Close Buttons
+          document.getElementById('modal-close-btn').addEventListener('click', resetApp);
+          document.getElementById('record-another-btn').addEventListener('click', resetApp);
+      });
+      
+      // Code for the custom prompt box
+      function showPrompt(message, message_type = 'info') {
+         // Set the message content
+         promptMessage.textContent = message;
+      
+         // Set icon and title based on message_type
+         switch (message_type) {
+             case 'success':
+                 promptIcon.className = 'fas fa-check-circle success';
+                 promptTitle.textContent = 'Success!';
+                 break;
+             case 'error':
+                 promptIcon.className = 'fas fa-times-circle error';
+                 promptTitle.textContent = 'Error';
+                 break;
+             case 'info':
+             default:
+                 promptIcon.className = 'fas fa-info-circle info';
+                 promptTitle.textContent = 'Notice';
+                 break;
+         }
+         
+         // Show the modal
+         promptDialog.classList.add('show');
+      }
+      
+      /**
+      * Hides the custom prompt box.
+      */
+      function hidePrompt() {
+         promptDialog.classList.remove('show');
+      }
+      
+      // --- Event Listeners ---
+      // Add listeners to close the prompt
+      promptCloseIconBtn.addEventListener('click', hidePrompt);
+      promptCloseActionBtn.addEventListener('click', hidePrompt);
+      
+      // Add listener to close when clicking on the overlay background
+      promptDialog.addEventListener('click', (event) => {
+         // Check if the click is on the overlay itself, not the content
+         if (event.target === promptDialog) {
+             hidePrompt();
+         }
+      });
+   </script>
+   <script>
+      // Handle notification sending
+      document.getElementById('notificationForm').addEventListener('submit', async function (e) {
+           e.preventDefault();
+      
+           const heading = document.getElementById('notificationHeading').value.trim() || 'Announcement' ;
+           const content = document.getElementById('notificationHeadline').value.trim();
+           const type = document.getElementById('notificationType').value || 'popup';
+      
+            if(heading === '' || content === '') {
+               document.getElementById('error-message-notification').innerText = 'Notification heading and content are required.' ;
+               return;
+            }
+      
+       showProcessingDialog(false);
+      
+            const result = await insertData('sport_notifications', {type, heading, content});
+            hideProcessingDialog();
+            if(result) {
+               showPrompt('Notification pushed to live screen!', 'success');
+               notificationForm.reset();
+            } else {
+               showPrompt('Failed to push notification to live screen!', 'error');
+            }
+      
+      });
+      
+      // Generate headlines with AI
+      document.getElementById('generateHeadline').addEventListener('click', async function (e) {
+           e.preventDefault();
+           document.getElementById('error-message-notification').innerText = '';
+      document.getElementById('error-message-notification').style.display = 'none';
+      
+      
+           const keywords = document.getElementById('notificationKeywords').value.trim();
+           if(keywords === '') {
+               document.getElementById('error-message-notification').innerText = 'Please provide a few keywords for AI to generate a headline.' ;
+      document.getElementById('error-message-notification').style.display = 'block';
+               return;
+           }
+           showProcessingDialog(false);
+           const response = await generateHeadline(keywords);
+           hideProcessingDialog();
+           document.getElementById('notificationHeadline').value = response.trim();
+      });               
+   </script>
    </body>
 </html>
