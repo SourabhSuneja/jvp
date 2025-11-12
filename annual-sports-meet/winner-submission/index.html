@@ -847,6 +847,54 @@
   display: none;
 }
 
+/* --- New CSS for Prompt Box --- */
+
+        /* Style for the icons in the new prompt */
+        #prompt-dialog .modal-content i {
+            font-size: 4.5rem; /* Match existing icon size */
+            margin-bottom: 20px;
+            display: block; /* Make sure it's a block element */
+        }
+
+        /* Icon color classes */
+        #prompt-dialog .modal-content i.success {
+            color: var(--success-color);
+        }
+
+        #prompt-dialog .modal-content i.error {
+            color: var(--error-color);
+        }
+
+        #prompt-dialog .modal-content i.info {
+            color: var(--info-color);
+        }
+
+        /* Title style (reuses confirmation h3 style) */
+        #prompt-dialog h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+
+        /* Message text style (reuses confirmation p style) */
+        #prompt-message {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 28px;
+            color: var(--medium-text);
+            /* Allow HTML for line breaks */
+            white-space: pre-line;
+        }
+        
+        /* New close button style */
+        .btn-secondary {
+            background-color: var(--button-secondary-bg);
+            color: var(--button-secondary-text);
+        }
+        .btn-secondary:hover {
+             background-color: var(--button-secondary-hover-bg);
+        }
       </style>
    </head>
    <body>
@@ -978,6 +1026,28 @@
             </div>
          </div>
       </div>
+      <!-- --- Custom Prompt Box Starts --- -->
+    <div id="prompt-dialog" class="modal-overlay">
+        <div class="modal-content">
+            <!-- Reuses .modal-close-btn class -->
+            <span class="modal-close-btn" id="prompt-close-icon-btn">&times;</span>
+            
+            <!-- Icon will be set by JS -->
+            <i id="prompt-icon"></i> 
+            
+            <!-- Title will be set by JS -->
+            <h3 id="prompt-title"></h3>
+            
+            <!-- Message will be set by JS -->
+            <p id="prompt-message"></p>
+            
+            <!-- New "Close" button -->
+            <button id="prompt-close-action-btn" class="btn btn-secondary">
+                Close
+            </button>
+        </div>
+    </div>
+      <!-- --- Custom Prompt Box Ends --- -->
       <script>
          // ==================================================
          // 1. GLOBAL DATA & VARIABLES
@@ -1022,6 +1092,14 @@
          const processingDialog = document.getElementById('processing-dialog');
          const confirmationDialog = document.getElementById('confirmation-dialog');
          const confirmationMessageEl = document.getElementById('confirmation-message');
+
+         // Get all elements for the custom prompt dialog
+        const promptDialog = document.getElementById('prompt-dialog');
+        const promptIcon = document.getElementById('prompt-icon');
+        const promptTitle = document.getElementById('prompt-title');
+        const promptMessage = document.getElementById('prompt-message');
+        const promptCloseIconBtn = document.getElementById('prompt-close-icon-btn');
+        const promptCloseActionBtn = document.getElementById('prompt-close-action-btn');
          
          // ==================================================
          // 3. QR SCANNER LOGIC (from snippet, integrated)
@@ -1578,7 +1656,52 @@
              document.getElementById('modal-close-btn').addEventListener('click', resetApp);
              document.getElementById('record-another-btn').addEventListener('click', resetApp);
          });
-                      
+
+         // Code for the custom prompt box
+         function showPrompt(message, message_type = 'info') {
+            // Set the message content
+            promptMessage.textContent = message;
+
+            // Set icon and title based on message_type
+            switch (message_type) {
+                case 'success':
+                    promptIcon.className = 'fas fa-check-circle success';
+                    promptTitle.textContent = 'Success!';
+                    break;
+                case 'error':
+                    promptIcon.className = 'fas fa-times-circle error';
+                    promptTitle.textContent = 'Error';
+                    break;
+                case 'info':
+                default:
+                    promptIcon.className = 'fas fa-info-circle info';
+                    promptTitle.textContent = 'Notice';
+                    break;
+            }
+            
+            // Show the modal
+            promptDialog.classList.add('show');
+        }
+
+        /**
+         * Hides the custom prompt box.
+         */
+        function hidePrompt() {
+            promptDialog.classList.remove('show');
+        }
+
+        // --- Event Listeners ---
+        // Add listeners to close the prompt
+        promptCloseIconBtn.addEventListener('click', hidePrompt);
+        promptCloseActionBtn.addEventListener('click', hidePrompt);
+
+        // Add listener to close when clicking on the overlay background
+        promptDialog.addEventListener('click', (event) => {
+            // Check if the click is on the overlay itself, not the content
+            if (event.target === promptDialog) {
+                hidePrompt();
+            }
+        });
       </script>
       <script>
          // Handle notification sending
