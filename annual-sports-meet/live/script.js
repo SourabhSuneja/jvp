@@ -18,7 +18,6 @@ let winners;
 const popupBox = document.getElementById('popupBox');
 const popupHeading = document.getElementById('popupHeading');
 const popupMsg = document.getElementById('popupMsg');
-const ribbons = document.getElementById('ribbons');
 const popupCloseBtn = document.getElementById('popupCloseBtn');
 const downloadBtn = document.getElementById('downloadBtn');
 const defaultHeadline = "Get ready for an action-packed celebration! Jamna Vidyapeeth proudly presents the Annual Sports Meet 2025-26. The ultimate showdown begins!";
@@ -80,14 +79,12 @@ async function pollEntireData() {
 // Close the popup when clicking the close button
 popupCloseBtn.addEventListener('click', () => {
    popupBox.style.display = 'none';
-   ribbons.style.display = 'none';
 });
 
 // Close the popup when clicking outside the popup content
 popupBox.addEventListener('click', (e) => {
    if (e.target === popupBox) {
       popupBox.style.display = 'none';
-      ribbons.style.display = 'none';
    }
 });
 
@@ -96,8 +93,7 @@ function showPopup(heading, message, showRibbons = false, stayAlive = 43200000) 
    popupMsg.innerHTML = message;
    popupBox.style.display = 'flex';
    if (showRibbons) {
-      ribbons.style.display = 'block';
-      ribbons.style.animation = 'showHide 2.5s ease-in-out forwards';
+      launchConfetti();
    }
    setTimeout(hidePopup, stayAlive); // hide pop-up after a set interval
 }
@@ -1031,3 +1027,48 @@ document.addEventListener('DOMContentLoaded', () => {
    };
    updatePredictionBar(initialState);
 });
+
+/**
+ * Triggers the confetti celebration.
+ */
+function launchConfetti() {
+   const count = 200;
+   const defaults = {
+      origin: {
+         y: 0.7
+      }
+   };
+
+   function fire(particleRatio, opts) {
+      confetti(Object.assign({}, defaults, opts, {
+         particleCount: Math.floor(count * particleRatio)
+      }));
+   }
+
+   fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+   });
+
+   fire(0.2, {
+      spread: 60,
+   });
+
+   fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8
+   });
+
+   fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2
+   });
+
+   fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+   });
+}
