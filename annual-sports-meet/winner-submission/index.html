@@ -1528,10 +1528,11 @@ console.log(success);
        * @param {object} data - The data to be sent.
        */
       async function handleServerSubmission(data, operation='write') {
-          return await invokeFunction('record_sport_winner', {
+          const result = await invokeFunction('record_sport_winner', {
                   data,
                   operation: operation
-              }, true);
+              }, false);
+            return result;
       }
       
       /**
