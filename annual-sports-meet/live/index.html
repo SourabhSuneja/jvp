@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>JVP Sports Meet | Live Score</title>
+      <meta name="description" content="Live results of JVP's Annual Sports Meet 2025-26. Stay updated in real-time!">
+      <link rel="preload" href="https://sourabhsuneja.github.io/jvp-sports-meet/images/loading.gif" as="image">
+      <link rel="stylesheet" href="https://sourabhsuneja.github.io/jvp-sports-meet/css/dialog.css">
+      <link rel="stylesheet" href="./style.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <div class="dashboard-container noselect">
+         <h1>
+            <ion-icon name="tennisball-outline"></ion-icon>
+            <span>JVP Annual Sports Meet 2025-26</span>
+         </h1>
+         <h2><span id="scorecard-heading">Live Scorecard</span> (Powered by Sourabh Sir)</h2>
+         <div class="hidden" id="credit">Powered by Sourabh Sir</div>
+         <!-- House Tiles -->
+         <h3>Grand Total</h3>
+         <div class="tiles tiles_total">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_total">0</span><br>Points
+               <div class="position-indicator" id="ruby_total_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_total">0</span><br>Points
+               <div class="position-indicator" id="emerald_total_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_total">0</span><br>Points
+               <div class="position-indicator" id="sapphire_total_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_total">0</span><br>Points
+               <div class="position-indicator" id="topaz_total_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_total">0</span><br>Points
+               <div class="position-indicator" id="nil_total_rank"></div>
+            </div>
+         </div>
+         <!-- House Tiles -->
+         <h3 class="hidden">Previously Held School Activities</h3>
+         <div class="tiles tiles_previous_total hidden">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_previous_total">0</span><br>Points
+               <div class="position-indicator" id="ruby_previous_total_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_previous_total">0</span><br>Points
+               <div class="position-indicator" id="emerald_previous_total_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_previous_total">0</span><br>Points
+               <div class="position-indicator" id="sapphire_previous_total_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_previous_total">0</span><br>Points
+               <div class="position-indicator" id="topaz_previous_total_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_previous_total">0</span><br>Points
+               <div class="position-indicator" id="nil_previous_total_rank">NIL</div>
+            </div>
+         </div>
+         <!-- House Tiles -->
+         <h3 class="hidden">Class 3 to 6 (Sports Meet)</h3>
+         <div class="tiles tiles_3_to_6 hidden">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="ruby_3_to_6_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="emerald_3_to_6_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="sapphire_3_to_6_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="topaz_3_to_6_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="nil_3_to_6_rank">NIL</div>
+            </div>
+         </div>
+         <!-- House Tiles -->
+         <h3 class="hidden">Class 7 to 12 (Sports Meet)</h3>
+         <div class="tiles tiles_7_to_12 hidden">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="ruby_7_to_12_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="emerald_7_to_12_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="sapphire_7_to_12_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="topaz_7_to_12_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="nil_7_to_12_rank">NIL</div>
+            </div>
+         </div>
+         <h3 class="hidden">Winners Table</h3>
+         <!-- Winners Table -->
+         <div class="table-container">
+            <table id="winnersTable">
+               <thead>
+                  <tr>
+                     <th>Game</th>
+                     <th>Class Group</th>
+                     <th>Winner 1</th>
+                     <th>Winner 2</th>
+                     <th>Winner 3</th>
+                     <th>Winner House 1</th>
+                     <th>Winner House 2</th>
+                     <th>Winner House 3</th>
+                  </tr>
+               </thead>
+               <tbody id="winnersTableBody">
+                  <!-- Dynamic Rows Will Be Injected Here -->
+               </tbody>
+            </table>
+         </div>
+         <!-- Download Button -->
+         <button class="btn-download hidden" id="downloadBtn">Download Results</button>
+         <h4 class="hidden">Points Criteria:</h4>
+         <ul class="hidden">
+            <li>Houses earn points based on their rank in each game.</li>
+            <li>
+               Points per position:
+               <ul>
+                  <li><strong>1st place</strong>: 10 points</li>
+                  <li><strong>2nd place</strong>: 7 points</li>
+                  <li><strong>3rd place</strong>: 5 points</li>
+               </ul>
+            </li>
+            <li>Add up points from all games to get the total score for a particular house.</li>
+            <li>
+               <strong>Example:</strong>
+               <ul>
+                  <li>
+                     A house got:
+                     <ul>
+                        <li><strong>1st place</strong> in 10 games: 10 × 10 = 100 points</li>
+                        <li><strong>2nd place</strong> in 5 games: 5 × 7 = 35 points</li>
+                        <li><strong>3rd place</strong> in 2 games: 2 × 5 = 10 points</li>
+                     </ul>
+                  </li>
+                  <li>Total points: 100 + 35 + 10 = <strong>145 points</strong>.</li>
+               </ul>
+            </li>
+            <li>The Grand Total scores of houses include points from all school activities held earlier during the session, such as soft board decoration, debates etc.</li>
+         </ul>
+      </div>
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <!-- Pop-up Box Starts -->
+      <div class="popup-box" id="popupBox">
+         <div class="popup-content">
+            <img id="ribbons" src="https://sourabhsuneja.github.io/jvp-sports-meet/images/confetti.gif">
+            <span class="popup-close-btn" id="popupCloseBtn">&times;</span>
+            <h3 id="popupHeading">Heading here</h3>
+            <p id="popupMsg">Message here</p>
+         </div>
+      </div>
+      <!-- Pop-up Box Ends -->
+      <!-- Scrolling Strip Starts -->
+      <div class="scrolling-strip">
+         <marquee class="scrolling-text" id="scrollingText" scrollamount="4">Get ready for an action-packed celebration! Jamna Vidyapeeth proudly presents the Annual Sports Meet 2025-26. The ultimate showdown begins!</marquee>
+      </div>
+      <!-- Scrolling Strip Ends -->
+      <!-- Win prediction widget starts -->
+      <div id="win-prediction-widget">
+         <h3 class="prediction-title">Win Predictions</h3>
+         <div id="prediction-bar-container">
+            <div id="ruby-strip" class="prediction-strip" data-house="Ruby">
+               <span></span>
+            </div>
+            <div id="emerald-strip" class="prediction-strip" data-house="Emerald">
+               <span></span>
+            </div>
+            <div id="sapphire-strip" class="prediction-strip" data-house="Sapphire">
+               <span></span>
+            </div>
+            <div id="topaz-strip" class="prediction-strip" data-house="Topaz">
+               <span></span>
+            </div>
+         </div>
+      </div>
+      <!-- Win prediction widget ends -->
+      <script src="https://sourabhsuneja.github.io/jvp-sports-meet/js/dialog.js"></script>
+      <script>
+         showProcessingDialog();
+      </script>
+      <script type="module" src="https://sourabhsuneja.github.io/jvp-sports-meet/js/supabase-crud.js"></script>
+      <script src="./script.js"></script>
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+   </body>
+</html>
