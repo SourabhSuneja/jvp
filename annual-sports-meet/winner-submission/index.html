@@ -1510,7 +1510,8 @@
               confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
           }
           
-          const success = await handleServerSubmission(submissionData, conflictChoice);
+          const success = await handleServerSubmission(submissionData, conflictChoice); 
+console.log(success);
           hideProcessingDialog();
 
           if(success) {
