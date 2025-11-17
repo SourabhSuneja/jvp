@@ -73,7 +73,7 @@
          left: 0;
          width: 100%;
          height: 100%;
-         z-index: 60000;
+         z-index: 999999;
          pointer-events: none;
          }
          header {
@@ -1516,8 +1516,7 @@ console.log(success);
 
           if(success) {
             // Show success
-            showConfirmation(confirmationMessage);
-            launchConfetti();
+            launchConfetti(); showConfirmation(confirmationMessage);
           } else {
             showPrompt('Failed to update winners! You may not be authorized to submit winners or there may be an internal server issue.', 'error');
           }
