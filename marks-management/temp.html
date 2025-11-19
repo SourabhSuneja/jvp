@@ -535,6 +535,72 @@
          border-top: 1px solid var(--border);
          gap: 12px;
          }
+
+         /* Grading Modal Specific Styles */
+.grading-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.grading-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 0.5fr; /* Label - Select - Marks */
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background-color: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.grading-row:hover {
+    border-color: var(--primary);
+    background-color: #fff;
+}
+
+.grading-label {
+    font-weight: 600;
+    color: var(--dark);
+    font-size: 0.95rem;
+}
+
+.grading-mark-display {
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.grading-total-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px dashed var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Mobile Responsiveness for Grading Row */
+@media (max-width: 600px) {
+    .grading-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .grading-mark-display {
+        text-align: left;
+    }
+    .grading-mark-display::before {
+        content: "Marks: ";
+        font-weight: 400;
+        color: var(--text);
+        font-size: 0.9rem;
+    }
+}
       </style>
    </head>
    <body>
@@ -601,8 +667,8 @@
                      <option value="">-- Select Exam --</option>
                   </select>
                   <div class="form-group">
-                     <label for="max-marks-input" class="hiddens">Maximum Marks</label>
-                     <input type="number" id="max-marks-input" min="1" max="5000" value="20" class="hiddens">
+                     <label for="max-marks-input" class="hidden">Maximum Marks</label>
+                     <input type="number" id="max-marks-input" min="1" max="5000" value="20" class="hidden">
                   </div>
                   <button id="edit-exam-btn" class="btn-secondary" style="display: none">Edit Exam Details</button>
                   <button id="add-exam-btn" class="btn-secondary">Add New Exam</button>
@@ -717,6 +783,34 @@
          </div>
       </div>
       <!-- Report Dialog Overlay Ends -->
+
+      <!-- Grading Modal Starts -->
+      <div id="grading-modal" class="modal hidden">
+   <div class="modal-content" style="max-width: 600px;">
+      <div class="report-dialog-header">
+         <h3 id="grading-student-name">Grading Student</h3>
+         <span class="domain-suffix" id="grading-exam-info" style="position: relative; right: auto; top: auto; transform: none;"></span>
+      </div>
+      
+      <div class="report-dialog-body">
+         <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Select grades for the following parameters:</p>
+         
+         <div id="grading-parameters-container" class="grading-grid">
+            </div>
+
+         <div class="grading-total-section">
+            <span>Total Calculated Score:</span>
+            <span id="grading-total-score" class="stat-value" style="font-size: 1.8rem;">0</span>
+         </div>
+      </div>
+
+      <div class="form-actions" style="margin-top: 20px;">
+         <button id="cancel-grading-btn">Cancel</button>
+         <button id="submit-grading-btn" class="btn-secondary">Save Grades</button>
+      </div>
+   </div>
+</div>
+      <!-- Grading Modal Ends -->
       <script>
          // Allowed teacher IDs
          const allowedIds = ['e37fd3ed-d9b7-44f4-90e1-96fadac54684'];
@@ -1464,7 +1558,7 @@
          const marksValue = existingRecord ? existingRecord.marks : '';
          const status = existingRecord === undefined ? '' : 
          (marksValue === '' ? 'Absent' : 
-         getPerformanceRemark(marksValue, examName));
+         getPerformanceRemark(marksValue, examName, null, className, subjectName));
          
          // Roll number cell (index + 1)
          const rollCell = document.createElement('td');
@@ -1487,6 +1581,17 @@
          if (marksValue !== '') {
             marksInput.value = marksValue;
          }
+
+         if(examName === 'PT-3') {
+            attachGradingTrigger(
+        marksInput, 
+        studentName, 
+        className, 
+        subjectName, 
+        examName, 
+        gradingConfig.pt3_parameters // Pass the config object
+    );
+         }
          
          // Add Enter key handler to move to next input
          marksInput.addEventListener('keydown', (e) => {
@@ -1507,13 +1612,15 @@
          // Status update on input change
          marksInput.addEventListener('input', (e) => {
             const selectedExam = examSelect.value;
+            const selectedClass = classSelect.value;
+            const selectedSubject = subjectSelect.value;
             const value = e.target.value.trim();
             const statusCell = e.target.parentNode.nextSibling;
             if (value === '') {
                 statusCell.textContent = 'Absent';
             } else {
                 const mark = parseFloat(value);
-                statusCell.textContent = getPerformanceRemark(mark, selectedExam);
+                statusCell.textContent = getPerformanceRemark(mark, selectedExam, null, selectedClass, selectedSubject);
             }
          });
          
@@ -1797,7 +1904,7 @@
          const marksValues = relevantMarks.map(record => parseFloat(record.marks));
          const maxScore = Math.max(...marksValues);
          const avgScore = marksValues.reduce((a, b) => a + b, 0) / presentStudents;
-         const passingCount = marksValues.filter(mark => mark >= getPassingMark(selectedExam)).length;
+         const passingCount = marksValues.filter(mark => mark >= getPassingMark(selectedExam, selectedClass, selectedSubject)).length;
          const passingRate = (passingCount / presentStudents) * 100;
          const attendanceRate = (presentStudents / totalStudents) * 100;
          
@@ -1899,11 +2006,22 @@
          
          // Function to open the report dialog
          function openReportDialog() {
+         const selectedExam = examSelect.value;
          reportDialogOverlay.classList.add('active');
          document.body.style.overflow = 'hidden'; // Prevent scrolling behind the dialog
-         
-         // Reset selection to the first button
-         selectReportButton(reportButtons[0]);
+
+         document.querySelectorAll('button[data-report-type="consolidated"], button[data-report-type="subjectwise"]')
+         .forEach(button => {
+            if(selectedExam.startsWith('Term-') || selectedExam.startsWith('PT-')) {
+               button.style.display = 'block';
+               // Reset selection to the first button
+               selectReportButton(reportButtons[0]);
+            } else {
+               button.style.display = 'none';
+               // Reset selection to the last (custom report) button
+               selectReportButton(reportButtons[2]);
+            }
+         });
          }
          
          // Function to close the report dialog
@@ -1932,11 +2050,23 @@
          let url;
          switch (selectedReportType) {
          case 'consolidated':
+         if(exam.startsWith('Term-')) {
+         const examName = exam.match(/^[^()]*/)[0].trim();
+         url = `consolidated-term-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(examName)}`;
+         } else if(exam.startsWith('PT-')) {
          url = `consolidated-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
+         }         
          break;
+               
          case 'subjectwise':
+         if(exam.startsWith('Term-')) {
+         const examName = exam.match(/^[^()]*/)[0].trim();
+         url = `subjectwise-term-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(examName)}`;
+         } else if(exam.startsWith('PT-')) {
          url = `subjectwise-pt-marks.html?class=${encodeURIComponent(classValue)}&exam=${encodeURIComponent(exam)}`;
+         }
          break;
+               
          case 'custom':
          url = `custom-marks-report.html?class=${encodeURIComponent(classValue)}`;
          break;
@@ -1990,6 +2120,206 @@
          hideLoading();
          return true;
          }
+
+
+         /* PT-3 GRADING LOGIC STARTS */
+         const gradingConfig = {
+    // You can have different configs for different exams if needed
+    pt3_parameters: [
+        {
+            id: "notebook_maint",
+            label: "Notebook Maintenance",
+            maxMarks: 5,
+            // Mapping grade letters to numeric marks
+            mapping: {
+                "A+": 5,
+                "A": 4,
+                "B": 3,
+                "C": 2,
+                "D": 1
+            }
+        },
+        {
+            id: "subj_enrichment",
+            label: "Subject Enrichment",
+            maxMarks: 5,
+            mapping: {
+                "Outstanding": 5,
+                "Very Good": 4,
+                "Good": 3,
+                "Average": 2,
+                "Needs Imp.": 1
+            }
+        },
+        {
+            id: "vocab_fluency",
+            label: "Vocab & Fluency",
+            maxMarks: 5,
+            mapping: {
+                "High": 5,
+                "Medium": 3,
+                "Low": 1
+            }
+        },
+        {
+            id: "discipline",
+            label: "Class Discipline",
+            maxMarks: 5,
+            mapping: {
+                "A": 5,
+                "B": 4,
+                "C": 3
+            }
+        }
+    ]
+};
+
+         /**
+ * Global variables to track the current grading session
+ */
+let currentActiveInput = null; 
+let currentGradingConfig = [];
+
+/**
+ * Event Listener Function to Attach to Inputs
+ * @param {HTMLElement} inputElement - The input field in the table
+ * @param {string} studentName - Name of the student
+ * @param {string} className - Class Name
+ * @param {string} subject - Subject Name
+ * @param {string} exam - Exam Name
+ * @param {Array} configParams - The gradingConfig array (e.g., gradingConfig.pt3_parameters)
+ */
+function attachGradingTrigger(inputElement, studentName, className, subject, exam, configParams) {
+    
+    // We use 'click' instead of 'focus' to prevent infinite loops if we programmatically blur/focus
+    inputElement.addEventListener('click', function(e) {
+        
+        // Prevent opening if the input is disabled or read-only
+        if(this.disabled || this.readOnly) return;
+
+        // Store reference to the input that triggered this
+        currentActiveInput = this;
+        currentGradingConfig = configParams;
+
+        // Update Modal Header Info
+        document.getElementById('grading-student-name').innerText = `Grading: ${studentName}`;
+        document.getElementById('grading-exam-info').innerText = `${className} | ${subject}`;
+
+        // Generate the UI
+        generateGradingUI(configParams);
+
+        // Open Modal
+        const modal = document.getElementById('grading-modal');
+        modal.classList.remove('hidden');
+        
+        // Blur the input so the cursor doesn't stay blinking behind the modal
+        this.blur();
+    });
+}
+
+/**
+ * Helper: Generates the dropdowns dynamically
+ */
+function generateGradingUI(params) {
+    const container = document.getElementById('grading-parameters-container');
+    container.innerHTML = ''; // Clear previous
+    let currentTotal = 0;
+
+    params.forEach((param, index) => {
+        const row = document.createElement('div');
+        row.className = 'grading-row';
+
+        // 1. Label
+        const label = document.createElement('div');
+        label.className = 'grading-label';
+        label.innerText = param.label;
+
+        // 2. Select Dropdown
+        const select = document.createElement('select');
+        select.id = `grade-select-${index}`;
+        select.dataset.index = index; // Store index to find config later
+        
+        // Add Default Option
+        const defaultOpt = document.createElement('option');
+        defaultOpt.text = "-- Select --";
+        defaultOpt.value = 0;
+        select.appendChild(defaultOpt);
+
+        // Add Configured Options
+        for (const [gradeLabel, markValue] of Object.entries(param.mapping)) {
+            const opt = document.createElement('option');
+            opt.text = `${gradeLabel} (${markValue})`;
+            opt.value = markValue;
+            select.appendChild(opt);
+        }
+
+        // 3. Marks Display for this row
+        const markDisplay = document.createElement('div');
+        markDisplay.id = `grade-display-${index}`;
+        markDisplay.className = 'grading-mark-display';
+        markDisplay.innerText = "0";
+
+        // Event Listener for Calculation
+        select.addEventListener('change', function() {
+            const val = parseInt(this.value) || 0;
+            document.getElementById(`grade-display-${index}`).innerText = val;
+            calculateTotalScore();
+        });
+
+        row.appendChild(label);
+        row.appendChild(select);
+        row.appendChild(markDisplay);
+        container.appendChild(row);
+    });
+
+    // Reset total on open
+    document.getElementById('grading-total-score').innerText = "0";
+}
+
+/**
+ * Helper: Calculates sum of all dropdowns
+ */
+function calculateTotalScore() {
+    let total = 0;
+    const selects = document.querySelectorAll('[id^="grade-select-"]');
+    selects.forEach(select => {
+        total += parseInt(select.value) || 0;
+    });
+    document.getElementById('grading-total-score').innerText = total;
+}
+
+/**
+ * Initialization of Modal Buttons (Call this once on page load)
+ */
+function initGradingModalListeners() {
+    // Cancel Button
+    document.getElementById('cancel-grading-btn').addEventListener('click', () => {
+        document.getElementById('grading-modal').classList.add('hidden');
+        currentActiveInput = null;
+    });
+
+    // Submit Button
+    document.getElementById('submit-grading-btn').addEventListener('click', () => {
+        const totalScore = document.getElementById('grading-total-score').innerText;
+        
+        if (currentActiveInput) {
+            // Update the original input field
+            currentActiveInput.value = totalScore;
+            
+            // Trigger input event manually so any existing validation/saving logic runs
+            currentActiveInput.dispatchEvent(new Event('input', { bubbles: true }));
+            currentActiveInput.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        document.getElementById('grading-modal').classList.add('hidden');
+        currentActiveInput = null;
+    });
+}
+
+// Initialize buttons immediately
+initGradingModalListeners();
+
+         /* PT-3 GRADING LOGIC ENDS */
       </script>
    </body>
 </html>
