@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover the ultimate student learning app crafted by Sourabh sir! Engage with interactive quizzes, fun games, insightful notes, and hands-on projects designed to make learning exciting and effective.">
+    <title>JVP Spark | Download App</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colors - Dark Theme */
+            --bg-primary: #121212;
+            --bg-secondary: #1f1f1f;
+            --bg-tertiary: #333333;
+            --bg-gradient-dark: linear-gradient(145deg, #1e1e1e, #333333);
+            --bg-input: #2c2c2c;
+            --bg-profile: rgb(25, 25, 25);
+
+            /* Text Colors - Dark Theme */
+            --text-primary: #fff;
+            --text-secondary: #ddd;
+            --text-tertiary: #b0bec5;
+            --text-muted: rgb(230, 230, 230);
+            --text-light-gray: rgb(240, 240, 240);
+            --text-dark-gray: rgb(220, 220, 220);
+
+            /* Accent Colors */
+            --accent-primary: #ffc107;
+            --accent-hover: #e0a800;
+            --accent-focus: #ffd54f;
+            --accent-button-text: black;
+
+            /* Logout button specific */
+            --logout-bg: #e53935;
+            --logout-text: #fff;
+            --logout-hover: #d32f2f;
+
+            /* Status Colors */
+            --error-color: #FF3333;
+            --error-bg: #e53935;
+            --error-hover: #d32f2f;
+
+            /* Overlay Colors */
+            --overlay-bg: rgba(0, 0, 0, 0.7); /* Darkened overlay for modal */
+            --loading-overlay-bg: black;
+            --loading-credits-color: rgb(245, 245, 245);
+
+            /* Scrollbar Colors */
+            --scrollbar-thumb: rgb(50, 50, 50);
+            --scrollbar-track: transparent;
+
+            /* Shadow Colors */
+            --shadow-dark: rgba(0, 0, 0, 0.5);
+            --shadow-medium: rgba(0, 0, 0, 0.6);
+            --shadow-light: rgba(0, 0, 0, 0.4);
+
+            /* Spacing Values */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 16px;
+            --spacing-xl: 20px;
+            --spacing-xxl: 25px;
+            --spacing-xxxl: 30px;
+
+            /* Border Radius */
+            --radius-sm: 5px;
+            --radius-md: 8px;
+            --radius-lg: 10px;
+            --radius-xl: 12px;
+            --radius-full: 50%;
+
+            /* Font Sizes */
+            --font-sm: 0.9rem;
+            --font-base: 1rem;
+            --font-md: 1.1rem;
+            --font-lg: 1.2rem;
+            --font-xl: 1.6rem;
+            --font-xxl: 1.7rem;
+            --font-xxxl: 1.8rem;
+            --font-icon-sm: 1.2rem;
+            --font-icon-md: 1.8rem;
+            --font-icon-lg: 2.1rem;
+            --font-icon-xl: 64px;
+
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-base: 0.3s ease;
+            --transition-slow: 0.4s all;
+            --transition-slower: 0.5s;
+
+            /* Z-index */
+            --z-overlay: 1;
+            --z-header: 10;
+            --z-sidebar: 20;
+            --z-signin: 99999;
+            --z-loading: 500000;
+        }
+
+        /* Light theme overrides */
+        body.light-theme {
+            --bg-primary: #ffffff;
+            --bg-secondary: rgb(253, 253, 253);
+            --bg-tertiary: rgb(240, 240, 240);
+            --bg-gradient-dark: linear-gradient(145deg, #ffffff, #f0f0f0);
+            --bg-input: #ffffff;
+            --bg-profile: rgb(253, 253, 253);
+
+            --text-primary: #333;
+            --text-secondary: rgb(50, 50, 50);
+            --text-tertiary: rgb(80, 80, 80);
+            --text-muted: #333;
+            --text-light-gray: rgb(50, 50, 50);
+            --text-dark-gray: rgb(90, 90, 90);
+
+            --accent-button-text: rgb(30, 30, 30);
+
+            --error-color: #d32f2f;
+            --error-bg: #ff6666;
+            --error-hover: #ff4d4d;
+            
+            --overlay-bg: rgba(0, 0, 0, 0.5); /* Light theme overlay */
+
+            --loading-overlay-bg: rgb(253, 253, 253);
+            --loading-credits-color: rgb(50, 50, 50);
+
+            --scrollbar-thumb: rgb(170, 170, 170);
+
+            --shadow-dark: rgba(0, 0, 0, 0.1);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --shadow-light: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            max-height: 999999px;
+            transition: var(--transition-base) all;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: var(--scrollbar-width);
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: var(--radius-lg);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary);
+            padding: var(--spacing-lg) var(--spacing-xxl);
+            box-shadow: 0 2px 10px var(--shadow-medium);
+            z-index: var(--z-header);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--accent-primary);
+        }
+
+        .logo-text h1 {
+            font-size: var(--font-xxl);
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .logo-text p {
+            font-size: var(--font-sm);
+            color: var(--text-tertiary);
+        }
+
+        .theme-toggle {
+            background: var(--bg-tertiary);
+            border: none;
+            color: var(--text-primary);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            font-size: var(--font-icon-sm);
+            transition: var(--transition-base);
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-primary);
+            color: var(--accent-button-text);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 90px;
+            padding: var(--spacing-xxxl) var(--spacing-xl);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: var(--spacing-xxxl) 0;
+            background: var(--bg-gradient-dark);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--spacing-xxxl);
+        }
+
+        .hero-icon {
+            font-size: var(--font-icon-xl);
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-xl);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .hero p {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto var(--spacing-xxl);
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: var(--spacing-lg);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: var(--spacing-lg) var(--spacing-xxxl);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: var(--font-md);
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: var(--accent-button-text);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px var(--shadow-dark);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-input);
+            transform: translateY(-2px);
+        }
+        
+        /* --- NEW --- */
+        .btn-disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-tertiary);
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none; /* Prevents clicks and hover effects */
+        }
+        
+        .btn-disabled:hover {
+             background: var(--bg-tertiary);
+             transform: none;
+             box-shadow: none;
+        }
+        /* --- END NEW --- */
+
+
+        /* Story Section */
+        .story-section {
+            background: var(--bg-secondary);
+            padding: var(--spacing-xxxl);
+            border-radius: var(--radius-xl);
+            margin-bottom: var(--spacing-xxxl);
+        }
+
+        .story-section h3 {
+            font-size: var(--font-xxl);
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .story-content {
+            font-size: var(--font-md);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .story-content p {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .highlight-box {
+            background: var(--bg-tertiary);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--accent-primary);
+            margin: var(--spacing-xl) 0;
+        }
+
+        /* Objectives Section */
+        .objectives {
+            margin-bottom: var(--spacing-xxxl);
+        }
+
+        .objectives h3 {
+            font-size: var(--font-xxl);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .objectives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .objective-card {
+            background: var(--bg-secondary);
+            padding: var(--spacing-xxl);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            transition: var(--transition-base);
+        }
+
+        .objective-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px var(--shadow-medium);
+        }
+
+        .objective-icon {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .objective-card h4 {
+            font-size: var(--font-xl);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .objective-card p {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Features Section */
+        .features {
+            margin-bottom: var(--spacing-xxxl);
+        }
+
+        .features h3 {
+            font-size: var(--font-xxl);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .feature-item {
+            background: var(--bg-secondary);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            transition: var(--transition-base);
+        }
+
+        .feature-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .feature-item i {
+            color: var(--accent-primary);
+            font-size: var(--font-icon-md);
+            margin-top: var(--spacing-xs);
+        }
+
+        .feature-text {
+            flex: 1;
+        }
+
+        .feature-text p {
+            font-size: var(--font-base);
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        /* Developer Section */
+        .developer {
+            background: var(--bg-gradient-dark);
+            padding: var(--spacing-xxxl);
+            border-radius: var(--radius-xl);
+            text-align: center;
+            margin-bottom: var(--spacing-xxxl);
+        }
+
+         .developer-avatar {
+           width: 180px;
+           height: 180px;
+           border-radius: var(--radius-full);
+           border: 4px solid var(--accent-primary);
+           box-shadow: 0 8px 25px var(--shadow-medium);
+           margin: 0 auto var(--spacing-xl);
+           background: var(--bg-tertiary);
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           font-size: 4rem;
+           color: var(--accent-primary);
+           /*animation: float 3s ease-in-out infinite;*/
+           }
+           @keyframes float {
+           0%, 100% { transform: translateY(0px); }
+           50% { transform: translateY(-10px); }
+           }
+
+        .developer h3 {
+            font-size: var(--font-xxl);
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .developer-info {
+            font-size: var(--font-lg);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-md);
+            font-weight: 700;
+        }
+
+        .developer-role {
+            font-size: var(--font-md);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .developer-icon {
+            font-size: 4rem;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        /* --- NEW: Modal Styles --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--overlay-bg);
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: var(--z-signin);
+            padding: var(--spacing-lg);
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            padding: var(--spacing-xxl);
+            border-radius: var(--radius-xl);
+            box-shadow: 0 10px 30px var(--shadow-medium);
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform var(--transition-base);
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-lg);
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-size: 2.5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-title {
+            font-size: var(--font-xxl);
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .modal-body {
+            color: var(--text-secondary);
+            font-size: var(--font-md);
+            line-height: 1.7;
+            margin-bottom: var(--spacing-xxl);
+        }
+        
+        .modal-body ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .modal-body li {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .modal-body li::before {
+            content: '\f101'; /* Font Awesome right arrow icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--accent-primary);
+            position: absolute;
+            left: 0;
+            top: 4px;
+            font-size: 1rem;
+        }
+        
+        .modal-body li strong {
+            color: var(--accent-focus); /* Use accent color for important words and phrases in instructions */
+        }
+
+        .modal-proceed {
+            width: 100%;
+            justify-content: center;
+            padding: var(--spacing-lg);
+        }
+        /* --- END NEW --- */
+
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            padding: var(--spacing-xxl);
+            text-align: center;
+            color: var(--text-tertiary);
+        }
+
+        footer p {
+            font-size: var(--font-sm);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: var(--spacing-md) var(--spacing-lg);
+            }
+
+            .logo-text h1 {
+                font-size: var(--font-xl);
+            }
+
+            .hero h2 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: var(--font-base);
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .story-section,
+            .developer {
+                padding: var(--spacing-xl);
+            }
+
+            main {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+             .developer-avatar {
+            width: 140px;
+            height: 140px;
+            font-size: 3rem;
+            }
+            
+            /* --- NEW: Modal Responsive --- */
+            .modal-content {
+                padding: var(--spacing-xl);
+                padding-top: var(--spacing-xxxl); /* More space for close btn */
+            }
+            .modal-title {
+                font-size: var(--font-xl);
+            }
+            .modal-body {
+                font-size: var(--font-base);
+            }
+            .modal-close {
+                top: var(--spacing-sm);
+                right: var(--spacing-md);
+            }
+            /* --- END NEW --- */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-section">
+            <ion-icon name="flash" class="logo-icon"></ion-icon>
+            <div class="logo-text">
+                <h1>JVP Spark</h1>
+                <p>Jamna Vidyapeeth, Jaipur</p>
+            </div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+            <i class="fas fa-sun"></i>
+        </button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <ion-icon name="flash" class="hero-icon"></ion-icon>
+            <h2>JVP Spark</h2>
+            <p>JVP Spark transforms education through gamification, making learning an adventure rather than a chore. Experience the perfect blend of academic resources and interactive tools designed to inspire curiosity and excellence.</p>
+            <div class="cta-buttons">
+                <a data-href="https://play.google.com/store/apps/details?id=io.github.sourabhsuneja.twa" data-type="android" class="btn btn-primary btn-android">
+                    <i style="font-size: 20px;" class="fab fa-android"></i>
+                    <span>Download Android App (Recommended)</span>
+                </a>
+                <a data-href="https://sourabhsuneja.github.io/jvp-spark/" data-type="web" class="btn btn-secondary btn-web">
+                    <i style="font-size: 20px;" class="fas fa-globe"></i>
+                    Use the Web Version (Limited Features)
+                </a>
+            </div>
+        </section>
+
+        <section class="story-section">
+            <h3>A Teacher's Dream, Realized</h3>
+            <div class="story-content">
+                <p>JVP Spark is more than just an educational app—it's the manifestation of a teacher's dream to transform how students learn. Born from personal experience and fueled by passion, this app represents years of dedication to making education joyful, engaging, and effective.</p>
+                
+                <div class="highlight-box">
+                    <p>As a student, Sourabh Sir experienced firsthand the frustration of monotonous teaching methods that stifled imagination and creativity. Traditional classroom approaches often reduced learning to rote memorization, leaving little room for curiosity, exploration, or genuine understanding. This experience left a lasting impact and planted the seed for what would eventually become JVP Spark.</p>
+                </div>
+                
+                <p>Today, as an educator and innovator, that vision has become a reality—a platform where learning meets play, where students discover the joy of knowledge, and where every interaction sparks curiosity and growth.</p>
+            </div>
+        </section>
+
+        <section class="objectives">
+            <h3>Two-Fold Mission</h3>
+            <div class="objectives-grid">
+                <div class="objective-card">
+                    <i class="fas fa-book-open objective-icon"></i>
+                    <h4>Unified Resource Hub</h4>
+                    <p>Access everything in one place—exam results, syllabus, blueprints, attendance, and more. No more hunting through multiple platforms. Just open JVP Spark and find what you need instantly.</p>
+                </div>
+                <div class="objective-card">
+                    <i class="fas fa-gamepad objective-icon"></i>
+                    <h4>Gamified Learning Experience</h4>
+                    <p>Transform education into an adventure with interactive quizzes, engaging assessment tools, and AI-powered assistance. Learning becomes fun when it feels like play!</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <h3>Powerful Features, Out of the Box</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Sharing results, exam syllabus, blueprints, and attendance</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Child-friendly UI with gamified assessment tools</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Quizzes and Worksheet Generator for kids</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Word of the Day, school photos, and notifications</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Engaging tools that blend learning with fun</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Child-friendly AI Chatbot for learning support</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div class="feature-text">
+                        <p>Full support for Dark Mode</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="developer">
+            <img src="https://sourabhsuneja.github.io/jvp-spark/images/sourabh_suneja.jpg" alt="Sourabh Sir" class="developer-avatar" style="object-fit: cover;">
+            <h3>Built by an Educator, For Educators</h3>
+            <p class="developer-info">Sourabh Suneja</p>
+            <p class="developer-role">
+                Computer Teacher & Technical Coordinator<br>
+                Jamna Vidyapeeth, Jaipur<br>
+                Innovator & Education Technology Enthusiast
+            </p>
+        </section>
+
+        <section class="hero">
+            <h2>Ready to Transform Learning?</h2>
+            <p>Join thousands of students and parents already experiencing the future of education.</p>
+            <div class="cta-buttons">
+                <a data-href="https://play.google.com/store/apps/details?id=io.github.sourabhsuneja.twa" data-type="android" class="btn btn-primary btn-android">
+                    <i style="font-size: 20px;" class="fab fa-android"></i>
+                    Download Android App (Recommended)
+                </a>
+                <a data-href="https://sourabhsuneja.github.io/jvp-spark/" data-type="web" class="btn btn-secondary btn-web">
+                    <i style="font-size: 20px;" class="fas fa-globe"></i>
+                    Use the Web Version (Limited Features)
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="instructionModalOverlay">
+        <div class="modal-content">
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+            <h3 class="modal-title" id="modalTitle">Instructions</h3>
+            <div class="modal-body" id="modalBody">
+                </div>
+            <button class="btn btn-primary modal-proceed" id="modalProceedBtn">
+                Continue
+                <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+            </button>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2025 JVP Spark - Jamna Vidyapeeth, Jaipur. All rights reserved.</p>
+        <p>Developed with ❤️ by Sourabh Suneja</p>
+    </footer>
+
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            
+            body.classList.toggle('light-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme preference
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            // --- START: NEW CODE ---
+
+            // 1. Android Button Activation
+            const isAndroid = /Android/i.test(navigator.userAgent);
+            const androidButtons = document.querySelectorAll('.btn-android');
+
+            if (!isAndroid) {
+                androidButtons.forEach(button => {
+                    button.classList.add('btn-disabled');
+                    button.setAttribute('title', 'Available on Android devices only');
+                });
+            } else {
+                 // If it is Android, ensure it's not disabled (in case it was cached)
+                 androidButtons.forEach(button => {
+                    button.classList.remove('btn-disabled');
+                    button.removeAttribute('title');
+                });
+            }
+
+            // 2. Modal Logic
+            const modalOverlay = document.getElementById('instructionModalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalProceedBtn = document.getElementById('modalProceedBtn');
+            
+            const allCtaButtons = document.querySelectorAll('.cta-buttons .btn');
+            
+            const androidInstructions = `
+                <ul>
+                    <li>The Play Store will open. Please <strong>install the app</strong>.</li>
+                    <li>Log in using your <strong>school QR code (using which you see your results)</strong> (scan or upload). No password needed!</li>
+                    <li><strong>Important:</strong> Allow <strong>Camera</strong> permission to scan the QR code.</li>
+                    <li><strong>Important:</strong> Allow <strong>Notification</strong> permission to get school updates.</li>
+                </ul>
+            `;
+
+            const webInstructions = `
+                <ul>
+                    <li>The app will open in your browser now.</li>
+                    <li>Log in using your <strong>school QR code (using which you see your results)</strong> (scan or upload). No password needed!</li>
+                    <li><strong>Important:</strong> On a computer, you'll need to <strong>upload the image</strong> of your QR code.</li>
+                </ul>
+            `;
+            
+            function showModal(e) {
+                e.preventDefault();
+                const button = e.currentTarget;
+                if (button.classList.contains('btn-disabled')) {
+                    return;
+                }
+                
+                const type = button.dataset.type;
+                const href = button.dataset.href;
+                
+                if (type === 'android') {
+                    modalTitle.textContent = 'Android App Instructions';
+                    modalBody.innerHTML = androidInstructions;
+                } else {
+                    modalTitle.textContent = 'Web App Instructions';
+                    modalBody.innerHTML = webInstructions;
+                }
+                
+                modalProceedBtn.dataset.href = href;
+                modalProceedBtn.dataset.type = type;
+                
+                modalOverlay.classList.add('active');
+            }
+            
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+            }
+            
+            function proceedAction() {
+                const href = modalProceedBtn.dataset.href;
+                const type = modalProceedBtn.dataset.type;
+                
+                if (!href) return;
+
+                if (type === 'android') {
+                    // Open Play Store in a new tab
+                    window.open(href, '_blank', 'noopener,noreferrer');
+                } else {
+                    // Open web app in the same tab
+                    window.location.href = href;
+                }
+                
+                closeModal();
+            }
+
+            allCtaButtons.forEach(button => {
+                button.addEventListener('click', showModal);
+            });
+            
+            modalCloseBtn.addEventListener('click', closeModal);
+            modalProceedBtn.addEventListener('click', proceedAction);
+            
+            // Close modal by clicking overlay
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+            
+            // --- END: NEW CODE ---
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
