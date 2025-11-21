@@ -27,6 +27,8 @@ CREATE TABLE sport_events (
     group_size INTEGER NOT NULL, 
     
     gender_filter VARCHAR(50) CHECK (gender_filter IN ('Boys', 'Girls', 'Mixed')),
+
+    included_in_total BOOLEAN NOT NULL DEFAULT TRUE,
     
     CONSTRAINT unique_event_definition UNIQUE (game_name, class_category)
 );
