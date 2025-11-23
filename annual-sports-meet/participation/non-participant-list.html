@@ -362,6 +362,12 @@
             // We store the ORIGINAL value (even if null) to match against rawData later
             // We attach the value object directly to the element to avoid string conversion issues
             checkbox.dataset.val = JSON.stringify(val); 
+
+            // If value (specifically the class value) contains "LEFT NOW", do not show this filter
+            let showOption = true;
+            if(val.toLowerCase().includes("left now")) {
+                 showOption = false;
+            }
             
             checkbox.addEventListener('change', (e) => {
                 // Parse the original value back
@@ -380,9 +386,12 @@
             label.innerText = displayText;
             label.title = displayText;
 
-            itemDiv.appendChild(checkbox);
-            itemDiv.appendChild(label);
-            container.appendChild(itemDiv);
+
+            if(showOption) {
+               itemDiv.appendChild(checkbox);
+               itemDiv.appendChild(label);
+               container.appendChild(itemDiv);
+             }
         });
     }
 
