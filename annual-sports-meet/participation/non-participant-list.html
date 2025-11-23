@@ -291,6 +291,8 @@
     async function init() {
         showProcessingDialog();
         rawData = await invokeFunction('get_students_missing_participation');
+
+        console.log(rawData);
         document.getElementById('current-date').innerText = new Date().toLocaleDateString();
         generateFilterUI();
         renderTable(rawData);
