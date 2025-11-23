@@ -365,7 +365,7 @@
 
             // If value (specifically the class value) contains "LEFT NOW", do not show this filter
             let showOption = true;
-            if(val.toLowerCase().includes("left now")) {
+            if(String(val || "").toLowerCase().includes("left now")) {
                  showOption = false;
             }
             
