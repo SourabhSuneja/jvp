@@ -289,23 +289,44 @@
     // --- 2. Initialization Logic ---
 
     async function init() {
-        showProcessingDialog();
-        rawData = await invokeFunction('get_students_missing_participation');
+        try {
+            showProcessingDialog();
+            
+            // Fetch data
+            rawData = await invokeFunction('get_students_missing_participation');
 
-        console.log(rawData);
-        document.getElementById('current-date').innerText = new Date().toLocaleDateString();
-        generateFilterUI();
-        renderTable(rawData);
-        hideProcessingDialog();
+            // Debug: Check if data is null or empty
+            if (!rawData) {
+                console.error("Data is null/undefined");
+                rawData = [];
+            }
+
+            console.log("Fetched Data:", rawData);
+            document.getElementById('current-date').innerText = new Date().toLocaleDateString();
+            
+            generateFilterUI();
+            renderTable(rawData);
+        } catch (error) {
+            console.error("Error initializing:", error);
+            alert("Error loading data. Check console.");
+        } finally {
+            hideProcessingDialog();
+        }
     }
 
-    // Helper to extract unique values sorted
+    // Helper to extract unique values sorted (FIXED FOR NULLS)
     function getUniqueValues(key) {
         const values = new Set(rawData.map(item => item[key]));
-        return Array.from(values).sort((a, b) => a.localeCompare(b, undefined, {numeric: true, sensitivity: 'base'}));
+        
+        return Array.from(values).sort((a, b) => {
+            // SAFE GUARD: Convert null/undefined to empty string for comparison
+            const valA = (a === null || a === undefined) ? "" : String(a);
+            const valB = (b === null || b === undefined) ? "" : String(b);
+            
+            return valA.localeCompare(valB, undefined, {numeric: true, sensitivity: 'base'});
+        });
     }
 
-    // Special helper for "Already Participated" as it might have variations
     function getParticipationValues() {
         return getUniqueValues('already_participated');
     }
@@ -318,33 +339,46 @@
         createCheckboxList('filter-not-participating', getUniqueValues('not_participating'), 'not_participating');
     }
 
+    // (FIXED FOR NULL IDS)
     function createCheckboxList(containerId, values, filterType) {
         const container = document.getElementById(containerId);
-        container.innerHTML = ''; // Clear existing
+        container.innerHTML = ''; 
 
         values.forEach(val => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'checkbox-item';
 
+            // Handle display text vs actual value
+            // If val is null/empty string, display "None/Unknown"
+            const displayText = (val === null || val === "" || val === undefined) ? "None" : val;
+            
+            // create a safe ID string (remove spaces, handle nulls)
+            const safeIdString = String(displayText).replace(/[^a-zA-Z0-9-_]/g, '-');
+
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = `${filterType}-${val.replace(/\s+/g, '-')}`;
-            checkbox.value = val;
+            checkbox.id = `${filterType}-${safeIdString}`;
             
-            // Event Listener for Real-time filtering
+            // We store the ORIGINAL value (even if null) to match against rawData later
+            // We attach the value object directly to the element to avoid string conversion issues
+            checkbox.dataset.val = JSON.stringify(val); 
+            
             checkbox.addEventListener('change', (e) => {
+                // Parse the original value back
+                const originalVal = JSON.parse(e.target.dataset.val);
+
                 if (e.target.checked) {
-                    activeFilters[filterType].add(val);
+                    activeFilters[filterType].add(originalVal);
                 } else {
-                    activeFilters[filterType].delete(val);
+                    activeFilters[filterType].delete(originalVal);
                 }
                 applyFilters();
             });
 
             const label = document.createElement('label');
             label.htmlFor = checkbox.id;
-            label.innerText = val;
-            label.title = val; // Tooltip for long text
+            label.innerText = displayText;
+            label.title = displayText;
 
             itemDiv.appendChild(checkbox);
             itemDiv.appendChild(label);
@@ -356,10 +390,11 @@
 
     function applyFilters() {
         const filteredData = rawData.filter(student => {
-            // If a set is empty, it implies "All Selected" (no filter applied for that category)
             const matchHouse = activeFilters.house.size === 0 || activeFilters.house.has(student.house);
             const matchClass = activeFilters.class.size === 0 || activeFilters.class.has(student.class);
             const matchGender = activeFilters.gender.size === 0 || activeFilters.gender.has(student.gender);
+            
+            // Note: student.already_participated might be null in DB, whereas in dummy data it was "None"
             const matchPart = activeFilters.participated.size === 0 || activeFilters.participated.has(student.already_participated);
             const matchNotPart = activeFilters.not_participating.size === 0 || activeFilters.not_participating.has(student.not_participating);
 
@@ -370,13 +405,10 @@
     }
 
     function resetFilters() {
-        // Clear Sets
         for (let key in activeFilters) {
             activeFilters[key].clear();
         }
-        // Uncheck UI
         document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-        // Re-render
         applyFilters();
     }
 
@@ -389,7 +421,7 @@
 
         countSpan.innerText = `Showing ${data.length} student${data.length !== 1 ? 's' : ''}`;
 
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #888;">No students match the selected filters.</td></tr>`;
             return;
         }
@@ -397,16 +429,20 @@
         data.forEach(student => {
             const row = document.createElement('tr');
             
-            // Logic for styling specific cells
-            const houseClass = `house-${student.house}`;
-            
+            // Handle null values for display
+            const house = student.house || "Unknown";
+            const houseClass = `house-${house}`;
+            const gender = student.gender || "-";
+            const participated = student.already_participated || "None"; // Display "None" if null
+            const notParticipating = student.not_participating || "Unknown";
+
             row.innerHTML = `
-                <td style="font-weight:600;">${student.student_name}</td>
-                <td>${student.class}</td>
-                <td><span class="gender-badge">${student.gender}</span></td>
-                <td><span class="badge ${houseClass}">${student.house}</span></td>
-                <td>${student.already_participated}</td>
-                <td style="color: #555; font-size: 0.85rem;">${student.not_participating}</td>
+                <td style="font-weight:600;">${student.student_name || "N/A"}</td>
+                <td>${student.class || "N/A"}</td>
+                <td><span class="gender-badge">${gender}</span></td>
+                <td><span class="badge ${houseClass}">${house}</span></td>
+                <td>${participated}</td>
+                <td style="color: #555; font-size: 0.85rem;">${notParticipating}</td>
             `;
             tbody.appendChild(row);
         });
@@ -415,6 +451,7 @@
     window.onload = init;
 
 </script>
+
 
 </body>
 </html>
