@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sport Participation Shortfall Dashboard</title>
+    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+    <script src="https://myjvp.in/commons/dialog.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            max-height: 9999999px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .filters-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-group h3 {
+            color: #495057;
+            margin-bottom: 12px;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .filter-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .filter-chip:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .filter-chip input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .filter-chip.checked {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            min-width: 150px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .actions-bar {
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .print-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .print-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-critical {
+            background: #fee;
+            color: #c00;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-action {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .house-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .house-ruby { background: #ffebee; color: #c62828; }
+        .house-emerald { background: #e8f5e9; color: #2e7d32; }
+        .house-sapphire { background: #e3f2fd; color: #1565c0; }
+        .house-topaz { background: #fff9c4; color: #f57f17; }
+
+        .gender-badge {
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .gender-boys { background: #e3f2fd; color: #1976d2; }
+        .gender-girls { background: #fce4ec; color: #c2185b; }
+        .gender-mixed { background: #f3e5f5; color: #7b1fa2; }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .no-results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .filters-section,
+            .actions-bar,
+            .print-btn {
+                display: none !important;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            tbody tr:hover {
+                background: white;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+            }
+
+            .stat-item {
+                width: 100%;
+            }
+
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>🏆</span>
+                Sport Participation Shortfall Dashboard
+                <span>🏆</span>
+            </h1>
+            <p>Monitor and manage sport participation across all houses</p>
+        </div>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <div class="stat-value" id="totalShortfalls">0</div>
+                <div class="stat-label">Total Shortfalls</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="criticalCount">0</div>
+                <div class="stat-label">Critical</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="warningCount">0</div>
+                <div class="stat-label">Warnings</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="actionCount">0</div>
+                <div class="stat-label">Action Needed</div>
+            </div>
+        </div>
+
+        <div class="filters-section">
+            <div class="filter-group">
+                <h3>🏠 House</h3>
+                <div class="filter-options" id="houseFilters"></div>
+            </div>
+
+            <div class="filter-group">
+                <h3>📚 Class Category</h3>
+                <div class="filter-options" id="classFilters"></div>
+            </div>
+
+            <div class="filter-group">
+                <h3>🎮 Game Type</h3>
+                <div class="filter-options" id="gameTypeFilters"></div>
+            </div>
+
+            <div class="filter-group">
+                <h3>👥 Gender</h3>
+                <div class="filter-options" id="genderFilters"></div>
+            </div>
+
+            <div class="filter-group">
+                <h3>⚠️ Status</h3>
+                <div class="filter-options" id="statusFilters"></div>
+            </div>
+        </div>
+
+        <div class="actions-bar">
+            <div id="resultsCount">Showing 0 of 0 records</div>
+            <button class="print-btn" onclick="window.print()">
+                🖨️ Print Report
+            </button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>House</th>
+                        <th>Class</th>
+                        <th>Game Name</th>
+                        <th>Type</th>
+                        <th>Gender</th>
+                        <th>Registered</th>
+                        <th>Shortfall</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="noResults" class="no-results" style="display: none;">
+                <div class="no-results-icon">🔍</div>
+                <h3>No records found</h3>
+                <p>Try adjusting your filters to see more results</p>
+            </div>
+        </div>
+    </div>
+
+<div id="dialog-overlay" class="dialog-overlay">
+    <div class="dialog-box" id="dialog-box">
+       <div class="dialog-header" id="dialog-header">Title</div>
+       <div class="dialog-message" id="dialog-message">Message goes here</div>
+       <div class="dialog-buttons" id="dialog-buttons">
+          </div>
+    </div>
+ </div>
+
+    <script>
+        let shortfalls = [];
+
+        const filters = {
+            house: new Set(),
+            class: new Set(),
+            gameType: new Set(),
+            gender: new Set(),
+            status: new Set()
+        };
+
+        function getStatusType(statusMessage) {
+            if (statusMessage.includes('CRITICAL')) return 'CRITICAL';
+            if (statusMessage.includes('WARNING')) return 'WARNING';
+            if (statusMessage.includes('ACTION')) return 'ACTION';
+            return 'OTHER';
+        }
+
+        function initializeFilters() {
+            const houses = [...new Set(shortfalls.map(s => s.house_name))].sort();
+            const classes = [...new Set(shortfalls.map(s => s.class_category))].sort();
+            const gameTypes = [...new Set(shortfalls.map(s => s.game_type))].sort();
+            const genders = [...new Set(shortfalls.map(s => s.gender_filter))].sort();
+            const statuses = ['CRITICAL', 'WARNING', 'ACTION'];
+
+            createFilterChips('houseFilters', houses, 'house');
+            createFilterChips('classFilters', classes, 'class');
+            createFilterChips('gameTypeFilters', gameTypes, 'gameType');
+            createFilterChips('genderFilters', genders, 'gender');
+            createFilterChips('statusFilters', statuses, 'status');
+        }
+
+        function createFilterChips(containerId, items, filterType) {
+            const container = document.getElementById(containerId);
+            items.forEach(item => {
+                const chip = document.createElement('label');
+                chip.className = 'filter-chip';
+                chip.innerHTML = `
+                    <input type="checkbox" value="${item}" onchange="toggleFilter('${filterType}', '${item}', this)">
+                    <span>${item}</span>
+                `;
+                container.appendChild(chip);
+            });
+        }
+
+        function toggleFilter(type, value, checkbox) {
+            const chip = checkbox.parentElement;
+            if (checkbox.checked) {
+                filters[type].add(value);
+                chip.classList.add('checked');
+            } else {
+                filters[type].delete(value);
+                chip.classList.remove('checked');
+            }
+            renderTable();
+        }
+
+        function filterData() {
+            return shortfalls.filter(item => {
+                const statusType = getStatusType(item.status_message);
+                return (filters.house.size === 0 || filters.house.has(item.house_name)) &&
+                       (filters.class.size === 0 || filters.class.has(item.class_category)) &&
+                       (filters.gameType.size === 0 || filters.gameType.has(item.game_type)) &&
+                       (filters.gender.size === 0 || filters.gender.has(item.gender_filter)) &&
+                       (filters.status.size === 0 || filters.status.has(statusType));
+            });
+        }
+
+        function renderTable() {
+            const filtered = filterData();
+            const tbody = document.getElementById('tableBody');
+            const noResults = document.getElementById('noResults');
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '';
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+                tbody.innerHTML = filtered.map(item => {
+                    const statusType = getStatusType(item.status_message);
+                    const statusClass = statusType === 'CRITICAL' ? 'status-critical' :
+                                      statusType === 'WARNING' ? 'status-warning' : 'status-action';
+                    const houseClass = `house-${item.house_name.toLowerCase()}`;
+                    const genderClass = `gender-${item.gender_filter.toLowerCase()}`;
+
+                    return `
+                        <tr>
+                            <td><span class="house-badge ${houseClass}">${item.house_name}</span></td>
+                            <td>${item.class_category}</td>
+                            <td><strong>${item.game_name}</strong></td>
+                            <td>${item.game_type}</td>
+                            <td><span class="gender-badge ${genderClass}">${item.gender_filter}</span></td>
+                            <td>${item.registered_count}</td>
+                            <td><strong>${item.shortfall_count}</strong></td>
+                            <td><span class="status-badge ${statusClass}">${item.status_message}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            updateStats(filtered);
+            document.getElementById('resultsCount').textContent = 
+                `Showing ${filtered.length} of ${shortfalls.length} records`;
+        }
+
+        function updateStats(data) {
+            const critical = data.filter(d => getStatusType(d.status_message) === 'CRITICAL').length;
+            const warning = data.filter(d => getStatusType(d.status_message) === 'WARNING').length;
+            const action = data.filter(d => getStatusType(d.status_message) === 'ACTION').length;
+
+            document.getElementById('totalShortfalls').textContent = data.length;
+            document.getElementById('criticalCount').textContent = critical;
+            document.getElementById('warningCount').textContent = warning;
+            document.getElementById('actionCount').textContent = action;
+        }
+
+        window.onload = async function () {
+            showProcessingDialog();
+            shortfalls = await invokeFunction('get_sports_shortfalls');
+            initializeFilters();
+            renderTable();
+            hideProcessingDialog();
+        }
+    </script>
+</body>
+</html>
