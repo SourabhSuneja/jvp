@@ -6,6 +6,7 @@ DROP FUNCTION IF EXISTS get_sport_participants();
 DROP FUNCTION IF EXISTS get_student_participations(UUID);
 DROP FUNCTION IF EXISTS record_sport_winner(JSONB, TEXT);
 DROP FUNCTION IF EXISTS get_sport_winner_by_position(INTEGER, VARCHAR);
+DROP FUNCTION IF EXISTS get_students_missing_participation();
 
 -- Drop tables
 DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_notifications, sport_score_managers, housemasters;
@@ -611,6 +612,75 @@ WHERE
     AND potential_winnerhouse <> 'NIL';
 $$ LANGUAGE sql SECURITY INVOKER;
 
+-- Function to get a list of all students with their comma-separated list of game participations and even non-participations
+CREATE OR REPLACE FUNCTION get_students_missing_participation()
+RETURNS TABLE (
+    student_id UUID,
+    student_name TEXT,
+    class TEXT,
+    house TEXT,
+    gender TEXT,
+    already_participated TEXT,
+    not_participating TEXT
+)
+SECURITY INVOKER
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH student_activity AS (
+        SELECT
+            s.id,
+            s.name,
+            s.class,
+            s.house,
+            s.gender,
+            -- Aggregate game names into a single string
+            STRING_AGG(se.game_name, ', ' ORDER BY se.game_name) AS games_list,
+            
+            -- Check existence of Ind/Grouped games
+            COUNT(CASE WHEN se.game_type IN ('Individual', 'Grouped') THEN 1 END) > 0 AS has_ind_grouped,
+            
+            -- Check existence of Team games
+            COUNT(CASE WHEN se.game_type = 'Team' THEN 1 END) > 0 AS has_team
+        FROM
+            students s
+        LEFT JOIN
+            sport_participations sp ON s.id = sp.student_id
+        LEFT JOIN
+            sport_events se ON sp.event_id = se.id
+        GROUP BY
+            s.id, s.name, s.class, s.house, s.gender
+    )
+    SELECT
+        sa.id AS student_id,
+        sa.name AS student_name,
+        sa.class,
+        sa.house,
+        sa.gender,
+        -- Handle NULLs for students with no games
+        COALESCE(sa.games_list, 'None') AS already_participated,
+        
+        -- Logic to determine missing category
+        CASE
+            -- NEW CONDITION: Student participates in both types
+            WHEN sa.has_ind_grouped AND sa.has_team THEN 'None'
+            -- Existing logic for partial/no participation
+            WHEN sa.has_ind_grouped AND NOT sa.has_team THEN 'Any Team Game'
+            WHEN NOT sa.has_ind_grouped AND sa.has_team THEN 'Any Individual/Grouped Game'
+            ELSE 'Neither Individual/Grouped nor Team Game'
+        END AS not_participating
+    FROM
+        student_activity sa
+    -- WHERE clause removed so all students are returned
+    ORDER BY
+        -- Numeric sort for class (e.g., '10' > '2')
+        SPLIT_PART(sa.class, '-', 1)::INTEGER ASC,
+        -- Section sort
+        SPLIT_PART(sa.class, '-', 2) ASC,
+        -- Name sort
+        sa.name ASC;
+END;
+$$ LANGUAGE plpgsql;
 
 -- Enable RLS on all tables
 ALTER TABLE sport_events ENABLE ROW LEVEL SECURITY;
