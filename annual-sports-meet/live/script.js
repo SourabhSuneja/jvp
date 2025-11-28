@@ -1029,9 +1029,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Triggers the confetti celebration.
+ * Triggers the confetti celebration using the custom canvas.
  */
 function launchConfetti() {
+   // 1. Select your specific canvas element
+   const canvas = document.getElementById('confetti-canvas');
+
+   // 2. Create a confetti instance bound to that canvas
+   const myConfetti = confetti.create(canvas, {
+      resize: true, // Will fit the canvas to the window
+      useWorker: true
+   });
+
    const count = 200;
    const defaults = {
       origin: {
@@ -1040,7 +1049,8 @@ function launchConfetti() {
    };
 
    function fire(particleRatio, opts) {
-      confetti(Object.assign({}, defaults, opts, {
+      // 3. Use 'myConfetti' instead of the global 'confetti'
+      myConfetti(Object.assign({}, defaults, opts, {
          particleCount: Math.floor(count * particleRatio)
       }));
    }
