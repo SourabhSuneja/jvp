@@ -7,6 +7,7 @@ DROP FUNCTION IF EXISTS get_student_participations(UUID);
 DROP FUNCTION IF EXISTS record_sport_winner(JSONB, TEXT);
 DROP FUNCTION IF EXISTS get_sport_winner_by_position(INTEGER, VARCHAR);
 DROP FUNCTION IF EXISTS get_students_missing_participation();
+DROP FUNCTION IF EXISTS get_sports_shortfalls(boolean);
 
 -- Drop tables
 DROP TABLE IF EXISTS sport_events, sport_participations, sport_winners, sport_notifications, sport_score_managers, housemasters;
@@ -681,6 +682,121 @@ BEGIN
         sa.name ASC;
 END;
 $$ LANGUAGE plpgsql;
+
+-- Function to list player shortfalls in different games
+CREATE OR REPLACE FUNCTION get_sports_shortfalls(show_only_shortfalls BOOLEAN DEFAULT TRUE)
+RETURNS TABLE (
+    house_name TEXT,
+    class_category VARCHAR,
+    game_name VARCHAR,
+    game_type VARCHAR,
+    gender_filter VARCHAR,
+    registered_count BIGINT,
+    shortfall_count INTEGER,
+    status_message TEXT
+)
+LANGUAGE plpgsql
+SECURITY INVOKER
+AS $$
+BEGIN
+    RETURN QUERY
+    WITH 
+    -- 1. Define Houses
+    houses AS (
+        SELECT unnest(ARRAY['Ruby', 'Emerald', 'Sapphire', 'Topaz']) AS name
+    ),
+    
+    -- 2. Build the Matrix (Every House x Every Event)
+    matrix AS (
+        SELECT 
+            h.name AS house_name,
+            e.id AS event_id,
+            e.game_name,
+            e.class_category,
+            e.game_type,
+            e.group_size,
+            e.gender_filter
+        FROM sport_events e
+        CROSS JOIN houses h
+    ),
+    
+    -- 3. Count Active Registrations
+    registrations AS (
+        SELECT 
+            s.house,
+            sp.event_id,
+            COUNT(*) as actual_count
+        FROM sport_participations sp
+        JOIN students s ON sp.student_id = s.id
+        GROUP BY s.house, sp.event_id
+    ),
+    
+    -- 4. Apply Logic
+    calc AS (
+        SELECT 
+            m.house_name,
+            m.class_category,
+            m.game_name,
+            m.game_type,
+            m.gender_filter,
+            COALESCE(r.actual_count, 0) as reg_count,
+            m.group_size,
+            
+            CASE 
+                -- Individual: If 0, we need 1.
+                WHEN m.game_type = 'Individual' AND COALESCE(r.actual_count, 0) = 0 THEN 1
+                WHEN m.game_type = 'Individual' THEN 0
+                
+                -- Grouped: Calculate the remainder. e.g. If group_size is 2 and we have 3 people, we need 1 more.
+                WHEN m.game_type = 'Grouped' THEN 
+                    CASE WHEN (COALESCE(r.actual_count, 0) % m.group_size) = 0 THEN 0
+                         ELSE m.group_size - (COALESCE(r.actual_count, 0) % m.group_size)
+                    END
+                
+                -- Team: Calculate distance to the cap (including extras).
+                WHEN m.game_type = 'Team' THEN 
+                    GREATEST(0, m.group_size - COALESCE(r.actual_count, 0)::INT)
+            END as missing_slots
+            
+        FROM matrix m
+        LEFT JOIN registrations r ON m.event_id = r.event_id AND m.house_name = r.house
+    )
+
+    -- 5. Final Output with Status Messages
+    SELECT 
+        c.house_name, -- Automatically casts to TEXT based on RETURNS TABLE
+        c.class_category,
+        c.game_name,
+        c.game_type,
+        c.gender_filter,
+        c.reg_count,
+        c.missing_slots,
+        
+        CASE 
+            WHEN c.reg_count = 0 THEN 'CRITICAL: No participants registered.'
+            
+            WHEN c.game_type = 'Individual' AND c.reg_count > 0 
+                THEN 'OK: ' || c.reg_count || ' registered.'
+                
+            WHEN c.game_type = 'Grouped' AND c.missing_slots > 0 
+                THEN 'ACTION: Need ' || c.missing_slots || ' more to complete the group.'
+                
+            WHEN c.game_type = 'Grouped' AND c.missing_slots = 0
+                THEN 'OK: ' || (c.reg_count / c.group_size) || ' full groups formed.'
+                
+            WHEN c.game_type = 'Team' AND c.missing_slots > 0 
+                THEN 'WARNING: Squad incomplete. Slots for ' || c.missing_slots || ' more.'
+                
+            ELSE 'OK: Full strength.'
+        END as status_message
+        
+    FROM calc c
+    WHERE 
+        (show_only_shortfalls = FALSE) OR (c.missing_slots > 0)
+    ORDER BY 
+        c.house_name, c.class_category, c.game_name;
+END;
+$$;
 
 -- Enable RLS on all tables
 ALTER TABLE sport_events ENABLE ROW LEVEL SECURITY;
