@@ -9,12 +9,8 @@ let pointCriteria = {
    'Grouped': [10, 7, 5],
    'Team': [20, 14, 10],
 };
-const totalEvents = {
-   Individual: 1,
-   Grouped: 2,
-   Team: 3
-};
-let winners;
+let totalEvents = {};
+let winners, events;
 const popupBox = document.getElementById('popupBox');
 const popupHeading = document.getElementById('popupHeading');
 const popupMsg = document.getElementById('popupMsg');
@@ -42,6 +38,9 @@ const congratulatoryWords = [
 ];
 
 async function pollEntireData() {
+   // Fetch events list
+   events = await selectData('sport_events', false, '*', [], [], 'game_name');
+   totalEvents = countActiveEvents(events);
    let inLiveMode = true;
    const resultName = getParameterByName('result');
    if (resultName) {
@@ -1081,4 +1080,24 @@ function launchConfetti() {
       spread: 120,
       startVelocity: 45,
    });
+}
+
+function countActiveEvents(eventList) {
+  // Initialize the counter object with 0s to ensure specific keys exist
+  const initialCounts = {
+    Individual: 0,
+    Grouped: 0,
+    Team: 0
+  };
+
+  return eventList.reduce((acc, event) => {
+    // Check if the event should be included
+    if (event.included_in_total === true) {
+      // Check if the game_type exists in our accumulator (to prevent errors if bad data comes in)
+      if (acc.hasOwnProperty(event.game_type)) {
+        acc[event.game_type] += 1;
+      }
+    }
+    return acc;
+  }, initialCounts);
 }
