@@ -332,11 +332,31 @@
             // Clear loading message
             container.innerHTML = '<h1 class="page-title">Annual Sports Meet - Participant Lists</h1>';
 
-            // Step 2: Create a table for each game
-            for (const game of Object.values(games)) {
-                const tableHtml = createGameTable(game);
-                container.insertAdjacentHTML('beforeend', tableHtml);
-            }
+    // Step 2: Create a table for each game
+    
+    // Convert the object values to an array
+    const sortedGames = Object.values(games);
+    
+    // Sort the array first alphabetically by game_name and then by class
+        sortedGames.sort((a, b) => {
+        // First sort by Game Name
+        const nameComparison = a.game_name.localeCompare(b.game_name);
+        
+        // If Game Names are the same, sort by Class Category
+        if (nameComparison === 0) {
+            return a.class_category.localeCompare(b.class_category);
+        }
+        
+        return nameComparison;
+    });
+
+
+    // Iterate through the sorted list
+    for (const game of sortedGames) {
+        const tableHtml = createGameTable(game);
+        container.insertAdjacentHTML('beforeend', tableHtml);
+    }
+
             
             // Step 3: Add event listeners to all new print buttons
             document.querySelectorAll('.print-btn-single').forEach(addPrintHandler);
@@ -395,7 +415,7 @@
             // Assemble the full section HTML
             return `
                 <section class="game-section">
-                    <button class="print-btn-single" title="Print this list">🖨️ Print</button>
+                    <button class="print-btn-single" title="Print this list">ЁЯЦия╕П Print</button>
                     <div class="game-header">
                         <h2>Participant List</h2>
                         <h3>${game.game_name}</h3>
