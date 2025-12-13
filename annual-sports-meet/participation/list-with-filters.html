@@ -256,6 +256,12 @@
         break-inside: avoid;
     }
 
+    /* Target the header and data cells for the "Not Participating Status" column (6th column) */
+    #student-table th:nth-child(6),
+    #student-table td:nth-child(6) {
+        display: none !important;
+    }
+
     /* 6. Badges - Optimize for Black & White printing */
     .badge { 
         padding: 0;
