@@ -152,92 +152,154 @@
 
         /* --- Print Styles --- */
         @media print {
-            body {
-                background-color: #ffffff;
-                margin: 0;
-                padding: 0;
-                -webkit-print-color-adjust: exact; /* Force print colors in Chrome */
-                print-color-adjust: exact; /* Standard */
-            }
+    body {
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 
-            @page {
-                size: A4;
-                margin: 10mm; /* Standard A4 margin */
-            }
+    /* 1. Reduce Page Margins to use more width/height of the paper */
+    @page {
+        size: A4;
+        margin: 6mm 8mm; /* Top/Bottom: 6mm, Left/Right: 8mm */
+    }
 
-            #main-container {
-                max-width: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            
-            h1.page-title,
-            .print-btn-single {
-                display: none; /* Hide global title and all print buttons */
-            }
+    #main-container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
 
-            .game-header {
-                /* Glue the header to the table below it */
-                page-break-after: avoid;
-                break-after: avoid;
-            }
+    /* Hide the main page title and buttons */
+    h1.page-title,
+    .print-btn-single {
+        display: none;
+    }
 
-            .game-section {
-                border: none;
-                box-shadow: none;
-                border-radius: 0;
-                margin: 0;
-                padding: 0;
-                width: 100% !important;
-                /* 1. Try to keep the whole game section on one page */
-                page-break-inside: avoid; 
-                break-inside: avoid;      
-                /* 2. Add visual separation between games on the same page */
-                margin-bottom: 15px;      
-                padding-bottom: 15px;
-                border-bottom: 2px dashed #ccc;
-            }
+    /* --- COMPACT GAME SECTION --- */
+    .game-section {
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        width: 100% !important;
+        margin: 0;
+        padding: 0;
+        
+        /* Logic: Try to keep together, break if massive */
+        page-break-inside: avoid;
+        break-inside: avoid;
 
-            .game-section:last-child {
-                page-break-after: auto;
-            }
-            
-            .participant-table {
-                font-size: 10pt; /* Optimize for print density */
-            }
+        /* Visual separation: distinct but thin line */
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed #999;
+    }
 
-            .participant-table tr {
-                /* Don't slice a row in half */
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-            
-            .participant-table th,
-            .participant-table td {
-                padding: 6px;
-            }
+    .game-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
 
-            .participant-table td {
-                /*padding-bottom: 80px;*/
-            }
+    /* --- OPTIMIZED HEADER --- */
+    .game-header {
+        text-align: left; /* Left align saves vertical visual flow */
+        margin-bottom: 5px; /* Drastically reduced from 20px */
+        padding-bottom: 5px;
+        border-bottom: 1px solid #000;
+        
+        /* Glue header to table */
+        page-break-after: avoid;
+        break-after: avoid;
+        
+        /* Flexbox to put Title and Info on one line (Saves massive space) */
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
 
-            .participant-name {
-                font-size: 0.9rem;
-            }
+    /* Hide the repetitive "Participant List" H2 to save space */
+    .game-header h2 {
+        display: none;
+    }
 
-            /* --- Logic for "Print This List" button --- */
-            
-            /* By default, hide all game sections when printing */
-            body.printing-single .game-section {
-                display: none;
-            }
-            
-            /* Only show the section explicitly marked for printing */
-            body.printing-single .game-section.show-print {
-                display: block;
-                page-break-after: auto; /* Don't add a page break after the single item */
-            }
-        }
+    /* Make the Game Name prominent but compact */
+    .game-header h3 {
+        margin: 0;
+        font-size: 12pt; /* Reduced from 1.5rem */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    /* Compact the metadata (Class, Gender, Type) */
+    .game-header p {
+        margin: 0;
+        font-size: 9pt;
+        color: #000; /* Black for better contrast */
+    }
+
+    /* --- COMPACT TABLE --- */
+    .participant-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 9pt; /* Reduced from 10pt */
+        margin-top: 5px;
+    }
+
+    .participant-table th {
+        background-color: #f0f0f0 !important; /* Light grey for print contrast */
+        color: #000;
+        font-weight: bold;
+        text-align: left;
+        padding: 3px 5px; /* Tighter padding */
+        font-size: 8pt; /* Headers can be smaller */
+        border: 1px solid #000;
+    }
+
+    .participant-table td {
+        border: 1px solid #000;
+        padding: 3px 5px; /* Reduced from 6px */
+        vertical-align: top;
+    }
+
+    /* Ensure rows don't split across pages */
+    tr {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* --- COMPACT CELL CONTENT --- */
+    .participant-name {
+        font-size: 9pt;
+        line-height: 1.2; /* Tighter line height */
+    }
+
+    .participant-entry {
+        /* Reduce gap between students in the same cell (e.g., grouped games) */
+        margin-bottom: 2px; 
+    }
+    
+    .participant-entry:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Optional: Hide QR code canvas container to ensure it takes 0 space if empty */
+    .participant-entry canvas {
+        display: none; 
+    }
+
+    /* --- SINGLE PRINT LOGIC --- */
+    body.printing-single .game-section {
+        display: none;
+    }
+    body.printing-single .game-section.show-print {
+        display: block;
+        page-break-inside: auto;
+        break-inside: auto;
+        border-bottom: none;
+    }
+}
 
     </style>
 </head>
