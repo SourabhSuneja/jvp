@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Meet Participant Lists</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <!-- Supabase CRUD Functions -->
+    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+    <!-- Dialog Box Styles -->
+    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+    <!-- Dialog Box Scripts -->
+    <script src="https://myjvp.in/commons/dialog.js"></script>
+    
+    <style>
+        /* --- General Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        #main-container {
+            max-width: 210mm; /* A4 Width */
+            margin: 20px auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        h1.page-title {
+            text-align: center;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            color: #0056b3;
+        }
+
+        /* --- Game Section --- */
+        .game-section {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 20mm; /* A4 padding */
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .game-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #004a99;
+        }
+
+        .game-header h3 {
+            margin: 5px 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .game-header p {
+            margin: 5px 0 0;
+            font-style: italic;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .print-btn-single {
+            float: right;
+            margin: -15px 0 10px 10px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .print-btn-single:hover {
+            background-color: #0056b3;
+        }
+
+        /* --- Participant Table --- */
+        .participant-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .participant-table th,
+        .participant-table td {
+            border: 1px solid #000; /* Solid black for print clarity */
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.95rem;
+        }
+
+        .participant-table th {
+            background-color: #e9ecef;
+            color: #212529;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        /* Sr. No. column */
+        .participant-table th:first-child,
+        .participant-table td:first-child {
+            text-align: center;
+            width: 5%;
+            font-weight: bold;
+        }
+
+        /* --- Participant Entry (Inside Cell) --- */
+        .participant-entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px; /* Space between grouped participants */
+        }
+
+        .participant-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .participant-entry canvas {
+            margin-right: 10px;
+            flex-shrink: 0; /* Prevent QR from shrinking */
+            display: none;
+        }
+
+        .participant-name {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .no-participants {
+            text-align: center;
+            font-style: italic;
+            color: #888;
+            padding: 20px;
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact; /* Force print colors in Chrome */
+                print-color-adjust: exact; /* Standard */
+            }
+
+            @page {
+                size: A4;
+                margin: 10mm; /* Standard A4 margin */
+            }
+
+            #main-container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            
+            h1.page-title,
+            .print-btn-single {
+                display: none; /* Hide global title and all print buttons */
+            }
+
+            .game-header {
+                /* Glue the header to the table below it */
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+
+            .game-section {
+                border: none;
+                box-shadow: none;
+                border-radius: 0;
+                margin: 0;
+                padding: 0;
+                width: 100% !important;
+                /* 1. Try to keep the whole game section on one page */
+                page-break-inside: avoid; 
+                break-inside: avoid;      
+                /* 2. Add visual separation between games on the same page */
+                margin-bottom: 15px;      
+                padding-bottom: 15px;
+                border-bottom: 2px dashed #ccc;
+            }
+
+            .game-section:last-child {
+                page-break-after: auto;
+            }
+            
+            .participant-table {
+                font-size: 10pt; /* Optimize for print density */
+            }
+
+            .participant-table tr {
+                /* Don't slice a row in half */
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            
+            .participant-table th,
+            .participant-table td {
+                padding: 6px;
+            }
+
+            .participant-table td {
+                /*padding-bottom: 80px;*/
+            }
+
+            .participant-name {
+                font-size: 0.9rem;
+            }
+
+            /* --- Logic for "Print This List" button --- */
+            
+            /* By default, hide all game sections when printing */
+            body.printing-single .game-section {
+                display: none;
+            }
+            
+            /* Only show the section explicitly marked for printing */
+            body.printing-single .game-section.show-print {
+                display: block;
+                page-break-after: auto; /* Don't add a page break after the single item */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="main-container">
+        <h1 class="page-title">Annual Sports Meet 2025-26</h1>
+        </div>
+
+    <script>
+        // --- 1. DATA (will be fetched from Supabase database)
+        let participants = [];
+
+        // --- 2. CONFIGURATION ---
+        const qrCodeSize = 80; // Size in pixels for the QR code canvas
+        const houses = ["Ruby", "Emerald", "Sapphire", "Topaz"];
+
+        // --- 3. HELPER FUNCTIONS ---
+
+        /**
+         * Formats a single participant object into an HTML string.
+         */
+        function formatParticipantCell(participant) {
+            if (!participant || !participant.student_name) {
+                return ''; // Return empty string for blank cells
+            }
+            
+            // Use access_token as data attribute to find canvas later
+            return `
+                <div class="participant-entry">
+                  <canvas class="qr-canvas" data-token="${participant.access_token}"></canvas>
+                  <div class="participant-name">
+                    ${participant.student_name} (${participant.student_class})
+                  </div>
+                </div>
+            `;
+        }
+        
+        /**
+         * Formats an array of participants (a group) into an HTML string.
+         */
+        function formatGroupCell(group) {
+            if (!group || group.length === 0) {
+                return ''; // Return empty string for blank cells
+            }
+            // Map each participant in the group to their cell format and join
+            return group.map(formatParticipantCell).join('');
+        }
+
+        /**
+         * Attaches a "print this list" event handler to a button.
+         */
+        function addPrintHandler(button) {
+            button.addEventListener('click', () => {
+                const sectionToPrint = button.closest('.game-section');
+                
+                // Add classes to body and the specific section
+                document.body.classList.add('printing-single');
+                sectionToPrint.classList.add('show-print');
+                
+                window.print(); // Trigger print dialog
+            });
+        }
+        
+        /**
+         * Cleans up print-specific classes after printing is done or cancelled.
+         */
+        window.onafterprint = () => {
+            document.body.classList.remove('printing-single');
+            const printedSection = document.querySelector('.game-section.show-print');
+            if (printedSection) {
+                printedSection.classList.remove('show-print');
+            }
+        };
+
+        // --- 4. CORE LOGIC ---
+
+        /**
+         * Main function to generate all participant lists.
+         */
+        async function generateAllLists() {
+            const container = document.getElementById('main-container');
+            container.innerHTML = '<h1>... Loading Lists ...</h1>'; // Clear and show loading
+
+            // Fetch participants data from server
+            participants = await invokeFunction('get_sport_participants'); 
+            
+            // Step 1: Group participants by game
+            const games = {};
+            for (const p of participants) {
+                // Unique key for each game
+                const gameKey = `${p.game_name}_${p.class_category}_${p.gender_filter}`;
+                
+                if (!games[gameKey]) {
+                    games[gameKey] = {
+                        game_name: p.game_name,
+                        class_category: p.class_category,
+                        gender_filter: p.gender_filter,
+                        game_type: p.game_type,
+                        participants: { Ruby: [], Emerald: [], Sapphire: [], Topaz: [] }
+                    };
+                }
+                
+                // Only add participants who have a name (i.e., not null)
+                if (p.student_name && p.student_house) {
+                    games[gameKey].participants[p.student_house].push(p);
+                }
+            }
+            
+            // Clear loading message
+            container.innerHTML = '<h1 class="page-title">Annual Sports Meet - Participant Lists</h1>';
+
+    // Step 2: Create a table for each game
+    
+    // Convert the object values to an array
+    const sortedGames = Object.values(games);
+    
+    // Sort the array first alphabetically by game_name and then by class
+        sortedGames.sort((a, b) => {
+        // First sort by Game Name
+        const nameComparison = a.game_name.localeCompare(b.game_name);
+        
+        // If Game Names are the same, sort by Class Category
+        if (nameComparison === 0) {
+            return a.class_category.localeCompare(b.class_category);
+        }
+        
+        return nameComparison;
+    });
+
+
+    // Iterate through the sorted list
+    for (const game of sortedGames) {
+        const tableHtml = createGameTable(game);
+        container.insertAdjacentHTML('beforeend', tableHtml);
+    }
+
+            
+            // Step 3: Add event listeners to all new print buttons
+            document.querySelectorAll('.print-btn-single').forEach(addPrintHandler);
+
+            // Step 4: Render all QR codes
+            //renderAllQRCodes();
+        }
+
+        /**
+         * Creates the HTML string for a single game's section and table.
+         */
+        function createGameTable(game) {
+            let tableBodyHtml = '';
+            let maxRows = 0;
+            let processedData = { Ruby: [], Emerald: [], Sapphire: [], Topaz: [] };
+            
+            if (game.game_type === 'Individual' || game.game_type === 'Team') {
+                // Data is already in the right format
+                processedData = game.participants;
+                maxRows = Math.max(...houses.map(h => processedData[h].length));
+                
+            } else if (game.game_type === 'Grouped') {
+                // Need to group participants by participant_group_id within each house
+                for (const house of houses) {
+                    const groups = {};
+                    for (const p of game.participants[house]) {
+                        if (!groups[p.participant_group_id]) {
+                            groups[p.participant_group_id] = [];
+                        }
+                        groups[p.participant_group_id].push(p);
+                    }
+                    processedData[house] = Object.values(groups); // Now an array of arrays
+                }
+                maxRows = Math.max(...houses.map(h => processedData[h].length));
+            }
+
+            // Build the table rows
+            if (maxRows > 0) {
+                for (let i = 0; i < maxRows; i++) {
+                    const rowFormatter = (game.game_type === 'Grouped') ? formatGroupCell : formatParticipantCell;
+                    
+                    tableBodyHtml += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${rowFormatter(processedData.Ruby[i])}</td>
+                            <td>${rowFormatter(processedData.Emerald[i])}</td>
+                            <td>${rowFormatter(processedData.Sapphire[i])}</td>
+                            <td>${rowFormatter(processedData.Topaz[i])}</td>
+                        </tr>
+                    `;
+                }
+            } else {
+                tableBodyHtml = '<tr><td colspan="5" class="no-participants">No participants registered for this event yet.</td></tr>';
+            }
+
+            // Assemble the full section HTML
+            return `
+                <section class="game-section">
+                    <button class="print-btn-single" title="Print this list">Print this list</button>
+                    <div class="game-header">
+                        <h2>Participant List</h2>
+                        <h3>${game.game_name}</h3>
+                        <p>
+                            <strong>Class Category:</strong> ${game.class_category} | 
+                            <strong>Gender:</strong> ${game.gender_filter} | 
+                            <strong>Type:</strong> ${game.game_type}
+                        </p>
+                    </div>
+                    
+                    <table class="participant-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Ruby</th>
+                                <th>Emerald</th>
+                                <th>Sapphire</th>
+                                <th>Topaz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableBodyHtml}
+                        </tbody>
+                    </table>
+                </section>
+            `;
+        }
+        
+        /**
+         * Finds all canvas elements and generates QR codes for them.
+         */
+        function renderAllQRCodes() {
+            const canvases = document.querySelectorAll('.qr-canvas');
+            
+            canvases.forEach(canvas => {
+                const token = canvas.dataset.token;
+                if (token) {
+                    QRCode.toCanvas(canvas, token, { 
+                        width: qrCodeSize, 
+                        margin: 1,
+                        errorCorrectionLevel: 'L' // Use 'L' for smallest, dense QR
+                    }, (error) => {
+                        if (error) console.error("QR Code Error for token " + token, error);
+                    });
+                }
+            });
+        }
+
+        // --- 5. INITIALIZATION ---
+        // Run the main function when the document is ready
+        document.addEventListener('DOMContentLoaded', generateAllLists);
+        
+    </script>
+</body>
+</html>
