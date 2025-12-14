@@ -260,6 +260,165 @@ BEGIN
 END;
 $$;
 
+-- Re-declaration of the same above function but with Boolean variables to easily allow granting/revoking rights to different roles (admins, housemasters etc) without changing any logic further down
+CREATE OR REPLACE FUNCTION public.manage_sport_participations(
+    changes_json JSONB
+)
+RETURNS TABLE(added INT, removed INT)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
+DECLARE
+    -- ==========================================================
+    -- CONFIGURATION TOGGLES
+    -- Set these to true or false to globally enable/disable specific roles
+    -- ==========================================================
+    allow_admins CONSTANT BOOLEAN := true;
+    allow_class_teachers CONSTANT BOOLEAN := true;
+    allow_housemasters CONSTANT BOOLEAN := true;
+
+    -- ==========================================================
+    -- FUNCTION VARIABLES
+    -- ==========================================================
+    
+    -- The ID of the user calling this function
+    auth_id UUID := auth.uid();
+
+    -- Flag for admin permissions
+    is_admin BOOLEAN := false;
+
+    -- Variables to store the user's scope (class and/or house)
+    user_class TEXT;
+    user_house TEXT;
+
+    -- Variables for looping and validation
+    change_record JSONB;
+    student_id_to_check UUID;
+    student_class TEXT;
+    student_house TEXT;
+
+    -- Flags to track if the *entire* batch of students is valid
+    can_manage_by_class BOOLEAN;
+    can_manage_by_house BOOLEAN;
+
+    -- Counters for the final report
+    added_count INT := 0;
+    removed_count INT := 0;
+BEGIN
+    -- 1. IDENTIFY ADMIN ROLE
+    -- We only check the database if the allow_admins toggle is TRUE.
+    IF allow_admins THEN
+        SELECT EXISTS (
+            SELECT 1 FROM public.admins WHERE id = auth_id
+        ) INTO is_admin;
+    END IF;
+
+    -- 2. IDENTIFY USER ROLE & SCOPE (if not an admin)
+    -- If the user is not an admin (or admin access is disabled), check other roles.
+    IF NOT is_admin THEN
+        
+        -- Check class teacher role only if enabled
+        IF allow_class_teachers THEN
+            SELECT class INTO user_class
+            FROM public.class_teachers
+            WHERE teacher_id = auth_id;
+        END IF;
+
+        -- Check housemaster role only if enabled
+        IF allow_housemasters THEN
+            SELECT house INTO user_house
+            FROM public.housemasters
+            WHERE teacher_id = auth_id;
+        END IF;
+        
+    END IF;
+
+    -- 3. AUTHORIZATION CHECK
+    -- If the user is not an admin AND has no other (allowed) role, reject.
+    -- Note: If a toggle is set to false, the corresponding variable (is_admin, user_class, etc.)
+    -- remains null/false, effectively triggering this exception for that user type.
+    IF user_class IS NULL AND user_house IS NULL AND NOT is_admin THEN
+        RAISE EXCEPTION 'Access Denied: You must be an authorized admin, class teacher, or housemaster to perform this operation.';
+    END IF;
+
+    -- 4. PRE-VALIDATION PASS
+    -- Initialize permission flags based on the scopes we found above.
+    can_manage_by_class := (user_class IS NOT NULL);
+    can_manage_by_house := (user_house IS NOT NULL);
+
+    FOR change_record IN SELECT * FROM jsonb_array_elements(changes_json)
+    LOOP
+        student_id_to_check := (change_record ->> 'student_id')::UUID;
+
+        -- Get the student's details
+        SELECT class, house INTO student_class, student_house
+        FROM public.students
+        WHERE id = student_id_to_check;
+
+        IF NOT FOUND THEN
+            RAISE EXCEPTION 'Invalid Operation: Student with ID % does not exist.', student_id_to_check;
+        END IF;
+
+        -- 5. APPLY ROLE-BASED SECURITY CHECKS
+        IF NOT is_admin THEN
+            -- If we still thought all students were in the class, check this student.
+            IF can_manage_by_class AND student_class IS DISTINCT FROM user_class THEN
+                can_manage_by_class := false;
+            END IF;
+
+            -- If we still thought all students were in the house, check this student.
+            IF can_manage_by_house AND student_house IS DISTINCT FROM user_house THEN
+                can_manage_by_house := false;
+            END IF;
+        END IF;
+
+    END LOOP; 
+
+    -- 5. FINAL BATCH VALIDATION
+    IF NOT is_admin THEN
+        IF NOT (can_manage_by_class OR can_manage_by_house) THEN
+            RAISE EXCEPTION 'Access Denied: You can only manage students if ALL are in your class (%) or ALL are in your house (%). This batch contains mixed students.', user_class, user_house;
+        END IF;
+    END IF;
+
+    -- 6. EXECUTION PASS
+    FOR change_record IN SELECT * FROM jsonb_array_elements(changes_json)
+    LOOP
+        IF (change_record ->> 'change') = 'add' THEN
+            INSERT INTO public.sport_participations (student_id, event_id, participant_group_id)
+            VALUES (
+                (change_record ->> 'student_id')::UUID,
+                (change_record ->> 'event_id')::INT,
+                (change_record ->> 'participant_group_id')::UUID
+            )
+            ON CONFLICT (student_id, event_id) DO NOTHING;
+
+            IF FOUND THEN
+                added_count := added_count + 1;
+            END IF;
+
+        ELSIF (change_record ->> 'change') = 'remove' THEN
+            DELETE FROM public.sport_participations
+            WHERE student_id = (change_record ->> 'student_id')::UUID
+              AND event_id = (change_record ->> 'event_id')::INT;
+
+            IF FOUND THEN
+                removed_count := removed_count + 1;
+            END IF;
+        END IF;
+    END LOOP;
+
+    -- 7. RETURN SUMMARY
+    added := added_count;
+    removed := removed_count;
+    RETURN NEXT;
+    RETURN;
+
+END;
+$$;
+
+
 -- Function to get participants of all games from all houses
 CREATE OR REPLACE FUNCTION get_sport_participants()
 RETURNS TABLE (
