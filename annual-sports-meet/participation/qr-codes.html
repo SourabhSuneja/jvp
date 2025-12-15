@@ -4,322 +4,228 @@
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="robots" content="noindex, nofollow">
-      <title>QR Codes for JVP Students</title>
+      <title>Sports Meet QR Badges - JVP</title>
       <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-      <!-- Supabase CRUD Functions -->
       <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
       <style>
          * {
-         max-height: 999999999px;
+            box-sizing: border-box;
          }
          body {
-         font-family: Arial, sans-serif;
-         margin: 0;
-         padding: 20px;
-         background-color: #f9f9f9;
-         color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+            color: #333;
          }
          h1 {
-         text-align: center;
-         margin-bottom: 20px;
-         color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a1a1a;
          }
+
+         /* Grid Layout */
          #qr-grid {
-         display: grid;
-         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-         gap: 20px;
-         margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 280px); /* Fixed width for consistency */
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
          }
+
+         /* Badge Card Design */
          .qr-card {
-         background: #fff;
-         padding: 15px;
-         border-radius: 10px;
-         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-         text-align: center;
+            background: #fff;
+            padding: 10px;
+            border: 2px solid #000; /* Solid border for cutting guide */
+            border-radius: 0; /* Square corners for easier cutting */
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            page-break-inside: avoid; /* Crucial for print */
          }
-         .qr-label {
-         margin-top: 10px;
-         font-size: 14px;
-         color: #000;
+
+         /* Typography within the Badge */
+         .school-name {
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #333;
+            width: 100%;
+            padding-bottom: 2px;
          }
-         .qr-label h2 {
-         margin: 4px 0;
-         padding: 0;
-         font-size: 15px;
-         color: #000;
+
+         canvas {
+            margin: 2px 0;
          }
-         .qr-label strong {
-         margin-top: 6px;
-         display: block;
+
+         .student-name {
+            font-size: 16px;
+            font-weight: 800;
+            margin: 2px 0;
+            line-height: 1.1;
+            text-transform: uppercase;
          }
-         .link {
-         margin: 8px auto;
-         display: block;
-         padding: 10px;
-         background: #002B5B;
-         color: white;
-         text-align: center;
-         border-radius: 3px;
-         text-decoration: none;
+
+         .student-meta {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
          }
+
+         .games-list {
+            font-size: 11px;
+            line-height: 1.2;
+            margin: 4px 0;
+            font-style: italic;
+            background: #eee;
+            padding: 4px;
+            border-radius: 4px;
+            width: 100%;
+         }
+
+         .credits {
+            font-size: 8px;
+            color: #666;
+            margin-top: 4px;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            padding-top: 2px;
+         }
+
+         /* Controls & UI */
          button {
-         display: inline-block;
-         margin: 10px auto;
-         padding: 10px 20px;
-         font-size: 16px;
-         color: #fff;
-         background-color: #4CAF50;
-         border: none;
-         border-radius: 5px;
-         cursor: pointer;
-         transition: background-color 0.3s ease;
+            display: inline-block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #002B5B;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
          }
          button:hover {
-         background-color: #45a049;
+            background-color: #004080;
          }
          #print-btn {
-         margin-top: 30px;
-         }
-         .center-text {
-         font-size: 50px;
-         font-weight: bold;
-         color: #4CAF50;
-         text-align: center;
-         animation: pulse 1.2s infinite;
-         position: absolute;
-         top: 50%;
-         left: 50%;
-         transform: translate(-50%, -50%);
-         }
-         @keyframes pulse {
-         0% {
-         transform: translate(-50%, -50%) scale(1);
-         }
-         50% {
-         transform: translate(-50%, -50%) scale(1.2);
-         }
-         100% {
-         transform: translate(-50%, -50%) scale(1);
-         }
+            margin-top: 30px;
+            display: block;
          }
          
-         /* Class Selection Dialog Styles */
+         /* Loading Animation */
+         .center-text {
+            font-size: 30px;
+            font-weight: bold;
+            color: #002B5B;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+         }
+
+         /* Class Selection Dialog */
          #class-dialog-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
          }
-         
          #class-dialog {
             background-color: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             width: 90%;
-            max-width: 500px;
+            max-width: 400px;
             text-align: center;
-            animation: dialogFadeIn 0.3s ease-out;
          }
-         
-         @keyframes dialogFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-         }
-         
-         #class-dialog h2 {
-            color: #2E7D32;
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 24px;
-         }
-         
-         #class-select, #size-select {
+         #class-select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
-            outline: none;
-            transition: border-color 0.3s;
-         }
-         
-         #class-select:focus, #size-select:focus {
-            border-color: #4CAF50;
-         }
-         
-         #class-select option, #size-select option {
             padding: 10px;
-         }
-         
-         .form-group {
-            margin-bottom: 16px;
-            text-align: left;
-         }
-         
-         .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
-         }
-         
-         #select-class-btn {
-            padding: 12px 25px;
+            margin: 15px 0;
             font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s;
+            border-radius: 4px;
+            border: 1px solid #ccc;
          }
-         
-         #select-class-btn:hover {
-            background-color: #2E7D32;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-         }
-         
-         /* Small QR code grid style */
-         .qr-size-small #qr-grid {
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-         }
-         
-         /* Medium QR code grid style */
-         .qr-size-medium #qr-grid {
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-         }
-         
-         /* Large QR code grid style */
-         .qr-size-large #qr-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-         }
-         
+
+         /* Print specific styles */
          @media print {
-         button, h1, #class-dialog-overlay, .link {
-            display: none;
-         }
-         html, body {
-            padding: 0;
-            margin: 0;
-            width: 210mm; /* A4 width */
-            height: 297mm; /* A4 height */
-         }
-         #qr-grid {
-            padding: 10mm;
-            page-break-inside: avoid;
-         }
-         .qr-card {
-            break-inside: avoid;
-            box-shadow: none;
-            border: 1px solid #eee;
-         }
+            button, h1, #class-dialog-overlay, #generating-text {
+               display: none !important;
+            }
+            body {
+               background-color: white;
+               padding: 0;
+               margin: 0;
+            }
+            #qr-grid {
+               display: block; /* Use block to allow floating if needed, or stick to grid */
+               display: grid;
+               grid-template-columns: repeat(3, 1fr); /* Fit 3 per row on A4 usually */
+               gap: 10px;
+               margin: 0;
+               padding: 10px;
+            }
+            .qr-card {
+               border: 1px dashed #999; /* Dashed lines for cutting */
+               break-inside: avoid;
+               box-shadow: none;
+            }
          }
       </style>
    </head>
    <body>
-      <h1>QR Codes for JVP Students</h1>
+      <h1>Annual Sports Meet 2025-26 - Blazer Tags</h1>
       
-      <!-- Class Selection Dialog -->
       <div id="class-dialog-overlay">
         <div id="class-dialog">
-            <h2>Generate QR Codes</h2>
-            <div class="form-group">
-                <label for="class-select">Select Class:</label>
-                <select id="class-select">
-                    <option value="all">All Classes</option>
-                    <!-- Options will be dynamically populated by JavaScript -->
+            <h2>Select Participants</h2>
+            <p>Choose a class to generate badges for.</p>
+            <select id="class-select">
+                <option value="all">All Classes</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="size-select">QR Code Size:</label>
-                <select id="size-select">
-                    <option value="small" selected>Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
-                </select>
-            </div>
-            <button id="select-class-btn">Generate QR Codes</button>
+            <button id="select-class-btn">Generate Badges</button>
         </div>
       </div>
       
       <div id="qr-grid"></div>
-      <button id="print-btn" onclick="printPage()">Print QR Codes</button>
-      <div id="generating-text" class="center-text">
-         Generating
-      </div>
-      <script>
-         let data = [];
-         let qrCodeSize = 140; // Default size (Small)
-         let instructionText = '<br><strong>Paste it in your diary.</strong>';
-         
-         function generateAllQRCodes() {
-             const qrGrid = document.getElementById('qr-grid');
-             qrGrid.innerHTML = ''; // Clear any existing content
-         
-             data.forEach((item) => {
-                 const qrCard = document.createElement('div');
-                 qrCard.className = 'qr-card';
-         
-                 const canvas = document.createElement('canvas');
-                 const label = document.createElement('div');
-                 label.className = 'qr-label';
+      <button id="print-btn" onclick="window.print()" style="display:none;">Print QR Badges</button>
+      
+      <div id="generating-text" class="center-text">Processing Data...</div>
 
-                 const link = document.createElement('a');
-                 link.className = 'link';
-                 link.innerText = 'View Result';
-                 link.href = 'https://sourabhsuneja.github.io/academic-resources/result.html?token=' + item.access_token;
-                  link.target = '_blank';
+      <script>
+         // Configuration
+         const QR_SIZE = 120; // Slightly smaller to fit meta data
+         const TARGET_URL_BASE = "https://sourabhsuneja.github.io/jvp-sports-participation.html?token=";
          
-                 // Prepare label text
-                 const labelText = `<h2>Student Details</h2>Name: ${capitalizeFirstLetter(item.name)}, Class: ${item.class}${instructionText}`;
-                 label.innerHTML = labelText;
-         
-                 // Generate QR code with the selected size
-                 const qrData = String('https://sourabhsuneja.github.io/academic-resources/result.html?token=' + item.access_token);
-                 QRCode.toCanvas(canvas, qrData, { width: qrCodeSize }, (error) => {
-                     if (error) console.error(error);
-                 });
-         
-                 // Append canvas and label to card
-                 qrCard.appendChild(canvas);
-                 qrCard.appendChild(label);
-                 qrCard.appendChild(link);
-         
-                 // Add card to grid
-                 qrGrid.appendChild(qrCard);
-             });
-             
-             document.getElementById('generating-text').style.display = 'none';
-             document.getElementById('print-btn').style.display = 'block';
+         let globalRawData = [];
+
+         // Helper: Capitalize Words
+         function capitalizeWords(str) {
+             if (!str) return '';
+             return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
          }
-         
-         function printPage() {
-             window.print();
-         }
-         
-         function capitalizeFirstLetter(string) {
-             return string
-             .toLowerCase() // Convert the entire string to lowercase
-             .split(' ') // Split the string into an array of words
-             .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
-             .join(' '); // Join the array of words back into a single string
-         }
-         
-         // Populate class selection options
+
+         // Helper: Populate Class Dropdown
          function populateClassOptions() {
              const classSelect = document.getElementById('class-select');
-             
-             // Add regular classes from 1-A1 to 10-A4
+             // Standard 1-10
              for (let grade = 1; grade <= 10; grade++) {
                  for (let section = 1; section <= 4; section++) {
                      const className = `${grade}-A${section}`;
@@ -329,106 +235,163 @@
                      classSelect.appendChild(option);
                  }
              }
-             
-             // Add special classes for 11th and 12th grades
-             const specialClasses = ['11-SCI', '11-COM', '11-HUM', '12-SCI', '12-COM', '12-HUM'];
-             specialClasses.forEach(className => {
+             // Senior Secondary
+             ['11-SCI', '11-COM', '11-HUM', '12-SCI', '12-COM', '12-HUM'].forEach(cls => {
                  const option = document.createElement('option');
-                 option.value = className;
-                 option.textContent = className;
+                 option.value = cls;
+                 option.textContent = cls;
                  classSelect.appendChild(option);
              });
          }
-         
-         // Set QR code size based on user selection
-         function setQRCodeSize(sizeOption) {
-             // Remove any existing size classes
-             document.body.classList.remove('qr-size-small', 'qr-size-medium', 'qr-size-large');
-             
-             switch(sizeOption) {
-                 case 'small':
-                     qrCodeSize = 140;
-                     document.body.classList.add('qr-size-small');
-                     break;
-                 case 'medium':
-                     qrCodeSize = 170;
-                     document.body.classList.add('qr-size-medium');
-                     break;
-                 case 'large':
-                 default:
-                     qrCodeSize = 200;
-                     document.body.classList.add('qr-size-large');
-                     break;
-             }
-         }
-         
-         // Fetch student data based on selected class
-         async function fetchStudentData(selectedClass) {
-             document.getElementById('generating-text').style.display = 'block';
-             document.getElementById('print-btn').style.display = 'none';
-             
-             try {
-                 let matchColumns = [];
-                 let matchValues = [];
+
+         // Core Logic: Aggregate Raw Data by Student (Token)
+         function processAndAggregateData(rawData, filterClass) {
+             const studentMap = {};
+
+             rawData.forEach(row => {
+                 // Filter by class if specific class selected
+                 if (filterClass !== 'all' && row.student_class !== filterClass) {
+                     return;
+                 }
+
+                 const token = row.access_token;
                  
-                 // If "All Classes" is not selected, use the specific class for filtering
-                 if (selectedClass !== 'all') {
-                     matchColumns = ["class"];
-                     matchValues = [selectedClass];
+                 // Create entry if not exists
+                 if (!studentMap[token]) {
+                     studentMap[token] = {
+                         name: row.student_name,
+                         class: row.student_class,
+                         house: row.student_house,
+                         access_token: token,
+                         games: new Set() // Use Set to avoid duplicates
+                     };
                  }
                  
-                 // Fetch student data
-                 data = await selectData(
-                     "students",
-                     false, // fetchSingle
-                     "name, class, access_token",
-                     matchColumns, // matchColumns
-                     matchValues, // matchValues
-                     "class", // orderByColumn
-                     "asc", // orderDirection
-                     [] // customFilters
-                 );
-                 
-                 // Sort by class and then by name
-                 if (data) {
-                     data.sort((a, b) => {
-                         // First compare by class
-                         if (a.class < b.class) return -1;
-                         if (a.class > b.class) return 1;
-                         
-                         // Then compare by name
-                         return a.name.localeCompare(b.name);
-                     });
-                     
-                     console.log("Fetched Students:", data);
-                     generateAllQRCodes();
+                 // Add game
+                 if (row.game_name) {
+                     studentMap[token].games.add(row.game_name);
                  }
-             } catch (err) {
-                 console.error("Failed to fetch student data:", err);
-                 document.getElementById('generating-text').style.display = 'none';
-                 document.getElementById('generating-text').textContent = 'Error loading data';
-             }
-         }
-         
-         window.onload = function() {
-             // Initialize the class selection dialog
-             populateClassOptions();
-             
-             // Set up the event listener for class selection and size selection
-             document.getElementById('select-class-btn').addEventListener('click', function() {
-                 const selectedClass = document.getElementById('class-select').value;
-                 const selectedSize = document.getElementById('size-select').value;
-                 
-                 // Set QR code size
-                 setQRCodeSize(selectedSize);
-                 
-                 // Hide the dialog and fetch data
-                 document.getElementById('class-dialog-overlay').style.display = 'none';
-                 fetchStudentData(selectedClass);
              });
-             
-             // Set default size (Large)
-             setQRCodeSize('small');
+
+             // Convert Map to Array and Sort
+             const processedArray = Object.values(studentMap).map(student => ({
+                 ...student,
+                 gamesList: Array.from(student.games).join(', ') // Convert Set to String
+             }));
+
+             // Sort: Class first, then Name
+             processedArray.sort((a, b) => {
+                 // Sort by class (simple string comparison works for "3-A3" vs "4-A2")
+                 // For stricter numeric sorting, more logic is needed, but string usually suffices for school formats
+                 if (a.class !== b.class) return a.class.localeCompare(b.class, undefined, {numeric: true});
+                 return a.name.localeCompare(b.name);
+             });
+
+             return processedArray;
+         }
+
+         // UI: Generate DOM Elements
+         function renderBadges(students) {
+             const qrGrid = document.getElementById('qr-grid');
+             qrGrid.innerHTML = '';
+
+             if (students.length === 0) {
+                 qrGrid.innerHTML = '<p style="text-align:center; width:100%;">No participants found for this selection.</p>';
+                 return;
+             }
+
+             students.forEach(student => {
+                 const card = document.createElement('div');
+                 card.className = 'qr-card';
+
+                 // Header
+                 const header = document.createElement('div');
+                 header.className = 'school-name';
+                 header.innerText = 'Jamna Vidyapeeth';
+
+                 // Canvas for QR
+                 const canvas = document.createElement('canvas');
+
+                 // Meta Data Container
+                 const metaDiv = document.createElement('div');
+                 metaDiv.style.width = '100%';
+
+                 // Student Details
+                 const nameDiv = document.createElement('div');
+                 nameDiv.className = 'student-name';
+                 nameDiv.innerText = capitalizeWords(student.name);
+
+                 const detailsDiv = document.createElement('div');
+                 detailsDiv.className = 'student-meta';
+                 detailsDiv.innerHTML = `${student.class} <span style="margin:0 4px">•</span> ${student.house}`;
+
+                 // Games List
+                 const gamesDiv = document.createElement('div');
+                 gamesDiv.className = 'games-list';
+                 gamesDiv.innerText = student.gamesList || 'No Games';
+
+                 // Credits
+                 const creditsDiv = document.createElement('div');
+                 creditsDiv.className = 'credits';
+                 creditsDiv.innerText = 'System by Mr. Sourabh Suneja';
+
+                 // Assemble
+                 card.appendChild(header);
+                 card.appendChild(canvas);
+                 
+                 metaDiv.appendChild(nameDiv);
+                 metaDiv.appendChild(detailsDiv);
+                 metaDiv.appendChild(gamesDiv);
+                 
+                 card.appendChild(metaDiv);
+                 card.appendChild(creditsDiv);
+
+                 qrGrid.appendChild(card);
+
+                 // Draw QR Code
+                 const qrUrl = TARGET_URL_BASE + student.access_token;
+                 QRCode.toCanvas(canvas, qrUrl, { width: QR_SIZE, margin: 1 }, (error) => {
+                     if (error) console.error(error);
+                 });
+             });
+
+             document.getElementById('print-btn').style.display = 'block';
+         }
+
+         // Main Flow
+         async function initSystem(selectedClass) {
+             const loader = document.getElementById('generating-text');
+             loader.style.display = 'block';
+
+             try {
+                 // 1. Fetch Data (if not already fetched)
+                 if (globalRawData.length === 0) {
+                     globalRawData = await invokeFunction('get_sport_participants');
+                 }
+
+                 // 2. Process Data
+                 const students = processAndAggregateData(globalRawData, selectedClass);
+
+                 // 3. Render
+                 renderBadges(students);
+
+             } catch (error) {
+                 console.error("Error:", error);
+                 alert("Failed to load data. Check console.");
+             } finally {
+                 loader.style.display = 'none';
+             }
+         }
+
+         // Events
+         window.onload = function() {
+             populateClassOptions();
+
+             document.getElementById('select-class-btn').addEventListener('click', () => {
+                 const cls = document.getElementById('class-select').value;
+                 document.getElementById('class-dialog-overlay').style.display = 'none';
+                 initSystem(cls);
+             });
          };
       </script>
    </body>
