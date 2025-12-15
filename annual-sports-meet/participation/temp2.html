@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Meet Participant Lists</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+    <script src="https://myjvp.in/commons/dialog.js"></script>
+    
+    <style>
+        /* --- General Styles --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        #main-container {
+            max-width: 210mm; /* A4 Width */
+            margin: 20px auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        h1.page-title {
+            text-align: center;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            color: #0056b3;
+        }
+
+        /* --- Game Section --- */
+        .game-section {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            padding: 20mm; /* A4 padding */
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .game-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #004a99;
+        }
+
+        .game-header h3 {
+            margin: 5px 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .game-header p {
+            margin: 5px 0 0;
+            font-style: italic;
+            color: #555;
+            font-size: 1.1rem;
+        }
+
+        .print-btn-single {
+            float: right;
+            margin: -15px 0 10px 10px;
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        .print-btn-single:hover {
+            background-color: #0056b3;
+        }
+
+        /* --- Participant Table --- */
+        .participant-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .participant-table th,
+        .participant-table td {
+            border: 1px solid #000; /* Solid black for print clarity */
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            font-size: 0.95rem;
+        }
+
+        .participant-table th {
+            background-color: #e9ecef;
+            color: #212529;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        /* Sr. No. column */
+        .participant-table th:first-child,
+        .participant-table td:first-child {
+            text-align: center;
+            width: 5%;
+            font-weight: bold;
+        }
+
+        /* --- Participant Entry (Inside Cell) --- */
+        .participant-entry {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px; /* Space between grouped participants */
+        }
+
+        .participant-entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .participant-entry canvas {
+            margin-right: 10px;
+            flex-shrink: 0; /* Prevent QR from shrinking */
+            display: none;
+        }
+
+        .participant-name {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .no-participants {
+            text-align: center;
+            font-style: italic;
+            color: #888;
+            padding: 20px;
+        }
+
+        /* --- Print Styles --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            @page {
+                size: A4;
+                margin: 6mm 8mm;
+            }
+
+            #main-container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1.page-title,
+            .print-btn-single {
+                display: none;
+            }
+
+            .game-section {
+                border: none;
+                box-shadow: none;
+                border-radius: 0;
+                width: 100% !important;
+                margin: 0;
+                padding: 0;
+                page-break-inside: avoid;
+                break-inside: avoid;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px dashed #999;
+            }
+
+            .game-section:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+
+            .game-header {
+                text-align: left;
+                margin-bottom: 5px;
+                padding-bottom: 5px;
+                border-bottom: 1px solid #000;
+                page-break-after: avoid;
+                break-after: avoid;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+            }
+
+            .game-header h2 {
+                display: none;
+            }
+
+            .game-header h3 {
+                margin: 0;
+                font-size: 12pt;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            .game-header p {
+                margin: 0;
+                font-size: 9pt;
+                color: #000;
+            }
+
+            .participant-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 9pt;
+                margin-top: 5px;
+            }
+
+            .participant-table th {
+                background-color: #f0f0f0 !important;
+                color: #000;
+                font-weight: bold;
+                text-align: left;
+                padding: 3px 5px;
+                font-size: 8pt;
+                border: 1px solid #000;
+            }
+
+            .participant-table td {
+                border: 1px solid #000;
+                padding: 3px 5px;
+                vertical-align: top;
+            }
+
+            tr {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+
+            .participant-name {
+                font-size: 9pt;
+                line-height: 1.2;
+            }
+
+            .participant-entry {
+                margin-bottom: 2px; 
+            }
+            
+            .participant-entry:last-child {
+                margin-bottom: 0;
+            }
+
+            .participant-entry canvas {
+                display: none; 
+            }
+
+            body.printing-single .game-section {
+                display: none;
+            }
+            body.printing-single .game-section.show-print {
+                display: block;
+                page-break-inside: auto;
+                break-inside: auto;
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-container">
+        <h1 class="page-title">Annual Sports Meet 2025-26</h1>
+    </div>
+
+    <script>
+        // --- 1. DATA ---
+        let participants = [];
+
+        // --- 2. CONFIGURATION ---
+        const qrCodeSize = 80;
+        const houses = ["Ruby", "Emerald", "Sapphire", "Topaz"];
+
+        // --- 3. HELPER FUNCTIONS ---
+
+        /**
+         * Enhanced Sorting Logic Helper
+         * Returns a complex object to be used for multi-level sorting
+         */
+        function getGameSortPriority(game) {
+            // A. Handle Class Category Sorting
+            const classStr = game.class_category || "";
+            // Extract the first number found in the string (e.g., "3 to 4" -> 3)
+            const match = classStr.match(/(\d+)/);
+            const startNum = match ? parseInt(match[0], 10) : 0;
+            const isRange = classStr.includes("to") ? 1 : 0;
+
+            // B. Super-Block Logic (Phase 1: Upto Class 6, Phase 2: Class 7-12)
+            const superBlock = (startNum <= 6) ? 0 : 1;
+
+            // C. Type & Gender Priority
+            // 1: Indiv/Group Girls, 2: Indiv/Group Boys, 3: Indiv/Group Mixed
+            // 4: Team Girls, 5: Team Boys, 6: Team Mixed (if any)
+            let typeGenderWeight = 0;
+            const type = game.game_type;
+            const gender = game.gender_filter;
+
+            if (type === 'Individual' || type === 'Grouped') {
+                if (gender === 'Girls') typeGenderWeight = 1;
+                else if (gender === 'Boys') typeGenderWeight = 2;
+                else typeGenderWeight = 3;
+            } else if (type === 'Team') {
+                if (gender === 'Girls') typeGenderWeight = 4;
+                else if (gender === 'Boys') typeGenderWeight = 5;
+                else typeGenderWeight = 6;
+            }
+
+            return {
+                superBlock,
+                startNum,
+                isRange,
+                typeGenderWeight,
+                name: (game.game_name || "").toLowerCase()
+            };
+        }
+
+        function formatParticipantCell(participant) {
+            if (!participant || !participant.student_name) return '';
+            return `
+                <div class="participant-entry">
+                  <canvas class="qr-canvas" data-token="${participant.access_token}"></canvas>
+                  <div class="participant-name">
+                    ${participant.student_name} (${participant.student_class})
+                  </div>
+                </div>
+            `;
+        }
+        
+        function formatGroupCell(group) {
+            if (!group || group.length === 0) return '';
+            return group.map(formatParticipantCell).join('');
+        }
+
+        function addPrintHandler(button) {
+            button.addEventListener('click', () => {
+                const sectionToPrint = button.closest('.game-section');
+                document.body.classList.add('printing-single');
+                sectionToPrint.classList.add('show-print');
+                window.print();
+            });
+        }
+        
+        window.onafterprint = () => {
+            document.body.classList.remove('printing-single');
+            const printedSection = document.querySelector('.game-section.show-print');
+            if (printedSection) printedSection.classList.remove('show-print');
+        };
+
+        // --- 4. CORE LOGIC ---
+
+        async function generateAllLists() {
+            const container = document.getElementById('main-container');
+            container.innerHTML = '<h1>... Loading Lists ...</h1>';
+
+            participants = await invokeFunction('get_sport_participants'); 
+            
+            const gamesMap = {};
+            for (const p of participants) {
+                const gameKey = `${p.game_name}_${p.class_category}_${p.gender_filter}`;
+                if (!gamesMap[gameKey]) {
+                    gamesMap[gameKey] = {
+                        game_name: p.game_name,
+                        class_category: p.class_category,
+                        gender_filter: p.gender_filter,
+                        game_type: p.game_type,
+                        participants: { Ruby: [], Emerald: [], Sapphire: [], Topaz: [] }
+                    };
+                }
+                if (p.student_name && p.student_house) {
+                    gamesMap[gameKey].participants[p.student_house].push(p);
+                }
+            }
+            
+            container.innerHTML = '<h1 class="page-title">Annual Sports Meet - Participant Lists</h1>';
+
+            // --- Enhanced Sorting implementation ---
+            const sortedGames = Object.values(gamesMap).sort((a, b) => {
+                const pA = getGameSortPriority(a);
+                const pB = getGameSortPriority(b);
+
+                // 1. Sort by SuperBlock (Upto 6 first, then 7-12)
+                if (pA.superBlock !== pB.superBlock) return pA.superBlock - pB.superBlock;
+
+                // 2. Sort by Class Number (Ascending)
+                if (pA.startNum !== pB.startNum) return pA.startNum - pB.startNum;
+
+                // 3. Single classes before Ranges
+                if (pA.isRange !== pB.isRange) return pA.isRange - pB.isRange;
+
+                // 4. Sort by Type & Gender logic (Indiv/Grouped G->B->M, then Team G->B)
+                if (pA.typeGenderWeight !== pB.typeGenderWeight) return pA.typeGenderWeight - pB.typeGenderWeight;
+
+                // 5. Alphabetical by Game Name
+                return pA.name.localeCompare(pB.name);
+            });
+
+            for (const game of sortedGames) {
+                const tableHtml = createGameTable(game);
+                container.insertAdjacentHTML('beforeend', tableHtml);
+            }
+            
+            document.querySelectorAll('.print-btn-single').forEach(addPrintHandler);
+        }
+
+        function createGameTable(game) {
+            let tableBodyHtml = '';
+            let maxRows = 0;
+            let processedData = { Ruby: [], Emerald: [], Sapphire: [], Topaz: [] };
+            
+            if (game.game_type === 'Individual' || game.game_type === 'Team') {
+                processedData = game.participants;
+                maxRows = Math.max(...houses.map(h => processedData[h].length));
+            } else if (game.game_type === 'Grouped') {
+                for (const house of houses) {
+                    const groups = {};
+                    for (const p of game.participants[house]) {
+                        if (!groups[p.participant_group_id]) groups[p.participant_group_id] = [];
+                        groups[p.participant_group_id].push(p);
+                    }
+                    processedData[house] = Object.values(groups);
+                }
+                maxRows = Math.max(...houses.map(h => processedData[h].length));
+            }
+
+            if (maxRows > 0) {
+                for (let i = 0; i < maxRows; i++) {
+                    const rowFormatter = (game.game_type === 'Grouped') ? formatGroupCell : formatParticipantCell;
+                    tableBodyHtml += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${rowFormatter(processedData.Ruby[i])}</td>
+                            <td>${rowFormatter(processedData.Emerald[i])}</td>
+                            <td>${rowFormatter(processedData.Sapphire[i])}</td>
+                            <td>${rowFormatter(processedData.Topaz[i])}</td>
+                        </tr>`;
+                }
+            } else {
+                tableBodyHtml = '<tr><td colspan="5" class="no-participants">No participants registered for this event yet.</td></tr>';
+            }
+
+            return `
+                <section class="game-section">
+                    <button class="print-btn-single" title="Print this list">Print this list</button>
+                    <div class="game-header">
+                        <h2>Participant List</h2>
+                        <h3>${game.game_name}</h3>
+                        <p>
+                            <strong>Class Category:</strong> ${game.class_category} | 
+                            <strong>Gender:</strong> ${game.gender_filter} | 
+                            <strong>Type:</strong> ${game.game_type}
+                        </p>
+                    </div>
+                    <table class="participant-table">
+                        <thead>
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Ruby</th>
+                                <th>Emerald</th>
+                                <th>Sapphire</th>
+                                <th>Topaz</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableBodyHtml}</tbody>
+                    </table>
+                </section>`;
+        }
+
+        // --- 5. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', generateAllLists);
+    </script>
+</body>
+</html>
