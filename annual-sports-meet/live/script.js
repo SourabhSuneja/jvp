@@ -39,7 +39,7 @@ const congratulatoryWords = [
 
 async function pollEntireData() {
    // Fetch events list
-   events = await selectData('sport_events', false, '*', [], [], 'game_name');
+   events = await selectData('sport_events', false, '*', ['included_in_total'], [true], 'game_name');
    totalEvents = countActiveEvents(events);
    let inLiveMode = true;
    const resultName = getParameterByName('result');
