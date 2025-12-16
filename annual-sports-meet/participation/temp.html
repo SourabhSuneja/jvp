@@ -398,7 +398,7 @@ function onStudentCheckboxChange() {
             } else {
                 // Check 2: Student-level limits (dynamic)
                 const type = cb.dataset.type;
-                const reachedIndividualLimit = (type === 'Individual' || type === 'Grouped') && individualCount >= 1;
+                const reachedIndividualLimit = (type === 'Individual' || type === 'Grouped') && individualCount >= 2;
                 const reachedTeamLimit = type === 'Team' && teamCount >= 2;
                 
                 if (reachedIndividualLimit) {
@@ -718,7 +718,7 @@ function revalidateGroupedGameView() {
                 }
                 
                 // Check student-level game type limit
-                const reachedIndividualLimit = (event.game_type === 'Individual' || event.game_type === 'Grouped') && individualCount >= 1;
+                const reachedIndividualLimit = (event.game_type === 'Individual' || event.game_type === 'Grouped') && individualCount >= 2;
                 const reachedTeamLimit = event.game_type === 'Team' && teamCount >= 2;
     
                 let isDisabled = false;
@@ -989,7 +989,7 @@ function revalidateGroupedGameView() {
                  disabledReason = "(Team is full)";
              } else {
                  // Rule 2: Student-level limits
-                 const reachedIndividualLimit = (currentEventType === 'Individual' || currentEventType === 'Grouped') && studentIndividualCount >= 1;
+                 const reachedIndividualLimit = (currentEventType === 'Individual' || currentEventType === 'Grouped') && studentIndividualCount >= 2;
                  const reachedTeamLimit = currentEventType === 'Team' && studentTeamCount >= 2;
 
                  if (reachedIndividualLimit) {
