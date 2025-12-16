@@ -312,15 +312,24 @@ function calculateScores(winners) {
          };
       }
 
-      // Add points for winner1, winner2, and winner3
-      addPoints(scores[category], entry.winnerhouse1, getPointsForPosition(entry.gametype, 1));
-      addPoints(scores[category], entry.winnerhouse2, getPointsForPosition(entry.gametype, 2));
-      addPoints(scores[category], entry.winnerhouse3, getPointsForPosition(entry.gametype, 3));
+      // Only add to totals if this game exists in the events array (is to be included in the house totals)
+      const exists = events.some(
+           e => e.game_name === entry.game && e.class_category === entry.classcategory
+      );
 
-      // Add points to the total as well
-      addPoints(scores.Total, entry.winnerhouse1, getPointsForPosition(entry.gametype, 1));
-      addPoints(scores.Total, entry.winnerhouse2, getPointsForPosition(entry.gametype, 2));
-      addPoints(scores.Total, entry.winnerhouse3, getPointsForPosition(entry.gametype, 3));
+      if(exists) {
+      
+            // Add points for winner1, winner2, and winner3
+            addPoints(scores[category], entry.winnerhouse1, getPointsForPosition(entry.gametype, 1));
+            addPoints(scores[category], entry.winnerhouse2, getPointsForPosition(entry.gametype, 2));
+            addPoints(scores[category], entry.winnerhouse3, getPointsForPosition(entry.gametype, 3));
+
+            // Add points to the total as well
+            addPoints(scores.Total, entry.winnerhouse1, getPointsForPosition(entry.gametype, 1));
+            addPoints(scores.Total, entry.winnerhouse2, getPointsForPosition(entry.gametype, 2));
+            addPoints(scores.Total, entry.winnerhouse3, getPointsForPosition(entry.gametype, 3));
+
+      }
    });
    return scores;
 }
