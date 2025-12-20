@@ -631,6 +631,179 @@
             }
         }
     </style>
+    <style>
+    /* Sports Meet Popup Styles */
+    .sports-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .sports-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .sports-popup {
+        /* Energetic Orange/Red Gradient for Sports */
+        background: linear-gradient(135deg, #FF512F, #DD2476);
+        border-radius: 24px;
+        padding: 2.5rem 2rem;
+        max-width: 480px;
+        width: 90%;
+        position: relative;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        transform: scale(0.8) translateY(50px);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        text-align: center;
+    }
+
+    .sports-overlay.active .sports-popup {
+        transform: scale(1) translateY(0);
+    }
+
+    .sports-popup-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        transition: background 0.3s;
+    }
+
+    .sports-popup-close:hover {
+        background: rgba(255, 255, 255, 0.4);
+    }
+
+    .sports-icon-wrapper {
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        animation: trophy-bounce 2s infinite;
+    }
+
+    .sports-icon-wrapper .material-icons {
+        font-size: 40px;
+        color: #DD2476; /* Matches the gradient bottom color */
+    }
+
+    @keyframes trophy-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .sports-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .sports-subtitle {
+        font-size: 1rem;
+        opacity: 0.9;
+        margin-bottom: 1.5rem;
+        font-weight: 400;
+    }
+
+    .sports-features {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+
+    .sports-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .sports-feature-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .sports-feature-item .material-icons {
+        font-size: 18px;
+        color: #FFD700; /* Gold color for icons */
+    }
+
+    .sports-btn {
+        background: white;
+        color: #DD2476;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .sports-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    
+    .sports-btn-secondary {
+        background: transparent;
+        color: white;
+        border: 1px solid rgba(255,255,255,0.5);
+        margin-left: 10px;
+        box-shadow: none;
+    }
+    
+    .sports-btn-secondary:hover {
+        background: rgba(255,255,255,0.1);
+    }
+
+    /* Confetti decoration */
+    .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: rgba(255,255,255,0.2);
+        animation: float 3s infinite ease-in-out;
+    }
+    .c1 { top: 20%; left: 10%; border-radius: 50%; animation-delay: 0s; }
+    .c2 { bottom: 20%; right: 10%; transform: rotate(45deg); animation-delay: 1s; }
+</style>
 </head>
 <body>
     <!-- Animated background particles -->
@@ -799,6 +972,46 @@
         </div>
     </div> -->
 
+    <div class="sports-overlay" id="sportsOverlay">
+    <div class="sports-popup">
+        <button class="sports-popup-close" onclick="closeSportsPopup()">
+            <span class="material-icons">close</span>
+        </button>
+
+        <div class="confetti c1"></div>
+        <div class="confetti c2"></div>
+
+        <div class="sports-icon-wrapper">
+            <span class="material-icons">emoji_events</span>
+        </div>
+        
+        <h2 class="sports-title">Annual Sports Meet</h2>
+        <p class="sports-subtitle">Live Updates & Scoreboard</p>
+
+        <div class="sports-features">
+            <div class="sports-feature-item">
+                <span class="material-icons">bolt</span>
+                <span>Real-time House Scores</span>
+            </div>
+            <div class="sports-feature-item">
+                <span class="material-icons">military_tech</span>
+                <span>Medal Tally Updates</span>
+            </div>
+            <div class="sports-feature-item">
+                <span class="material-icons">photo_camera</span>
+                <span>Event Photo Gallery</span>
+            </div>
+        </div>
+
+        <a href="https://myjvp.in/annual-sports-meet/live/?nosubscribe=1" class="sports-btn">
+            View Live Scores
+        </a>
+        <button class="sports-btn sports-btn-secondary" onclick="closeSportsPopup()">
+            Dismiss
+        </button>
+    </div>
+</div>
+    
     <script>
         // Create animated background particles
         function createParticles() {
@@ -920,6 +1133,51 @@
                 closeHindiDiwasPopup();
             }
         });
+    </script>
+    <script>
+    // --- Sports Meet Pop-up Logic ---
+
+    // Show popup shortly after page load
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            showSportsPopup(); 
+        }, 500); // 0.5 second delay
+    });
+
+    function showSportsPopup() {
+        const overlay = document.getElementById('sportsOverlay');
+        if(overlay) {
+            overlay.classList.add('active');
+            // Prevent scrolling on the background page
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeSportsPopup() {
+        const overlay = document.getElementById('sportsOverlay');
+        if(overlay) {
+            overlay.classList.remove('active');
+            // Restore scrolling
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Close when clicking outside the popup card
+    document.addEventListener('click', function(event) {
+        const overlay = document.getElementById('sportsOverlay');
+        const popup = document.querySelector('.sports-popup');
+        
+        if (overlay && popup && event.target === overlay && !popup.contains(event.target)) {
+            closeSportsPopup();
+        }
+    });
+
+    // Close with ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeSportsPopup();
+        }
+    });
     </script>
 </body>
 </html>
