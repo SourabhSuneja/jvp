@@ -884,7 +884,12 @@ function predictWinPercentage(houseScores) {
    // Ensure 'winners' is defined, default to empty array if not
    const gameWinners = typeof winners !== 'undefined' ? winners : [];
    for (const game of gameWinners) {
-      if (game.gametype in completedGames && game.included_in_total) {
+      // Only consider if this game exists in the events array (is to be included in the house totals)
+      const exists = events.some(
+           e => e.game_name === game.game && e.class_category === game.classcategory
+      );
+
+      if (game.gametype in completedGames && exists) {
          completedGames[game.gametype]++;
       }
    }
