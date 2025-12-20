@@ -820,7 +820,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('load', async function () {
    const isLive = await pollEntireData();
-   if (isLive) {
+   const nosubscribe = getParameterByName('nosubscribe');
+   if (isLive && !nosubscribe) {
       const subscription = subscribeToTable('sport_winners', handleLiveUpdate);
       const subscription2 = subscribeToTable('sport_notifications', handleNotifications);
    }
