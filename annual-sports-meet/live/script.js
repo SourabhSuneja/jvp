@@ -1,8 +1,8 @@
 let prevHouseTotals = {
-   'Ruby': 0,
-   'Emerald': 0,
-   'Sapphire': 0,
-   'Topaz': 0
+   'Ruby': 37,
+   'Emerald': 35,
+   'Sapphire': 34,
+   'Topaz': 26
 };
 let pointCriteria = {
    'Individual': [10, 7, 5],
