@@ -893,7 +893,7 @@ function predictWinPercentage(houseScores) {
          completedGames[game.gametype]++;
       }
    }
-console.log("Completed: ", completedGames);
+      console.log("Completed: ", completedGames);
 
    // --- 2. Calculate Remaining Games ---
    let remainingGames = {
@@ -901,6 +901,7 @@ console.log("Completed: ", completedGames);
       Grouped: totalEvents.Grouped - completedGames.Grouped,
       Team: totalEvents.Team - completedGames.Team,
    };
+   console.log("Remaining: ", remainingGames);
 
    // --- 3. Calculate Total Remaining Potential Points ---
    // (Max points for 1st place in each *remaining* game)
