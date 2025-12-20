@@ -884,10 +884,11 @@ function predictWinPercentage(houseScores) {
    // Ensure 'winners' is defined, default to empty array if not
    const gameWinners = typeof winners !== 'undefined' ? winners : [];
    for (const game of gameWinners) {
-      if (game.gametype in completedGames) {
+      if (game.gametype in completedGames && game.included_in_total) {
          completedGames[game.gametype]++;
       }
    }
+console.log("Completed: ", completedGames);
 
    // --- 2. Calculate Remaining Games ---
    let remainingGames = {
