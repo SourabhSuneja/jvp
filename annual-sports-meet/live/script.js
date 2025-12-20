@@ -1117,3 +1117,4 @@ function countActiveEvents(eventList) {
     return acc;
   }, initialCounts);
 }
+
