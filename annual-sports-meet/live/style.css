@@ -1,3 +1,10 @@
+:root {
+	/* Scrollbar */
+	--scrollbar-thumb: rgb(50, 50, 50);
+	--scrollbar-track: transparent;
+	--scrollbar-width: 6px;
+}
+
 * {
 	margin: 0;
 	padding: 0;
