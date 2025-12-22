@@ -137,7 +137,7 @@
             padding-top: 2px;
          }
 
-         /* --- NEW: Winner Button Style --- */
+         /* --- Winner Button Style --- */
          .winner-btn {
             display: inline-block;
             margin-top: 5px;
@@ -224,9 +224,61 @@
             border: 1px solid #ccc;
          }
 
+         /* --- NEW: Winner Overlay Iframe Styles --- */
+         #winner-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+         }
+         #winner-modal-container {
+            width: 90%;
+            height: 90%;
+            background: #fff;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+         }
+         #winner-iframe {
+            flex-grow: 1;
+            width: 100%;
+            border: none;
+            border-radius: 0 0 8px 8px;
+         }
+         #winner-modal-header {
+             padding: 10px 15px;
+             background: #f8f9fa;
+             border-bottom: 1px solid #dee2e6;
+             border-radius: 8px 8px 0 0;
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+         }
+         #close-overlay-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+         }
+         #close-overlay-btn:hover {
+             background-color: #c82333;
+         }
+         /* ----------------------------------------- */
+
          /* Print specific styles */
          @media print {
-            .no-print, button, #class-dialog-overlay, #generating-text, .filter-bar, .winner-btn {
+            .no-print, button, #class-dialog-overlay, #generating-text, .filter-bar, .winner-btn, #winner-overlay {
                display: none !important;
             }
             body {
@@ -306,6 +358,15 @@
       
       <div id="generating-text" class="center-text">Processing Data...</div>
 
+      <div id="winner-overlay">
+          <div id="winner-modal-container">
+              <div id="winner-modal-header">
+                  <span style="font-weight:bold; font-size:18px;">Winner Submission</span>
+                  <button id="close-overlay-btn" onclick="closeWinnerModal()">Close Window [X]</button>
+              </div>
+              <iframe id="winner-iframe" src=""></iframe>
+          </div>
+      </div>
       <script>
          // Configuration
          const QR_SIZE = 120; // Slightly smaller to fit meta data
@@ -314,6 +375,22 @@
          
          let globalRawData = [];
          let globalProcessedStudents = []; // Store processed data for filtering
+
+         // --- NEW: Overlay Control Functions ---
+         function openWinnerModal(url) {
+             const overlay = document.getElementById('winner-overlay');
+             const iframe = document.getElementById('winner-iframe');
+             iframe.src = url; // Load the page
+             overlay.style.display = 'flex'; // Show overlay
+         }
+
+         function closeWinnerModal() {
+             const overlay = document.getElementById('winner-overlay');
+             const iframe = document.getElementById('winner-iframe');
+             iframe.src = ''; // Unload page to stop scripts/media
+             overlay.style.display = 'none'; // Hide overlay
+         }
+         // -------------------------------------
 
          // Helper: Capitalize Words
          function capitalizeWords(str) {
@@ -510,12 +587,15 @@
                  gamesDiv.className = 'games-list';
                  gamesDiv.innerText = student.gamesListStr || 'No Games';
 
-                 // NEW: Winner Submission Button
-                 const winnerBtn = document.createElement('a');
-                 winnerBtn.href = WINNER_URL_BASE + student.access_token;
-                 winnerBtn.target = "_blank"; // Open in new tab
-                 winnerBtn.className = 'winner-btn no-print'; // Add no-print class
+                 // --- MODIFIED: Winner Submission Button to Open Iframe ---
+                 const winnerBtn = document.createElement('a'); // Kept as <a> for styling, but works like button
+                 winnerBtn.className = 'winner-btn no-print';
                  winnerBtn.innerText = 'Submit Winner';
+                 winnerBtn.href = "javascript:void(0)"; // Prevent default navigation
+                 winnerBtn.onclick = function() {
+                     openWinnerModal(WINNER_URL_BASE + student.access_token);
+                 };
+                 // --------------------------------------------------------
 
                  // Credits
                  const creditsDiv = document.createElement('div');
