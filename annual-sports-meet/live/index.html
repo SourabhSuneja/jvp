@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html class="noselect" lang="en">
    <head>
-    <!-- Google tag -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
-    <script>
+      <!-- Google tag -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+      <script>
          window.dataLayer = window.dataLayer || [];
          function gtag(){dataLayer.push(arguments);}
          gtag('js', new Date());
-
+         
          gtag('config', 'G-QF1MCK0B9Y');
-    </script>
+      </script>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>JVP Sports Meet | Live Score</title>
@@ -55,8 +55,8 @@
             </div>
          </div>
          <!-- House Tiles -->
-         <h3 class="nohidden">Previously Held School Activities</h3>
-         <div class="tiles tiles_previous_total nohidden">
+         <h3 class="hidden">Previously Held School Activities</h3>
+         <div class="tiles tiles_previous_total hidden">
             <div class="tile ruby">
                Ruby:<br> <span id="ruby_previous_total">0</span><br>Points
                <div class="position-indicator" id="ruby_previous_total_rank">Ruby</div>
@@ -149,33 +149,48 @@
          </div>
          <!-- Download Button -->
          <button class="btn-download hidden" id="downloadBtn">Download Results</button>
-         <h4 class="hidden">Points Criteria:</h4>
-         <ul class="hidden">
-            <li>Houses earn points based on their rank in each game.</li>
+         <h4 class="nohidden">Points Criteria:</h4>
+         <ul class="nohidden">
+            <li>All games and events are divided into <strong>three types</strong>:</li>
+            <ul>
+               <li><strong>Individual Events</strong> (example: 100m Race, Hurdle Race)</li>
+               <li><strong>Group Events</strong> (example: Soft Board Decoration, Relay Race – pairs of students)</li>
+               <li><strong>Team Events</strong> (example: Kho Kho, Kabaddi)</li>
+            </ul>
             <li>
-               Points per position:
+               <strong>Points for Individual & Group Events:</strong>
                <ul>
                   <li><strong>1st place</strong>: 10 points</li>
                   <li><strong>2nd place</strong>: 7 points</li>
                   <li><strong>3rd place</strong>: 5 points</li>
                </ul>
             </li>
-            <li>Add up points from all games to get the total score for a particular house.</li>
             <li>
-               <strong>Example:</strong>
+               <strong>Points for Team Events (Double Points):</strong>
+               <ul>
+                  <li><strong>1st place</strong>: 20 points</li>
+                  <li><strong>2nd place</strong>: 14 points</li>
+                  <li><strong>3rd place</strong>: 10 points</li>
+               </ul>
+            </li>
+            <li>Add points from all events to get the <strong>Total Score</strong> of a house.</li>
+            <li>
+               <strong>Easy Example:</strong>
                <ul>
                   <li>
                      A house got:
                      <ul>
-                        <li><strong>1st place</strong> in 10 games: 10 × 10 = 100 points</li>
-                        <li><strong>2nd place</strong> in 5 games: 5 × 7 = 35 points</li>
-                        <li><strong>3rd place</strong> in 2 games: 2 × 5 = 10 points</li>
+                        <li><strong>1st place</strong> in 2 individual events: 2 × 10 = 20 points</li>
+                        <li><strong>2nd place</strong> in 1 group event: 1 × 7 = 7 points</li>
+                        <li><strong>1st place</strong> in 1 team event: 1 × 20 = 20 points</li>
                      </ul>
                   </li>
-                  <li>Total points: 100 + 35 + 10 = <strong>145 points</strong>.</li>
+                  <li>Total points: 20 + 7 + 20 = <strong>47 points</strong></li>
                </ul>
             </li>
-            <li>The Grand Total scores of houses include points from all school activities held earlier during the session, such as soft board decoration, debates etc.</li>
+            <li>
+               The <strong>Grand Total</strong> of each house also includes points from other school activities held during the session (like Soft Board Decoration, Rakhi Making, etc.).
+            </li>
          </ul>
       </div>
       <!-- Dialog Overlay Starts -->
