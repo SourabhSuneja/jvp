@@ -354,7 +354,7 @@ table td:first-child {
 	position: relative;
 	color: #000;
 	animation: popUp 0.5s ease;
-	border: 10px solid #f3b10ebf;
+	border: 5px solid #FFD700;
 	text-align: center;
 }
 
