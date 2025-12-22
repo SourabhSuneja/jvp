@@ -1637,6 +1637,12 @@ console.log(success);
           // Modal Close Buttons
           document.getElementById('modal-close-btn').addEventListener('click', resetApp);
           document.getElementById('record-another-btn').addEventListener('click', resetApp);
+
+          // If the page is loaded with GET paramter 'token' already set, use this token value to fetch participant information
+          const token = new URLSearchParams(window.location.search).get('token');
+          if(token) {
+             processQRCode(token);
+          }
       });
       
       // Code for the custom prompt box
