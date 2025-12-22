@@ -24,7 +24,7 @@
             color: #1a1a1a;
          }
 
-         /* --- NEW: Filter Bar Styles --- */
+         /* --- Filter Bar Styles --- */
          .filter-bar {
              background: #fff;
              padding: 15px;
@@ -137,6 +137,26 @@
             padding-top: 2px;
          }
 
+         /* --- NEW: Winner Button Style --- */
+         .winner-btn {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #1e7e34;
+            transition: background 0.2s;
+         }
+         .winner-btn:hover {
+            background-color: #218838;
+         }
+         /* -------------------------------- */
+
          /* Controls & UI */
          button.action-btn {
             display: inline-block;
@@ -207,7 +227,7 @@
 
          /* Print specific styles */
          @media print {
-            .no-print, button, #class-dialog-overlay, #generating-text, .filter-bar {
+            .no-print, button, #class-dialog-overlay, #generating-text, .filter-bar, .winner-btn {
                display: none !important;
             }
             body {
@@ -257,6 +277,12 @@
             </select>
          </div>
          <div class="filter-group">
+            <label for="rt-house">Filter House</label>
+            <select id="rt-house" class="filter-input">
+               <option value="">All Houses</option>
+            </select>
+         </div>
+         <div class="filter-group">
             <label for="rt-gender">Filter Gender</label>
             <select id="rt-gender" class="filter-input">
                <option value="">All</option>
@@ -285,6 +311,7 @@
          // Configuration
          const QR_SIZE = 120; // Slightly smaller to fit meta data
          const TARGET_URL_BASE = "https://myjvp.in/annual-sports-meet/participation/my-events.html?token=";
+         const WINNER_URL_BASE = "https://myjvp.in/annual-sports-meet/winner-submission/?token=";
          
          let globalRawData = [];
          let globalProcessedStudents = []; // Store processed data for filtering
@@ -367,10 +394,12 @@
          // UI: Populate Filter Dropdowns dynamically based on loaded data
          function setupFilterUI(students) {
             const classSet = new Set();
+            const houseSet = new Set(); // New Set for Houses
             const gameSet = new Set();
 
             students.forEach(s => {
                if(s.class) classSet.add(s.class);
+               if(s.house) houseSet.add(s.house); // Collect Houses
                if(s.gamesArray) s.gamesArray.forEach(g => gameSet.add(g));
             });
 
@@ -382,6 +411,16 @@
                opt.value = c;
                opt.innerText = c;
                classFilter.appendChild(opt);
+            });
+
+            // Populate House Filter (NEW)
+            const houseFilter = document.getElementById('rt-house');
+            houseFilter.innerHTML = '<option value="">All Houses</option>';
+            Array.from(houseSet).sort().forEach(h => {
+               const opt = document.createElement('option');
+               opt.value = h;
+               opt.innerText = h;
+               houseFilter.appendChild(opt);
             });
 
             // Populate Game Filter
@@ -402,6 +441,7 @@
          function applyFilters() {
             const searchVal = document.getElementById('rt-search').value.toLowerCase();
             const classVal = document.getElementById('rt-class').value;
+            const houseVal = document.getElementById('rt-house').value; // Get House Value
             const genderVal = document.getElementById('rt-gender').value;
             const gameVal = document.getElementById('rt-game').value;
 
@@ -411,6 +451,9 @@
                
                // Class Filter
                if (classVal && s.class !== classVal) return false;
+
+               // House Filter (NEW)
+               if (houseVal && s.house !== houseVal) return false;
 
                // Gender Filter (Case insensitive check)
                if (genderVal && s.gender.toLowerCase() !== genderVal.toLowerCase()) return false;
@@ -468,6 +511,13 @@
                  gamesDiv.className = 'games-list';
                  gamesDiv.innerText = student.gamesListStr || 'No Games';
 
+                 // NEW: Winner Submission Button
+                 const winnerBtn = document.createElement('a');
+                 winnerBtn.href = WINNER_URL_BASE + student.access_token;
+                 winnerBtn.target = "_blank"; // Open in new tab
+                 winnerBtn.className = 'winner-btn no-print'; // Add no-print class
+                 winnerBtn.innerText = 'Submit Winner';
+
                  // Credits
                  const creditsDiv = document.createElement('div');
                  creditsDiv.className = 'credits';
@@ -482,6 +532,7 @@
                  metaDiv.appendChild(gamesDiv);
                  
                  card.appendChild(metaDiv);
+                 card.appendChild(winnerBtn); // Add button to card
                  card.appendChild(creditsDiv);
 
                  qrGrid.appendChild(card);
@@ -537,6 +588,7 @@
              // Filter Event Listeners
              document.getElementById('rt-search').addEventListener('input', applyFilters);
              document.getElementById('rt-class').addEventListener('change', applyFilters);
+             document.getElementById('rt-house').addEventListener('change', applyFilters); // New Event
              document.getElementById('rt-gender').addEventListener('change', applyFilters);
              document.getElementById('rt-game').addEventListener('change', applyFilters);
          };
