@@ -544,87 +544,92 @@
          }
 
          // UI: Generate DOM Elements
-         function renderBadges(students) {
-             const qrGrid = document.getElementById('qr-grid');
-             const countDisplay = document.getElementById('count-display');
-             
-             qrGrid.innerHTML = '';
-             countDisplay.innerText = `Count: ${students.length}`;
+         // Optimized Render Function
+function renderBadges(students) {
+    const qrGrid = document.getElementById('qr-grid');
+    const countDisplay = document.getElementById('count-display');
+    const printBtn = document.getElementById('print-btn');
 
-             if (students.length === 0) {
-                 qrGrid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">No participants match current filters.</p>';
-                 document.getElementById('print-btn').style.display = 'none';
-                 return;
-             }
+    // Clear existing content
+    qrGrid.innerHTML = '';
+    countDisplay.innerText = `Count: ${students.length}`;
 
-             students.forEach(student => {
-                 const card = document.createElement('div');
-                 card.className = 'qr-card';
+    if (students.length === 0) {
+        qrGrid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">No participants match current filters.</p>';
+        printBtn.style.display = 'none';
+        return;
+    }
 
-                 // Header
-                 const header = document.createElement('div');
-                 header.className = 'school-name';
-                 header.innerText = 'Jamna Vidyapeeth';
+    // 1. Create a DocumentFragment (Invisible container)
+    const fragment = document.createDocumentFragment();
 
-                 // Canvas for QR
-                 const canvas = document.createElement('canvas');
+    students.forEach(student => {
+        const card = document.createElement('div');
+        card.className = 'qr-card';
 
-                 // Meta Data Container
-                 const metaDiv = document.createElement('div');
-                 metaDiv.style.width = '100%';
+        // Header
+        const header = document.createElement('div');
+        header.className = 'school-name';
+        header.innerText = 'Jamna Vidyapeeth';
 
-                 // Student Details
-                 const nameDiv = document.createElement('div');
-                 nameDiv.className = 'student-name';
-                 nameDiv.innerText = capitalizeWords(student.name);
+        // Canvas for QR
+        const canvas = document.createElement('canvas');
 
-                 const detailsDiv = document.createElement('div');
-                 detailsDiv.className = 'student-meta';
-                 detailsDiv.innerHTML = `${student.class} <span style="margin:0 4px">•</span> ${student.house}`;
+        // Meta Data
+        const metaDiv = document.createElement('div');
+        metaDiv.style.width = '100%';
 
-                 // Games List
-                 const gamesDiv = document.createElement('div');
-                 gamesDiv.className = 'games-list';
-                 gamesDiv.innerText = student.gamesListStr || 'No Games';
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'student-name';
+        nameDiv.innerText = capitalizeWords(student.name);
 
-                 // --- MODIFIED: Winner Submission Button to Open Iframe ---
-                 const winnerBtn = document.createElement('a'); // Kept as <a> for styling, but works like button
-                 winnerBtn.className = 'winner-btn no-print';
-                 winnerBtn.innerText = 'Submit Winner';
-                 winnerBtn.href = "javascript:void(0)"; // Prevent default navigation
-                 winnerBtn.onclick = function() {
-                     openWinnerModal(WINNER_URL_BASE + student.access_token);
-                 };
-                 // --------------------------------------------------------
+        const detailsDiv = document.createElement('div');
+        detailsDiv.className = 'student-meta';
+        detailsDiv.innerHTML = `${student.class} <span style="margin:0 4px">•</span> ${student.house}`;
 
-                 // Credits
-                 const creditsDiv = document.createElement('div');
-                 creditsDiv.className = 'credits';
-                 creditsDiv.innerText = 'System by Mr. Sourabh Suneja';
+        const gamesDiv = document.createElement('div');
+        gamesDiv.className = 'games-list';
+        gamesDiv.innerText = student.gamesListStr || 'No Games';
 
-                 // Assemble
-                 card.appendChild(header);
-                 card.appendChild(canvas);
-                 
-                 metaDiv.appendChild(nameDiv);
-                 metaDiv.appendChild(detailsDiv);
-                 metaDiv.appendChild(gamesDiv);
-                 
-                 card.appendChild(metaDiv);
-                 card.appendChild(winnerBtn); // Add button to card
-                 card.appendChild(creditsDiv);
+        // Winner Button
+        const winnerBtn = document.createElement('a');
+        winnerBtn.className = 'winner-btn no-print';
+        winnerBtn.innerText = 'Submit Winner';
+        winnerBtn.href = "javascript:void(0)";
+        winnerBtn.onclick = function() {
+            openWinnerModal(WINNER_URL_BASE + student.access_token);
+        };
 
-                 qrGrid.appendChild(card);
+        // Credits
+        const creditsDiv = document.createElement('div');
+        creditsDiv.className = 'credits';
+        creditsDiv.innerText = 'System by Mr. Sourabh Suneja';
 
-                 // Draw QR Code
-                 const qrUrl = TARGET_URL_BASE + student.access_token;
-                 QRCode.toCanvas(canvas, qrUrl, { width: QR_SIZE, margin: 1 }, (error) => {
-                     if (error) console.error(error);
-                 });
-             });
+        // Assemble Card
+        card.appendChild(header);
+        card.appendChild(canvas);
+        metaDiv.appendChild(nameDiv);
+        metaDiv.appendChild(detailsDiv);
+        metaDiv.appendChild(gamesDiv);
+        card.appendChild(metaDiv);
+        card.appendChild(winnerBtn);
+        card.appendChild(creditsDiv);
 
-             document.getElementById('print-btn').style.display = 'block';
-         }
+        // Add card to Fragment (Not the live page yet)
+        fragment.appendChild(card);
+
+        // Generate QR (This is async, but won't block the fragment append)
+        const qrUrl = TARGET_URL_BASE + student.access_token;
+        QRCode.toCanvas(canvas, qrUrl, { width: QR_SIZE, margin: 1 }, (error) => {
+            if (error) console.error(error);
+        });
+    });
+
+    // 2. Append the specific fragment to the DOM only ONCE
+    qrGrid.appendChild(fragment);
+
+    printBtn.style.display = 'block';
+}
 
          // Main Flow
          async function initSystem(selectedClass) {
@@ -665,7 +670,11 @@
              });
 
              // Filter Event Listeners
-             document.getElementById('rt-search').addEventListener('input', applyFilters);
+             let debounceTimer;
+             document.getElementById('rt-search').addEventListener('input', function() {
+                clearTimeout(debounceTimer); // Cancel the previous search attempt
+                debounceTimer = setTimeout(applyFilters, 400); // Wait 400ms after the last keystroke to run
+             });
              document.getElementById('rt-class').addEventListener('change', applyFilters);
              document.getElementById('rt-house').addEventListener('change', applyFilters); // New Event
              document.getElementById('rt-gender').addEventListener('change', applyFilters);
