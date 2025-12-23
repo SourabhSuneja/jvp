@@ -9,313 +9,296 @@
       <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
       <style>
          * {
-            box-sizing: border-box;
+         box-sizing: border-box;
          }
          body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f2f5;
-            color: #333;
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         margin: 0;
+         padding: 20px;
+         background-color: #f0f2f5;
+         color: #333;
          }
          h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #1a1a1a;
+         text-align: center;
+         margin-bottom: 20px;
+         color: #1a1a1a;
          }
-
          /* --- Filter Bar Styles --- */
          .filter-bar {
-             background: #fff;
-             padding: 15px;
-             border-radius: 8px;
-             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-             margin-bottom: 20px;
-             display: flex;
-             flex-wrap: wrap;
-             gap: 15px;
-             justify-content: center;
-             align-items: center;
-             position: sticky;
-             top: 0;
-             z-index: 100;
-             border: 1px solid #ddd;
-             display: none; /* Hidden until data loads */
+         background: #fff;
+         padding: 15px;
+         border-radius: 8px;
+         box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+         margin-bottom: 20px;
+         display: flex;
+         flex-wrap: wrap;
+         gap: 15px;
+         justify-content: center;
+         align-items: center;
+         position: sticky;
+         top: 0;
+         z-index: 100;
+         border: 1px solid #ddd;
+         display: none; /* Hidden until data loads */
          }
          .filter-group {
-             display: flex;
-             flex-direction: column;
+         display: flex;
+         flex-direction: column;
          }
          .filter-group label {
-             font-size: 12px;
-             font-weight: bold;
-             margin-bottom: 5px;
-             color: #666;
+         font-size: 12px;
+         font-weight: bold;
+         margin-bottom: 5px;
+         color: #666;
          }
          .filter-input {
-             padding: 8px;
-             border: 1px solid #ccc;
-             border-radius: 4px;
-             font-size: 14px;
-             min-width: 150px;
+         padding: 8px;
+         border: 1px solid #ccc;
+         border-radius: 4px;
+         font-size: 14px;
+         min-width: 150px;
          }
          /* --------------------------- */
-
          /* Grid Layout */
          #qr-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 280px); /* Fixed width for consistency */
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
+         display: grid;
+         grid-template-columns: repeat(auto-fill, 280px); /* Fixed width for consistency */
+         gap: 15px;
+         justify-content: center;
+         margin-top: 20px;
          }
-
          /* Badge Card Design */
          .qr-card {
-            background: #fff;
-            padding: 10px;
-            border: 2px solid #000; /* Solid border for cutting guide */
-            border-radius: 0; /* Square corners for easier cutting */
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            page-break-inside: avoid; /* Crucial for print */
+         background: #fff;
+         padding: 10px;
+         border: 2px solid #000; /* Solid border for cutting guide */
+         border-radius: 0; /* Square corners for easier cutting */
+         text-align: center;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: space-between;
+         page-break-inside: avoid; /* Crucial for print */
          }
-
          /* Typography within the Badge */
          .school-name {
-            font-size: 14px;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #333;
-            width: 100%;
-            padding-bottom: 2px;
+         font-size: 14px;
+         font-weight: 900;
+         text-transform: uppercase;
+         margin-bottom: 5px;
+         letter-spacing: 0.5px;
+         border-bottom: 2px solid #333;
+         width: 100%;
+         padding-bottom: 2px;
          }
-
          canvas {
-            margin: 2px 0;
+         margin: 2px 0;
          }
-
          .student-name {
-            font-size: 16px;
-            font-weight: 800;
-            margin: 2px 0;
-            line-height: 1.1;
-            text-transform: uppercase;
+         font-size: 16px;
+         font-weight: 800;
+         margin: 2px 0;
+         line-height: 1.1;
+         text-transform: uppercase;
          }
-
          .student-meta {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 4px;
+         font-size: 14px;
+         font-weight: 600;
+         margin-bottom: 4px;
          }
-
          .games-list {
-            font-size: 12px;
-            line-height: 1.2;
-            margin: 4px 0;
-            font-style: italic;
-            font-weight: bold;
-            /*background: #eee;*/
-            padding: 4px;
-            border-radius: 4px;
-            width: 100%;
+         font-size: 12px;
+         line-height: 1.2;
+         margin: 4px 0;
+         font-style: italic;
+         font-weight: bold;
+         /*background: #eee;*/
+         padding: 4px;
+         border-radius: 4px;
+         width: 100%;
          }
-
          .credits {
-            font-size: 10px;
-            color: #666;
-            color: black;
-            font-weight: bold;
-            margin-top: 4px;
-            border-top: 1px solid #ddd;
-            width: 100%;
-            padding-top: 2px;
+         font-size: 10px;
+         color: #666;
+         color: black;
+         font-weight: bold;
+         margin-top: 4px;
+         border-top: 1px solid #ddd;
+         width: 100%;
+         padding-top: 2px;
          }
-
          /* --- Winner Button Style --- */
          .winner-btn {
-            display: inline-block;
-            margin-top: 5px;
-            padding: 6px 18px;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            border: 1px solid #1e7e34;
-            transition: background 0.2s;
+         display: inline-block;
+         margin-top: 5px;
+         padding: 6px 18px;
+         background-color: #28a745;
+         color: white;
+         text-decoration: none;
+         font-size: 14px;
+         border-radius: 4px;
+         cursor: pointer;
+         border: 1px solid #1e7e34;
+         transition: background 0.2s;
          }
          .winner-btn:hover {
-            background-color: #218838;
+         background-color: #218838;
          }
          /* -------------------------------- */
-
          /* Controls & UI */
          button.action-btn {
-            display: inline-block;
-            margin: 10px auto;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #002B5B;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+         display: inline-block;
+         margin: 10px auto;
+         padding: 10px 20px;
+         font-size: 16px;
+         color: #fff;
+         background-color: #002B5B;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         transition: background-color 0.3s ease;
          }
          button.action-btn:hover {
-            background-color: #004080;
+         background-color: #004080;
          }
          #print-btn {
-            margin-top: 30px;
-            display: block;
+         margin-top: 30px;
+         display: block;
          }
-         
          /* Loading Animation */
          .center-text {
-            font-size: 30px;
-            font-weight: bold;
-            color: #002B5B;
-            text-align: center;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none;
-            background: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            z-index: 1000;
+         font-size: 30px;
+         font-weight: bold;
+         color: #002B5B;
+         text-align: center;
+         position: fixed;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         display: none;
+         background: rgba(255,255,255,0.9);
+         padding: 20px;
+         border-radius: 10px;
+         box-shadow: 0 0 10px rgba(0,0,0,0.2);
+         z-index: 1000;
          }
-
          /* Class Selection Dialog */
          #class-dialog-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+         position: fixed;
+         top: 0; left: 0;
+         width: 100%; height: 100%;
+         background-color: rgba(0, 0, 0, 0.6);
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         z-index: 1000;
          }
          #class-dialog {
-            background-color: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
+         background-color: white;
+         border-radius: 8px;
+         padding: 25px;
+         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+         width: 90%;
+         max-width: 400px;
+         text-align: center;
          }
          #class-select {
-            width: 100%;
-            padding: 10px;
-            margin: 15px 0;
-            font-size: 16px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+         width: 100%;
+         padding: 10px;
+         margin: 15px 0;
+         font-size: 16px;
+         border-radius: 4px;
+         border: 1px solid #ccc;
          }
-
          /* --- NEW: Winner Overlay Iframe Styles --- */
          #winner-overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
+         display: none; /* Hidden by default */
+         position: fixed;
+         top: 0; left: 0;
+         width: 100%; height: 100%;
+         background-color: rgba(0, 0, 0, 0.85);
+         z-index: 2000;
+         justify-content: center;
+         align-items: center;
+         flex-direction: column;
          }
          #winner-modal-container {
-            width: 90%;
-            height: 90%;
-            background: #fff;
-            border-radius: 8px;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
+         width: 90%;
+         height: 90%;
+         background: #fff;
+         border-radius: 8px;
+         position: relative;
+         box-shadow: 0 0 20px rgba(0,0,0,0.5);
+         display: flex;
+         flex-direction: column;
          }
          #winner-iframe {
-            flex-grow: 1;
-            width: 100%;
-            border: none;
-            border-radius: 0 0 8px 8px;
+         flex-grow: 1;
+         width: 100%;
+         border: none;
+         border-radius: 0 0 8px 8px;
          }
          #winner-modal-header {
-             padding: 10px 15px;
-             background: #f8f9fa;
-             border-bottom: 1px solid #dee2e6;
-             border-radius: 8px 8px 0 0;
-             display: flex;
-             justify-content: space-between;
-             align-items: center;
+         padding: 10px 15px;
+         background: #f8f9fa;
+         border-bottom: 1px solid #dee2e6;
+         border-radius: 8px 8px 0 0;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
          }
          #close-overlay-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
+         background-color: #dc3545;
+         color: white;
+         border: none;
+         padding: 8px 15px;
+         border-radius: 4px;
+         cursor: pointer;
+         font-weight: bold;
+         font-size: 14px;
          }
          #close-overlay-btn:hover {
-             background-color: #c82333;
+         background-color: #c82333;
          }
          /* ----------------------------------------- */
-
          /* Print specific styles */
          @media print {
-            .no-print, button, #class-dialog-overlay, #generating-text, .filter-bar, .winner-btn, #winner-overlay {
-               display: none !important;
-            }
-            body {
-               background-color: white;
-               padding: 0;
-               margin: 0;
-            }
-            #qr-grid {
-               display: block; /* Use block to allow floating if needed, or stick to grid */
-               display: grid;
-               grid-template-columns: repeat(3, 1fr); /* Fit 3 per row on A4 usually */
-               gap: 10px;
-               margin: 0;
-               padding: 10px;
-            }
-            .qr-card {
-               border: 1px dashed #999; /* Dashed lines for cutting */
-               break-inside: avoid;
-               box-shadow: none;
-            }
+         .no-print, button, #class-dialog-overlay, #generating-text, .filter-bar, .winner-btn, #winner-overlay {
+         display: none !important;
+         }
+         body {
+         background-color: white;
+         padding: 0;
+         margin: 0;
+         }
+         #qr-grid {
+         display: block; /* Use block to allow floating if needed, or stick to grid */
+         display: grid;
+         grid-template-columns: repeat(3, 1fr); /* Fit 3 per row on A4 usually */
+         gap: 10px;
+         margin: 0;
+         padding: 10px;
+         }
+         .qr-card {
+         border: 1px dashed #999; /* Dashed lines for cutting */
+         break-inside: avoid;
+         box-shadow: none;
+         }
          }
       </style>
    </head>
    <body>
       <h1 class="no-print">Annual Sports Meet 2025-26 - Blazer Tags</h1>
-      
       <div id="class-dialog-overlay">
-        <div id="class-dialog">
+         <div id="class-dialog">
             <h2>Select Participants</h2>
             <p>Choose a class to fetch data.</p>
             <select id="class-select">
-                <option value="all">All Classes</option>
+               <option value="all">All Classes</option>
             </select>
             <button id="select-class-btn" class="action-btn">Load Data</button>
-        </div>
+         </div>
       </div>
-
       <div id="filter-controls" class="filter-bar">
          <div class="filter-group">
             <label for="rt-search">Search Name</label>
@@ -351,21 +334,17 @@
             <div id="count-display" style="font-weight: bold; padding: 8px;"></div>
          </div>
       </div>
-      
       <div id="qr-grid"></div>
-      
       <button id="print-btn" class="action-btn" onclick="window.print()" style="display:none;">Print QR Badges</button>
-      
       <div id="generating-text" class="center-text">Processing Data...</div>
-
       <div id="winner-overlay">
-          <div id="winner-modal-container">
-              <div id="winner-modal-header">
-                  <span style="font-weight:bold; font-size:18px;">Winner Submission</span>
-                  <button id="close-overlay-btn" onclick="closeWinnerModal()">Close Window [X]</button>
-              </div>
-              <iframe id="winner-iframe" src=""></iframe>
-          </div>
+         <div id="winner-modal-container">
+            <div id="winner-modal-header">
+               <span style="font-weight:bold; font-size:18px;">Winner Submission</span>
+               <button id="close-overlay-btn" onclick="closeWinnerModal()">Close Window [X]</button>
+            </div>
+            <iframe id="winner-iframe" src=""></iframe>
+         </div>
       </div>
       <script>
          // Configuration
@@ -375,7 +354,7 @@
          
          let globalRawData = [];
          let globalProcessedStudents = []; // Store processed data for filtering
-
+         
          // --- NEW: Overlay Control Functions ---
          function openWinnerModal(url) {
              const overlay = document.getElementById('winner-overlay');
@@ -383,7 +362,7 @@
              iframe.src = url; // Load the page
              overlay.style.display = 'flex'; // Show overlay
          }
-
+         
          function closeWinnerModal() {
              const overlay = document.getElementById('winner-overlay');
              const iframe = document.getElementById('winner-iframe');
@@ -391,13 +370,13 @@
              overlay.style.display = 'none'; // Hide overlay
          }
          // -------------------------------------
-
+         
          // Helper: Capitalize Words
          function capitalizeWords(str) {
              if (!str) return '';
              return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
          }
-
+         
          // Helper: Populate Initial Class Dropdown
          function populateClassOptions() {
              const classSelect = document.getElementById('class-select');
@@ -419,17 +398,17 @@
                  classSelect.appendChild(option);
              });
          }
-
+         
          // Core Logic: Aggregate Raw Data by Student (Token)
          function processAndAggregateData(rawData, filterClass) {
              const studentMap = {};
-
+         
              rawData.forEach(row => {
                  // Filter by class if specific class selected initially
                  if (filterClass !== 'all' && row.student_class !== filterClass) {
                      return;
                  }
-
+         
                  const token = row.access_token;
                  
                  // Create entry if not exists
@@ -450,35 +429,35 @@
                      studentMap[token].games.add(row.game_name);
                  }
              });
-
+         
              // Convert Map to Array
              const processedArray = Object.values(studentMap).map(student => ({
                  ...student,
                  gamesListStr: Array.from(student.games).join(', '),
                  gamesArray: Array.from(student.games) // Keep array for filtering
              }));
-
+         
              // Sort: Class first, then Name
              processedArray.sort((a, b) => {
                  if (a.class !== b.class) return a.class.localeCompare(b.class, undefined, {numeric: true});
                  return a.name.localeCompare(b.name);
              });
-
+         
              return processedArray;
          }
-
+         
          // UI: Populate Filter Dropdowns dynamically based on loaded data
          function setupFilterUI(students) {
             const classSet = new Set();
             const houseSet = new Set(); // New Set for Houses
             const gameSet = new Set();
-
+         
             students.forEach(s => {
                if(s.class) classSet.add(s.class);
                if(s.house) houseSet.add(s.house); // Collect Houses
                if(s.gamesArray) s.gamesArray.forEach(g => gameSet.add(g));
             });
-
+         
             // Populate Class Filter
             const classFilter = document.getElementById('rt-class');
             classFilter.innerHTML = '<option value="">All Classes</option>';
@@ -488,7 +467,7 @@
                opt.innerText = c;
                classFilter.appendChild(opt);
             });
-
+         
             // Populate House Filter (NEW)
             const houseFilter = document.getElementById('rt-house');
             houseFilter.innerHTML = '<option value="">All Houses</option>';
@@ -498,7 +477,7 @@
                opt.innerText = h;
                houseFilter.appendChild(opt);
             });
-
+         
             // Populate Game Filter
             const gameFilter = document.getElementById('rt-game');
             gameFilter.innerHTML = '<option value="">All Games</option>';
@@ -508,11 +487,11 @@
                opt.innerText = g;
                gameFilter.appendChild(opt);
             });
-
+         
             // Show the filter bar
             document.getElementById('filter-controls').style.display = 'flex';
          }
-
+         
          // Logic: Apply Real-time Filters
          function applyFilters() {
             const searchVal = document.getElementById('rt-search').value.toLowerCase();
@@ -520,137 +499,137 @@
             const houseVal = document.getElementById('rt-house').value; // Get House Value
             const genderVal = document.getElementById('rt-gender').value;
             const gameVal = document.getElementById('rt-game').value;
-
+         
             const filtered = globalProcessedStudents.filter(s => {
                // Name Search
                if (searchVal && !s.name.toLowerCase().includes(searchVal)) return false;
                
                // Class Filter
                if (classVal && s.class !== classVal) return false;
-
+         
                // House Filter (NEW)
                if (houseVal && s.house !== houseVal) return false;
-
+         
                // Gender Filter (Case insensitive check)
                if (genderVal && s.gender.toLowerCase() !== genderVal.toLowerCase()) return false;
-
+         
                // Game Filter
                if (gameVal && !s.gamesArray.includes(gameVal)) return false;
-
+         
                return true;
             });
-
+         
             renderBadges(filtered);
          }
-
+         
          // UI: Generate DOM Elements
          // Optimized Render Function
-function renderBadges(students) {
-    const qrGrid = document.getElementById('qr-grid');
-    const countDisplay = document.getElementById('count-display');
-    const printBtn = document.getElementById('print-btn');
-
-    // Clear existing content
-    qrGrid.innerHTML = '';
-    countDisplay.innerText = `Count: ${students.length}`;
-
-    if (students.length === 0) {
-        qrGrid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">No participants match current filters.</p>';
-        printBtn.style.display = 'none';
-        return;
-    }
-
-    // 1. Create a DocumentFragment (Invisible container)
-    const fragment = document.createDocumentFragment();
-
-    students.forEach(student => {
-        const card = document.createElement('div');
-        card.className = 'qr-card';
-
-        // Header
-        const header = document.createElement('div');
-        header.className = 'school-name';
-        header.innerText = 'Jamna Vidyapeeth';
-
-        // Canvas for QR
-        const canvas = document.createElement('canvas');
-
-        // Meta Data
-        const metaDiv = document.createElement('div');
-        metaDiv.style.width = '100%';
-
-        const nameDiv = document.createElement('div');
-        nameDiv.className = 'student-name';
-        nameDiv.innerText = capitalizeWords(student.name);
-
-        const detailsDiv = document.createElement('div');
-        detailsDiv.className = 'student-meta';
-        detailsDiv.innerHTML = `${student.class} <span style="margin:0 4px">•</span> ${student.house}`;
-
-        const gamesDiv = document.createElement('div');
-        gamesDiv.className = 'games-list';
-        gamesDiv.innerText = student.gamesListStr || 'No Games';
-
-        // Winner Button
-        const winnerBtn = document.createElement('a');
-        winnerBtn.className = 'winner-btn no-print';
-        winnerBtn.innerText = 'Submit Winner';
-        winnerBtn.href = "javascript:void(0)";
-        winnerBtn.onclick = function() {
+         function renderBadges(students) {
+         const qrGrid = document.getElementById('qr-grid');
+         const countDisplay = document.getElementById('count-display');
+         const printBtn = document.getElementById('print-btn');
+         
+         // Clear existing content
+         qrGrid.innerHTML = '';
+         countDisplay.innerText = `Count: ${students.length}`;
+         
+         if (students.length === 0) {
+         qrGrid.innerHTML = '<p style="text-align:center; width:100%; grid-column: 1/-1;">No participants match current filters.</p>';
+         printBtn.style.display = 'none';
+         return;
+         }
+         
+         // 1. Create a DocumentFragment (Invisible container)
+         const fragment = document.createDocumentFragment();
+         
+         students.forEach(student => {
+         const card = document.createElement('div');
+         card.className = 'qr-card';
+         
+         // Header
+         const header = document.createElement('div');
+         header.className = 'school-name';
+         header.innerText = 'Jamna Vidyapeeth';
+         
+         // Canvas for QR
+         const canvas = document.createElement('canvas');
+         
+         // Meta Data
+         const metaDiv = document.createElement('div');
+         metaDiv.style.width = '100%';
+         
+         const nameDiv = document.createElement('div');
+         nameDiv.className = 'student-name';
+         nameDiv.innerText = capitalizeWords(student.name);
+         
+         const detailsDiv = document.createElement('div');
+         detailsDiv.className = 'student-meta';
+         detailsDiv.innerHTML = `${student.class} <span style="margin:0 4px">•</span> ${student.house}`;
+         
+         const gamesDiv = document.createElement('div');
+         gamesDiv.className = 'games-list';
+         gamesDiv.innerText = student.gamesListStr || 'No Games';
+         
+         // Winner Button
+         const winnerBtn = document.createElement('a');
+         winnerBtn.className = 'winner-btn no-print';
+         winnerBtn.innerText = 'Submit Winner';
+         winnerBtn.href = "javascript:void(0)";
+         winnerBtn.onclick = function() {
             openWinnerModal(WINNER_URL_BASE + student.access_token);
-        };
-
-        // Credits
-        const creditsDiv = document.createElement('div');
-        creditsDiv.className = 'credits';
-        creditsDiv.innerText = 'System by Mr. Sourabh Suneja';
-
-        // Assemble Card
-        card.appendChild(header);
-        card.appendChild(canvas);
-        metaDiv.appendChild(nameDiv);
-        metaDiv.appendChild(detailsDiv);
-        metaDiv.appendChild(gamesDiv);
-        card.appendChild(metaDiv);
-        card.appendChild(winnerBtn);
-        card.appendChild(creditsDiv);
-
-        // Add card to Fragment (Not the live page yet)
-        fragment.appendChild(card);
-
-        // Generate QR (This is async, but won't block the fragment append)
-        const qrUrl = TARGET_URL_BASE + student.access_token;
-        QRCode.toCanvas(canvas, qrUrl, { width: QR_SIZE, margin: 1 }, (error) => {
+         };
+         
+         // Credits
+         const creditsDiv = document.createElement('div');
+         creditsDiv.className = 'credits';
+         creditsDiv.innerText = 'System by Mr. Sourabh Suneja';
+         
+         // Assemble Card
+         card.appendChild(header);
+         card.appendChild(canvas);
+         metaDiv.appendChild(nameDiv);
+         metaDiv.appendChild(detailsDiv);
+         metaDiv.appendChild(gamesDiv);
+         card.appendChild(metaDiv);
+         card.appendChild(winnerBtn);
+         card.appendChild(creditsDiv);
+         
+         // Add card to Fragment (Not the live page yet)
+         fragment.appendChild(card);
+         
+         // Generate QR (This is async, but won't block the fragment append)
+         const qrUrl = TARGET_URL_BASE + student.access_token;
+         QRCode.toCanvas(canvas, qrUrl, { width: QR_SIZE, margin: 1 }, (error) => {
             if (error) console.error(error);
-        });
-    });
-
-    // 2. Append the specific fragment to the DOM only ONCE
-    qrGrid.appendChild(fragment);
-
-    printBtn.style.display = 'block';
-}
-
+         });
+         });
+         
+         // 2. Append the specific fragment to the DOM only ONCE
+         qrGrid.appendChild(fragment);
+         
+         printBtn.style.display = 'block';
+         }
+         
          // Main Flow
          async function initSystem(selectedClass) {
              const loader = document.getElementById('generating-text');
              loader.style.display = 'block';
-
+         
              try {
                  // 1. Fetch Data (if not already fetched)
                  if (globalRawData.length === 0) {
                      globalRawData = await invokeFunction('get_sport_participants');
                  }
-
+         
                  // 2. Process Data
                  globalProcessedStudents = processAndAggregateData(globalRawData, selectedClass);
-
+         
                  // 3. Setup Filter Dropdowns
                  setupFilterUI(globalProcessedStudents);
-
+         
                  // 4. Render Initial List
                  renderBadges(globalProcessedStudents);
-
+         
              } catch (error) {
                  console.error("Error:", error);
                  alert("Failed to load data. Check console.");
@@ -658,17 +637,17 @@ function renderBadges(students) {
                  loader.style.display = 'none';
              }
          }
-
+         
          // Events
          window.onload = function() {
              populateClassOptions();
-
+         
              document.getElementById('select-class-btn').addEventListener('click', () => {
                  const cls = document.getElementById('class-select').value;
                  document.getElementById('class-dialog-overlay').style.display = 'none';
                  initSystem(cls);
              });
-
+         
              // Filter Event Listeners
              let debounceTimer;
              document.getElementById('rt-search').addEventListener('input', function() {
