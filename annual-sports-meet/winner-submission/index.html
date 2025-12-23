@@ -1344,6 +1344,22 @@
           groupInfoEl.className = 'group-info'; // Reset class
           
           if (!selectedGame) return;
+
+          // Disable 3rd Position for Team Games (school's policy does not allow third position)
+          const posThirdInput = document.getElementById('pos-third');
+          const posThirdLabel = document.querySelector('label[for="pos-third"]');
+
+          if (selectedGame.game_type === 'Team') {
+              posThirdInput.disabled = true;
+              // Visual feedback to show it is disabled
+              posThirdLabel.style.opacity = '0.5';
+              posThirdLabel.style.cursor = 'not-allowed';
+          } else {
+              posThirdInput.disabled = false;
+              // Restore visual state
+              posThirdLabel.style.opacity = '1';
+              posThirdLabel.style.cursor = 'pointer';
+          }
       
           // Show position selector
           positionSelectorWrapper.style.display = 'block';
