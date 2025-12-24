@@ -44,8 +44,8 @@
             // 5. Fire Confetti (Canvas Confetti Library)
             fireConfetti(config.colors);
 
-            // 6. Play Sound (Optional - simplistic beep for demo)
-            // const audio = new Audio('path/to/win.mp3'); audio.play();
+            // 6. Set scrolling headline
+            updateScrollingText(houseName + ' House Triumphs at JVP Sports Meet 2025–26, Secures Victory with ' + score + ' points.', 999999999);
         }
 
         function hideWinner() {
