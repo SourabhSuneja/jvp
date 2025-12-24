@@ -21,8 +21,8 @@
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Russo+One&display=swap" rel="stylesheet"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    
+      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Russo+One&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    </head>
    <body>
       <canvas id="confetti-canvas"></canvas>
@@ -240,6 +240,21 @@
          </div>
       </div>
       <!-- Win prediction widget ends -->
+      <!-- Winner Overlay starts -->
+      <div id="winner-overlay">
+         <div class="winner-card" id="winner-card">
+            <button class="close-btn" onclick="hideWinner()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="trophy-container">
+               <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div class="congrats-text">Victory Goes To</div>
+            <div class="house-title" id="house-name">HOUSE NAME</div>
+            <div class="score-badge">
+               TOTAL SCORE <span class="score-value" id="score-val">0000</span>
+            </div>
+         </div>
+      </div>
+      <!-- Winner Overlay ends -->
       <script src="https://myjvp.in/commons/dialog.js"></script>
       <script>
          showProcessingDialog();
