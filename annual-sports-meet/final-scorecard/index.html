@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Sports Meet 2025-26 - Results</title>
+    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+    <style>
+        :root {
+            --ruby: #e74c3c;
+            --emerald: #27ae60;
+            --sapphire: #2980b9;
+            --topaz: #f1c40f;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- Header Section --- */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--dark);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            margin: 5px 0 0;
+            font-weight: 400;
+            color: #555;
+            font-size: 1.4rem;
+        }
+
+        .meta-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        /* --- Scoreboard Section --- */
+        .scoreboard-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .score-card {
+            flex: 1;
+            min-width: 200px;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 5px solid #ccc;
+        }
+
+        .score-card h3 { margin: 0; font-size: 1.2rem; color: #555; }
+        .score-card .points { font-size: 2.5rem; font-weight: bold; margin: 10px 0; color: var(--dark); }
+        .score-card .rank { font-size: 0.9rem; font-weight: bold; text-transform: uppercase; padding: 4px 8px; border-radius: 4px; display: inline-block;}
+
+        /* House Colors */
+        .border-Ruby { border-top-color: var(--ruby); }
+        .border-Emerald { border-top-color: var(--emerald); }
+        .border-Sapphire { border-top-color: var(--sapphire); }
+        .border-Topaz { border-top-color: var(--topaz); }
+
+        .text-Ruby { color: var(--ruby); }
+        .text-Emerald { color: var(--emerald); }
+        .text-Sapphire { color: var(--sapphire); }
+        .text-Topaz { color: #d4ac0d; /* Darker yellow for text visibility */ }
+
+        /* --- Final Judgement (Podium) --- */
+        .final-judgement {
+            background: var(--white);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .final-judgement h3 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .winner-banner {
+            background-color: var(--dark);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        /* --- Data Table --- */
+        .table-responsive {
+            overflow-x: auto;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background-color: var(--dark);
+            color: var(--white);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        tr:hover { background-color: #f1f1f1; }
+
+        .game-col { font-weight: bold; color: var(--dark); }
+        .house-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: white;
+            font-weight: normal;
+        }
+        .bg-Ruby { background-color: var(--ruby); }
+        .bg-Emerald { background-color: var(--emerald); }
+        .bg-Sapphire { background-color: var(--sapphire); }
+        .bg-Topaz { background-color: var(--topaz); color: #333; }
+        .bg-NIL { background-color: #ccc; color: #555;}
+
+        /* --- Signatures --- */
+        .signatures {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+        }
+
+        .sig-block {
+            text-align: center;
+            width: 200px;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+        .sig-block p { margin: 5px 0; font-size: 0.9rem; font-weight: bold; }
+        .sig-block span { display: block; font-size: 0.8rem; color: #666; font-weight: normal; }
+
+        /* --- Utility --- */
+        .badge {
+            font-size: 0.75rem;
+            padding: 2px 5px;
+            border-radius: 3px;
+            background: #eee;
+            border: 1px solid #ccc;
+        }
+        .badge-Team { background: #e8daef; border-color: #d2b4de; color: #6c3483; }
+        .badge-Ind { background: #d4e6f1; border-color: #a9cce3; color: #2471a3; }
+        .badge-Grp { background: #d0ece7; border-color: #a3e4d7; color: #117864; }
+
+        .btn-print {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background: var(--dark);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn-print:hover { background: #34495e; }
+
+        /* --- PRINT STYLES --- */
+        @media print {
+            body { background-color: white; font-size: 11pt; }
+            .container { width: 100%; max-width: 100%; padding: 0; }
+            .btn-print { display: none; }
+            .score-card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .table-responsive { box-shadow: none; overflow: visible; }
+            thead { background-color: #eee !important; color: black !important; }
+            .house-badge { border: 1px solid #ccc; color: black !important; background: white !important; font-weight: bold;}
+            
+            /* Add color indicators specifically for print text */
+            .house-badge.bg-Ruby::after { content: " (R)"; font-size: 0.7em;}
+            .house-badge.bg-Emerald::after { content: " (E)"; font-size: 0.7em;}
+            .house-badge.bg-Sapphire::after { content: " (S)"; font-size: 0.7em;}
+            .house-badge.bg-Topaz::after { content: " (T)"; font-size: 0.7em;}
+
+            .signatures { margin-top: 50px; page-break-inside: avoid; }
+            h1 { font-size: 1.8rem; }
+            th, td { padding: 6px 8px; border: 1px solid #999; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Jamna Vidyapeeth</h1>
+        <h2>Annual Sports Meet 2025-26</h2>
+        <div class="meta-info">Houses: Ruby, Emerald, Sapphire, Topaz</div>
+    </header>
+
+    <button onclick="window.print()" class="btn-print">🖨️ Print Results</button>
+
+    <div class="scoreboard-section" id="scoreboard">
+        </div>
+
+    <div class="final-judgement">
+        <h3>🏆 Final Judgement</h3>
+        <div id="winner-banner-container">
+            </div>
+    </div>
+
+    <div class="table-responsive">
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th style="width: 5%">ID</th>
+                    <th style="width: 20%">Game / Event</th>
+                    <th style="width: 10%">Type</th>
+                    <th style="width: 8%">Class</th>
+                    <th style="width: 19%">1st Position</th>
+                    <th style="width: 19%">2nd Position</th>
+                    <th style="width: 19%">3rd Position</th>
+                </tr>
+            </thead>
+            <tbody>
+                </tbody>
+        </table>
+    </div>
+
+    <div class="signatures">
+        <div class="sig-block">
+            <p>Sourabh Suneja</p>
+            <span>Technical Coordinator</span>
+        </div>
+        <div class="sig-block">
+            <p>Kajal Jha & Ritu Das</p>
+            <span>Activity Coordinators</span>
+        </div>
+        <div class="sig-block">
+            <p>Mrs. Savita Devi</p>
+            <span>Principal</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 1. DATA SOURCE ---
+    let winners = [];
+
+    // --- 2. LOGIC CONFIGURATION ---
+    const housePoints = {
+        "Ruby": 0,
+        "Emerald": 0,
+        "Sapphire": 0,
+        "Topaz": 0
+    };
+
+    const rules = {
+        standard: { 1: 10, 2: 7, 3: 5 }, // Individual & Grouped
+        team: { 1: 20, 2: 14, 3: 0 }     // Team events
+    };
+
+    // --- 3. PROCESSING FUNCTIONS ---
+
+    function calculatePoints() {
+        // Reset points
+        Object.keys(housePoints).forEach(h => housePoints[h] = 0);
+
+        winners.forEach(event => {
+            const isTeam = event.gametype.toLowerCase() === 'team';
+            const pointsRule = isTeam ? rules.team : rules.standard;
+
+            // Helper to process a specific position (1, 2, or 3)
+            const processPosition = (houseString, position) => {
+                // If Team event, there is no 3rd place points
+                if (isTeam && position === 3) return; 
+
+                if (!houseString || houseString === "NIL") return;
+
+                // Handle split winners (e.g. "Ruby/Emerald")
+                const winnersList = houseString.split('/').map(s => s.trim());
+                
+                winnersList.forEach(house => {
+                    if (housePoints.hasOwnProperty(house)) {
+                        housePoints[house] += pointsRule[position];
+                    }
+                });
+            };
+
+            processPosition(event.winnerhouse1, 1);
+            processPosition(event.winnerhouse2, 2);
+            processPosition(event.winnerhouse3, 3);
+        });
+    }
+
+    function renderTable() {
+        const tbody = document.querySelector("#resultsTable tbody");
+        tbody.innerHTML = "";
+
+        winners.forEach(row => {
+            // Determine badge type for styling
+            let typeBadge = "badge-Ind";
+            if(row.gametype === 'Team') typeBadge = "badge-Team";
+            else if(row.gametype === 'Grouped') typeBadge = "badge-Grp";
+
+            // Helper to format winner cell
+            const formatWinnerCell = (name, house) => {
+                if(house === 'NIL') return '<span style="color:#ccc">NIL</span>';
+                
+                // Handle multiple houses for display badges
+                const houses = house.split('/').map(h => h.trim());
+                let badges = houses.map(h => `<span class="house-badge bg-${h}">${h}</span>`).join(' ');
+                
+                return `
+                    <div><strong>${name}</strong></div>
+                    <div style="margin-top:4px;">${badges}</div>
+                `;
+            };
+
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${row.row_id}</td>
+                <td class="game-col">${row.game}</td>
+                <td><span class="badge ${typeBadge}">${row.gametype}</span></td>
+                <td>${row.classcategory}</td>
+                <td>${formatWinnerCell(row.winner1, row.winnerhouse1)}</td>
+                <td>${formatWinnerCell(row.winner2, row.winnerhouse2)}</td>
+                <td>${formatWinnerCell(row.winner3, row.winnerhouse3)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function renderScoreboard() {
+        const board = document.getElementById('scoreboard');
+        board.innerHTML = "";
+
+        // Convert object to array for sorting
+        const sortedHouses = Object.entries(housePoints).sort((a, b) => b[1] - a[1]);
+
+        // Calculate Rank (handle ties)
+        let currentRank = 1;
+        
+        sortedHouses.forEach((item, index) => {
+            const [house, points] = item;
+            
+            // Check for tie with previous
+            if (index > 0 && points < sortedHouses[index-1][1]) {
+                currentRank = index + 1;
+            }
+
+            const card = document.createElement('div');
+            card.className = `score-card border-${house}`;
+            card.innerHTML = `
+                <h3>${house} House</h3>
+                <div class="points text-${house}">${points}</div>
+                <div class="rank" style="background-color: #eee; color: #555">Rank ${currentRank}</div>
+            `;
+            board.appendChild(card);
+        });
+
+        // Update Final Judgement Banner
+        const banner = document.getElementById('winner-banner-container');
+        const winnerName = sortedHouses[0][0];
+        const winnerPoints = sortedHouses[0][1];
+        
+        // Check if there is a tie for 1st place
+        let winnersText = `${winnerName} House`;
+        if (sortedHouses.length > 1 && sortedHouses[1][1] === winnerPoints) {
+            winnersText += ` & ${sortedHouses[1][0]} House`;
+        }
+
+        banner.innerHTML = `
+            <div class="winner-banner">
+                🎉 Congratulations to <strong>${winnersText}</strong> for leading with <strong>${winnerPoints} points</strong>! 🎉
+            </div>
+        `;
+    }
+
+    // --- 4. INITIALIZATION ---
+    window.onload = async function() {
+        winners = await selectData('sport_winners');
+        calculatePoints();
+        renderScoreboard();
+        renderTable();
+    };
+
+</script>
+
+</body>
+</html>
