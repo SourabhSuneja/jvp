@@ -3,6 +3,19 @@
 	--scrollbar-thumb: rgb(50, 50, 50);
 	--scrollbar-track: transparent;
 	--scrollbar-width: 6px;
+	--ruby-primary: #ff4757;
+    --ruby-secondary: #2f3542;
+    
+	--emerald-primary: #2ed573;
+    --emerald-secondary: #2f3542;
+            
+    --sapphire-primary: #1e90ff;
+    --sapphire-secondary: #2f3542;
+            
+    --topaz-primary: #ffa502;
+    --topaz-secondary: #2f3542;
+
+    --bg-color: #000;
 }
 
 * {
