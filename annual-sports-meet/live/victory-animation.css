@@ -143,6 +143,7 @@
             cursor: pointer;
             transition: color 0.3s;
             z-index: 10;
+            display: none;
         }
         .close-btn:hover { color: white; }
 
