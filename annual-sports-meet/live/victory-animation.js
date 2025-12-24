@@ -64,7 +64,7 @@
             });
 
             // Burst 2: Side Cannons (School Pride)
-            var end = Date.now() + 2000; // Run for 2 seconds
+            var end = Date.now() + 99999999; // Run for a long time
 
             (function frame() {
                 confetti({
