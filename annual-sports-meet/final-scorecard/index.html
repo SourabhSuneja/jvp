@@ -628,7 +628,7 @@
     window.onload = async function() {
         const loader = document.getElementById('loading-overlay');
         try {
-            winners = await selectData('sport_winners');
+            winners = await selectData('sport_winners', false, '*', [], [], 'classcategory');
             calculatePoints();
             renderScoreboard();
             renderTable();
