@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html class="noselect" lang="en">
+   <head>
+      <!-- Google tag -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+         
+         gtag('config', 'G-QF1MCK0B9Y');
+      </script>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>JVP Sports Meet | Live Score</title>
+      <meta name="description" content="Live results of JVP's Annual Sports Meet 2025-26. Stay updated in real-time!">
+      <link rel="preload" href="https://myjvp.in/commons/loading.gif" as="image">
+      <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
+      <link rel="stylesheet" href="./style.css">
+      <link rel="stylesheet" href="./victory-animation.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Oswald:wght@200..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Russo+One&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    
+   </head>
+   <body>
+      <canvas id="confetti-canvas"></canvas>
+      <div class="dashboard-container noselect">
+         <h1>
+            <ion-icon name="tennisball-outline"></ion-icon>
+            <span>JVP Annual Sports Meet 2025-26</span>
+         </h1>
+         <h2><span id="scorecard-heading">Live Scorecard</span> (Powered by Sourabh Sir)</h2>
+         <div class="hidden" id="credit">Powered by Sourabh Sir</div>
+         <!-- House Tiles -->
+         <h3>Grand Total</h3>
+         <div class="tiles tiles_total">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_total">0</span><br>Points
+               <div class="position-indicator" id="ruby_total_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_total">0</span><br>Points
+               <div class="position-indicator" id="emerald_total_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_total">0</span><br>Points
+               <div class="position-indicator" id="sapphire_total_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_total">0</span><br>Points
+               <div class="position-indicator" id="topaz_total_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_total">0</span><br>Points
+               <div class="position-indicator" id="nil_total_rank"></div>
+            </div>
+         </div>
+         <!-- House Tiles -->
+         <h3 class="hidden">Previously Held School Activities</h3>
+         <div class="tiles tiles_previous_total hidden">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_previous_total">0</span><br>Points
+               <div class="position-indicator" id="ruby_previous_total_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_previous_total">0</span><br>Points
+               <div class="position-indicator" id="emerald_previous_total_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_previous_total">0</span><br>Points
+               <div class="position-indicator" id="sapphire_previous_total_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_previous_total">0</span><br>Points
+               <div class="position-indicator" id="topaz_previous_total_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_previous_total">0</span><br>Points
+               <div class="position-indicator" id="nil_previous_total_rank">NIL</div>
+            </div>
+         </div>
+         <!-- House Tiles -->
+         <h3 class="hidden">Class 3 to 6 (Sports Meet)</h3>
+         <div class="tiles tiles_3_to_6 hidden">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="ruby_3_to_6_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="emerald_3_to_6_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="sapphire_3_to_6_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="topaz_3_to_6_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_3_to_6">0</span><br>Points
+               <div class="position-indicator" id="nil_3_to_6_rank">NIL</div>
+            </div>
+         </div>
+         <!-- House Tiles -->
+         <h3 class="hidden">Class 7 to 12 (Sports Meet)</h3>
+         <div class="tiles tiles_7_to_12 hidden">
+            <div class="tile ruby">
+               Ruby:<br> <span id="ruby_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="ruby_7_to_12_rank">Ruby</div>
+            </div>
+            <div class="tile emerald">
+               Emerald:<br> <span id="emerald_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="emerald_7_to_12_rank">Emerald</div>
+            </div>
+            <div class="tile sapphire">
+               Sapphire:<br> <span id="sapphire_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="sapphire_7_to_12_rank">Sapphire</div>
+            </div>
+            <div class="tile topaz">
+               Topaz:<br> <span id="topaz_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="topaz_7_to_12_rank">Topaz</div>
+            </div>
+            <div class="tile hidden">
+               NIL:<br> <span id="nil_7_to_12">0</span><br>Points
+               <div class="position-indicator" id="nil_7_to_12_rank">NIL</div>
+            </div>
+         </div>
+         <h3 class="hidden">Winners Table</h3>
+         <!-- Winners Table -->
+         <div class="table-container">
+            <table id="winnersTable">
+               <thead>
+                  <tr>
+                     <th>Event</th>
+                     <th>Class Group</th>
+                     <th>Winner 1</th>
+                     <th>Winner 2</th>
+                     <th>Winner 3</th>
+                     <th>Winner House 1</th>
+                     <th>Winner House 2</th>
+                     <th>Winner House 3</th>
+                  </tr>
+               </thead>
+               <tbody id="winnersTableBody">
+                  <!-- Dynamic Rows Will Be Injected Here -->
+               </tbody>
+            </table>
+         </div>
+         <!-- Download Button -->
+         <button class="btn-download hidden" id="downloadBtn">Download Results</button>
+         <h4 class="nohidden">Points Criteria:</h4>
+         <ul class="nohidden">
+            <li>All games and events are divided into <strong>three types</strong>:</li>
+            <ul>
+               <li><strong>Individual Events</strong> (example: 100m Race, Hurdle Race)</li>
+               <li><strong>Group Events</strong> (example: Soft Board Decoration, Relay Race – pairs of students)</li>
+               <li><strong>Team Events</strong> (example: Kho Kho, Kabaddi)</li>
+            </ul>
+            <li>
+               <strong>Points for Individual & Group Events:</strong>
+               <ul>
+                  <li><strong>1st place</strong>: 10 points</li>
+                  <li><strong>2nd place</strong>: 7 points</li>
+                  <li><strong>3rd place</strong>: 5 points</li>
+               </ul>
+            </li>
+            <li>
+               <strong>Points for Team Events (Double Points):</strong>
+               <ul>
+                  <li><strong>1st place</strong>: 20 points</li>
+                  <li><strong>2nd place</strong>: 14 points</li>
+               </ul>
+            </li>
+            <li>Add points from all events to get the <strong>Total Score</strong> of a house.</li>
+            <li>
+               <strong>Easy Example:</strong>
+               <ul>
+                  <li>
+                     A house got:
+                     <ul>
+                        <li><strong>1st place</strong> in 2 individual events: 2 × 10 = 20 points</li>
+                        <li><strong>2nd place</strong> in 1 group event: 1 × 7 = 7 points</li>
+                        <li><strong>1st place</strong> in 1 team event: 1 × 20 = 20 points</li>
+                     </ul>
+                  </li>
+                  <li>Total points: 20 + 7 + 20 = <strong>47 points</strong></li>
+               </ul>
+            </li>
+            <li>
+               The <strong>Grand Total</strong> of each house also includes points from other school activities held during the session (like Soft Board Decoration, Rakhi Making, etc.).
+            </li>
+         </ul>
+      </div>
+      <!-- Dialog Overlay Starts -->
+      <div id="dialog-overlay" class="dialog-overlay">
+         <div class="dialog-box" id="dialog-box">
+            <div class="dialog-header" id="dialog-header">Title</div>
+            <div class="dialog-message" id="dialog-message">Message goes here</div>
+            <div class="dialog-buttons" id="dialog-buttons">
+               <!-- Buttons will be added dynamically -->
+            </div>
+         </div>
+      </div>
+      <!-- Dialog Overlay Ends -->
+      <!-- Pop-up Box Starts -->
+      <div class="popup-box" id="popupBox">
+         <div class="popup-content">
+            <img id="ribbons" src="https://sourabhsuneja.github.io/jvp-sports-meet/images/confetti.gif">
+            <span class="popup-close-btn" id="popupCloseBtn">&times;</span>
+            <h3 id="popupHeading">Heading here</h3>
+            <p id="popupMsg">Message here</p>
+         </div>
+      </div>
+      <!-- Pop-up Box Ends -->
+      <!-- Scrolling Strip Starts -->
+      <div class="scrolling-strip">
+         <marquee class="scrolling-text" id="scrollingText" scrollamount="4">Get ready for an action-packed celebration! Jamna Vidyapeeth proudly presents the Annual Sports Meet 2025-26. The ultimate showdown begins!</marquee>
+      </div>
+      <!-- Scrolling Strip Ends -->
+      <!-- Win prediction widget starts -->
+      <div id="win-prediction-widget">
+         <h3 class="prediction-title">Win Predictions</h3>
+         <div id="prediction-bar-container">
+            <div id="ruby-strip" class="prediction-strip" data-house="Ruby">
+               <span></span>
+            </div>
+            <div id="emerald-strip" class="prediction-strip" data-house="Emerald">
+               <span></span>
+            </div>
+            <div id="sapphire-strip" class="prediction-strip" data-house="Sapphire">
+               <span></span>
+            </div>
+            <div id="topaz-strip" class="prediction-strip" data-house="Topaz">
+               <span></span>
+            </div>
+         </div>
+      </div>
+      <!-- Win prediction widget ends -->
+      <script src="https://myjvp.in/commons/dialog.js"></script>
+      <script>
+         showProcessingDialog();
+      </script>
+      <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
+      <script src="./victory-animation.js"></script>
+      <script src="./script.js"></script>
+      <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+      <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+   </body>
+</html>
