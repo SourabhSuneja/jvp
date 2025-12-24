@@ -1,0 +1,155 @@
+        /* --- Overlay Container --- */
+        #winner-overlay {
+            font-family: 'Poppins', sans-serif;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(8px);
+            background: radial-gradient(circle at center, var(--bg-color), #000000 90%);
+        }
+
+        #winner-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* --- Winner Card (Glassmorphism) --- */
+        .winner-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 3rem 4rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
+            transform: scale(0.8);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            max-width: 90%;
+        }
+
+        #winner-overlay.active .winner-card {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Decorative Shine on Card */
+        .winner-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        /* --- Icons & Text --- */
+        .trophy-container {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .congrats-text {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .house-title {
+            font-family: 'Russo One', sans-serif;
+            font-size: 5rem;
+            line-height: 1.1;
+            margin: 10px 0;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .score-badge {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            color: #fff;
+            margin-top: 1.5rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .score-value {
+            font-family: 'Russo One', sans-serif;
+            color: #fff;
+            margin-left: 10px;
+        }
+
+        /* --- Dynamic Theme Classes --- */
+        .theme-ruby .trophy-container { color: var(--ruby-primary); }
+        .theme-ruby .house-title { text-shadow: 0 0 30px var(--ruby-primary); }
+        .theme-ruby .score-value { color: var(--ruby-primary); }
+
+        .theme-emerald .trophy-container { color: var(--emerald-primary); }
+        .theme-emerald .house-title { text-shadow: 0 0 30px var(--emerald-primary); }
+        .theme-emerald .score-value { color: var(--emerald-primary); }
+
+        .theme-sapphire .trophy-container { color: var(--sapphire-primary); }
+        .theme-sapphire .house-title { text-shadow: 0 0 30px var(--sapphire-primary); }
+        .theme-sapphire .score-value { color: var(--sapphire-primary); }
+
+        .theme-topaz .trophy-container { color: var(--topaz-primary); }
+        .theme-topaz .house-title { text-shadow: 0 0 30px var(--topaz-primary); }
+        .theme-topaz .score-value { color: var(--topaz-primary); }
+
+        /* --- Close Button --- */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+        .close-btn:hover { color: white; }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 600px) {
+            .winner-card { padding: 2rem; width: 85%; }
+            .house-title { font-size: 3rem; }
+            .trophy-container { font-size: 4rem; }
+            .score-badge { font-size: 1.2rem; padding: 0.5rem 1.5rem; }
+        }
