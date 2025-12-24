@@ -236,7 +236,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 900px;
+            min-width: 900px; /* Applies to screen only */
         }
 
         thead {
@@ -348,28 +348,35 @@
 
         /* --- PRINT STYLES --- */
         @media print {
-            body { background-color: white; font-size: 10pt; color: #000; }
+            /* 1. Page Margin & Size Fix */
+            @page { 
+                size: A4 portrait; 
+                margin: 10mm; /* Reduce default margins to maximize width */
+            }
+
+            body { background-color: white; font-size: 10pt; color: #000; -webkit-print-color-adjust: exact; }
             .container { width: 100%; max-width: 100%; padding: 0; margin: 0; }
             .action-bar, #loading-overlay { display: none !important; }
             
-            header { margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 15px; }
-            h1 { font-size: 1.8rem; color: #000; }
-            h2 { font-size: 1.2rem; color: #333; margin-bottom: 5px;}
+            header { margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            h1 { font-size: 1.5rem; color: #000; }
+            h2 { font-size: 1.1rem; color: #333; margin-bottom: 5px;}
             
             .meta-badge { border: 1px solid #ccc; color: #000 !important; background: transparent !important; }
             
             /* Scoreboard Print */
-            .scoreboard-section { gap: 10px; margin-bottom: 20px; }
+            .scoreboard-section { gap: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; }
             .score-card { 
                 box-shadow: none; 
                 border: 1px solid #ccc; 
-                padding: 10px; 
+                padding: 8px; 
+                flex: 1;
                 break-inside: avoid;
                 page-break-inside: avoid;
             }
-            .score-card .points { font-size: 1.8rem; color: #000 !important; }
-            .score-card h3 { color: #000; font-size: 1rem; }
-            .score-card .rank { background: transparent; border: 1px solid #ddd; }
+            .score-card .points { font-size: 1.4rem; color: #000 !important; margin: 5px 0;}
+            .score-card h3 { color: #000; font-size: 0.9rem; }
+            .score-card .rank { background: transparent; border: 1px solid #ddd; font-size: 0.75rem; padding: 2px 6px;}
             .score-card .icon-bg { display: none; }
             
             /* Winner Banner Print */
@@ -378,26 +385,55 @@
                 border: 2px solid #000; 
                 color: black; 
                 box-shadow: none; 
-                padding: 10px;
+                padding: 8px;
+                margin-bottom: 15px;
             }
             .winner-banner i { display: none; }
             .winner-banner strong { color: black !important; text-decoration: underline; }
 
-            /* Table Print */
-            .table-container { box-shadow: none; }
-            .table-responsive { overflow: visible; }
-            table { width: 100%; border: 1px solid #000; }
-            thead { background-color: #eee !important; color: black !important; -webkit-print-color-adjust: exact; }
-            th { border-bottom: 2px solid #000; padding: 8px; font-size: 0.85rem; }
-            td { border-bottom: 1px solid #ccc; padding: 6px 8px; font-size: 0.85rem; }
+            /* 2. Table Layout Fixes */
+            .table-container { box-shadow: none; margin-bottom: 20px;}
+            .table-responsive { overflow: visible; display: block; width: 100%; }
             
+            table { 
+                width: 100% !important; 
+                min-width: 0 !important; /* CRITICAL FIX: Override screen min-width */
+                border: 1px solid #000; 
+                table-layout: fixed; /* CRITICAL FIX: Respect percentages strictly */
+            }
+
+            thead { background-color: #eee !important; color: black !important; }
+            
+            th { 
+                border-bottom: 2px solid #000; 
+                padding: 6px 4px; /* Reduced padding */
+                font-size: 0.8rem; 
+                word-wrap: break-word;
+            }
+
+            td { 
+                border-bottom: 1px solid #ccc; 
+                padding: 4px 4px; /* Reduced padding */
+                font-size: 0.8rem; /* Smaller font for print */
+                overflow-wrap: break-word; /* Ensure long names break to next line */
+                word-wrap: break-word;
+                hyphens: auto;
+            }
+            
+            .winner-cell {
+                display: block; /* Stack vertically, removed flex to prevent width issues */
+            }
+
+            .winner-name { font-size: 0.8rem; margin-bottom: 2px; }
+
             /* Ensure colors print slightly for identification or fallback to borders */
             .house-badge-pill { 
                 border: 1px solid #999; 
                 color: black !important; 
                 background: white !important; 
                 font-weight: bold;
-                padding: 1px 4px;
+                padding: 0px 4px;
+                font-size: 0.7rem;
             }
             
             /* Add letter indicators for B/W printing clarity */
@@ -406,8 +442,9 @@
             .bg-Sapphire::after { content: " (S)"; font-size: 0.8em; }
             .bg-Topaz::after { content: " (T)"; font-size: 0.8em; }
 
-            .signatures { margin-top: 40px; }
+            .signatures { margin-top: 30px; }
             .sig-line { background-color: #000; }
+            .sig-block p { font-size: 0.9rem; }
 
             tr { break-inside: avoid; page-break-inside: avoid; }
         }
@@ -447,12 +484,12 @@
             <table id="resultsTable">
                 <thead>
                     <tr>
-                        <th style="width: 25%">Game / Event</th>
+                        <th style="width: 20%">Game / Event</th>
                         <th style="width: 10%">Type</th>
                         <th style="width: 8%">Class</th>
-                        <th style="width: 19%"><i class="fas fa-trophy" style="color: #f1c40f"></i> 1st Position</th>
-                        <th style="width: 19%"><i class="fas fa-medal" style="color: #95a5a6"></i> 2nd Position</th>
-                        <th style="width: 19%"><i class="fas fa-medal" style="color: #cd7f32"></i> 3rd Position</th>
+                        <th style="width: 20%"><i class="fas fa-trophy" style="color: #f1c40f"></i> 1st Position</th>
+                        <th style="width: 20%"><i class="fas fa-medal" style="color: #95a5a6"></i> 2nd Position</th>
+                        <th style="width: 22%"><i class="fas fa-medal" style="color: #cd7f32"></i> 3rd Position</th>
                     </tr>
                 </thead>
                 <tbody>
