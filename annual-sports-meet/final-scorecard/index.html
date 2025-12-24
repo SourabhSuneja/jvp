@@ -141,7 +141,7 @@
             transition: transform 0.2s ease;
         }
 
-        .score-card:hover { transform: translateY(-3px); }
+        .score-card:hover { /*transform: translateY(-3px); */}
 
         .score-card h3 { 
             margin: 0; 
@@ -262,7 +262,8 @@
         }
 
         tr:last-child td { border-bottom: none; }
-        tr:hover { background-color: #f8fcfd; }
+        tr:not(:first-child):hover { background-color: #f8fcfd; }
+
 
         .game-col { font-weight: 600; color: var(--dark); font-family: 'Poppins', sans-serif;}
         
