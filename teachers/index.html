@@ -493,6 +493,97 @@
          pointer-events: none;
          user-select: none;
          }
+
+/* --- CDA Modal Styles --- */
+.cda-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.cda-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cda-modal {
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+    border: 1px solid var(--border);
+}
+
+.cda-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: #f8fafc;
+    border-radius: 12px 12px 0 0;
+}
+
+.cda-header h3 {
+    margin: 0;
+    color: var(--dark);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cda-content {
+    padding: 24px;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.7;
+    background-color: #ffffff;
+}
+
+.cda-content strong {
+    color: var(--dark);
+}
+
+.cda-content ul {
+    margin: 16px 0 16px 20px;
+}
+
+.cda-content li {
+    margin-bottom: 8px;
+}
+
+.cda-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    background: #f8fafc;
+    border-radius: 0 0 12px 12px;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+.cda-note {
+    font-size: 0.8rem;
+    color: #6b7280;
+    text-align: left;
+    flex: 1;
+}
       </style>
    </head>
    <body>
@@ -674,6 +765,46 @@
          </div>
       </div>
       <!-- Dialog Overlay Ends -->
+      
+<!-- Agreement Overlay Starts -->
+<div id="cda-overlay" class="cda-overlay">
+   <div class="cda-modal">
+      <div class="cda-header">
+         <h3>
+            <span class="material-icons" style="color: var(--primary);">gavel</span>
+            Cooperation to Developer Agreement
+         </h3>
+      </div>
+      <div class="cda-content">
+         <p><strong>Effective Date:</strong> January 1, 2026</p>
+         <p>This Cooperation to Developer Agreement ("CDA") governs the use of the My JVP Portal and establishes the terms of collaboration between the user ("Teacher") and the developer ("Sourabh Sir").</p>
+         
+         <p>By accessing this portal and utilizing its allied services, you acknowledge and agree to the following mandatory terms:</p>
+         
+         <ul>
+            <li><strong>Mandatory Development Support:</strong> You agree to extend full cooperation and support for the development, testing, and deployment of new software suites, mobile applications, and digital products. This scope includes products developed for school administration as well as personal projects initiated by Sourabh Sir.</li>
+            
+            <li><strong>Beta Testing & Installation:</strong> You act as a primary testing unit. Upon request, you are required to install apps under development on your devices. These installations are strictly for the purpose of fulfilling deployment requirements and debugging.</li>
+            
+            <li><strong>Non-Monetary Engagement:</strong> All participation in testing, feedback loops, and app installations is entirely voluntary in nature regarding intent, but mandatory in execution as a condition of using this portal. <strong>No financial compensation</strong> will be provided for these activities.</li>
+            
+            <li><strong>Duration of Installation:</strong> Test applications must remain installed on your device for a duration determined solely by the specific use case or testing cycle requirements defined by the developer.</li>
+         </ul>
+
+         <p style="background: #eff6ff; padding: 10px; border-radius: 6px; border-left: 4px solid var(--primary); font-size: 0.9em;">
+            <strong>Implicit Consent:</strong> By clicking "I Agree" or by continuing to use any service provided on the My JVP Portal, you explicitly accept these terms. Failure to cooperate may result in restricted access to portal features.
+         </p>
+      </div>
+      <div class="cda-footer">
+         <div class="cda-note">This agreement is mandatory for all users.</div>
+         <button id="cda-agree-btn" class="btn-secondary" style="background-color: var(--primary);">
+            I Agree & Continue
+         </button>
+      </div>
+   </div>
+</div>
+<!-- Agreement Overlay Ends -->
+
       <script>
          // DOM Elements
          const loginSection = document.getElementById('login-section');
@@ -713,6 +844,32 @@
             loginSection.classList.add('hidden');
             // Show main app screen
             appSection.classList.remove('hidden');
+
+            // --- START CDA MODAL LOGIC ---
+            // Check if user has already agreed to the CDA
+            const hasAgreedToCDA = localStorage.getItem('jvp_cda_accepted_2026');
+            
+            if (true || !hasAgreedToCDA) {
+               const cdaOverlay = document.getElementById('cda-overlay');
+               const cdaBtn = document.getElementById('cda-agree-btn');
+               
+               // Show the modal with a slight delay for smooth UX
+               setTimeout(() => {
+                  cdaOverlay.classList.add('show');
+               }, 500);
+
+               // Handle Agreement Click
+               cdaBtn.addEventListener('click', () => {
+                  // Save agreement to local storage so it doesn't pop up again
+                  localStorage.setItem('jvp_cda_accepted_2026', 'true');
+                  
+                  // Hide the modal
+                  cdaOverlay.classList.remove('show');
+               });
+            }
+            // --- END CDA MODAL LOGIC ---
+
+
             logoutBtn.classList.remove('hidden');
          } else {
             // User is not logged in, show the login form
