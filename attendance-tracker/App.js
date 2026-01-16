@@ -47,6 +47,8 @@ const COLORS = {
   warning: '#f59e0b',
   holiday: '#8b5cf6',
   border: '#334155',
+  leave: '#f59e0b',
+  medical: '#0ea5e9',
 };
 
 // --- HELPER FUNCTIONS ---
@@ -88,17 +90,40 @@ const Header = ({ title, subtitle, rightActions }) => (
   </View>
 );
 
-const StudentRow = ({ student, status, onToggle, isHoliday }) => {
+const StudentRow = ({ student, status, reason, onToggle, onEditReason, isHoliday }) => {
   const isPresent = status === 'PRESENT';
+  const isAbsent = status === 'ABSENT';
+  const isLeave = status === 'LEAVE';
+  const isMedical = status === 'MEDICAL LEAVE';
   const isHolidayStatus = status === 'HOLIDAY';
+
+  // Base style
+  let rowStyle = [styles.studentRow]; // Start as an array with base style
+  let badgeStyle = styles.badgeSuccess; // Default Present
+  let statusLabel = 'P';
+
+  if (isAbsent) {
+    // We push the absent style modification to the array
+    rowStyle.push(styles.studentRowAbsent); 
+    badgeStyle = styles.badgeDanger;
+    statusLabel = 'A';
+  } else if (isLeave) {
+    // For dynamic colors, we push a new object
+    rowStyle.push({ borderColor: COLORS.leave, backgroundColor: 'rgba(245, 158, 11, 0.1)' });
+    badgeStyle = { backgroundColor: COLORS.leave };
+    statusLabel = 'L';
+  } else if (isMedical) {
+    rowStyle.push({ borderColor: COLORS.medical, backgroundColor: 'rgba(14, 165, 233, 0.1)' });
+    badgeStyle = { backgroundColor: COLORS.medical };
+    statusLabel = 'ML';
+  } else if (isHolidayStatus) {
+    rowStyle.push(styles.studentRowHoliday);
+    badgeStyle = styles.badgeHoliday;
+  }
 
   return (
     <TouchableOpacity 
-      style={[
-        styles.studentRow, 
-        !isPresent && !isHolidayStatus && styles.studentRowAbsent,
-        isHolidayStatus && styles.studentRowHoliday
-      ]} 
+      style={rowStyle} // Pass the array here
       onPress={() => !isHoliday && onToggle(student.id)}
       activeOpacity={isHoliday ? 1 : 0.7}
     >
@@ -106,18 +131,30 @@ const StudentRow = ({ student, status, onToggle, isHoliday }) => {
         <View style={styles.rollBadge}>
           <Text style={styles.rollText}>{student.roll_number}</Text>
         </View>
-        <Text style={styles.studentName}>{student.name}</Text>
+        <View style={{flex: 1}}>
+          <Text style={styles.studentName}>{student.name}</Text>
+          {/* Show Reason if exists */}
+          {(reason && !isPresent && !isHolidayStatus) && (
+            <Text style={{color: COLORS.subText, fontSize: 12, marginTop: 2}}>Note: {reason}</Text>
+          )}
+        </View>
       </View>
       
-      <View style={[
-        styles.statusBadge, 
-        isHolidayStatus ? styles.badgeHoliday : (isPresent ? styles.badgeSuccess : styles.badgeDanger)
-      ]}>
-        {isHolidayStatus ? (
-          <Ionicons name="airplane" size={16} color="#fff" />
-        ) : (
-          <Text style={styles.statusText}>{isPresent ? 'P' : 'A'}</Text>
+      <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
+        {/* Edit Reason Button (Only for L/ML/A) */}
+        {(!isPresent && !isHolidayStatus) && (
+          <TouchableOpacity onPress={() => onEditReason(student)} style={{padding: 5}}>
+            <Ionicons name="create-outline" size={20} color={COLORS.subText} />
+          </TouchableOpacity>
         )}
+
+        <View style={[styles.statusBadge, badgeStyle]}>
+          {isHolidayStatus ? (
+            <Ionicons name="airplane" size={16} color="#fff" />
+          ) : (
+            <Text style={styles.statusText}>{statusLabel}</Text>
+          )}
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -153,7 +190,8 @@ const ClassSelector = ({ classes, onSelectClass, onLogout }) => (
 // Dashboard Modal Component
 const DashboardModal = ({ visible, onClose, assignedClass, students }) => {
   const [loading, setLoading] = useState(false);
-  const [stats, setStats] = useState({ studentStats: [], totalP: 0, totalA: 0, totalH: 0 });
+  // Updated state to include Total Leave (tL) and Total Medical (tML)
+  const [stats, setStats] = useState({ studentStats: [], totalP: 0, totalA: 0, totalH: 0, totalL: 0, totalML: 0 });
   const [monthOffset, setMonthOffset] = useState(0);
 
   const currentViewDate = useMemo(() => {
@@ -184,29 +222,42 @@ const DashboardModal = ({ visible, onClose, assignedClass, students }) => {
       if (error) throw error;
 
       const sMap = {};
-      let tP = 0, tA = 0, tH = 0;
+      let tP = 0, tA = 0, tH = 0, tL = 0, tML = 0;
 
+      // Initialize counters for all students
       students.forEach(s => {
-        sMap[s.id] = { P: 0, A: 0, H: 0, name: s.name, roll: s.roll_number };
+        sMap[s.id] = { P: 0, A: 0, H: 0, L: 0, ML: 0, name: s.name, roll: s.roll_number };
       });
 
       data.forEach(record => {
         if (sMap[record.student_id]) {
-          if (record.status === 'PRESENT') {
-            sMap[record.student_id].P++;
-            tP++;
-          } else if (record.status === 'ABSENT') {
-            sMap[record.student_id].A++;
-            tA++;
-          } else if (record.status === 'HOLIDAY') {
-            sMap[record.student_id].H++;
-            tH++;
+          switch (record.status) {
+            case 'PRESENT':
+              sMap[record.student_id].P++;
+              tP++;
+              break;
+            case 'ABSENT':
+              sMap[record.student_id].A++;
+              tA++;
+              break;
+            case 'HOLIDAY':
+              sMap[record.student_id].H++;
+              tH++;
+              break;
+            case 'LEAVE':
+              sMap[record.student_id].L++;
+              tL++;
+              break;
+            case 'MEDICAL LEAVE':
+              sMap[record.student_id].ML++;
+              tML++;
+              break;
           }
         }
       });
 
       const sortedStats = Object.values(sMap).sort((a, b) => a.roll - b.roll);
-      setStats({ studentStats: sortedStats, totalP: tP, totalA: tA, totalH: tH });
+      setStats({ studentStats: sortedStats, totalP: tP, totalA: tA, totalH: tH, totalL: tL, totalML: tML });
 
     } catch (err) {
       Alert.alert('Error', 'Failed to load stats');
@@ -220,6 +271,7 @@ const DashboardModal = ({ visible, onClose, assignedClass, students }) => {
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
       <View style={styles.modalContainer}>
+        {/* Modal Header */}
         <View style={styles.modalHeader}>
           <Text style={styles.modalTitle}>Attendance Dashboard</Text>
           <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
@@ -227,6 +279,7 @@ const DashboardModal = ({ visible, onClose, assignedClass, students }) => {
           </TouchableOpacity>
         </View>
 
+        {/* Month Selector */}
         <View style={styles.monthSelector}>
           <TouchableOpacity onPress={() => setMonthOffset(p => p - 1)}>
              <Ionicons name="chevron-back" size={24} color={COLORS.primary} />
@@ -241,14 +294,28 @@ const DashboardModal = ({ visible, onClose, assignedClass, students }) => {
           <ActivityIndicator size="large" color={COLORS.primary} style={{ marginTop: 50 }} />
         ) : (
           <ScrollView contentContainerStyle={{ padding: 20 }}>
-            <View style={styles.statsGrid}>
-              <View style={[styles.statCard, { backgroundColor: 'rgba(16, 185, 129, 0.15)' }]}>
+            
+            {/* Top Stats Grid - 2x2 Layout */}
+            <View style={{flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 20}}>
+              {/* Present */}
+              <View style={[styles.statCard, { backgroundColor: 'rgba(16, 185, 129, 0.15)', width: '48%' }]}>
                 <Text style={[styles.statValue, { color: COLORS.success }]}>{stats.totalP}</Text>
-                <Text style={styles.statLabel}>Total Presents</Text>
+                <Text style={styles.statLabel}>Present</Text>
               </View>
-              <View style={[styles.statCard, { backgroundColor: 'rgba(239, 68, 68, 0.15)' }]}>
+              {/* Absent */}
+              <View style={[styles.statCard, { backgroundColor: 'rgba(239, 68, 68, 0.15)', width: '48%' }]}>
                 <Text style={[styles.statValue, { color: COLORS.danger }]}>{stats.totalA}</Text>
-                <Text style={styles.statLabel}>Total Absents</Text>
+                <Text style={styles.statLabel}>Absent</Text>
+              </View>
+              {/* Leave */}
+              <View style={[styles.statCard, { backgroundColor: 'rgba(245, 158, 11, 0.15)', width: '48%' }]}>
+                <Text style={[styles.statValue, { color: COLORS.leave }]}>{stats.totalL}</Text>
+                <Text style={styles.statLabel}>Leave (L)</Text>
+              </View>
+              {/* Medical */}
+              <View style={[styles.statCard, { backgroundColor: 'rgba(14, 165, 233, 0.15)', width: '48%' }]}>
+                <Text style={[styles.statValue, { color: COLORS.medical }]}>{stats.totalML}</Text>
+                <Text style={styles.statLabel}>Medical (ML)</Text>
               </View>
             </View>
 
@@ -258,24 +325,81 @@ const DashboardModal = ({ visible, onClose, assignedClass, students }) => {
               <View key={idx} style={styles.statRow}>
                 <View style={{flex: 1}}>
                   <Text style={styles.statRowName}>{item.roll}. {item.name}</Text>
+                  {/* Progress Bar (Percentage of presence relative to total class days minus holidays) */}
                   <View style={styles.progressBarBg}>
                     <View style={{
-                      width: `${(item.P / (item.P + item.A + 0.1)) * 100}%`, 
+                      width: `${(item.P / (item.P + item.A + item.L + item.ML + 0.001)) * 100}%`, 
                       height: '100%', 
                       backgroundColor: COLORS.success, 
                       borderRadius: 2
                     }} />
                   </View>
                 </View>
+                
+                {/* Individual Breakdown */}
                 <View style={styles.statRowNumbers}>
-                  <Text style={{color: COLORS.success, fontWeight: 'bold'}}>{item.P} P</Text>
-                  <Text style={{color: COLORS.subText}}> | </Text>
-                  <Text style={{color: COLORS.danger, fontWeight: 'bold'}}>{item.A} A</Text>
+                  <Text style={{color: COLORS.success, fontWeight: 'bold'}}>{item.P}</Text>
+                  <Text style={{color: COLORS.subText, fontSize: 10}}> P | </Text>
+                  
+                  <Text style={{color: COLORS.danger, fontWeight: 'bold'}}>{item.A}</Text>
+                  <Text style={{color: COLORS.subText, fontSize: 10}}> A </Text>
+
+                  {/* Only show L or ML if > 0 to keep UI clean */}
+                  {item.L > 0 && (
+                    <>
+                      <Text style={{color: COLORS.subText, fontSize: 10}}>| </Text>
+                      <Text style={{color: COLORS.leave, fontWeight: 'bold'}}>{item.L}</Text>
+                      <Text style={{color: COLORS.subText, fontSize: 10}}> L</Text>
+                    </>
+                  )}
+                  {item.ML > 0 && (
+                    <>
+                      <Text style={{color: COLORS.subText, fontSize: 10}}>| </Text>
+                      <Text style={{color: COLORS.medical, fontWeight: 'bold'}}>{item.ML}</Text>
+                      <Text style={{color: COLORS.subText, fontSize: 10}}> M</Text>
+                    </>
+                  )}
                 </View>
               </View>
             ))}
           </ScrollView>
         )}
+      </View>
+    </Modal>
+  );
+};
+
+const ReasonModal = ({ visible, initialValue, onSave, onClose, title }) => {
+  const [text, setText] = useState(initialValue);
+
+  // Update internal text when initialValue changes (modal opens)
+  useEffect(() => { setText(initialValue || ''); }, [initialValue, visible]);
+
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 20}}>
+        <View style={{backgroundColor: COLORS.card, padding: 20, borderRadius: 12, borderWidth: 1, borderColor: COLORS.border}}>
+          <Text style={{color: COLORS.text, fontSize: 18, fontWeight: 'bold', marginBottom: 15}}>{title}</Text>
+          <TextInput
+            style={[styles.input, {marginBottom: 20}]}
+            placeholder="Enter reason (e.g. Fever, Wedding)"
+            placeholderTextColor={COLORS.subText}
+            value={text}
+            onChangeText={setText}
+            autoFocus
+          />
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end', gap: 10}}>
+            <TouchableOpacity onPress={onClose} style={{padding: 10}}>
+              <Text style={{color: COLORS.subText}}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              onPress={() => onSave(text)} 
+              style={{backgroundColor: COLORS.primary, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 8}}
+            >
+              <Text style={{color: '#fff', fontWeight: 'bold'}}>Save</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </Modal>
   );
@@ -303,6 +427,10 @@ export default function App() {
   const [submitting, setSubmitting] = useState(false);
   const [isHoliday, setIsHoliday] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [reasons, setReasons] = useState({}); // Stores student specific reasons
+  const [holidayReason, setHolidayReason] = useState(''); // Stores holiday reason
+  const [modalVisible, setModalVisible] = useState(false);
+  const [editingStudent, setEditingStudent] = useState(null);
 
   // Login Inputs
   const [email, setEmail] = useState('');
@@ -438,28 +566,48 @@ export default function App() {
       const dateStr = formatDate(selectedDate);
       const { data: attData, error: aError } = await supabase
         .from('attendance')
-        .select('student_id, status')
+        // UPDATED: Select 'extra' column
+        .select('student_id, status, extra') 
         .eq('class', assignedClass)
         .eq('date', dateStr);
 
       if (aError) throw aError;
 
       const attMap = {};
+      const reasonMap = {}; // Temp map for reasons
       let holidayFlag = false;
+      let fetchedHolidayReason = '';
 
-      // Check if any record says HOLIDAY
       const isRecordHoliday = attData.some(r => r.status === 'HOLIDAY');
       
       if (isRecordHoliday) {
         holidayFlag = true;
+        // Try to find a holiday reason from the first record that has one
+        const recWithReason = attData.find(r => r.extra && r.extra.reason);
+        if (recWithReason) fetchedHolidayReason = recWithReason.extra.reason;
+        
         studentsData.forEach(s => attMap[s.id] = 'HOLIDAY');
       } else {
         studentsData.forEach(s => attMap[s.id] = 'PRESENT');
-        attData.forEach(r => attMap[r.student_id] = r.status);
+        attData.forEach(r => {
+          attMap[r.student_id] = r.status;
+          // Extract reason if exists
+          if (r.extra && r.extra.reason) {
+            reasonMap[r.student_id] = r.extra.reason;
+          }
+        });
       }
 
       setAttendance(attMap);
+      setReasons(reasonMap); // Set reasons state
       setIsHoliday(holidayFlag);
+      
+      // If it's a Sunday and no reason saved, default to "Sunday"
+      if (selectedDate.getDay() === 0 && !fetchedHolidayReason) {
+         setHolidayReason('Sunday');
+      } else {
+         setHolidayReason(fetchedHolidayReason);
+      }
 
     } catch (err) {
       Alert.alert('Error', 'Failed to fetch class data: ' + err.message);
@@ -471,10 +619,15 @@ export default function App() {
   // --- LOGIC: Attendance Operations ---
   const toggleAttendance = (studentId) => {
     if (isHoliday) return;
-    setAttendance(prev => ({
-      ...prev,
-      [studentId]: prev[studentId] === 'PRESENT' ? 'ABSENT' : 'PRESENT'
-    }));
+    
+    const STATUS_CYCLE = ['PRESENT', 'ABSENT', 'LEAVE', 'MEDICAL LEAVE'];
+    
+    setAttendance(prev => {
+      const currentStatus = prev[studentId] || 'PRESENT';
+      const currentIndex = STATUS_CYCLE.indexOf(currentStatus);
+      const nextIndex = (currentIndex + 1) % STATUS_CYCLE.length;
+      return { ...prev, [studentId]: STATUS_CYCLE[nextIndex] };
+    });
   };
 
   const toggleHolidayMode = (value) => {
@@ -488,18 +641,45 @@ export default function App() {
     });
   };
 
+  const handleEditReason = (student) => {
+    setEditingStudent(student);
+    setModalVisible(true);
+  };
+
+  const saveReason = (text) => {
+    if (editingStudent) {
+      setReasons(prev => ({ ...prev, [editingStudent.id]: text }));
+    }
+    setModalVisible(false);
+    setEditingStudent(null);
+  };
+
   const submitAttendance = async () => {
     setSubmitting(true);
     try {
       const dateStr = formatDate(selectedDate);
       
-      const updates = students.map(student => ({
-        student_id: student.id,
-        class: assignedClass,
-        date: dateStr,
-        status: isHoliday ? 'HOLIDAY' : (attendance[student.id] || 'PRESENT'),
-        updated_at: new Date()
-      }));
+      const updates = students.map(student => {
+        const status = isHoliday ? 'HOLIDAY' : (attendance[student.id] || 'PRESENT');
+        
+        // Prepare Extra Data
+        let extraData = null;
+        if (isHoliday && holidayReason) {
+            extraData = { reason: holidayReason };
+        } else if (!isHoliday && (status === 'LEAVE' || status === 'MEDICAL LEAVE' || status === 'ABSENT')) {
+            // We save reason for Absent too if they typed one, though mostly for L/ML
+            if (reasons[student.id]) extraData = { reason: reasons[student.id] };
+        }
+
+        return {
+          student_id: student.id,
+          class: assignedClass,
+          date: dateStr,
+          status: status,
+          extra: extraData, // New Column
+          updated_at: new Date()
+        };
+      });
 
       const { error } = await supabase
         .from('attendance')
@@ -526,19 +706,43 @@ export default function App() {
       Alert.alert('Info', 'It is a holiday!');
       return;
     }
-    const absentees = students.filter(s => attendance[s.id] === 'ABSENT');
+
+    // Filter for Absent, Leave, or Medical Leave
+    const nonPresentStudents = students.filter(s => {
+      const status = attendance[s.id];
+      return status === 'ABSENT' || status === 'LEAVE' || status === 'MEDICAL LEAVE';
+    });
+    
     const dateStr = getDayName(selectedDate);
     
-    if (absentees.length === 0) {
-      Alert.alert('Good News', 'No absentees to share!');
+    if (nonPresentStudents.length === 0) {
+      Alert.alert('Good News', 'Everyone is present!');
       return;
     }
 
-    let message = `*Absentees - Class ${assignedClass}*\n📅 ${dateStr}\n\n`;
-    absentees.forEach((s, index) => {
-      message += `${index + 1}. ${s.name} (${s.roll_number})\n`;
+    let message = `*Attendance Report - Class ${assignedClass}*\n📅 ${dateStr}\n\n`;
+    
+    nonPresentStudents.forEach((s, index) => {
+      const status = attendance[s.id];
+      let suffix = ''; // Default for ABSENT
+      
+      if (status === 'LEAVE') suffix = ' (L)';
+      else if (status === 'MEDICAL LEAVE') suffix = ' (ML)';
+      
+      // Check if there is a reason note (optional, but helpful)
+      const reasonNote = reasons[s.id] ? ` - ${reasons[s.id]}` : '';
+
+      message += `${index + 1}. ${s.name} (${s.roll_number})${suffix}${reasonNote}\n`;
     });
-    message += `\nTotal Absent: ${absentees.length}`;
+
+    const totalA = nonPresentStudents.filter(s => attendance[s.id] === 'ABSENT').length;
+    const totalL = nonPresentStudents.filter(s => attendance[s.id] === 'LEAVE').length;
+    const totalML = nonPresentStudents.filter(s => attendance[s.id] === 'MEDICAL LEAVE').length;
+
+    message += `\nSummary:`;
+    if(totalA > 0) message += `\nAbsent: ${totalA}`;
+    if(totalL > 0) message += `\nLeave: ${totalL}`;
+    if(totalML > 0) message += `\nMedical: ${totalML}`;
 
     try {
       await Share.share({ message });
@@ -689,6 +893,18 @@ export default function App() {
               />
             </View>
           </View>
+          {/* Holiday Reason Input (Only visible if Holiday is true) */}
+          {isHoliday && (
+             <View style={{backgroundColor: COLORS.card, paddingHorizontal: 20, paddingBottom: 10}}>
+                <TextInput 
+                  style={[styles.input, {height: 40, marginBottom: 0}]}
+                  placeholder="Reason for Holiday (e.g. Sunday, Festival)"
+                  placeholderTextColor={COLORS.subText}
+                  value={holidayReason}
+                  onChangeText={setHolidayReason}
+                />
+             </View>
+          )}
         </View>
 
         {/* Main List */}
@@ -705,7 +921,9 @@ export default function App() {
                 <StudentRow 
                   student={item} 
                   status={attendance[item.id]} 
+                  reason={reasons[item.id]} // Pass reason
                   onToggle={toggleAttendance}
+                  onEditReason={handleEditReason} // Pass handler
                   isHoliday={isHoliday}
                 />
               )}
@@ -742,6 +960,15 @@ export default function App() {
           onClose={() => setShowDashboard(false)} 
           assignedClass={assignedClass}
           students={students}
+        />
+
+        {/* Reason Entry Modal */}
+        <ReasonModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          onSave={saveReason}
+          initialValue={editingStudent ? reasons[editingStudent.id] : ''}
+          title={editingStudent ? `Note for ${editingStudent.name}` : 'Reason'}
         />
       </View>
     </SafeAreaView>
