@@ -854,7 +854,7 @@
             // Check if user has already agreed to the CDA
             const hasAgreedToCDA = localStorage.getItem('jvp_cda_accepted_2026');
             
-            if (true || !hasAgreedToCDA) {
+            if (!hasAgreedToCDA) {
                const cdaOverlay = document.getElementById('cda-overlay');
                const cdaBtn = document.getElementById('cda-agree-btn');
                
