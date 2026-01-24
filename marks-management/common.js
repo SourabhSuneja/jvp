@@ -324,7 +324,7 @@ const examMarksConfig = [
     subjects: ["Fine Arts"],
     exams: {
       "Term-1 (Theory)": 30,
-      "Term-1 (Practical)": 70
+      "Term-1 (Practical)": 50
     }
   },
   // Class 12 Starts
