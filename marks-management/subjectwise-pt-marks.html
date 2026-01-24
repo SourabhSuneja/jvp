@@ -353,10 +353,14 @@
                  // Generate roll number
                  const serialNum = (idx + 1).toString().padStart(2, '0');
                  const rollNo = `${classNumber}${sectionDigit}${serialNum}`;
+
+                 // Default (passed roll numbers)
+                 // Get roll number directly from DB view (new implementation instead of generating roll numbers by serialization)
+                 const studentRoll = filteredMarks.find(m => m.student === student)?.roll_number || '-';
                  
                  // Add roll number cell
                  const rollCell = document.createElement('td');
-                 rollCell.textContent = rollNo;
+                 rollCell.textContent = studentRoll;
                  row.appendChild(rollCell);
                  
                  // Add name cell
@@ -381,6 +385,8 @@
                      }
                  } else {
                      mark20Cell.textContent = '-';
+                     // Temporary change
+                     mark20Cell.textContent = '';
                  }
                  row.appendChild(mark20Cell);
                  
@@ -395,6 +401,8 @@
                      }
                  } else {
                      mark10Cell.textContent = '-';
+                     // Temporary change
+                     mark10Cell.textContent = '';
                  }
                  row.appendChild(mark10Cell);
                  
