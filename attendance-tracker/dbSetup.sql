@@ -4,6 +4,12 @@ CREATE TABLE attendance_admins (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE POLICY "Enable read access for all authenticated users"
+ON attendance_admins
+FOR SELECT
+TO authenticated
+USING (true);
+
 create table attendance (
   id uuid not null default gen_random_uuid (),
   student_id uuid null,
