@@ -493,7 +493,7 @@
              showLoading();
              
              try {
-                 const isAuthenticated = await checkAuth();
+                 const isAuthenticated = await checkAuthWithToken();
                  
                  if (isAuthenticated) {
                      // Load all marks data for the grade specified in the URL params
