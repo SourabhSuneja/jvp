@@ -39,6 +39,54 @@ async function checkAuth() {
    }
 }
 
+// check authentication status with URL token param check
+async function checkAuthWithToken() {
+    try {
+        // 1. Check if tokens are passed via URL (e.g., from React Native Webview)
+        const params = new URLSearchParams(window.location.search);
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token'); // Optional, depending on your app logic
+
+        if (accessToken) {
+            // Manually set the session using the tokens from URL
+            const { data, error } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken || accessToken // Fallback if no refresh token provided
+            });
+
+            if (error) {
+                console.warn('Error setting session from URL tokens:', error);
+            }
+        }
+
+        // 2. Proceed with standard session check
+        const {
+            data: {
+                session
+            }
+        } = await supabase.auth.getSession();
+
+        if (session && session.user) {
+            // User is signed in, fetch the user data
+            window.userId = session.user.id;
+
+            // Wait for fetchUserData to resolve or reject
+            // window.userDetails = await fetchUserData(userId, 'students');
+
+            // authentication successful
+            return true;
+
+        } else {
+            // User is not signed in
+            return false;
+        }
+    } catch (error) {
+        console.error("Auth check failed:", error);
+        // User is registered but user details are missing or other error
+        return false;
+    }
+}
+
 // sign in user
 async function signInUser(email, password) {
    try {
@@ -411,6 +459,7 @@ async function createUserWithoutSession(email, password, metadata = {}) {
 
 // expose all methods globally by attaching them to the window object
 window.checkAuth = checkAuth;
+window.checkAuthWithToken = checkAuthWithToken;
 window.signInUser = signInUser;
 window.signOutUser = signOutUser;
 window.signUpUser = signUpUser;
