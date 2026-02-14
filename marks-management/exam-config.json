@@ -1,0 +1,143 @@
+{
+  "OPTIONAL_SUBJECTS": {
+    "11-HUM": ["Applied Maths", "Maths", "P.E.", "I.P.", "Economics", "Fine Arts", "Psychology"],
+    "11-COM": ["Applied Maths", "Maths", "P.E.", "I.P.", "Fine Arts", "Psychology"],
+    "11-SCI": ["Biology", "Maths", "P.E.", "I.P.", "Geography", "Economics", "Fine Arts", "Psychology"],
+    "12-HUM": ["Maths", "P.E.", "I.P.", "Economics"],
+    "12-COM": ["Maths", "P.E.", "I.P."],
+    "12-SCI": ["Biology", "Maths", "P.E.", "I.P.", "Geography", "Economics"]
+  },
+  "COMMON_EXAMS": [
+    {"name": "PT-1", "mm": 20},
+    {"name": "PT-2", "mm": 20},
+    {"name": "Term-1 (Objective)", "mm": 0},
+    {"name": "Term-1 (Theory)", "mm": 0},
+    {"name": "Term-1 (SEA)", "mm": 0},
+    {"name": "Term-1 (PP)", "mm": 0},
+    {"name": "Term-1 (Practical)", "mm": 0},
+    {"name": "Term-1 (Internal)", "mm": 0},
+    {"name": "PT-3", "mm": 20},
+    {"name": "PT-4", "mm": 20},
+    {"name": "Pre-Term Test 1", "mm": 15},
+    {"name": "Pre-Term Test 2", "mm": 15},
+    {"name": "Enthusiasm (July)", "mm": 300},
+    {"name": "Enthusiasm (August)", "mm": 300}
+  ],
+  "EXAM_MARKS_CONFIG": [
+    {
+      "classes": [1, 2],
+      "subjects": ["English", "Hindi", "EVS", "Maths"],
+      "exams": {
+        "Term-1 (Objective)": 20,
+        "Term-1 (Theory)": 50,
+        "Term-1 (SEA)": 5,
+        "Term-1 (PP)": 5
+      }
+    },
+    {
+      "classes": [1, 2],
+      "subjects": ["GK", "Computer"],
+      "exams": {
+        "Term-1 (Theory)": 30
+      }
+    },
+    {
+      "classes": [3, 4, 5],
+      "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
+      "exams": {
+        "Term-1 (Objective)": 20,
+        "Term-1 (Theory)": 50,
+        "Term-1 (SEA)": 5,
+        "Term-1 (PP)": 5
+      }
+    },
+    {
+      "classes": [3, 4, 5],
+      "subjects": ["GK", "Computer"],
+      "exams": {
+        "Term-1 (Theory)": 30
+      }
+    },
+    {
+      "classes": [6, 7, 8],
+      "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
+      "exams": {
+        "Term-1 (Objective)": 20,
+        "Term-1 (Theory)": 60
+      }
+    },
+    {
+      "classes": [6, 7, 8],
+      "subjects": ["GK", "Computer", "Data Science"],
+      "exams": {
+        "Term-1 (Theory)": 30
+      }
+    },
+    {
+      "classes": [6, 7, 8],
+      "subjects": ["Sanskrit"],
+      "exams": {
+        "Term-1 (Theory)": 80
+      }
+    },
+    {
+      "classes": [9, 10],
+      "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
+      "exams": {
+        "Term-1 (Theory)": 80
+      }
+    },
+    {
+      "classes": [9, 10],
+      "subjects": ["Data Science"],
+      "exams": {
+        "Term-1 (Theory)": 50,
+        "Term-1 (Practical)": 30
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
+      "exams": {
+        "Term-1 (Theory)": 70,
+        "Term-1 (Internal)": 10
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
+      "exams": {
+        "Term-1 (Theory)": 80
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["Fine Arts"],
+      "exams": {
+        "Term-1 (Theory)": 30,
+        "Term-1 (Practical)": 50
+      }
+    },
+    {
+      "classes": [12],
+      "subjects": ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
+      "exams": {
+        "Term-1 (Theory)": 70
+      }
+    },
+    {
+      "classes": [12],
+      "subjects": ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
+      "exams": {
+        "Term-1 (Theory)": 80
+      }
+    },
+    {
+      "classes": [9],
+      "subjects": ["Data Science"],
+      "exams": {
+        "Term-2 (Theory)": 50
+      }
+    }
+  ]
+}
