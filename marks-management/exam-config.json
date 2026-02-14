@@ -97,8 +97,15 @@
       "classes": [9, 10],
       "subjects": ["Data Science"],
       "exams": {
-        "Term-1 (Theory)": 500,
+        "Term-1 (Theory)": 50,
         "Term-1 (Practical)": 30
+      }
+    },
+    {
+      "classes": [9],
+      "subjects": ["Data Science"],
+      "exams": {
+        "Term-2 (Theory)": 50
       }
     },
     {
@@ -136,13 +143,6 @@
       "subjects": ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
       "exams": {
         "Term-1 (Theory)": 80
-      }
-    },
-    {
-      "classes": [9],
-      "subjects": ["Data Science"],
-      "exams": {
-        "Term-2 (Theory)": 50
       }
     }
   ]
