@@ -92,6 +92,12 @@ const exams = [
              {'name': 'Term-1 (PP)', 'mm': 0},
              {'name': 'Term-1 (Practical)', 'mm': 0},
              {'name': 'Term-1 (Internal)', 'mm': 0},
+             {'name': 'Term-2 (Objective)', 'mm': 0},
+             {'name': 'Term-2 (Theory)', 'mm': 0},
+             {'name': 'Term-2 (SEA)', 'mm': 0},
+             {'name': 'Term-2 (PP)', 'mm': 0},
+             {'name': 'Term-2 (Practical)', 'mm': 0},
+             {'name': 'Term-2 (Internal)', 'mm': 0},
              {'name': 'PT-3', 'mm': 20},
              {'name': 'PT-4', 'mm': 20},
              {'name': 'Pre-Term Test 1', 'mm': 15},
@@ -302,6 +308,13 @@ const examMarksConfig = [
     exams: {
       "Term-1 (Theory)": 50,
       "Term-1 (Practical)": 30
+    }
+  },
+  {
+    classes: [9],
+    subjects: ["Data Science"],
+    exams: {
+      "Term-2 (Theory)": 50
     }
   },
   // Class 11 Starts
