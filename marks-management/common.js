@@ -237,126 +237,126 @@ function logActivity(visitor, action, extra = null) {
 
 
 
-// Configuration structure SPECIFICALLY for handling Term-1 Exam components
+// Configuration structure SPECIFICALLY for handling Term Exam components
 const examMarksConfig = [
-  {
-    classes: [1, 2],
-    subjects: ["English", "Hindi", "EVS", "Maths"],
-    exams: {
-      "Term-1 (Objective)": 20,
-      "Term-1 (Theory)": 50,
-      "Term-1 (SEA)": 5,
-      "Term-1 (PP)": 5
+    {
+      "classes": [1, 2],
+      "subjects": ["English", "Hindi", "EVS", "Maths"],
+      "exams": {
+        "Term-1 (Objective)": 20,
+        "Term-1 (Theory)": 50,
+        "Term-1 (SEA)": 5,
+        "Term-1 (PP)": 5
+      }
+    },
+    {
+      "classes": [1, 2],
+      "subjects": ["GK", "Computer"],
+      "exams": {
+        "Term-1 (Theory)": 30
+      }
+    },
+    {
+      "classes": [3, 4, 5],
+      "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
+      "exams": {
+        "Term-1 (Objective)": 20,
+        "Term-1 (Theory)": 50,
+        "Term-1 (SEA)": 5,
+        "Term-1 (PP)": 5
+      }
+    },
+    {
+      "classes": [3, 4, 5],
+      "subjects": ["GK", "Computer"],
+      "exams": {
+        "Term-1 (Theory)": 30
+      }
+    },
+    {
+      "classes": [6, 7, 8],
+      "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
+      "exams": {
+        "Term-1 (Objective)": 20,
+        "Term-1 (Theory)": 60
+      }
+    },
+    {
+      "classes": [6, 7, 8],
+      "subjects": ["GK", "Computer", "Data Science"],
+      "exams": {
+        "Term-1 (Theory)": 30
+      }
+    },
+    {
+      "classes": [6, 7, 8],
+      "subjects": ["Sanskrit"],
+      "exams": {
+        "Term-1 (Theory)": 80
+      }
+    },
+    {
+      "classes": [9, 10],
+      "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
+      "exams": {
+        "Term-1 (Theory)": 80,
+        "Term-2 (Theory)": 80
+      }
+    },
+    {
+      "classes": [9, 10],
+      "subjects": ["Data Science"],
+      "exams": {
+        "Term-1 (Theory)": 50,
+        "Term-1 (Practical)": 30,
+        "Term-2 (Theory)": 50,
+        "Term-2 (Practical)": 30
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
+      "exams": {
+        "Term-1 (Theory)": 70,
+        "Term-1 (Internal)": 10,
+        "Term-2 (Theory)": 70
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
+      "exams": {
+        "Term-1 (Theory)": 80,
+        "Term-2 (Theory)": 80
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["Fine Arts"],
+      "exams": {
+        "Term-1 (Theory)": 30,
+        "Term-1 (Practical)": 70,
+        "Term-2 (Theory)": 30,
+        "Term-2 (Practical)": 70
+      }
+    },
+    {
+      "classes": [12],
+      "subjects": ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
+      "exams": {
+        "Term-1 (Theory)": 70,
+        "Term-2 (Theory)": 70
+      }
+    },
+    {
+      "classes": [12],
+      "subjects": ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
+      "exams": {
+        "Term-1 (Theory)": 80,
+        "Term-2 (Theory)": 80
+      }
     }
-  },
-  {
-    classes: [1, 2],
-    subjects: ["GK", "Computer"],
-    exams: {
-      "Term-1 (Theory)": 30
-    }
-  },
-  {
-    classes: [3, 4, 5],
-    subjects: ["English", "Hindi", "Science", "Maths", "Social Science"],
-    exams: {
-      "Term-1 (Objective)": 20,
-      "Term-1 (Theory)": 50,
-      "Term-1 (SEA)": 5,
-      "Term-1 (PP)": 5
-    }
-  },
-  {
-    classes: [3, 4, 5],
-    subjects: ["GK", "Computer"],
-    exams: {
-      "Term-1 (Theory)": 30
-    }
-  },
-  {
-    classes: [6, 7, 8],
-    subjects: ["English", "Hindi", "Science", "Maths", "Social Science"],
-    exams: {
-      "Term-1 (Objective)": 20,
-      "Term-1 (Theory)": 60
-    }
-  },
-  {
-    classes: [6, 7, 8],
-    subjects: ["GK", "Computer", "Data Science"],
-    exams: {
-      "Term-1 (Theory)": 30
-    }
-  },
-  {
-    classes: [6, 7, 8],
-    subjects: ["Sanskrit"],
-    exams: {
-      "Term-1 (Theory)": 80
-    }
-  },
-  {
-    classes: [9, 10],
-    subjects: ["English", "Hindi", "Science", "Maths", "Social Science"],
-    exams: {
-      "Term-1 (Theory)": 80
-    }
-  },
-  {
-    classes: [9, 10],
-    subjects: ["Data Science"],
-    exams: {
-      "Term-1 (Theory)": 50,
-      "Term-1 (Practical)": 30
-    }
-  },
-  {
-    classes: [9],
-    subjects: ["Data Science"],
-    exams: {
-      "Term-2 (Theory)": 50
-    }
-  },
-  // Class 11 Starts
-  {
-    classes: [11],
-    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
-    exams: {
-      "Term-1 (Theory)": 70,
-      "Term-1 (Internal)": 10
-    }
-  },
-  {
-    classes: [11],
-    subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
-    exams: {
-      "Term-1 (Theory)": 80
-    }
-  },
-  {
-    classes: [11],
-    subjects: ["Fine Arts"],
-    exams: {
-      "Term-1 (Theory)": 30,
-      "Term-1 (Practical)": 50
-    }
-  },
-  // Class 12 Starts
-  {
-    classes: [12],
-    subjects: ["I.P.", "P.E.", "Psychology", "Physics", "Chemistry", "Biology", "Geography"],
-    exams: {
-      "Term-1 (Theory)": 70
-    }
-  },
-  {
-    classes: [12],
-    subjects: ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci."],
-    exams: {
-      "Term-1 (Theory)": 80
-    }
-  }
-];
+  ];
 
 
 /* Function designed to return max marks for Term Exam Components */
