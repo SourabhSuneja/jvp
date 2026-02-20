@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jamna Vidyapeeth — Syllabus Planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================
+       DESIGN TOKENS & RESET
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #0f1f3d;
+      --navy-mid:   #1a3260;
+      --navy-light: #243f78;
+      --gold:       #c49a2b;
+      --gold-light: #e8bc45;
+      --gold-pale:  #f5e8c0;
+      --cream:      #faf7f2;
+      --cream-dark: #f0ebe0;
+      --white:      #ffffff;
+      --text-dark:  #0d1b2e;
+      --text-mid:   #3a4a62;
+      --text-light: #7a8aab;
+      --success:    #2d7a5f;
+      --success-bg: #eaf6f1;
+      --error:      #b83232;
+      --error-bg:   #fdf0f0;
+      --warn:       #9b6c1a;
+      --warn-bg:    #fdf5e6;
+      --border:     #d8dce8;
+      --shadow-sm:  0 2px 8px rgba(15,31,61,0.07);
+      --shadow-md:  0 6px 24px rgba(15,31,61,0.10);
+      --shadow-lg:  0 16px 48px rgba(15,31,61,0.15);
+      --radius:     12px;
+      --radius-sm:  8px;
+      --radius-lg:  20px;
+      --transition: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* =====================================================
+       BACKGROUND DECORATION
+    ===================================================== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, rgba(196,154,43,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(15,31,61,0.06) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+    .site-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, var(--navy-light) 100%);
+      color: var(--white);
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(15,31,61,0.30);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 16px;
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-emblem {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--navy);
+      flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(196,154,43,0.35);
+    }
+
+    .logo-text { display: flex; flex-direction: column; line-height: 1.15; }
+    .logo-text .school { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
+    .logo-text .subtitle { font-size: 10px; font-weight: 500; color: var(--gold-light); letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .header-actions { display: flex; align-items: center; gap: 10px; }
+
+    .btn-logout {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--white);
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: none;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.2); }
+    .btn-logout.visible { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* =====================================================
+       MAIN LAYOUT
+    ===================================================== */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    /* =====================================================
+       SCREENS (login / app)
+    ===================================================== */
+    .screen { display: none; }
+    .screen.active { display: block; animation: fadeUp 0.45s cubic-bezier(0.4,0,0.2,1) both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =====================================================
+       LOGIN SCREEN
+    ===================================================== */
+    .login-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 68px - 72px);
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 52px 44px 44px;
+      width: 100%;
+      max-width: 420px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+    }
+
+    .login-icon {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--gold-pale), #fdf5da);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 28px;
+    }
+
+    .login-card h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .login-card p.sub {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    .year-badge {
+      display: inline-block;
+      background: var(--gold-pale);
+      color: var(--gold);
+      border: 1px solid rgba(196,154,43,0.25);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 3px 10px;
+      text-transform: uppercase;
+      margin: 0 auto 24px;
+      display: block;
+      text-align: center;
+    }
+
+    /* =====================================================
+       FORM ELEMENTS
+    ===================================================== */
+    .form-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text-dark);
+      background: var(--white);
+      transition: var(--transition);
+      outline: none;
+      appearance: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--navy-light);
+      box-shadow: 0 0 0 3px rgba(36,63,120,0.10);
+    }
+
+    input::placeholder, textarea::placeholder { color: var(--text-light); }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%237a8aab' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    textarea { resize: vertical; min-height: 130px; line-height: 1.65; }
+
+    /* Password toggle */
+    .pass-wrap { position: relative; }
+    .pass-toggle {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-light);
+      padding: 4px; font-size: 16px; transition: color var(--transition);
+    }
+    .pass-toggle:hover { color: var(--navy); }
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(15,31,61,0.25);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(15,31,61,0.30);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy);
+      box-shadow: 0 4px 16px rgba(196,154,43,0.30);
+    }
+    .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(196,154,43,0.40); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-mid);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--cream-dark); border-color: var(--navy-light); color: var(--navy); }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--error);
+      border: 1.5px solid rgba(184,50,50,0.25);
+    }
+    .btn-danger:hover { background: var(--error-bg); }
+
+    .btn-sm { padding: 8px 14px; font-size: 13px; }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .btn-full { width: 100%; }
+
+    /* Spinner inside button */
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .btn.loading .spinner { display: block; }
+    .btn.loading .btn-label { opacity: 0.7; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* =====================================================
+       ALERT / TOAST
+    ===================================================== */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 20px;
+      border: 1.5px solid transparent;
+      animation: fadeUp 0.3s ease both;
+    }
+    .alert-icon { font-size: 17px; flex-shrink: 0; margin-top: 1px; }
+    .alert.success { background: var(--success-bg); color: var(--success); border-color: rgba(45,122,95,0.2); }
+    .alert.error   { background: var(--error-bg);   color: var(--error);   border-color: rgba(184,50,50,0.2); }
+    .alert.info    { background: #eef2ff; color: #3949ab; border-color: rgba(57,73,171,0.2); }
+    .alert.warn    { background: var(--warn-bg); color: var(--warn); border-color: rgba(155,108,26,0.2); }
+
+    /* Toast notification */
+    #toast-container {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--navy);
+      color: white;
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideInToast 0.35s cubic-bezier(0.4,0,0.2,1) both;
+      max-width: 320px;
+    }
+    .toast.success { background: var(--success); }
+    .toast.error   { background: var(--error); }
+    .toast.fade-out { animation: fadeOutToast 0.3s ease forwards; }
+
+    @keyframes slideInToast {
+      from { opacity: 0; transform: translateX(30px) scale(0.95); }
+      to   { opacity: 1; transform: translateX(0) scale(1); }
+    }
+    @keyframes fadeOutToast {
+      to { opacity: 0; transform: translateX(30px) scale(0.95); }
+    }
+
+    /* =====================================================
+       SECTION HEADER
+    ===================================================== */
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.2;
+    }
+
+    .section-title span { color: var(--gold); }
+
+    .section-sub {
+      color: var(--text-light);
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    /* =====================================================
+       TABS
+    ===================================================== */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--cream-dark);
+      border: 1px solid var(--border);
+      padding: 5px;
+      border-radius: var(--radius);
+      margin-bottom: 32px;
+      width: fit-content;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 9px 20px;
+      border-radius: calc(var(--radius) - 4px);
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tab-btn.active {
+      background: var(--white);
+      color: var(--navy);
+      font-weight: 600;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-btn .count {
+      background: var(--navy-light);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 20px;
+    }
+
+    .tab-panel { display: none; animation: fadeUp 0.3s ease both; }
+    .tab-panel.active { display: block; }
+
+    /* =====================================================
+       CARD
+    ===================================================== */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    }
+
+    /* =====================================================
+       FORM GRID
+    ===================================================== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .col-span-2 { grid-column: span 2; }
+
+    /* Working days badge */
+    .days-display {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      color: white;
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .days-display .days-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 32px;
+      font-weight: 500;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+
+    .days-display .days-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.4;
+    }
+
+    .days-display .days-label strong {
+      display: block;
+      font-size: 14px;
+      color: white;
+      letter-spacing: 0;
+      text-transform: none;
+      margin-bottom: 2px;
+    }
+
+    /* =====================================================
+       ENTRY CARDS (Records List)
+    ===================================================== */
+    .entries-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .entry-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .entry-card:hover {
+      border-color: rgba(36,63,120,0.25);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+
+    .entry-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+      border-radius: 0 4px 4px 0;
+    }
+
+    .entry-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .entry-teacher {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .entry-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-navy   { background: rgba(15,31,61,0.07); color: var(--navy); }
+    .badge-gold   { background: var(--gold-pale); color: var(--warn); border: 1px solid rgba(196,154,43,0.2); }
+    .badge-green  { background: var(--success-bg); color: var(--success); }
+
+    .entry-syllabus {
+      background: var(--cream);
+      border: 1px solid var(--cream-dark);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 140px;
+      overflow-y: auto;
+    }
+
+    .entry-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .entry-timestamp {
+      font-size: 12px;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .entry-actions { display: flex; gap: 8px; }
+
+    /* =====================================================
+       EMPTY STATE
+    ===================================================== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+
+    .empty-icon { font-size: 52px; margin-bottom: 16px; opacity: 0.6; }
+    .empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--text-mid); margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; }
+
+    /* =====================================================
+       STATS BAR
+    ===================================================== */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    /* =====================================================
+       FILTERS
+    ===================================================== */
+    .filters-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filters-bar select,
+    .filters-bar input {
+      max-width: 200px;
+      padding: 9px 14px;
+      font-size: 13px;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* =====================================================
+       MODAL
+    ===================================================== */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,20,40,0.55);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 24px 80px rgba(15,31,61,0.25);
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+      position: relative;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 28px 32px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .modal-close {
+      background: var(--cream-dark);
+      border: none;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      color: var(--text-mid);
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--error-bg); color: var(--error); }
+
+    .modal-body { padding: 24px 32px 32px; }
+
+    /* =====================================================
+       SETUP GUIDE
+    ===================================================== */
+    .setup-guide {
+      background: var(--warn-bg);
+      border: 1.5px solid rgba(155,108,26,0.2);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 28px;
+    }
+    .setup-guide h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--warn);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .setup-guide ol {
+      padding-left: 18px;
+      color: var(--text-mid);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+    .setup-guide code {
+      background: rgba(0,0,0,0.06);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+    }
+    .setup-guide a { color: var(--warn); font-weight: 600; }
+
+    /* config form inside card */
+    .config-section {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 28px;
+    }
+    .config-section h4 { font-size: 13px; font-weight: 700; color: var(--text-mid); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 14px; }
+    .config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 768px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .col-span-2 { grid-column: span 1; }
+      .card { padding: 24px 20px; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .modal-header, .modal-body { padding-left: 24px; padding-right: 24px; }
+      .section-title { font-size: 26px; }
+      .logo-text .school { font-size: 15px; }
+      .tabs { width: 100%; }
+      .tab-btn { flex: 1; justify-content: center; padding: 9px 12px; font-size: 13px; }
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 24px 14px 60px; }
+      .login-card { padding: 36px 24px 32px; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .config-grid { grid-template-columns: 1fr; }
+    }
+
+    /* =====================================================
+       DIVIDER
+    ===================================================== */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    /* scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-light); }
+
+    /* no-storage banner */
+    .no-config-banner {
+      background: var(--warn-bg);
+      border: 1.5px solid rgba(155,108,26,0.25);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--warn);
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-group">
+      <div class="logo-emblem">JV</div>
+      <div class="logo-text">
+        <span class="school">Jamna Vidyapeeth</span>
+        <span class="subtitle">Syllabus Planner</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-logout" id="btn-logout" onclick="doLogout()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Logout
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div id="toast-container"></div>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+  <!-- ==============================
+       SCREEN: LOGIN
+  ============================== -->
+  <div id="screen-login" class="screen active">
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-icon">🏫</div>
+        <h1>Welcome Back</h1>
+        <span class="year-badge">Academic Year 2025–26</span>
+        <p class="sub">Enter your passkey to access the Syllabus Planning Portal</p>
+
+        <div id="login-alert"></div>
+
+        <div class="form-group">
+          <label for="passkey-input">Access Passkey</label>
+          <div class="pass-wrap">
+            <input type="password" id="passkey-input" placeholder="Enter passkey" autocomplete="current-password" />
+            <button class="pass-toggle" onclick="togglePass()" title="Show/hide" tabindex="-1">👁</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="doLogin()">
+          <div class="spinner"></div>
+          <span class="btn-label">Access Portal</span>
+        </button>
+
+        <hr class="divider" style="margin-top:28px;" />
+        <p style="font-size:12px;color:var(--text-light);text-align:center;">
+          Contact your school administrator if you forgot the passkey.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==============================
+       SCREEN: APP
+  ============================== -->
+  <div id="screen-app" class="screen">
+
+    <!-- Section header -->
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Syllabus <span>Coverage</span></h2>
+        <p class="section-sub">Plan and record monthly syllabus for your subject &amp; class</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="openSettings()">
+        ⚙️ Storage Settings
+      </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-value" id="stat-total">—</div>
+        <div class="stat-label">Total Entries</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-period">—</div>
+        <div class="stat-label">Current Period</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="stat-days">—</div>
+        <div class="stat-label">Working Days</div>
+      </div>
+    </div>
+
+    <!-- No storage config warning -->
+    <div id="no-config-banner" class="no-config-banner" style="display:none;">
+      ⚠️ <span>JSONbin.io not configured. <strong>Entries will only be saved locally</strong> in this browser session. Click <em>Storage Settings</em> above to set up cloud sync.</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('add')" id="tab-add">
+        ✏️ New Entry
+      </button>
+      <button class="tab-btn" onclick="switchTab('list')" id="tab-list">
+        📋 All Records <span class="count" id="tab-count">0</span>
+      </button>
+    </div>
+
+    <!-- ====== TAB: ADD/EDIT ENTRY ====== -->
+    <div id="panel-add" class="tab-panel active">
+      <div class="card">
+        <div id="form-alert"></div>
+
+        <div class="form-grid">
+
+          <!-- Teacher Name -->
+          <div class="form-group">
+            <label for="f-teacher">Teacher Name</label>
+            <input type="text" id="f-teacher" placeholder="e.g. Sourabh Suneja" />
+          </div>
+
+          <!-- Subject -->
+          <div class="form-group">
+            <label for="f-subject">Subject</label>
+            <input type="text" id="f-subject" placeholder="e.g. Computer Science" />
+          </div>
+
+          <!-- Class -->
+          <div class="form-group">
+            <label for="f-class">Class</label>
+            <select id="f-class">
+              <option value="">Select class…</option>
+              <option>1</option><option>2</option><option>3</option>
+              <option>4</option><option>5</option><option>6</option>
+              <option>7</option><option>8</option><option>9</option>
+              <option>10</option><option>11</option><option>12</option>
+            </select>
+          </div>
+
+          <!-- Period -->
+          <div class="form-group">
+            <label for="f-period">Academic Period</label>
+            <select id="f-period" onchange="onPeriodChange()">
+              <option value="">Select period…</option>
+            </select>
+          </div>
+
+          <!-- Working Days display -->
+          <div class="form-group col-span-2" id="days-row" style="display:none;">
+            <label>Working Days in Selected Period</label>
+            <div class="days-display">
+              <div class="days-num" id="days-num">0</div>
+              <div class="days-label">
+                <strong id="days-period-label">—</strong>
+                Available Working Days
+              </div>
+            </div>
+          </div>
+
+          <!-- Syllabus -->
+          <div class="form-group col-span-2">
+            <label for="f-syllabus">Syllabus Content Planned</label>
+            <textarea id="f-syllabus" placeholder="e.g.
+Chapter 1: Introduction to Computers
+Chapter 2: Number Systems
+Chapter 3: Input &amp; Output Devices
+..."></textarea>
+          </div>
+
+        </div>
+
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
+          <button class="btn btn-primary" id="btn-submit" onclick="submitEntry()">
+            <div class="spinner"></div>
+            <span class="btn-label">💾 Save Entry</span>
+          </button>
+          <button class="btn btn-ghost" id="btn-cancel-edit" onclick="cancelEdit()" style="display:none;">
+            ✕ Cancel Edit
+          </button>
+        </div>
+
+        <input type="hidden" id="edit-id" value="" />
+      </div>
+    </div>
+
+    <!-- ====== TAB: RECORDS LIST ====== -->
+    <div id="panel-list" class="tab-panel">
+
+      <div class="filters-bar">
+        <span class="filter-label">Filter:</span>
+        <select id="filter-period" onchange="renderEntries()">
+          <option value="">All Periods</option>
+        </select>
+        <input type="text" id="filter-search" placeholder="Search teacher / subject…" oninput="renderEntries()" />
+        <button class="btn btn-ghost btn-sm" onclick="loadEntries()">
+          🔄 Refresh
+        </button>
+      </div>
+
+      <div id="entries-container" class="entries-grid"></div>
+    </div>
+
+  </div><!-- /screen-app -->
+
+</main>
+
+<!-- ==============================
+     SETTINGS MODAL
+============================== -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal" role="dialog" aria-labelledby="settings-title">
+    <div class="modal-header">
+      <h2 class="modal-title" id="settings-title">Storage Settings</h2>
+      <button class="modal-close" onclick="closeSettings()">×</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="setup-guide">
+        <h4>⚡ One-Time JSONbin.io Setup</h4>
+        <ol>
+          <li>Go to <a href="https://jsonbin.io" target="_blank">jsonbin.io</a> and create a <strong>free account</strong></li>
+          <li>Create a new <strong>Bin</strong> with this initial content: <code>{"entries":[]}</code></li>
+          <li>Copy your <strong>Bin ID</strong> (the part after <code>/b/</code> in the URL)</li>
+          <li>Go to <em>API Keys</em> in dashboard → create a key → copy it</li>
+          <li>Paste both below and click <strong>Save &amp; Test</strong></li>
+        </ol>
+      </div>
+
+      <div id="settings-alert"></div>
+
+      <div class="config-section">
+        <h4>🔗 JSONbin.io Configuration</h4>
+        <div class="config-grid">
+          <div class="form-group">
+            <label for="cfg-bin-id">Bin ID</label>
+            <input type="text" id="cfg-bin-id" placeholder="e.g. 64abc123def456" />
+          </div>
+          <div class="form-group">
+            <label for="cfg-api-key">API Key (Master Key)</label>
+            <div class="pass-wrap">
+              <input type="password" id="cfg-api-key" placeholder="$2a$10$…" />
+              <button class="pass-toggle" onclick="toggleApiKey()" tabindex="-1">👁</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="saveSettings()">
+          <div class="spinner"></div>
+          <span class="btn-label">💾 Save &amp; Test Connection</span>
+        </button>
+        <button class="btn btn-ghost" onclick="closeSettings()">Cancel</button>
+        <button class="btn btn-danger btn-sm" onclick="clearSettings()" style="margin-left:auto;">
+          🗑 Clear Config
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==============================
+     JAVASCRIPT
+============================== -->
+<script>
+/* ============================================================
+   ██████╗  ██████╗ ███╗   ██╗███████╗██╗ ██████╗
+   ██╔════╝██╔═══██╗████╗  ██║██╔════╝██║██╔════╝
+   ██║     ██║   ██║██╔██╗ ██║█████╗  ██║██║  ███╗
+   ██║     ██║   ██║██║╚██╗██║██╔══╝  ██║██║   ██║
+   ╚██████╗╚██████╔╝██║ ╚████║██║     ██║╚██████╔╝
+    ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝     ╚═╝ ╚═════╝
+
+   JAMNA VIDYAPEETH — SYLLABUS PLANNER
+   Static Frontend · JSONbin.io Cloud Storage
+============================================================ */
+
+// ============================================================
+// 🔐 SECURITY CONFIG — Change passkey here
+// ============================================================
+const PASSKEY = "JVP@2026";
+
+// ============================================================
+// 📅 PERIODS CONFIG — Edit academic periods here
+// Add or remove periods; set workingDays for each
+// ============================================================
+const PERIODS = [
+  { label: "1 April – 30 April",       workingDays: 23 },
+  { label: "1 May – 31 May",           workingDays: 20 },
+  { label: "1 June – 30 June",         workingDays: 22 },
+  { label: "1 July – 31 July",         workingDays: 25 },
+  { label: "1 August – 31 August",     workingDays: 24 },
+  { label: "1 September – 30 September", workingDays: 22 },
+  { label: "1 October – 31 October",   workingDays: 20 },
+  { label: "1 November – 30 November", workingDays: 22 },
+  { label: "1 December – 31 December", workingDays: 18 },
+  { label: "1 January – 31 January",   workingDays: 24 },
+  { label: "1 February – 28 February", workingDays: 20 },
+  { label: "1 March – 31 March",       workingDays: 22 },
+];
+
+// CONFIG
+localStorage.setItem("jv_bin_id",  "69980153d0ea881f40c8cd4a");
+localStorage.setItem("jv_api_key", "$2a$10$qPvSqwEhkXSFO9Ulv868KO/TUvLIKQVlPsG6rnuZ5Gw7ttiAoJqhG");
+
+// ============================================================
+// 🗄️ STATE
+// ============================================================
+let LOCAL_ENTRIES = []; // fallback if JSONbin not configured
+let EDITING_ID = null;
+
+// ============================================================
+// 📌 JSONbin.io helpers
+// ============================================================
+const JSONBIN_BASE = "https://api.jsonbin.io/v3/b";
+
+function getStorageConfig() {
+  return {
+    binId:  localStorage.getItem("jv_bin_id")  || "",
+    apiKey: localStorage.getItem("jv_api_key") || "",
+  };
+}
+
+function hasStorage() {
+  const c = getStorageConfig();
+  return c.binId.trim() !== "" && c.apiKey.trim() !== "";
+}
+
+async function readBin() {
+  const { binId, apiKey } = getStorageConfig();
+  const res = await fetch(`${JSONBIN_BASE}/${binId}/latest`, {
+    headers: { "X-Master-Key": apiKey }
+  });
+  if (!res.ok) throw new Error(`JSONbin read failed: ${res.status}`);
+  const json = await res.json();
+  return json.record;
+}
+
+async function writeBin(data) {
+  const { binId, apiKey } = getStorageConfig();
+  const res = await fetch(`${JSONBIN_BASE}/${binId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Master-Key": apiKey,
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error(`JSONbin write failed: ${res.status}`);
+  return await res.json();
+}
+
+// ============================================================
+// 🔐 AUTH
+// ============================================================
+function doLogin() {
+  const val = document.getElementById("passkey-input").value.trim();
+  if (!val) { showAlert("login-alert", "error", "Please enter your passkey."); return; }
+  if (val !== PASSKEY) {
+    showAlert("login-alert", "error", "Incorrect passkey. Please try again.");
+    return;
+  }
+  sessionStorage.setItem("jv_auth", "1");
+  switchScreen("app");
+  initApp();
+}
+
+function doLogout() {
+  sessionStorage.removeItem("jv_auth");
+  switchScreen("login");
+  document.getElementById("passkey-input").value = "";
+  document.getElementById("btn-logout").classList.remove("visible");
+  clearAlert("login-alert");
+}
+
+function togglePass() {
+  const i = document.getElementById("passkey-input");
+  i.type = i.type === "password" ? "text" : "password";
+}
+
+function toggleApiKey() {
+  const i = document.getElementById("cfg-api-key");
+  i.type = i.type === "password" ? "text" : "password";
+}
+
+// Allow Enter key on passkey field
+document.getElementById("passkey-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") doLogin();
+});
+
+// ============================================================
+// 🖥 SCREEN MANAGEMENT
+// ============================================================
+function switchScreen(name) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.getElementById(`screen-${name}`).classList.add("active");
+}
+
+// ============================================================
+// 🚀 APP INIT
+// ============================================================
+function initApp() {
+  document.getElementById("btn-logout").classList.add("visible");
+  populatePeriodDropdowns();
+  updateNoConfigBanner();
+  loadEntries();
+  updateStats();
+}
+
+function populatePeriodDropdowns() {
+  const selPeriod  = document.getElementById("f-period");
+  const selFilter  = document.getElementById("filter-period");
+  selPeriod.innerHTML  = '<option value="">Select period…</option>';
+  selFilter.innerHTML  = '<option value="">All Periods</option>';
+  PERIODS.forEach((p, i) => {
+    const opt1 = new Option(p.label, i);
+    const opt2 = new Option(p.label, p.label);
+    selPeriod.add(opt1);
+    selFilter.add(opt2);
+  });
+}
+
+function updateNoConfigBanner() {
+  document.getElementById("no-config-banner").style.display = hasStorage() ? "none" : "flex";
+}
+
+// ============================================================
+// 📊 STATS
+// ============================================================
+function updateStats() {
+  const entries = getEntries();
+  document.getElementById("stat-total").textContent = entries.length;
+
+  // Current period = most recently used, or latest PERIOD
+  const latestPeriod = PERIODS[PERIODS.length - 1];
+  document.getElementById("stat-period").textContent =
+    latestPeriod.label.split("–")[0].trim();
+  document.getElementById("stat-days").textContent = latestPeriod.workingDays;
+}
+
+// ============================================================
+// 📂 PERIOD CHANGE
+// ============================================================
+function onPeriodChange() {
+  const idx = document.getElementById("f-period").value;
+  if (idx === "") {
+    document.getElementById("days-row").style.display = "none";
+    return;
+  }
+  const p = PERIODS[idx];
+  document.getElementById("days-row").style.display = "block";
+  document.getElementById("days-num").textContent = p.workingDays;
+  document.getElementById("days-period-label").textContent = p.label;
+}
+
+// ============================================================
+// 📋 TABS
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById(`tab-${name}`).classList.add("active");
+  document.getElementById(`panel-${name}`).classList.add("active");
+}
+
+// ============================================================
+// 💾 ENTRIES: get/set local
+// ============================================================
+function getEntries() {
+  if (hasStorage()) return LOCAL_ENTRIES;
+  const raw = sessionStorage.getItem("jv_entries");
+  return raw ? JSON.parse(raw) : [];
+}
+
+function setLocalEntries(arr) {
+  LOCAL_ENTRIES = arr;
+  sessionStorage.setItem("jv_entries", JSON.stringify(arr));
+  document.getElementById("tab-count").textContent = arr.length;
+}
+
+// ============================================================
+// 🔁 LOAD ENTRIES (from JSONbin or local)
+// ============================================================
+async function loadEntries() {
+  if (!hasStorage()) {
+    const local = JSON.parse(sessionStorage.getItem("jv_entries") || "[]");
+    setLocalEntries(local);
+    renderEntries();
+    updateStats();
+    return;
+  }
+  try {
+    const data = await readBin();
+    const arr = Array.isArray(data.entries) ? data.entries : [];
+    setLocalEntries(arr);
+    renderEntries();
+    updateStats();
+  } catch(e) {
+    showToast("Could not load entries: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// ✏️ SUBMIT ENTRY
+// ============================================================
+async function submitEntry() {
+  clearAlert("form-alert");
+  const teacher  = document.getElementById("f-teacher").value.trim();
+  const subject  = document.getElementById("f-subject").value.trim();
+  const cls      = document.getElementById("f-class").value;
+  const periodIdx= document.getElementById("f-period").value;
+  const syllabus = document.getElementById("f-syllabus").value.trim();
+
+  if (!teacher)    { showAlert("form-alert","error","Please enter the teacher name."); return; }
+  if (!subject)    { showAlert("form-alert","error","Please enter the subject."); return; }
+  if (!cls)        { showAlert("form-alert","error","Please select a class."); return; }
+  if (periodIdx === "") { showAlert("form-alert","error","Please select an academic period."); return; }
+  if (!syllabus)   { showAlert("form-alert","error","Please enter the syllabus content."); return; }
+
+  const period   = PERIODS[periodIdx];
+  const btn      = document.getElementById("btn-submit");
+  setLoading(btn, true);
+
+  try {
+    let entries = getEntries().slice();
+    const now   = new Date().toISOString();
+    const editId= document.getElementById("edit-id").value;
+
+    if (editId) {
+      // UPDATE
+      const idx = entries.findIndex(e => e.id === editId);
+      if (idx > -1) {
+        entries[idx] = { ...entries[idx], teacher, subject, class: cls,
+          period: period.label, workingDays: period.workingDays,
+          syllabus, updatedAt: now };
+      }
+    } else {
+      // CREATE
+      entries.push({
+        id: generateId(),
+        teacher, subject, class: cls,
+        period: period.label,
+        workingDays: period.workingDays,
+        syllabus,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    if (hasStorage()) {
+      await writeBin({ entries });
+    }
+
+    setLocalEntries(entries);
+    resetForm();
+    renderEntries();
+    updateStats();
+    showToast(editId ? "Entry updated successfully!" : "Entry saved successfully!", "success");
+    switchTab("list");
+
+  } catch(e) {
+    showAlert("form-alert","error","Save failed: " + e.message);
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
+// ============================================================
+// ✏️ EDIT ENTRY
+// ============================================================
+function editEntry(id) {
+  const entry = getEntries().find(e => e.id === id);
+  if (!entry) return;
+
+  // Find period index
+  const pidx = PERIODS.findIndex(p => p.label === entry.period);
+
+  document.getElementById("f-teacher").value  = entry.teacher;
+  document.getElementById("f-subject").value  = entry.subject;
+  document.getElementById("f-class").value    = entry.class;
+  document.getElementById("f-period").value   = pidx >= 0 ? pidx : "";
+  document.getElementById("f-syllabus").value = entry.syllabus;
+  document.getElementById("edit-id").value    = entry.id;
+
+  document.getElementById("btn-submit").querySelector(".btn-label").textContent = "💾 Update Entry";
+  document.getElementById("btn-cancel-edit").style.display = "inline-flex";
+
+  onPeriodChange();
+  switchTab("add");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function cancelEdit() {
+  resetForm();
+  switchTab("list");
+}
+
+function resetForm() {
+  ["f-teacher","f-subject","f-syllabus"].forEach(id => document.getElementById(id).value = "");
+  document.getElementById("f-class").value  = "";
+  document.getElementById("f-period").value = "";
+  document.getElementById("edit-id").value  = "";
+  document.getElementById("days-row").style.display = "none";
+  document.getElementById("btn-submit").querySelector(".btn-label").textContent = "💾 Save Entry";
+  document.getElementById("btn-cancel-edit").style.display = "none";
+  clearAlert("form-alert");
+}
+
+// ============================================================
+// 🗑 DELETE ENTRY
+// ============================================================
+async function deleteEntry(id) {
+  if (!confirm("Delete this entry? This cannot be undone.")) return;
+  let entries = getEntries().filter(e => e.id !== id);
+  try {
+    if (hasStorage()) await writeBin({ entries });
+    setLocalEntries(entries);
+    renderEntries();
+    updateStats();
+    showToast("Entry deleted.", "success");
+  } catch(e) {
+    showToast("Delete failed: " + e.message, "error");
+  }
+}
+
+// ============================================================
+// 📋 RENDER ENTRIES
+// ============================================================
+function renderEntries() {
+  const container = document.getElementById("entries-container");
+  const search  = (document.getElementById("filter-search").value || "").toLowerCase();
+  const period  = document.getElementById("filter-period").value;
+
+  let entries = getEntries().slice().reverse();
+
+  if (period)  entries = entries.filter(e => e.period === period);
+  if (search)  entries = entries.filter(e =>
+    e.teacher.toLowerCase().includes(search) ||
+    e.subject.toLowerCase().includes(search) ||
+    (e.class || "").toLowerCase().includes(search)
+  );
+
+  if (entries.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <h3>No entries found</h3>
+        <p>Start by adding a new syllabus entry from the "New Entry" tab.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = entries.map(e => `
+    <div class="entry-card">
+      <div class="entry-header">
+        <div class="entry-teacher">👤 ${esc(e.teacher)}</div>
+        <div class="entry-actions">
+          <button class="btn btn-ghost btn-sm" onclick="editEntry('${e.id}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteEntry('${e.id}')">🗑</button>
+        </div>
+      </div>
+      <div class="entry-meta">
+        <span class="badge badge-navy">📚 ${esc(e.subject)}</span>
+        <span class="badge badge-navy">🎓 Class ${esc(e.class)}</span>
+        <span class="badge badge-gold">📅 ${esc(e.period)}</span>
+        <span class="badge badge-green">📆 ${e.workingDays} Working Days</span>
+      </div>
+      <div class="entry-syllabus">${esc(e.syllabus)}</div>
+      <div class="entry-footer">
+        <div class="entry-timestamp">
+          🕐 ${formatDate(e.updatedAt || e.createdAt)}
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+// ============================================================
+// ⚙️ SETTINGS MODAL
+// ============================================================
+function openSettings() {
+  const { binId, apiKey } = getStorageConfig();
+  document.getElementById("cfg-bin-id").value  = binId;
+  document.getElementById("cfg-api-key").value = apiKey;
+  clearAlert("settings-alert");
+  document.getElementById("settings-modal").classList.add("open");
+}
+
+function closeSettings() {
+  document.getElementById("settings-modal").classList.remove("open");
+}
+
+async function saveSettings() {
+  const binId  = document.getElementById("cfg-bin-id").value.trim();
+  const apiKey = document.getElementById("cfg-api-key").value.trim();
+  clearAlert("settings-alert");
+
+  if (!binId || !apiKey) {
+    showAlert("settings-alert","error","Please enter both Bin ID and API Key.");
+    return;
+  }
+
+  const btn = document.querySelector("#settings-modal .btn-primary");
+  setLoading(btn, true);
+
+  try {
+    // Test connection
+    const res = await fetch(`${JSONBIN_BASE}/${binId}/latest`, {
+      headers: { "X-Master-Key": apiKey }
+    });
+    if (!res.ok) throw new Error("Connection failed. Check your Bin ID and API Key.");
+    const data = await res.json();
+
+    localStorage.setItem("jv_bin_id",  binId);
+    localStorage.setItem("jv_api_key", apiKey);
+
+    // Init bin if needed
+    if (!data.record.entries) {
+      await fetch(`${JSONBIN_BASE}/${binId}`, {
+        method: "PUT",
+        headers: { "Content-Type":"application/json","X-Master-Key":apiKey },
+        body: JSON.stringify({ entries: [] })
+      });
+    }
+
+    showAlert("settings-alert","success","✅ Connected successfully! Cloud sync is now active.");
+    updateNoConfigBanner();
+    loadEntries();
+    setTimeout(closeSettings, 1800);
+
+  } catch(e) {
+    showAlert("settings-alert","error","❌ " + e.message);
+  } finally {
+    setLoading(btn, false);
+  }
+}
+
+function clearSettings() {
+  if (!confirm("Remove cloud storage configuration? Data in the cloud will not be deleted.")) return;
+  localStorage.removeItem("jv_bin_id");
+  localStorage.removeItem("jv_api_key");
+  document.getElementById("cfg-bin-id").value  = "";
+  document.getElementById("cfg-api-key").value = "";
+  updateNoConfigBanner();
+  showAlert("settings-alert","warn","Cloud config removed. Entries now stored locally.");
+}
+
+// Close modal on overlay click
+document.getElementById("settings-modal").addEventListener("click", function(e) {
+  if (e.target === this) closeSettings();
+});
+
+// ============================================================
+// 🛠 UTILITIES
+// ============================================================
+function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function formatDate(iso) {
+  if (!iso) return "—";
+  try {
+    return new Date(iso).toLocaleString("en-IN", {
+      day:"2-digit", month:"short", year:"numeric",
+      hour:"2-digit", minute:"2-digit"
+    });
+  } catch { return iso; }
+}
+
+function showAlert(containerId, type, msg) {
+  const icons = { success:"✅", error:"❌", info:"ℹ️", warn:"⚠️" };
+  document.getElementById(containerId).innerHTML = `
+    <div class="alert ${type}">
+      <span class="alert-icon">${icons[type]||"•"}</span>
+      <span>${msg}</span>
+    </div>`;
+}
+
+function clearAlert(containerId) {
+  document.getElementById(containerId).innerHTML = "";
+}
+
+function showToast(msg, type = "") {
+  const icons = { success:"✅", error:"❌" };
+  const t = document.createElement("div");
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span>${icons[type]||"🔔"}</span> ${msg}`;
+  document.getElementById("toast-container").appendChild(t);
+  setTimeout(() => { t.classList.add("fade-out"); setTimeout(() => t.remove(), 400); }, 3000);
+}
+
+function setLoading(btn, state) {
+  btn.disabled = state;
+  btn.classList.toggle("loading", state);
+}
+
+// ============================================================
+// 🚀 BOOT
+// ============================================================
+(function boot() {
+  if (sessionStorage.getItem("jv_auth") === "1") {
+    switchScreen("app");
+    initApp();
+  }
+})();
+</script>
+</body>
+</html>
