@@ -289,6 +289,17 @@ const S = {
   adminClassFilter: '', adminSubjectFilter: '',
 };
 
+// ─── INLINE DATA STORE (avoids JSON-in-attr issues) ──────
+// Used to safely pass complex data to onclick handlers
+const _store = {};
+let _storeIdx = 0;
+function storeData(data) {
+  const key = 'k' + (++_storeIdx);
+  _store[key] = data;
+  return key;
+}
+function loadData_store(key) { return _store[key]; }
+
 // ─── UTILS ───────────────────────────────────────────────
 function waitForSupabase(cb, start = Date.now()) {
   if (window.checkAuth) { cb(); return; }
@@ -449,7 +460,7 @@ function renderApp() {
   else navigate('subject', { id: S.mySubjectIds[0] });
 }
 function renderSidebar() {
-  const name  = S.teacherData?.name || S.classData?.class || 'User';
+  const name  = S.teacherData?.name || S.classData?.class || 'Admin';
   const email = S.teacherData?.email || '';
   const roleLabel = {admin:'Exhibition Admin',class_teacher:'Class Teacher',subject_teacher:'Subject Teacher'}[S.role]||'—';
   const roleCls   = {admin:'admin',class_teacher:'class_t',subject_teacher:'subject_t'}[S.role]||'';
@@ -662,6 +673,8 @@ function renderAssignTable() {
   if (S.adminSubjectFilter === '__none__') students = students.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
   else if (S.adminSubjectFilter) students = students.filter(s => S.studentAssignments.find(a => a.student_id === s.id && a.subject_id == S.adminSubjectFilter));
   const n = S.selectedStudents.size;
+  // FIX: store IDs safely to avoid JSON-in-attr double-quote issues
+  const allIdsKey = storeData(students.map(s => s.id));
   document.getElementById('assign-table').innerHTML = `
     ${n > 0 ? `<div class="action-bar">
       <span class="action-bar-left">✅ ${n} student${n>1?'s':''} selected</span>
@@ -673,7 +686,7 @@ function renderAssignTable() {
     <div class="tbl-wrap">
       <table>
         <thead><tr>
-          <th class="cb-col"><input type="checkbox" id="sa-all" onchange="saToggleAll(this,${JSON.stringify(students.map(s=>s.id))})"></th>
+          <th class="cb-col"><input type="checkbox" id="sa-all" data-ids-key="${allIdsKey}" onchange="saToggleAll(this)"></th>
           <th>Name</th><th>Class</th><th>Subject</th><th>Actions</th>
         </tr></thead>
         <tbody>
@@ -681,13 +694,14 @@ function renderAssignTable() {
           ${students.map(s => {
             const subj = getStudentSubject(s.id);
             const sel  = S.selectedStudents.has(s.id);
+            const sname = s.name.replace(/'/g, "\\'");
             return `<tr>
-              <td><input type="checkbox" ${sel?'checked':''} onchange="saToggle('${s.id}',this.checked)"></td>
+              <td><input type="checkbox" ${sel?'checked':''} data-sid="${s.id}" onchange="saToggle(this)"></td>
               <td><strong>${s.name}</strong></td>
               <td><span class="chip ch-gray">${s.class}</span></td>
               <td>${subj ? `<span class="chip ch-green">📚 ${subj.name}</span>` : '<span class="chip ch-gray">—</span>'}</td>
               <td style="display:flex;gap:5px;">
-                <button class="btn btn-ghost btn-xs" onclick="modalSingleAssign('${s.id}','${s.name.replace(/'/g,"\\'")}')">✏️</button>
+                <button class="btn btn-ghost btn-xs" onclick="modalSingleAssign('${s.id}','${sname}')">✏️</button>
                 ${subj ? `<button class="btn btn-danger btn-xs" onclick="unassignStudent('${s.id}')">✕</button>` : ''}
               </td>
             </tr>`;
@@ -697,18 +711,35 @@ function renderAssignTable() {
     </div>
   `;
 }
-function saToggleAll(cb, ids) {
+// FIX: saToggleAll now reads IDs from the store via data attribute
+function saToggleAll(cb) {
+  const ids = loadData_store(cb.dataset.idsKey) || [];
   ids.forEach(id => cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id));
   renderAssignTable();
 }
-function saToggle(id, checked) { checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id); }
+// FIX: saToggle now re-renders the action bar by calling renderAssignTable
+function saToggle(cb) {
+  const id = cb.dataset.sid;
+  cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id);
+  // Update action bar count without full re-render
+  const n = S.selectedStudents.size;
+  const bar = document.querySelector('#assign-table .action-bar .action-bar-left');
+  if (bar) {
+    bar.textContent = n > 0 ? `✅ ${n} student${n>1?'s':''} selected` : '';
+  } else if (n > 0) {
+    // Action bar not shown yet — re-render to show it
+    renderAssignTable();
+  }
+}
 function modalBulkAssign() {
   const ids = [...S.selectedStudents];
   if (!ids.length) { toast('Select students first', 'i'); return; }
   openAssignModal(ids, `${ids.length} students`);
 }
 function modalSingleAssign(id, name) { openAssignModal([id], name); }
+// FIX: store IDs in _store and pass key instead of JSON-in-attr
 function openAssignModal(ids, label) {
+  const key = storeData(ids);
   openModal(`
     <div class="modal-hdr"><div class="modal-title">Assign to Exhibition Subject</div><button class="modal-x" onclick="closeModal()">×</button></div>
     <p class="modal-note">Assigning: <strong>${label}</strong></p>
@@ -721,11 +752,12 @@ function openAssignModal(ids, label) {
     </div>
     <div class="modal-ftr">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="doAssign(${JSON.stringify(ids)})">Assign →</button>
+      <button class="btn btn-primary" onclick="doAssign('${key}')">Assign →</button>
     </div>
   `);
 }
-async function doAssign(ids) {
+async function doAssign(key) {
+  const ids = loadData_store(key);
   const sid = document.getElementById('m-subject').value;
   if (!sid) { toast('Select a subject', 'e'); return; }
   let ok = 0;
@@ -777,6 +809,7 @@ function renderGroupsAdmin() {
   showAdminGroups(withGroups[0].id);
 }
 function showAdminGroups(subjectId) {
+  // FIX: use == for type-safe comparison (sid stored as string attr, subjectId may be number)
   document.querySelectorAll('#g-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.sid == subjectId));
   const grps = S.groups.filter(g => g.subject_id == subjectId);
   document.getElementById('g-content').innerHTML = grps.length
@@ -835,13 +868,14 @@ function ctRender() {
           ${S.classStudents.map(s => {
             const subj = getStudentSubject(s.id);
             const sel  = S.selectedStudents.has(s.id);
+            const sname = s.name.replace(/'/g, "\\'");
             return `<tr>
-              <td><input type="checkbox" ${sel?'checked':''} onchange="ctTgl('${s.id}',this.checked)"></td>
+              <td><input type="checkbox" ${sel?'checked':''} data-sid="${s.id}" onchange="ctTgl(this)"></td>
               <td><strong>${s.name}</strong></td>
               <td style="color:var(--muted)">${s.roll_number||'—'}</td>
               <td>${subj ? `<span class="chip ch-green">📚 ${subj.name}</span>` : '<span class="chip ch-gray">—</span>'}</td>
               <td style="display:flex;gap:5px;">
-                <button class="btn btn-ghost btn-xs" onclick="ctSingleAssign('${s.id}','${s.name.replace(/'/g,"\\'")}')">✏️</button>
+                <button class="btn btn-ghost btn-xs" onclick="ctSingleAssign('${s.id}','${sname}')">✏️</button>
                 ${subj ? `<button class="btn btn-danger btn-xs" onclick="ctUnassign('${s.id}')">✕</button>` : ''}
               </td>
             </tr>`;
@@ -851,13 +885,20 @@ function ctRender() {
     </div>
   `;
 }
-function ctTgl(id, c) { c ? S.selectedStudents.add(id) : S.selectedStudents.delete(id); ctRender(); }
+// FIX: read sid from data attribute
+function ctTgl(cb) {
+  const id = cb.dataset.sid;
+  cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id);
+  ctRender();
+}
 function ctToggleAll(cb) { S.classStudents.forEach(s => cb.checked ? S.selectedStudents.add(s.id) : S.selectedStudents.delete(s.id)); ctRender(); }
 function ctSelectAll()        { S.classStudents.forEach(s => S.selectedStudents.add(s.id)); ctRender(); }
 function ctSelectUnassigned() { S.classStudents.filter(s => !S.studentAssignments.find(a => a.student_id===s.id)).forEach(s => S.selectedStudents.add(s.id)); ctRender(); }
 function ctShowAssign()       { if (!S.selectedStudents.size) { toast('Select students first','i'); return; } ctOpenAssignModal([...S.selectedStudents], `${S.selectedStudents.size} students`); }
 function ctSingleAssign(id, name) { ctOpenAssignModal([id], name); }
+// FIX: store IDs safely
 function ctOpenAssignModal(ids, label) {
+  const key = storeData(ids);
   openModal(`
     <div class="modal-hdr"><div class="modal-title">Assign to Subject</div><button class="modal-x" onclick="closeModal()">×</button></div>
     <p class="modal-note">Assigning: <strong>${label}</strong></p>
@@ -870,11 +911,12 @@ function ctOpenAssignModal(ids, label) {
     </div>
     <div class="modal-ftr">
       <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="ctDoAssign(${JSON.stringify(ids)})">Assign →</button>
+      <button class="btn btn-primary" onclick="ctDoAssign('${key}')">Assign →</button>
     </div>
   `);
 }
-async function ctDoAssign(ids) {
+async function ctDoAssign(key) {
+  const ids = loadData_store(key);
   const sid = document.getElementById('m-ct-sub').value;
   if (!sid) { toast('Select a subject', 'e'); return; }
   let ok = 0;
@@ -884,13 +926,20 @@ async function ctDoAssign(ids) {
     if (r) ok++;
   }
   toast(`${ok} student${ok!==1?'s':''} assigned ✅`); closeModal();
-  S.selectedStudents.clear(); await refresh(); ctRender();
+  S.selectedStudents.clear();
+  await refresh();
+  // FIX: call renderClassView() to also update the stats, not just ctRender()
+  renderClassView();
 }
 async function ctUnassign(studentId) {
   if (!confirm('Remove from subject?')) return;
   const r = await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
-  if (r !== null) { toast('Removed'); await refresh(); ctRender(); }
-  else toast('Failed', 'e');
+  if (r !== null) {
+    toast('Removed');
+    await refresh();
+    // FIX: call renderClassView() to update stats
+    renderClassView();
+  } else toast('Failed', 'e');
 }
 function copyClassList() {
   let text = `📋 Class ${S.classData?.class} — Exhibition Assignments\n${'═'.repeat(34)}\n\n`;
@@ -978,6 +1027,8 @@ function renderGroupsTab(subjectId) {
 }
 function renderShareTab(subjectId) {
   const text = buildShareText(subjectId);
+  // FIX: store share text to avoid inline string issues
+  const key = storeData(text);
   document.getElementById('st-content').innerHTML = `
     <div class="card">
       <div class="card-header">
@@ -986,7 +1037,7 @@ function renderShareTab(subjectId) {
           <div class="card-sub">Copy or share this formatted summary</div>
         </div>
         <div class="card-header-actions">
-          <button class="btn btn-copy" onclick="copyText(document.getElementById('share-txt').textContent)">📋 Copy</button>
+          <button class="btn btn-copy" onclick="copyShareTabText()">📋 Copy</button>
           <button class="btn btn-amber" onclick="shareWhatsApp(${subjectId})">📱 WhatsApp</button>
           <button class="btn btn-success" onclick="shareNative(${subjectId})">📤 Share</button>
         </div>
@@ -995,17 +1046,23 @@ function renderShareTab(subjectId) {
     </div>
   `;
 }
+function copyShareTabText() {
+  const el = document.getElementById('share-txt');
+  if (el) copyText(el.textContent);
+}
 
 // ─── GROUP CARD ──────────────────────────────────────────
 function groupCard(group, editable) {
   const members = getGroupStudents(group.id);
   const shareText = buildGroupText(group, members);
+  // FIX: store share text in _store to safely pass to onclick without quote/encoding issues
+  const textKey = storeData(shareText);
   return `
     <div class="group-card">
       <div class="group-card-hdr">
         <span class="group-card-title">🗂️ ${group.group_name}</span>
         <div style="display:flex;gap:5px;">
-          <button class="btn btn-xs btn-copy" onclick='copyText(${JSON.stringify(shareText)})' title="Copy">📋</button>
+          <button class="btn btn-xs btn-copy" onclick="copyText(loadData_store('${textKey}'))" title="Copy">📋</button>
           ${editable ? `<button class="btn btn-xs btn-ghost" onclick="modalEditGroup('${group.id}')">✏️</button>
           <button class="btn btn-xs btn-danger" onclick="deleteGroup('${group.id}',${group.subject_id})">🗑️</button>` : ''}
         </div>
@@ -1034,11 +1091,11 @@ function groupCard(group, editable) {
 // ─── GROUP CRUD ──────────────────────────────────────────
 function groupFormFields(g = {}) {
   return `
-    <div class="fgroup-m"><label>Group Name *</label><input type="text" id="gf-name" value="${g.group_name||''}" placeholder="e.g. Group A, Team Stars…"></div>
-    <div class="fgroup-m"><label>Project Title</label><input type="text" id="gf-project" value="${g.project_title||''}" placeholder="Project topic or title"></div>
-    <div class="fgroup-m"><label>Room Number</label><input type="text" id="gf-room" value="${g.room_number||''}" placeholder="e.g. Room 101, Science Lab…"></div>
+    <div class="fgroup-m"><label>Group Name *</label><input type="text" id="gf-name" value="${(g.group_name||'').replace(/"/g,'&quot;')}" placeholder="e.g. Group A, Team Stars…"></div>
+    <div class="fgroup-m"><label>Project Title</label><input type="text" id="gf-project" value="${(g.project_title||'').replace(/"/g,'&quot;')}" placeholder="Project topic or title"></div>
+    <div class="fgroup-m"><label>Room Number</label><input type="text" id="gf-room" value="${(g.room_number||'').replace(/"/g,'&quot;')}" placeholder="e.g. Room 101, Science Lab…"></div>
     <div class="fgroup-m"><label>Materials Required</label><textarea id="gf-materials" placeholder="List materials needed…">${g.materials_required||''}</textarea></div>
-    <div class="fgroup-m"><label>Reference Links</label><input type="text" id="gf-links" value="${g.reference_links||''}" placeholder="https://…"></div>
+    <div class="fgroup-m"><label>Reference Links</label><input type="text" id="gf-links" value="${(g.reference_links||'').replace(/"/g,'&quot;')}" placeholder="https://…"></div>
     <div class="fgroup-m"><label>Instructions</label><textarea id="gf-instructions" placeholder="Instructions or notes…">${g.instructions||''}</textarea></div>
   `;
 }
@@ -1103,7 +1160,7 @@ function modalAddToGroup(groupId, subjectId) {
     <p class="modal-note">Select ungrouped students:</p>
     <div class="ssl" id="m-ssl">
       ${available.map(s=>`
-        <div class="ssl-item" onclick="this.classList.toggle('sel'); this.querySelector('input').checked=!this.querySelector('input').checked">
+        <div class="ssl-item" onclick="sslToggle(this)">
           <input type="checkbox" value="${s.id}" onclick="event.stopPropagation()">
           <span><strong>${s.name}</strong> <span class="chip ch-gray" style="font-size:11px;">${s.class}</span></span>
         </div>
@@ -1114,6 +1171,12 @@ function modalAddToGroup(groupId, subjectId) {
       <button class="btn btn-primary" onclick="addToGroup('${groupId}',${subjectId})">Add Selected</button>
     </div>
   `);
+}
+// FIX: unified toggle handler so both row click and checkbox click work correctly
+function sslToggle(row) {
+  row.classList.toggle('sel');
+  const cb = row.querySelector('input[type="checkbox"]');
+  if (cb) cb.checked = row.classList.contains('sel');
 }
 async function addToGroup(groupId, subjectId) {
   const cbs = document.querySelectorAll('#m-ssl input[type="checkbox"]:checked');
@@ -1181,7 +1244,13 @@ async function shareNative(subjectId) {
 
 // ─── KEYBOARD SHORTCUTS ───────────────────────────────────
 document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') handleLogin();
+  if (e.key === 'Enter') {
+    const ls = document.getElementById('login-screen');
+    // FIX: check computed visibility, not just inline style
+    if (ls && ls.offsetParent !== null && getComputedStyle(ls).display !== 'none') {
+      handleLogin();
+    }
+  }
   if (e.key === 'Escape') closeModal();
 });
 
