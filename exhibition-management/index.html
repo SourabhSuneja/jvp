@@ -151,7 +151,7 @@ textarea{resize:vertical;min-height:80px;width:100%}
 .t-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:28px}
 
 /* MODAL */
-#modal-overlay{position:fixed;inset:0;background:rgba(15,17,26,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+#modal-overlay{position:fixed;inset:0;background:rgba(15,17,26,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
 .modal{background:var(--card);border-radius:18px;padding:28px;max-width:540px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.3)}
 .modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
 .modal-title{font-size:18px;font-weight:700}
@@ -265,7 +265,7 @@ textarea{resize:vertical;min-height:80px;width:100%}
 </div>
 
 <!-- MODAL -->
-<div id="modal-overlay" hidden onclick="handleOverlayClick(event)">
+<div id="modal-overlay" onclick="handleOverlayClick(event)">
   <div class="modal" id="modal-body"></div>
 </div>
 
@@ -302,10 +302,10 @@ function toast(msg, type = 's') {
 }
 function openModal(html) {
   document.getElementById('modal-body').innerHTML = html;
-  document.getElementById('modal-overlay').hidden = false;
+  document.getElementById('modal-overlay').style.display = 'flex';
 }
 function closeModal() {
-  document.getElementById('modal-overlay').hidden = true;
+  document.getElementById('modal-overlay').style.display = 'none';
   document.getElementById('modal-body').innerHTML = '';
 }
 function handleOverlayClick(e) {
