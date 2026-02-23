@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exhibition Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --sidebar:#0d1117;--sidebar2:#161b22;
+  --primary:#6366f1;--primary-h:#4f46e5;
+  --amber:#f59e0b;--cyan:#06b6d4;--green:#10b981;--red:#ef4444;
+  --bg:#f0f2f8;--card:#ffffff;--border:#e4e8f0;
+  --text:#1a1f36;--muted:#6b7280;
+  --radius:14px;
+  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+  --sh2:0 4px 16px rgba(0,0,0,.08)
+}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
+
+/* LOGIN */
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--sidebar);background-image:radial-gradient(circle at 20% 80%,rgba(99,102,241,.25) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(6,182,212,.15) 0%,transparent 50%)}
+.login-card{background:var(--card);border-radius:20px;padding:44px 40px;width:100%;max-width:400px;box-shadow:0 25px 60px rgba(0,0,0,.35)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.login-logo .logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--primary),var(--cyan));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.login-logo h1{font-family:'Syne',sans-serif;font-size:22px;color:var(--text)}
+.login-card p{color:var(--muted);font-size:13px;margin-bottom:28px}
+.fgroup{margin-bottom:18px}
+.fgroup label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.fgroup input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.fgroup input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+#login-error{color:var(--red);font-size:13px;margin-bottom:12px;display:none;padding:10px 12px;background:#fef2f2;border-radius:8px}
+
+/* APP SHELL */
+#app{display:flex;min-height:100vh}
+#sidebar{width:250px;min-width:250px;background:var(--sidebar);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid rgba(255,255,255,.06)}
+.sb-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
+.sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--cyan));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-logo h2{font-family:'Syne',sans-serif;font-size:16px;color:#fff;line-height:1.2}
+.sb-logo span{color:rgba(255,255,255,.4);font-size:11px;display:block;font-weight:400}
+.sb-nav{flex:1;padding:14px 10px}
+.sb-section-title{color:rgba(255,255,255,.25);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 10px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;color:rgba(255,255,255,.55);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-item.active{background:rgba(99,102,241,.25);color:var(--primary);border:1px solid rgba(99,102,241,.3)}
+.nav-item .ni{font-size:15px;min-width:18px;text-align:center}
+.sb-footer{padding:16px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user strong{display:block;color:#fff;font-size:13px;margin-bottom:3px}
+.sb-user small{color:rgba(255,255,255,.35);font-size:11px}
+.role-pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin:6px 0 12px}
+.role-pill.admin{background:rgba(245,158,11,.2);color:var(--amber)}
+.role-pill.class_t{background:rgba(6,182,212,.2);color:var(--cyan)}
+.role-pill.subject_t{background:rgba(99,102,241,.2);color:var(--primary)}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-shrink:0}
+#topbar h2{font-size:18px;font-weight:700}
+#topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
+#content{flex:1;padding:24px 28px;overflow-y:auto}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-h);transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,.3)}
+.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border)}
+.btn-ghost:hover{background:var(--bg)}
+.btn-danger{background:#fef2f2;color:var(--red);border:1.5px solid #fecaca}
+.btn-danger:hover{background:#fee2e2}
+.btn-copy{background:#f0f9ff;color:var(--cyan);border:1.5px solid #bae6fd}
+.btn-copy:hover{background:#e0f2fe}
+.btn-amber{background:#fffbeb;color:var(--amber);border:1.5px solid #fde68a}
+.btn-amber:hover{background:#fef3c7}
+.btn-success{background:#ecfdf5;color:var(--green);border:1.5px solid #a7f3d0}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-xs{padding:4px 8px;font-size:11px;border-radius:6px}
+.btn-full{width:100%;justify-content:center;padding:12px}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--sh);padding:22px;margin-bottom:18px;border:1px solid rgba(0,0,0,.04)}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
+.card-header-left .card-title{font-size:16px;font-weight:700}
+.card-header-left .card-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.card-header-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--sh);border:1px solid rgba(0,0,0,.04)}
+.stat-val{font-size:34px;font-weight:800;color:var(--primary);line-height:1}
+.stat-val.warn{color:var(--amber)}
+.stat-val.good{color:var(--green)}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:6px;font-weight:500}
+
+/* CHIPS */
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
+.ch-blue{background:#ede9fe;color:#5b21b6}
+.ch-green{background:#dcfce7;color:#166534}
+.ch-amber{background:#fffbeb;color:#92400e}
+.ch-cyan{background:#ecfeff;color:#155e75}
+.ch-red{background:#fef2f2;color:#991b1b}
+.ch-gray{background:#f1f5f9;color:var(--muted)}
+.chip .chip-rm{background:none;border:none;cursor:pointer;color:inherit;opacity:.7;font-size:12px;padding:0;line-height:1;margin-left:2px}
+.chip .chip-rm:hover{opacity:1}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;padding:9px 14px;background:#f8fafc;color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafbff}
+.cb-col{width:36px}
+input[type="checkbox"]{width:15px;height:15px;cursor:pointer;accent-color:var(--primary)}
+
+/* FORMS */
+select,input[type="text"],input[type="email"],input[type="password"],textarea{border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13.5px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;background:var(--card);color:var(--text)}
+select:focus,input:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+textarea{resize:vertical;min-height:80px;width:100%}
+.f-lbl{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+
+/* ACTION BAR */
+.action-bar{background:#ede9fe;border-radius:10px;padding:11px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.action-bar-left{font-size:13.5px;color:#5b21b6;font-weight:600}
+
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:22px;overflow-x:auto}
+.tab{padding:10px 18px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s}
+.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.tab:hover:not(.active){color:var(--text)}
+
+/* GROUPS */
+.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.group-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--sh)}
+.group-card-hdr{padding:14px 16px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.group-card-title{font-weight:700;color:#4c1d95;font-size:14.5px}
+.group-card-body{padding:14px 16px}
+.drow{display:flex;gap:9px;margin-bottom:9px;font-size:13px;align-items:flex-start}
+.drow-icon{font-size:15px;min-width:20px;margin-top:1px}
+.drow-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.drow-val{color:var(--text);line-height:1.4;word-break:break-word}
+.s-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+
+/* SUBJECT CARDS */
+.subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.subj-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--sh)}
+.subj-card-hdr{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.subj-card-name{font-size:15px;font-weight:700}
+.subj-card-body{padding:14px 16px}
+.t-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:28px}
+
+/* MODAL */
+#modal-overlay{position:fixed;inset:0;background:rgba(15,17,26,.6);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{background:var(--card);border-radius:18px;padding:28px;max-width:540px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.3)}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.modal-title{font-size:18px;font-weight:700}
+.modal-x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);padding:2px 8px;border-radius:7px;line-height:1}
+.modal-x:hover{background:var(--bg)}
+.modal-ftr{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
+.modal-note{font-size:13px;color:var(--muted);margin-bottom:16px}
+.fgroup-m{margin-bottom:16px}
+.fgroup-m label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.fgroup-m input,.fgroup-m select,.fgroup-m textarea{width:100%}
+
+/* STUDENT SELECT LIST */
+.ssl{border:1.5px solid var(--border);border-radius:10px;max-height:280px;overflow-y:auto}
+.ssl-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.ssl-item:last-child{border-bottom:none}
+.ssl-item:hover{background:#f8fafc}
+.ssl-item.sel{background:#ede9fe}
+
+/* SHARE BOX */
+.share-box{background:#0d1117;color:#a5f3fc;padding:22px;border-radius:12px;font-family:'Courier New',monospace;font-size:12.5px;white-space:pre-wrap;line-height:1.8;max-height:420px;overflow-y:auto;border:1px solid rgba(99,102,241,.3)}
+
+/* FILTERS */
+.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:18px}
+.filters select{min-width:150px}
+
+/* EMPTY */
+.empty{text-align:center;padding:52px 24px;color:var(--muted)}
+.empty-icon{font-size:46px;margin-bottom:12px}
+.empty h3{font-size:16px;color:var(--text);margin-bottom:6px}
+.empty p{font-size:13px}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:11px;font-size:13.5px;font-weight:600;color:#fff;box-shadow:var(--sh2);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.s{background:var(--green)}
+#toast.e{background:var(--red)}
+#toast.i{background:var(--primary)}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:64px;color:var(--muted);gap:12px}
+.spin{width:22px;height:22px;border:2.5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  #sidebar{width:210px;min-width:210px}
+  #content{padding:16px}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:580px){
+  #app{flex-direction:column}
+  #sidebar{width:100%;min-width:unset;height:auto;position:static}
+  .sb-nav{display:flex;flex-wrap:wrap;gap:4px}
+  .sb-section-title{display:none}
+  .groups-grid,.subj-grid{grid-template-columns:1fr}
+  #topbar{padding:12px 16px}
+  #content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-icon">🎨</div>
+      <div>
+        <h1>Exhibition</h1>
+        <span style="color:var(--muted);font-size:12px;">Management System</span>
+      </div>
+    </div>
+    <p>Sign in to manage the school exhibition.</p>
+    <div class="fgroup">
+      <label>Email Address</label>
+      <input type="email" id="login-email" placeholder="teacher@school.edu" autocomplete="email">
+    </div>
+    <div class="fgroup">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <div id="login-error"></div>
+    <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" hidden>
+  <aside id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">🎨</div>
+      <div><h2>Exhibition</h2><span>Management</span></div>
+    </div>
+    <nav class="sb-nav" id="sidebar-nav"></nav>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <strong id="sb-name">—</strong>
+        <small id="sb-email">—</small>
+      </div>
+      <div id="sb-role-pill" class="role-pill">—</div>
+      <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </aside>
+  <div id="main">
+    <header id="topbar">
+      <h2 id="page-title">Dashboard</h2>
+      <div id="topbar-actions"></div>
+    </header>
+    <main id="content"><div class="loading"><div class="spin"></div> Loading…</div></main>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" hidden onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal-body"></div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script type="module" src="supabase-crud.js"></script>
+<script>
+'use strict';
+
+// ─── STATE ───────────────────────────────────────────────
+const S = {
+  userId: null, role: null,
+  teacherData: null, classData: null,
+  mySubjectIds: [],
+  subjects: [], teachers: [], allStudents: [], classStudents: [],
+  subjectTeachers: [], studentAssignments: [],
+  groups: [], groupMembers: [],
+  selectedStudents: new Set(),
+  currentView: null, currentSubjectId: null, activeTab: 'students',
+  adminClassFilter: '', adminSubjectFilter: '',
+};
+
+// ─── UTILS ───────────────────────────────────────────────
+function waitForSupabase(cb, start = Date.now()) {
+  if (window.checkAuth) { cb(); return; }
+  if (Date.now() - start > 8000) { console.error('Supabase timeout'); return; }
+  setTimeout(() => waitForSupabase(cb, start), 80);
+}
+function toast(msg, type = 's') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = `show ${type}`;
+  clearTimeout(el._t); el._t = setTimeout(() => { el.className = ''; }, 3200);
+}
+function openModal(html) {
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-overlay').hidden = false;
+}
+function closeModal() {
+  document.getElementById('modal-overlay').hidden = true;
+  document.getElementById('modal-body').innerHTML = '';
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+function setContent(html) { document.getElementById('content').innerHTML = html; }
+function setTitle(t)  { document.getElementById('page-title').textContent = t; }
+function setActions(h){ document.getElementById('topbar-actions').innerHTML = h; }
+function copyText(text) {
+  navigator.clipboard.writeText(text)
+    .then(() => toast('Copied to clipboard 📋', 'i'))
+    .catch(() => { toast('Could not auto-copy', 'e'); });
+}
+function subjName(id) { return (S.subjects.find(s => s.id == id) || {}).name || '—'; }
+function tchrName(id) { return (S.teachers.find(t => t.id === id) || {}).name || '—'; }
+function studentById(id) {
+  return S.allStudents.find(s => s.id === id) || S.classStudents.find(s => s.id === id) || null;
+}
+function getStudentSubject(studentId) {
+  const a = S.studentAssignments.find(a => a.student_id === studentId);
+  return a ? S.subjects.find(s => s.id == a.subject_id) : null;
+}
+function getSubjectStudents(subjectId) {
+  return S.studentAssignments
+    .filter(a => a.subject_id == subjectId)
+    .map(a => studentById(a.student_id)).filter(Boolean);
+}
+function getGroupStudents(groupId) {
+  return S.groupMembers
+    .filter(m => m.group_id === groupId)
+    .map(m => studentById(m.student_id)).filter(Boolean);
+}
+
+// ─── AUTH ────────────────────────────────────────────────
+async function init() {
+  try {
+    const ok = await window.checkAuth();
+    if (!ok) { showLogin(); return; }
+    S.userId = window.userId;
+    await detectRole();
+    await loadData();
+    renderApp();
+  } catch(e) { console.error(e); toast('Load failed. Refresh.', 'e'); showLogin(); }
+}
+function showLogin() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').hidden = true;
+}
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pw    = document.getElementById('login-password').value;
+  const err   = document.getElementById('login-error');
+  err.style.display = 'none';
+  if (!email || !pw) { showErr('Enter email and password.'); return; }
+  try {
+    await window.signInUser(email, pw);
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').hidden = false;
+    await init();
+  } catch(e) { showErr(e.message || 'Sign in failed.'); }
+}
+function showErr(msg) {
+  const err = document.getElementById('login-error');
+  err.textContent = msg; err.style.display = 'block';
+}
+async function handleLogout() { await window.signOutUser(); location.reload(); }
+
+// ─── ROLE DETECTION ──────────────────────────────────────
+async function detectRole() {
+  const uid = S.userId;
+  const admins = await window.selectData('exhibition_admins', false, 'id', ['id'], [uid]);
+  if (admins && admins.length > 0) { S.role = 'admin'; return; }
+  const ct = await window.selectData('class_teachers', false, '*', ['teacher_id'], [uid]);
+  if (ct && ct.length > 0) S.classData = { class: ct[0].class };
+  const tr = await window.selectData('teachers', false, '*', ['id'], [uid]);
+  if (tr && tr.length > 0) {
+    S.teacherData = tr[0];
+    const mySubs = await window.selectData('exhibition_subject_teachers', false, '*', ['teacher_id'], [uid]);
+    S.mySubjectIds = (mySubs || []).map(s => s.subject_id);
+  }
+  if (S.classData) S.role = 'class_teacher';
+  else S.role = 'subject_teacher';
+}
+
+// ─── DATA LOADING ────────────────────────────────────────
+async function loadData() {
+  const subjs = await window.selectData('subjects', false, '*', [], [], 'name', 'asc');
+  S.subjects = subjs || [];
+  if (S.role === 'admin') await loadAdminData();
+  else if (S.role === 'class_teacher') await loadClassTeacherData();
+  else await loadSubjectTeacherData();
+}
+async function loadAdminData() {
+  const [teachers, est, esa, groups, gm, students] = await Promise.all([
+    window.selectData('teachers', false, '*', [], [], 'name', 'asc'),
+    window.selectData('exhibition_subject_teachers', false, '*'),
+    window.selectData('exhibition_student_assignments', false, '*'),
+    window.selectData('exhibition_groups', false, '*'),
+    window.selectData('exhibition_group_members', false, '*'),
+    window.selectData('students', false, 'id,name,class,roll_number,gender,house', [], [], 'name', 'asc'),
+  ]);
+  S.teachers = teachers || []; S.subjectTeachers = est || [];
+  S.studentAssignments = esa || []; S.groups = groups || [];
+  S.groupMembers = gm || []; S.allStudents = students || [];
+}
+async function loadClassTeacherData() {
+  const myClass = S.classData.class;
+  const [students, esa, tr] = await Promise.all([
+    window.selectData('students', false, 'id,name,class,roll_number,gender', [], [], 'name', 'asc', [{operator:'eq',column:'class',value:myClass}]),
+    window.selectData('exhibition_student_assignments', false, '*'),
+    S.userId ? window.selectData('teachers', false, '*', ['id'], [S.userId]) : Promise.resolve(null),
+  ]);
+  S.classStudents = students || []; S.studentAssignments = esa || [];
+  if (tr && tr.length > 0) S.teacherData = tr[0];
+}
+async function loadSubjectTeacherData() {
+  if (!S.teacherData) {
+    const tr = await window.selectData('teachers', false, '*', ['id'], [S.userId]);
+    S.teacherData = tr?.[0] || { name:'Teacher', email:'' };
+  }
+  const mySubs = await window.selectData('exhibition_subject_teachers', false, '*', ['teacher_id'], [S.userId]);
+  S.mySubjectIds = (mySubs || []).map(s => s.subject_id);
+  const [esa, groups, gm, students] = await Promise.all([
+    window.selectData('exhibition_student_assignments', false, '*'),
+    window.selectData('exhibition_groups', false, '*'),
+    window.selectData('exhibition_group_members', false, '*'),
+    window.selectData('students', false, 'id,name,class,roll_number,gender'),
+  ]);
+  S.studentAssignments = esa || []; S.groups = groups || [];
+  S.groupMembers = gm || []; S.allStudents = students || [];
+}
+async function refresh() { await loadData(); }
+
+// ─── APP SHELL ───────────────────────────────────────────
+function renderApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').hidden = false;
+  renderSidebar();
+  if (S.role === 'admin') navigate('dashboard');
+  else if (S.role === 'class_teacher') navigate('class');
+  else navigate('subject', { id: S.mySubjectIds[0] });
+}
+function renderSidebar() {
+  const name  = S.teacherData?.name || S.classData?.class || 'User';
+  const email = S.teacherData?.email || '';
+  const roleLabel = {admin:'Exhibition Admin',class_teacher:'Class Teacher',subject_teacher:'Subject Teacher'}[S.role]||'—';
+  const roleCls   = {admin:'admin',class_teacher:'class_t',subject_teacher:'subject_t'}[S.role]||'';
+  document.getElementById('sb-name').textContent  = name;
+  document.getElementById('sb-email').textContent = email;
+  const pill = document.getElementById('sb-role-pill');
+  pill.textContent = roleLabel; pill.className = `role-pill ${roleCls}`;
+  let nav = '';
+  if (S.role === 'admin') {
+    nav = `
+      <div class="sb-section-title">Administration</div>
+      <div class="nav-item" onclick="navigate('dashboard')"><span class="ni">📊</span> Dashboard</div>
+      <div class="nav-item" onclick="navigate('subjects')"><span class="ni">📚</span> Subjects & Teachers</div>
+      <div class="nav-item" onclick="navigate('assignments')"><span class="ni">👥</span> Student Assignments</div>
+      <div class="nav-item" onclick="navigate('groups_admin')"><span class="ni">🗂️</span> Groups Overview</div>
+    `;
+  } else if (S.role === 'class_teacher') {
+    nav = `
+      <div class="sb-section-title">Class: ${S.classData?.class||''}</div>
+      <div class="nav-item" onclick="navigate('class')"><span class="ni">🏫</span> My Students</div>
+    `;
+  } else {
+    nav = `<div class="sb-section-title">My Subjects</div>`;
+    if (!S.mySubjectIds.length) {
+      nav += `<div style="color:rgba(255,255,255,.3);font-size:12px;padding:10px;">No subjects assigned</div>`;
+    } else {
+      S.mySubjectIds.forEach(sid => {
+        nav += `<div class="nav-item" onclick="navigate('subject',{id:${sid}})"><span class="ni">📖</span> ${subjName(sid)}</div>`;
+      });
+    }
+  }
+  document.getElementById('sidebar-nav').innerHTML = nav;
+}
+function updateActiveNav(view, subjectId) {
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.remove('active');
+    const txt = el.textContent.trim();
+    if (view==='dashboard'    && txt.includes('Dashboard'))   el.classList.add('active');
+    if (view==='subjects'     && txt.includes('Subjects'))    el.classList.add('active');
+    if (view==='assignments'  && txt.includes('Student'))     el.classList.add('active');
+    if (view==='groups_admin' && txt.includes('Groups'))      el.classList.add('active');
+    if (view==='class'        && txt.includes('My Students')) el.classList.add('active');
+    if (view==='subject'      && subjectId && txt.includes(subjName(subjectId))) el.classList.add('active');
+  });
+}
+function navigate(view, params = {}) {
+  S.currentView = view; S.selectedStudents = new Set();
+  setActions(''); updateActiveNav(view, params.id);
+  switch(view) {
+    case 'dashboard':    renderDashboard(); break;
+    case 'subjects':     renderSubjects(); break;
+    case 'assignments':  S.adminClassFilter=''; S.adminSubjectFilter=''; renderAssignments(); break;
+    case 'groups_admin': renderGroupsAdmin(); break;
+    case 'class':        renderClassView(); break;
+    case 'subject':
+      S.currentSubjectId = params.id;
+      S.activeTab = params.tab || 'students';
+      renderSubjectView(params.id); break;
+  }
+}
+
+// ─── ADMIN: DASHBOARD ────────────────────────────────────
+function renderDashboard() {
+  setTitle('Exhibition Dashboard');
+  const total = S.allStudents.length;
+  const assigned = S.studentAssignments.length;
+  const tAssign = new Set(S.subjectTeachers.map(s => s.teacher_id)).size;
+  setContent(`
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-val">${S.subjects.length}</div><div class="stat-lbl">📚 Subjects</div></div>
+      <div class="stat-card"><div class="stat-val">${tAssign}</div><div class="stat-lbl">👩‍🏫 Teachers Active</div></div>
+      <div class="stat-card"><div class="stat-val good">${assigned}</div><div class="stat-lbl">✅ Students Assigned</div></div>
+      <div class="stat-card"><div class="stat-val ${total-assigned>0?'warn':'good'}">${total-assigned}</div><div class="stat-lbl">⏳ Unassigned</div></div>
+      <div class="stat-card"><div class="stat-val">${S.groups.length}</div><div class="stat-lbl">🗂️ Groups Created</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-title">Subject Overview</div>
+          <div class="card-sub">Students and groups per subject</div>
+        </div>
+        <button class="btn btn-copy btn-sm" onclick="copyFullSummary()">📋 Copy Summary</button>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Subject</th><th>Teachers</th><th>Students</th><th>Groups</th></tr></thead>
+          <tbody>
+            ${S.subjects.map(subj => {
+              const tids   = S.subjectTeachers.filter(st => st.subject_id == subj.id).map(st => st.teacher_id);
+              const sCount = S.studentAssignments.filter(a => a.subject_id == subj.id).length;
+              const gCount = S.groups.filter(g => g.subject_id == subj.id).length;
+              return `<tr>
+                <td><strong>${subj.name}</strong></td>
+                <td>${tids.length ? tids.map(t=>`<span class="chip ch-cyan" style="font-size:11px;">👩‍🏫 ${tchrName(t)}</span>`).join(' ') : '<span class="chip ch-gray">None</span>'}</td>
+                <td>${sCount ? `<span class="chip ch-green">${sCount}</span>` : '<span class="chip ch-gray">0</span>'}</td>
+                <td>${gCount ? `<span class="chip ch-blue">${gCount}</span>` : '<span class="chip ch-gray">0</span>'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `);
+}
+function copyFullSummary() {
+  let text = `🎨 EXHIBITION SUMMARY\n${'═'.repeat(30)}\n\n`;
+  S.subjects.forEach(subj => {
+    const studs = getSubjectStudents(subj.id);
+    const grps  = S.groups.filter(g => g.subject_id == subj.id);
+    const tids  = S.subjectTeachers.filter(st => st.subject_id == subj.id).map(st => tchrName(st.teacher_id));
+    text += `📚 ${subj.name}\n   Teachers: ${tids.join(', ') || 'None'}\n   Students: ${studs.length}  |  Groups: ${grps.length}\n\n`;
+  });
+  copyText(text);
+}
+
+// ─── ADMIN: SUBJECTS & TEACHERS ──────────────────────────
+function renderSubjects() {
+  setTitle('Subjects & Teacher Assignments');
+  setContent(`
+    <div class="subj-grid">
+      ${S.subjects.map(subj => {
+        const assigned = S.subjectTeachers.filter(st => st.subject_id == subj.id);
+        return `<div class="subj-card">
+          <div class="subj-card-hdr">
+            <span class="subj-card-name">📚 ${subj.name}</span>
+            <span class="chip ch-blue">${assigned.length} teacher${assigned.length!==1?'s':''}</span>
+          </div>
+          <div class="subj-card-body">
+            <div class="t-chips">
+              ${assigned.length ? assigned.map(a=>`
+                <span class="chip ch-cyan">👩‍🏫 ${tchrName(a.teacher_id)}
+                  <button class="chip-rm" onclick="removeTeacher('${a.id}')">✕</button>
+                </span>
+              `).join('') : '<span style="color:var(--muted);font-size:12px;">No teacher assigned</span>'}
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="modalAssignTeacher(${subj.id})">+ Add Teacher</button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `);
+}
+function modalAssignTeacher(subjectId) {
+  const already   = S.subjectTeachers.filter(st => st.subject_id == subjectId).map(st => st.teacher_id);
+  const available = S.teachers.filter(t => !already.includes(t.id));
+  const subj      = S.subjects.find(s => s.id == subjectId);
+  if (!available.length) { toast('All teachers already assigned to this subject', 'i'); return; }
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Assign Teacher — ${subj?.name}</div><button class="modal-x" onclick="closeModal()">×</button></div>
+    <div class="fgroup-m">
+      <label>Select Teacher</label>
+      <select id="m-teacher">
+        <option value="">— Pick a teacher —</option>
+        ${available.map(t=>`<option value="${t.id}">${t.name} (${t.email})</option>`).join('')}
+      </select>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="assignTeacher(${subjectId})">Assign</button>
+    </div>
+  `);
+}
+async function assignTeacher(subjectId) {
+  const tid = document.getElementById('m-teacher').value;
+  if (!tid) { toast('Select a teacher', 'e'); return; }
+  const res = await window.insertData('exhibition_subject_teachers', { subject_id: subjectId, teacher_id: tid });
+  if (res) { toast('Teacher assigned ✅'); closeModal(); await refresh(); renderSubjects(); }
+  else toast('Failed to assign', 'e');
+}
+async function removeTeacher(assignmentId) {
+  if (!confirm('Remove this teacher from the subject?')) return;
+  const res = await window.deleteRow('exhibition_subject_teachers', ['id'], [assignmentId]);
+  if (res !== null) { toast('Teacher removed'); await refresh(); renderSubjects(); }
+  else toast('Failed', 'e');
+}
+
+// ─── ADMIN: STUDENT ASSIGNMENTS ──────────────────────────
+function renderAssignments() {
+  setTitle('Student Assignments');
+  const classes = [...new Set(S.allStudents.map(s => s.class))].sort();
+  setContent(`
+    <div class="card">
+      <div class="filters">
+        <div>
+          <div class="f-lbl">Class</div>
+          <select onchange="S.adminClassFilter=this.value; renderAssignTable()">
+            <option value="">All Classes</option>
+            ${classes.map(c=>`<option value="${c}">${c}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <div class="f-lbl">Subject Filter</div>
+          <select onchange="S.adminSubjectFilter=this.value; renderAssignTable()">
+            <option value="">All Subjects</option>
+            <option value="__none__">⏳ Unassigned</option>
+            ${S.subjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="modalBulkAssign()">✏️ Assign Selected</button>
+        <button class="btn btn-copy" onclick="copyAssignmentSummary()">📋 Copy</button>
+      </div>
+      <div id="assign-table"></div>
+    </div>
+  `);
+  renderAssignTable();
+}
+function renderAssignTable() {
+  let students = [...S.allStudents];
+  if (S.adminClassFilter) students = students.filter(s => s.class === S.adminClassFilter);
+  if (S.adminSubjectFilter === '__none__') students = students.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
+  else if (S.adminSubjectFilter) students = students.filter(s => S.studentAssignments.find(a => a.student_id === s.id && a.subject_id == S.adminSubjectFilter));
+  const n = S.selectedStudents.size;
+  document.getElementById('assign-table').innerHTML = `
+    ${n > 0 ? `<div class="action-bar">
+      <span class="action-bar-left">✅ ${n} student${n>1?'s':''} selected</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="S.selectedStudents.clear(); renderAssignTable()">Clear</button>
+        <button class="btn btn-primary btn-sm" onclick="modalBulkAssign()">Assign to Subject</button>
+      </div>
+    </div>` : ''}
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th class="cb-col"><input type="checkbox" id="sa-all" onchange="saToggleAll(this,${JSON.stringify(students.map(s=>s.id))})"></th>
+          <th>Name</th><th>Class</th><th>Subject</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          ${!students.length ? `<tr><td colspan="5"><div class="empty"><div class="empty-icon">📭</div><h3>No students</h3></div></td></tr>` : ''}
+          ${students.map(s => {
+            const subj = getStudentSubject(s.id);
+            const sel  = S.selectedStudents.has(s.id);
+            return `<tr>
+              <td><input type="checkbox" ${sel?'checked':''} onchange="saToggle('${s.id}',this.checked)"></td>
+              <td><strong>${s.name}</strong></td>
+              <td><span class="chip ch-gray">${s.class}</span></td>
+              <td>${subj ? `<span class="chip ch-green">📚 ${subj.name}</span>` : '<span class="chip ch-gray">—</span>'}</td>
+              <td style="display:flex;gap:5px;">
+                <button class="btn btn-ghost btn-xs" onclick="modalSingleAssign('${s.id}','${s.name.replace(/'/g,"\\'")}')">✏️</button>
+                ${subj ? `<button class="btn btn-danger btn-xs" onclick="unassignStudent('${s.id}')">✕</button>` : ''}
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+function saToggleAll(cb, ids) {
+  ids.forEach(id => cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id));
+  renderAssignTable();
+}
+function saToggle(id, checked) { checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id); }
+function modalBulkAssign() {
+  const ids = [...S.selectedStudents];
+  if (!ids.length) { toast('Select students first', 'i'); return; }
+  openAssignModal(ids, `${ids.length} students`);
+}
+function modalSingleAssign(id, name) { openAssignModal([id], name); }
+function openAssignModal(ids, label) {
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Assign to Exhibition Subject</div><button class="modal-x" onclick="closeModal()">×</button></div>
+    <p class="modal-note">Assigning: <strong>${label}</strong></p>
+    <div class="fgroup-m">
+      <label>Select Subject</label>
+      <select id="m-subject" style="width:100%">
+        <option value="">— Pick a subject —</option>
+        ${S.subjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="doAssign(${JSON.stringify(ids)})">Assign →</button>
+    </div>
+  `);
+}
+async function doAssign(ids) {
+  const sid = document.getElementById('m-subject').value;
+  if (!sid) { toast('Select a subject', 'e'); return; }
+  let ok = 0;
+  for (const studentId of ids) {
+    await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
+    const r = await window.insertData('exhibition_student_assignments', { student_id: studentId, subject_id: parseInt(sid), assigned_by: S.userId });
+    if (r) ok++;
+  }
+  toast(`${ok} student${ok!==1?'s':''} assigned ✅`); closeModal();
+  S.selectedStudents.clear(); await refresh(); renderAssignTable();
+}
+async function unassignStudent(studentId) {
+  if (!confirm('Remove from subject?')) return;
+  const r = await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
+  if (r !== null) { toast('Unassigned'); await refresh(); renderAssignTable(); }
+  else toast('Failed', 'e');
+}
+function copyAssignmentSummary() {
+  let text = `📋 Exhibition Student Assignments\n${'═'.repeat(32)}\n\n`;
+  S.subjects.forEach(subj => {
+    const studs = getSubjectStudents(subj.id);
+    if (!studs.length) return;
+    text += `📚 ${subj.name} (${studs.length})\n`;
+    studs.forEach((s,i) => { text += `  ${i+1}. ${s.name} — ${s.class}\n`; });
+    text += '\n';
+  });
+  const unassigned = S.allStudents.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
+  if (unassigned.length) {
+    text += `⏳ Unassigned (${unassigned.length})\n`;
+    unassigned.forEach((s,i) => { text += `  ${i+1}. ${s.name} — ${s.class}\n`; });
+  }
+  copyText(text);
+}
+
+// ─── ADMIN: GROUPS OVERVIEW ──────────────────────────────
+function renderGroupsAdmin() {
+  setTitle('Groups & Projects Overview');
+  const withGroups = S.subjects.filter(s => S.groups.some(g => g.subject_id == s.id));
+  if (!withGroups.length) {
+    setContent(`<div class="empty"><div class="empty-icon">🗂️</div><h3>No groups created yet</h3><p>Subject teachers will create groups in their subjects.</p></div>`);
+    return;
+  }
+  setContent(`
+    <div class="tabs" id="g-tabs">
+      ${withGroups.map(s=>`<div class="tab" onclick="showAdminGroups(${s.id})" data-sid="${s.id}">${s.name}</div>`).join('')}
+    </div>
+    <div id="g-content"></div>
+  `);
+  showAdminGroups(withGroups[0].id);
+}
+function showAdminGroups(subjectId) {
+  document.querySelectorAll('#g-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.sid == subjectId));
+  const grps = S.groups.filter(g => g.subject_id == subjectId);
+  document.getElementById('g-content').innerHTML = grps.length
+    ? `<div class="groups-grid">${grps.map(g => groupCard(g, false)).join('')}</div>`
+    : `<div class="empty"><div class="empty-icon">📂</div><h3>No groups yet</h3></div>`;
+}
+
+// ─── CLASS TEACHER VIEW ──────────────────────────────────
+function renderClassView() {
+  setTitle(`My Class: ${S.classData?.class||''}`);
+  const students   = S.classStudents;
+  const assigned   = students.filter(s =>  S.studentAssignments.find(a => a.student_id === s.id));
+  const unassigned = students.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
+  setActions(`<button class="btn btn-copy" onclick="copyClassList()">📋 Copy List</button>`);
+  setContent(`
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="stat-val">${students.length}</div><div class="stat-lbl">Total Students</div></div>
+      <div class="stat-card"><div class="stat-val good">${assigned.length}</div><div class="stat-lbl">✅ Assigned</div></div>
+      <div class="stat-card"><div class="stat-val ${unassigned.length?'warn':'good'}">${unassigned.length}</div><div class="stat-lbl">⏳ Pending</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-title">Students — ${S.classData?.class}</div>
+          <div class="card-sub">Select students and assign them to exhibition subjects</div>
+        </div>
+        <div class="card-header-actions">
+          <button class="btn btn-ghost btn-sm" onclick="ctSelectUnassigned()">Select Unassigned</button>
+          <button class="btn btn-primary" onclick="ctShowAssign()">✏️ Assign Selected</button>
+        </div>
+      </div>
+      <div class="action-bar" style="margin-bottom:12px;">
+        <span id="ct-sel-lbl" style="color:#5b21b6;font-weight:600;font-size:13px;">Select students to assign</span>
+        <div style="display:flex;gap:7px;">
+          <button class="btn btn-ghost btn-xs" onclick="ctSelectAll()">All</button>
+          <button class="btn btn-ghost btn-xs" onclick="S.selectedStudents.clear(); ctRender()">Clear</button>
+        </div>
+      </div>
+      <div id="ct-table"></div>
+    </div>
+  `);
+  ctRender();
+}
+function ctRender() {
+  const n = S.selectedStudents.size;
+  const el = document.getElementById('ct-sel-lbl');
+  if (el) el.textContent = n ? `${n} student${n>1?'s':''} selected` : 'Select students to assign';
+  document.getElementById('ct-table').innerHTML = `
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th class="cb-col"><input type="checkbox" onchange="ctToggleAll(this)"></th>
+          <th>Name</th><th>Roll</th><th>Subject</th><th>Action</th>
+        </tr></thead>
+        <tbody>
+          ${S.classStudents.map(s => {
+            const subj = getStudentSubject(s.id);
+            const sel  = S.selectedStudents.has(s.id);
+            return `<tr>
+              <td><input type="checkbox" ${sel?'checked':''} onchange="ctTgl('${s.id}',this.checked)"></td>
+              <td><strong>${s.name}</strong></td>
+              <td style="color:var(--muted)">${s.roll_number||'—'}</td>
+              <td>${subj ? `<span class="chip ch-green">📚 ${subj.name}</span>` : '<span class="chip ch-gray">—</span>'}</td>
+              <td style="display:flex;gap:5px;">
+                <button class="btn btn-ghost btn-xs" onclick="ctSingleAssign('${s.id}','${s.name.replace(/'/g,"\\'")}')">✏️</button>
+                ${subj ? `<button class="btn btn-danger btn-xs" onclick="ctUnassign('${s.id}')">✕</button>` : ''}
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+function ctTgl(id, c) { c ? S.selectedStudents.add(id) : S.selectedStudents.delete(id); ctRender(); }
+function ctToggleAll(cb) { S.classStudents.forEach(s => cb.checked ? S.selectedStudents.add(s.id) : S.selectedStudents.delete(s.id)); ctRender(); }
+function ctSelectAll()        { S.classStudents.forEach(s => S.selectedStudents.add(s.id)); ctRender(); }
+function ctSelectUnassigned() { S.classStudents.filter(s => !S.studentAssignments.find(a => a.student_id===s.id)).forEach(s => S.selectedStudents.add(s.id)); ctRender(); }
+function ctShowAssign()       { if (!S.selectedStudents.size) { toast('Select students first','i'); return; } ctOpenAssignModal([...S.selectedStudents], `${S.selectedStudents.size} students`); }
+function ctSingleAssign(id, name) { ctOpenAssignModal([id], name); }
+function ctOpenAssignModal(ids, label) {
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Assign to Subject</div><button class="modal-x" onclick="closeModal()">×</button></div>
+    <p class="modal-note">Assigning: <strong>${label}</strong></p>
+    <div class="fgroup-m">
+      <label>Select Subject</label>
+      <select id="m-ct-sub" style="width:100%">
+        <option value="">— Pick a subject —</option>
+        ${S.subjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="ctDoAssign(${JSON.stringify(ids)})">Assign →</button>
+    </div>
+  `);
+}
+async function ctDoAssign(ids) {
+  const sid = document.getElementById('m-ct-sub').value;
+  if (!sid) { toast('Select a subject', 'e'); return; }
+  let ok = 0;
+  for (const studentId of ids) {
+    await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
+    const r = await window.insertData('exhibition_student_assignments', { student_id: studentId, subject_id: parseInt(sid), assigned_by: S.userId });
+    if (r) ok++;
+  }
+  toast(`${ok} student${ok!==1?'s':''} assigned ✅`); closeModal();
+  S.selectedStudents.clear(); await refresh(); ctRender();
+}
+async function ctUnassign(studentId) {
+  if (!confirm('Remove from subject?')) return;
+  const r = await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
+  if (r !== null) { toast('Removed'); await refresh(); ctRender(); }
+  else toast('Failed', 'e');
+}
+function copyClassList() {
+  let text = `📋 Class ${S.classData?.class} — Exhibition Assignments\n${'═'.repeat(34)}\n\n`;
+  S.classStudents.forEach((s,i) => {
+    const subj = getStudentSubject(s.id);
+    text += `${String(i+1).padStart(2,'0')}. ${s.name.padEnd(25,' ')} → ${subj ? subj.name : 'Not assigned'}\n`;
+  });
+  copyText(text);
+}
+
+// ─── SUBJECT TEACHER VIEW ────────────────────────────────
+function renderSubjectView(subjectId) {
+  if (!subjectId) {
+    setTitle('My Subjects'); setActions('');
+    setContent(`<div class="empty"><div class="empty-icon">📚</div><h3>No subjects assigned</h3><p>Ask an Exhibition Admin to assign you to a subject.</p></div>`);
+    return;
+  }
+  const subj  = S.subjects.find(s => s.id == subjectId) || {};
+  const studs = getSubjectStudents(subjectId);
+  const grps  = S.groups.filter(g => g.subject_id == subjectId);
+  setTitle(`📚 ${subj.name}`);
+  setActions(`
+    <button class="btn btn-copy" onclick="copySubjectDetails(${subjectId})">📋 Copy All</button>
+    <button class="btn btn-amber" onclick="shareWhatsApp(${subjectId})">📱 WhatsApp</button>
+  `);
+  setContent(`
+    <div class="tabs">
+      <div class="tab ${S.activeTab==='students'?'active':''}" onclick="stTab('students',${subjectId})">👥 Students (${studs.length})</div>
+      <div class="tab ${S.activeTab==='groups'?'active':''}" onclick="stTab('groups',${subjectId})">🗂️ Groups (${grps.length})</div>
+      <div class="tab ${S.activeTab==='share'?'active':''}" onclick="stTab('share',${subjectId})">📤 Share</div>
+    </div>
+    <div id="st-content"></div>
+  `);
+  renderStTab(subjectId);
+}
+function stTab(tab, sid) { S.activeTab = tab; renderSubjectView(sid); }
+function renderStTab(subjectId) {
+  if (S.activeTab === 'students') renderStudentsTab(subjectId);
+  else if (S.activeTab === 'groups') renderGroupsTab(subjectId);
+  else renderShareTab(subjectId);
+}
+function renderStudentsTab(subjectId) {
+  const studs = getSubjectStudents(subjectId);
+  document.getElementById('st-content').innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-title">Assigned Students (${studs.length})</div>
+          <div class="card-sub">${studs.filter(s=>!S.groupMembers.find(m=>m.student_id===s.id)).length} ungrouped</div>
+        </div>
+        <button class="btn btn-copy btn-sm" onclick="copyStudentList(${subjectId})">📋 Copy</button>
+      </div>
+      ${!studs.length ? `<div class="empty"><div class="empty-icon">👤</div><h3>No students assigned yet</h3><p>Class teachers or admins assign students here.</p></div>` : `
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Class</th><th>Group</th></tr></thead>
+          <tbody>
+            ${studs.map(s => {
+              const gm  = S.groupMembers.find(m => m.student_id === s.id);
+              const grp = gm ? S.groups.find(g => g.id === gm.group_id) : null;
+              return `<tr>
+                <td><strong>${s.name}</strong></td>
+                <td><span class="chip ch-gray">${s.class}</span></td>
+                <td>${grp ? `<span class="chip ch-blue">🗂️ ${grp.group_name}</span>` : '<span class="chip ch-gray">Not grouped</span>'}</td>
+              </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`}
+    </div>
+  `;
+}
+function renderGroupsTab(subjectId) {
+  const grps = S.groups.filter(g => g.subject_id == subjectId);
+  document.getElementById('st-content').innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+      <button class="btn btn-primary" onclick="modalCreateGroup(${subjectId})">+ Create Group</button>
+    </div>
+    ${!grps.length ? `
+      <div class="empty"><div class="empty-icon">🗂️</div><h3>No groups yet</h3>
+      <p>Create groups to organize students and assign projects.</p>
+      <button class="btn btn-primary" style="margin-top:16px;" onclick="modalCreateGroup(${subjectId})">+ Create First Group</button></div>
+    ` : `<div class="groups-grid">${grps.map(g => groupCard(g, true)).join('')}</div>`}
+  `;
+}
+function renderShareTab(subjectId) {
+  const text = buildShareText(subjectId);
+  document.getElementById('st-content').innerHTML = `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-title">Exhibition Details — ${subjName(subjectId)}</div>
+          <div class="card-sub">Copy or share this formatted summary</div>
+        </div>
+        <div class="card-header-actions">
+          <button class="btn btn-copy" onclick="copyText(document.getElementById('share-txt').textContent)">📋 Copy</button>
+          <button class="btn btn-amber" onclick="shareWhatsApp(${subjectId})">📱 WhatsApp</button>
+          <button class="btn btn-success" onclick="shareNative(${subjectId})">📤 Share</button>
+        </div>
+      </div>
+      <div class="share-box" id="share-txt">${text}</div>
+    </div>
+  `;
+}
+
+// ─── GROUP CARD ──────────────────────────────────────────
+function groupCard(group, editable) {
+  const members = getGroupStudents(group.id);
+  const shareText = buildGroupText(group, members);
+  return `
+    <div class="group-card">
+      <div class="group-card-hdr">
+        <span class="group-card-title">🗂️ ${group.group_name}</span>
+        <div style="display:flex;gap:5px;">
+          <button class="btn btn-xs btn-copy" onclick='copyText(${JSON.stringify(shareText)})' title="Copy">📋</button>
+          ${editable ? `<button class="btn btn-xs btn-ghost" onclick="modalEditGroup('${group.id}')">✏️</button>
+          <button class="btn btn-xs btn-danger" onclick="deleteGroup('${group.id}',${group.subject_id})">🗑️</button>` : ''}
+        </div>
+      </div>
+      <div class="group-card-body">
+        ${group.project_title      ? `<div class="drow"><span class="drow-icon">💡</span><div><div class="drow-lbl">Project</div><div class="drow-val">${group.project_title}</div></div></div>` : ''}
+        ${group.room_number        ? `<div class="drow"><span class="drow-icon">🚪</span><div><div class="drow-lbl">Room</div><div class="drow-val">${group.room_number}</div></div></div>` : ''}
+        ${group.materials_required ? `<div class="drow"><span class="drow-icon">📦</span><div><div class="drow-lbl">Materials</div><div class="drow-val">${group.materials_required}</div></div></div>` : ''}
+        ${group.reference_links    ? `<div class="drow"><span class="drow-icon">🔗</span><div><div class="drow-lbl">Links</div><div class="drow-val" style="word-break:break-all">${group.reference_links}</div></div></div>` : ''}
+        ${group.instructions       ? `<div class="drow"><span class="drow-icon">📋</span><div><div class="drow-lbl">Instructions</div><div class="drow-val">${group.instructions}</div></div></div>` : ''}
+        <div class="drow">
+          <span class="drow-icon">👨‍🎓</span>
+          <div>
+            <div class="drow-lbl">Students (${members.length})</div>
+            <div class="s-chips">
+              ${members.map(m=>`<span class="chip ch-blue">${m.name}${editable?`<button class="chip-rm" onclick="removeFromGroup('${group.id}','${m.id}',${group.subject_id})">✕</button>`:''}</span>`).join('')||'<span style="color:var(--muted);font-size:12px;">No students</span>'}
+              ${editable ? `<button class="btn btn-xs btn-ghost" onclick="modalAddToGroup('${group.id}',${group.subject_id})">+ Add</button>` : ''}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ─── GROUP CRUD ──────────────────────────────────────────
+function groupFormFields(g = {}) {
+  return `
+    <div class="fgroup-m"><label>Group Name *</label><input type="text" id="gf-name" value="${g.group_name||''}" placeholder="e.g. Group A, Team Stars…"></div>
+    <div class="fgroup-m"><label>Project Title</label><input type="text" id="gf-project" value="${g.project_title||''}" placeholder="Project topic or title"></div>
+    <div class="fgroup-m"><label>Room Number</label><input type="text" id="gf-room" value="${g.room_number||''}" placeholder="e.g. Room 101, Science Lab…"></div>
+    <div class="fgroup-m"><label>Materials Required</label><textarea id="gf-materials" placeholder="List materials needed…">${g.materials_required||''}</textarea></div>
+    <div class="fgroup-m"><label>Reference Links</label><input type="text" id="gf-links" value="${g.reference_links||''}" placeholder="https://…"></div>
+    <div class="fgroup-m"><label>Instructions</label><textarea id="gf-instructions" placeholder="Instructions or notes…">${g.instructions||''}</textarea></div>
+  `;
+}
+function getGroupFormValues() {
+  return {
+    group_name:         document.getElementById('gf-name').value.trim(),
+    project_title:      document.getElementById('gf-project').value.trim() || null,
+    room_number:        document.getElementById('gf-room').value.trim() || null,
+    materials_required: document.getElementById('gf-materials').value.trim() || null,
+    reference_links:    document.getElementById('gf-links').value.trim() || null,
+    instructions:       document.getElementById('gf-instructions').value.trim() || null,
+  };
+}
+function modalCreateGroup(subjectId) {
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Create Group</div><button class="modal-x" onclick="closeModal()">×</button></div>
+    ${groupFormFields()}
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="createGroup(${subjectId})">Create Group</button>
+    </div>
+  `);
+}
+async function createGroup(subjectId) {
+  const vals = getGroupFormValues();
+  if (!vals.group_name) { toast('Group name is required', 'e'); return; }
+  const r = await window.insertData('exhibition_groups', { subject_id: subjectId, ...vals });
+  if (r) { toast('Group created ✅'); closeModal(); await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
+  else toast('Failed to create group', 'e');
+}
+function modalEditGroup(groupId) {
+  const g = S.groups.find(g => g.id === groupId); if (!g) return;
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Edit Group</div><button class="modal-x" onclick="closeModal()">×</button></div>
+    ${groupFormFields(g)}
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="updateGroup('${groupId}',${g.subject_id})">Save Changes</button>
+    </div>
+  `);
+}
+async function updateGroup(groupId, subjectId) {
+  const vals = getGroupFormValues();
+  if (!vals.group_name) { toast('Group name required', 'e'); return; }
+  const r = await window.updateRow('exhibition_groups', ['id'], [groupId], Object.keys(vals), Object.values(vals));
+  if (r) { toast('Group updated ✅'); closeModal(); await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
+  else toast('Failed to update', 'e');
+}
+async function deleteGroup(groupId, subjectId) {
+  const g = S.groups.find(g => g.id === groupId);
+  if (!confirm(`Delete group "${g?.group_name}"? Members will be ungrouped.`)) return;
+  const r = await window.deleteRow('exhibition_groups', ['id'], [groupId]);
+  if (r !== null) { toast('Group deleted'); await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
+  else toast('Failed', 'e');
+}
+function modalAddToGroup(groupId, subjectId) {
+  const available = getSubjectStudents(subjectId).filter(s => !S.groupMembers.find(m => m.student_id === s.id));
+  if (!available.length) { toast('All students already in groups', 'i'); return; }
+  const grp = S.groups.find(g => g.id === groupId);
+  openModal(`
+    <div class="modal-hdr"><div class="modal-title">Add Students — ${grp?.group_name}</div><button class="modal-x" onclick="closeModal()">×</button></div>
+    <p class="modal-note">Select ungrouped students:</p>
+    <div class="ssl" id="m-ssl">
+      ${available.map(s=>`
+        <div class="ssl-item" onclick="this.classList.toggle('sel'); this.querySelector('input').checked=!this.querySelector('input').checked">
+          <input type="checkbox" value="${s.id}" onclick="event.stopPropagation()">
+          <span><strong>${s.name}</strong> <span class="chip ch-gray" style="font-size:11px;">${s.class}</span></span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="modal-ftr">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="addToGroup('${groupId}',${subjectId})">Add Selected</button>
+    </div>
+  `);
+}
+async function addToGroup(groupId, subjectId) {
+  const cbs = document.querySelectorAll('#m-ssl input[type="checkbox"]:checked');
+  const ids = [...cbs].map(c => c.value);
+  if (!ids.length) { toast('Select at least one student', 'i'); return; }
+  let ok = 0;
+  for (const sid of ids) {
+    const r = await window.insertData('exhibition_group_members', { group_id: groupId, student_id: sid });
+    if (r) ok++;
+  }
+  toast(`${ok} student${ok!==1?'s':''} added ✅`); closeModal();
+  await refresh(); S.activeTab='groups'; renderSubjectView(subjectId);
+}
+async function removeFromGroup(groupId, studentId, subjectId) {
+  const r = await window.deleteRow('exhibition_group_members', ['group_id','student_id'], [groupId, studentId]);
+  if (r !== null) { await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
+  else toast('Failed', 'e');
+}
+
+// ─── SHARE TEXT BUILDERS ─────────────────────────────────
+function buildGroupText(group, members) {
+  const subj = subjName(group.subject_id);
+  let t = `📚 Subject: ${subj}\n🗂️  Group: ${group.group_name}\n`;
+  if (group.project_title)      t += `💡 Project: ${group.project_title}\n`;
+  if (group.room_number)        t += `🚪 Room: ${group.room_number}\n`;
+  if (group.materials_required) t += `📦 Materials: ${group.materials_required}\n`;
+  if (group.reference_links)    t += `🔗 Links: ${group.reference_links}\n`;
+  if (group.instructions)       t += `📋 Instructions: ${group.instructions}\n`;
+  t += `\n👨‍🎓 Students (${members.length}):\n`;
+  members.forEach((m,i) => { t += `  ${i+1}. ${m.name} — ${m.class}\n`; });
+  return t;
+}
+function buildShareText(subjectId) {
+  const name  = subjName(subjectId);
+  const grps  = S.groups.filter(g => g.subject_id == subjectId);
+  const studs = getSubjectStudents(subjectId);
+  let t = `🎨 EXHIBITION — ${name.toUpperCase()}\n${'═'.repeat(34)}\n`;
+  t += `👥 Total Students: ${studs.length}  |  🗂️ Groups: ${grps.length}\n\n`;
+  if (grps.length) {
+    grps.forEach(g => { t += buildGroupText(g, getGroupStudents(g.id)); t += `\n${'─'.repeat(28)}\n\n`; });
+  } else {
+    t += `📋 Students:\n`;
+    studs.forEach((s,i) => { t += `  ${i+1}. ${s.name} — ${s.class}\n`; });
+  }
+  return t;
+}
+function copySubjectDetails(subjectId) { copyText(buildShareText(subjectId)); }
+function copyStudentList(subjectId) {
+  const studs = getSubjectStudents(subjectId);
+  let t = `👥 ${subjName(subjectId)} — Student List\n\n`;
+  studs.forEach((s,i) => { t += `${i+1}. ${s.name} (${s.class})\n`; });
+  copyText(t);
+}
+function shareWhatsApp(subjectId) {
+  const text = buildShareText(subjectId);
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+async function shareNative(subjectId) {
+  const text = buildShareText(subjectId);
+  if (navigator.share) {
+    try { await navigator.share({ title: `Exhibition — ${subjName(subjectId)}`, text }); }
+    catch(e) { copyText(text); }
+  } else { copyText(text); }
+}
+
+// ─── KEYBOARD SHORTCUTS ───────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') handleLogin();
+  if (e.key === 'Escape') closeModal();
+});
+
+// ─── BOOT ─────────────────────────────────────────────────
+waitForSupabase(init);
+</script>
+</body>
+</html>
