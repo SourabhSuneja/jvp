@@ -311,8 +311,7 @@ const examMarksConfig = [
         "Term-1 (Theory)": 50,
         "Term-1 (Practical)": 30,
         "Term-2 (Theory)": 50,
-        "Term-2 (Practical)": 30,
-        "Term-2 (Internal)": 10
+        "Term-2 (Practical)": 50
       }
     },
     {
