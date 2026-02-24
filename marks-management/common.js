@@ -300,7 +300,8 @@ const examMarksConfig = [
       "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
       "exams": {
         "Term-1 (Theory)": 80,
-        "Term-2 (Theory)": 80
+        "Term-2 (Theory)": 80,
+        "Term-2 (Internal)": 10
       }
     },
     {
@@ -310,7 +311,8 @@ const examMarksConfig = [
         "Term-1 (Theory)": 50,
         "Term-1 (Practical)": 30,
         "Term-2 (Theory)": 50,
-        "Term-2 (Practical)": 30
+        "Term-2 (Practical)": 30,
+        "Term-2 (Internal)": 10
       }
     },
     {
@@ -319,7 +321,8 @@ const examMarksConfig = [
       "exams": {
         "Term-1 (Theory)": 70,
         "Term-1 (Internal)": 10,
-        "Term-2 (Theory)": 70
+        "Term-2 (Theory)": 70,
+        "Term-2 (Internal)": 10
       }
     },
     {
