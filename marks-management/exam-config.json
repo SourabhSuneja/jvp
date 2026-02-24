@@ -113,15 +113,25 @@
         "Term-1 (Theory)": 70,
         "Term-1 (Internal)": 10,
         "Term-2 (Theory)": 70,
-        "Term-2 (Internal)": 10
+        "Term-2 (Practical)": 30
       }
     },
     {
       "classes": [11],
-      "subjects": ["English", "Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
+      "subjects": ["English"],
       "exams": {
         "Term-1 (Theory)": 80,
-        "Term-2 (Theory)": 80
+        "Term-2 (Theory)": 80,
+        "Term-2 (Internal)": 20
+      }
+    },
+    {
+      "classes": [11],
+      "subjects": ["Maths", "Accountancy", "B.St.", "Economics", "History", "Pol. Sci.", "Applied Maths"],
+      "exams": {
+        "Term-1 (Theory)": 80,
+        "Term-2 (Theory)": 80,
+        "Term-2 (Practical)": 20
       }
     },
     {
