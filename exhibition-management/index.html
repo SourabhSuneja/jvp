@@ -38,7 +38,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow: hidden; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;}
 button { font-family: var(--font-body); cursor: pointer; border: none; background: none; color: inherit; }
 input, textarea { font-family: var(--font-body); color: var(--text); }
 a { color: var(--primary); text-decoration: none; }
@@ -48,7 +48,7 @@ a { color: var(--primary); text-decoration: none; }
 
 /* ── APP SHELL ────────────────────────────────────────────────────────── */
 #app {
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -388,6 +388,7 @@ a { color: var(--primary); text-decoration: none; }
   background: var(--surface);
   border-top: 1px solid var(--border);
   padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   display: flex;
   gap: 10px;
   flex-shrink: 0;
@@ -552,7 +553,7 @@ a { color: var(--primary); text-decoration: none; }
   border-top: 1px solid var(--border);
   padding: 24px 24px 0;
   width: 100%;
-  max-height: 85vh;
+  max-height: calc(85dvh - env(safe-area-inset-bottom, 0px));
   display: flex;
   flex-direction: column;
   transform: translateY(100%);
@@ -561,8 +562,8 @@ a { color: var(--primary); text-decoration: none; }
 .modal-overlay.open .modal-box { transform: translateY(0); }
 .modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
 .modal-sub { font-size: 12px; color: var(--subtext); margin-bottom: 16px; font-family: var(--font-mono); }
-.modal-scroll { overflow-y: auto; flex: 1; margin: 0 -24px; padding: 0 24px; }
-.modal-footer { display: flex; gap: 10px; padding: 14px 0 24px; border-top: 1px solid var(--border); margin: 0 -24px; padding: 14px 24px 24px; flex-shrink: 0; }
+.modal-scroll { overflow-y: auto; min-height: 0; flex: 1; margin: 0 -24px; padding: 0 24px; }
+.modal-footer { display: flex; gap: 10px; padding: 14px 24px calc(24px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--border); margin: 0 -24px; padding: 14px 24px 24px; flex-shrink: 0; }
 
 /* Subject option rows in modal */
 .subject-option {
@@ -615,7 +616,7 @@ a { color: var(--primary); text-decoration: none; }
 /* Toast */
 .toast {
   position: fixed;
-  bottom: 80px;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: var(--surface2);
