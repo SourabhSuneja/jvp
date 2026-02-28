@@ -1754,7 +1754,7 @@ async function gdSaveField(fieldKey) {
   const btn = document.querySelector('#modal-footer .btn-primary');
   if (btn) { btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>'; }
   const { data, error } = await sb.from('exhibition_groups').update({ [fieldKey]: val }).eq('id', _gd.groupId).select('*').single();
-  if (!error && data) { _gd.group = data; if (_gd.onSaved) _gd.onSaved(); }
+  if (!error && data) { _gd.group = data; }
   else if (error) showToast('❌ '+error.message);
   closeModal();
   gdRender(document.getElementById('screen-root').firstChild);
