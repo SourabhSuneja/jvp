@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Exhibition Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg: #0a0f1e;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d47;
+  --border2: #253650;
+  --text: #e8edf5;
+  --subtext: #6b7f99;
+  --primary: #4f7cff;
+  --primary-dim: rgba(79,124,255,0.12);
+  --primary-glow: rgba(79,124,255,0.25);
+  --success: #10c97a;
+  --success-dim: rgba(16,201,122,0.12);
+  --danger: #ff4d6d;
+  --danger-dim: rgba(255,77,109,0.12);
+  --warning: #f5a623;
+  --warning-dim: rgba(245,166,35,0.12);
+  --violet: #8b5cf6;
+  --violet-dim: rgba(139,92,246,0.12);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --transition: 200ms cubic-bezier(0.4,0,0.2,1);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font-family: var(--font-body); cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea { font-family: var(--font-body); color: var(--text); }
+a { color: var(--primary); text-decoration: none; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ── APP SHELL ────────────────────────────────────────────────────────── */
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg);
+}
+
+/* Subtle grid background */
+#app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#screen-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  backdrop-filter: blur(12px);
+}
+.header-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.header-back:hover { background: var(--border2); border-color: var(--border2); }
+.header-back svg { width: 18px; height: 18px; stroke: var(--text); }
+.header-info { flex: 1; min-width: 0; }
+.header-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-subtitle {
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  margin-top: 1px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
+  flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--border2); border-color: var(--border2); }
+.icon-btn svg { width: 18px; height: 18px; stroke: var(--text); }
+.icon-btn.danger svg { stroke: var(--danger); }
+.icon-btn.success svg { stroke: var(--success); }
+
+/* ── SCROLLABLE CONTENT ─────────────────────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.content-inner { padding: 20px; padding-bottom: 40px; }
+
+/* ── CARDS ──────────────────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  transition: var(--transition);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-1px); }
+.card:active { transform: translateY(0); }
+.card.no-hover { cursor: default; }
+.card.no-hover:hover { transform: none; border-color: var(--border); background: var(--surface); }
+.card-col { flex-direction: column; align-items: stretch; }
+.card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon svg { width: 20px; height: 20px; }
+.card-body { flex: 1; min-width: 0; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--text); font-family: var(--font-display); }
+.card-sub { font-size: 12px; color: var(--subtext); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-arrow svg { width: 16px; height: 16px; stroke: var(--subtext); flex-shrink: 0; }
+
+/* ── SECTION LABEL ──────────────────────────────────────────────────────── */
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtext);
+  font-family: var(--font-mono);
+  margin-bottom: 14px;
+  margin-top: 4px;
+}
+
+/* ── STUDENT ROW ────────────────────────────────────────────────────────── */
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 8px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.student-row:hover { border-color: var(--border2); }
+.student-row.assigned { border-color: rgba(16,201,122,0.3); }
+.student-row.selected { border-color: var(--primary); background: var(--primary-dim); }
+.roll-badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  min-width: 38px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--subtext);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.student-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.student-meta { font-size: 11px; color: var(--subtext); margin-top: 1px; }
+.student-subject { font-size: 11px; color: var(--success); margin-top: 2px; }
+.student-group { font-size: 11px; color: var(--success); margin-top: 2px; }
+
+/* ── TAB BAR ────────────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--subtext);
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  cursor: pointer;
+  font-family: var(--font-body);
+  background: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 700; }
+
+/* ── FILTER / STATS BAR ─────────────────────────────────────────────────── */
+.filter-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--subtext);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+.chip:hover { border-color: var(--border2); }
+.chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.chip.primary-border { border-color: var(--primary); color: var(--primary); background: transparent; }
+.chip.primary-border.active { background: var(--primary); color: #fff; }
+.pct-label { font-size: 13px; font-weight: 700; color: var(--success); margin-left: auto; font-family: var(--font-mono); }
+
+/* ── SEARCH BAR ─────────────────────────────────────────────────────────── */
+.search-wrap {
+  padding: 0 16px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.search-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  height: 40px;
+}
+.search-inner svg { width: 15px; height: 15px; stroke: var(--subtext); flex-shrink: 0; }
+.search-inner input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text);
+}
+.search-inner input::placeholder { color: var(--subtext); }
+.search-clear { background: none; border: none; cursor: pointer; display: flex; padding: 2px; }
+.search-clear svg { width: 14px; height: 14px; stroke: var(--subtext); }
+
+/* ── PROGRESS BAR ───────────────────────────────────────────────────────── */
+.progress-bg {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+
+/* ── ASSIGN MODE BANNER ─────────────────────────────────────────────────── */
+.assign-banner {
+  background: var(--primary-dim);
+  border-bottom: 1px solid rgba(79,124,255,0.2);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.assign-banner-title { font-size: 14px; font-weight: 700; color: var(--primary); font-family: var(--font-display); }
+.assign-banner-sub { font-size: 11px; color: var(--subtext); margin-top: 1px; }
+
+/* ── CHIP TAGS ──────────────────────────────────────────────────────────── */
+.chip-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--primary-dim);
+  border: 1px solid rgba(79,124,255,0.3);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 500;
+}
+.chip-tag svg { width: 12px; height: 12px; stroke: var(--primary); }
+
+/* ── DETAIL ROWS ────────────────────────────────────────────────────────── */
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.detail-row:hover { border-color: var(--border2); background: var(--surface2); }
+.detail-label { font-size: 11px; color: var(--subtext); font-family: var(--font-mono); margin-bottom: 3px; }
+.detail-value { font-size: 14px; color: var(--text); line-height: 1.4; }
+.detail-empty { font-size: 13px; color: var(--subtext); font-style: italic; }
+.detail-edit svg { width: 15px; height: 15px; stroke: var(--subtext); }
+
+/* ── TEACHER CHIP ROW ───────────────────────────────────────────────────── */
+.teacher-chip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(30,45,71,0.7);
+}
+.remove-btn { background: none; border: none; cursor: pointer; display: flex; padding: 2px; }
+.remove-btn svg { width: 18px; height: 18px; stroke: var(--danger); }
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.btn {
+  height: 48px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 18px;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: #fff; flex: 1; }
+.btn-primary:hover { background: #3d6af0; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); flex: 1; }
+.btn-secondary:hover { background: var(--border2); }
+.btn svg { width: 17px; height: 17px; stroke: currentColor; }
+
+/* ── LOADING / EMPTY ────────────────────────────────────────────────────── */
+.loading-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 40px;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 13px; color: var(--subtext); }
+.empty-wrap { display: flex; flex-direction: column; align-items: center; padding: 48px 20px; gap: 12px; }
+.empty-wrap svg { width: 48px; height: 48px; stroke: var(--border2); }
+.empty-text { font-size: 13px; color: var(--subtext); text-align: center; line-height: 1.6; }
+
+/* ── LOGIN ──────────────────────────────────────────────────────────────── */
+.login-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 400px;
+}
+.login-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.login-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary-dim);
+  border: 1px solid rgba(79,124,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-icon svg { width: 28px; height: 28px; stroke: var(--primary); }
+.login-title { font-family: var(--font-display); font-size: 22px; font-weight: 800; text-align: center; color: var(--text); margin-bottom: 6px; }
+.login-sub { font-size: 13px; color: var(--subtext); text-align: center; margin-bottom: 28px; }
+.form-input {
+  width: 100%;
+  height: 50px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+  display: block;
+  margin-bottom: 14px;
+}
+.form-input:focus { border-color: var(--primary); }
+.form-input::placeholder { color: var(--subtext); }
+.form-input.error { border-color: var(--danger); }
+.form-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+  display: block;
+  margin-bottom: 14px;
+  resize: vertical;
+  font-family: var(--font-body);
+}
+.form-textarea:focus { border-color: var(--primary); }
+.form-textarea::placeholder { color: var(--subtext); }
+.login-btn {
+  width: 100%;
+  height: 50px;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  margin-top: 8px;
+}
+.login-btn:hover { background: #3d6af0; }
+.login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.error-msg { color: var(--danger); font-size: 12px; text-align: center; margin-bottom: 12px; }
+
+/* ── MODAL ──────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: flex-end;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--surface);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 1px solid var(--border);
+  padding: 24px 24px 0;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 280ms cubic-bezier(0.34,1.2,0.64,1);
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--subtext); margin-bottom: 16px; font-family: var(--font-mono); }
+.modal-scroll { overflow-y: auto; flex: 1; margin: 0 -24px; padding: 0 24px; }
+.modal-footer { display: flex; gap: 10px; padding: 14px 0 24px; border-top: 1px solid var(--border); margin: 0 -24px; padding: 14px 24px 24px; flex-shrink: 0; }
+
+/* Subject option rows in modal */
+.subject-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 4px;
+  border-bottom: 1px solid rgba(30,45,71,0.6);
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: 6px;
+}
+.subject-option:hover { background: var(--surface2); padding-left: 8px; padding-right: 8px; }
+.subject-option.active { background: var(--primary-dim); padding-left: 8px; padding-right: 8px; }
+.subject-option svg { width: 17px; height: 17px; stroke: var(--primary); flex-shrink: 0; }
+
+/* Confirmation dialog (replacing Alert) */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms;
+}
+.confirm-overlay.open { opacity: 1; pointer-events: all; }
+.confirm-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  transform: scale(0.9);
+  transition: transform 200ms cubic-bezier(0.34,1.2,0.64,1);
+}
+.confirm-overlay.open .confirm-box { transform: scale(1); }
+.confirm-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.confirm-msg { font-size: 13px; color: var(--subtext); line-height: 1.6; margin-bottom: 20px; }
+.confirm-btns { display: flex; gap: 10px; }
+.confirm-cancel { flex: 1; height: 42px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+.confirm-ok { flex: 1; height: 42px; background: var(--danger); border: none; border-radius: var(--radius-sm); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
+.confirm-ok.primary { background: var(--primary); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 30px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  z-index: 3000;
+  opacity: 0;
+  transition: opacity 250ms, transform 250ms;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── SCREEN TRANSITION ──────────────────────────────────────────────────── */
+.screen-enter { animation: slideIn 220ms cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── MISC ───────────────────────────────────────────────────────────────── */
+.ungrouped-warning {
+  border-color: rgba(245,166,35,0.4) !important;
+  background: var(--warning-dim) !important;
+}
+.ungrouped-warning .card-title { color: var(--warning); }
+.no-perm-card { border-color: rgba(255,77,109,0.2); }
+
+@media (max-width: 480px) {
+  .login-card { padding: 24px 20px; }
+  .content-inner { padding: 16px; }
+  .header { padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="screen-root"></div>
+</div>
+<!-- Modals (always mounted) -->
+<div id="modal-overlay" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="modal-box" id="modal-box">
+    <div id="modal-content"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+<div id="confirm-overlay" class="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" id="confirm-cancel">Cancel</button>
+      <button class="confirm-ok" id="confirm-ok">OK</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://ckltcwampaagyzneaznt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrbHRjd2FtcGFhZ3l6bmVhem50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1MDI2NjgsImV4cCI6MjA0ODA3ODY2OH0.pUT2kngS0nkzFBjI-P6g8azU5E3tZzGDQGL68-AUWFc';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let session = null;
+let role = null;
+let roleData = {};
+let screenStack = [{ name: 'loading', params: {} }];
+
+// ── ICONS (inline SVG) ─────────────────────────────────────────────────────
+const I = {
+  back: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>`,
+  fwd: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>`,
+  down: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>`,
+  up: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>`,
+  ribbon: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>`,
+  book: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>`,
+  people: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>`,
+  layers: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"/></svg>`,
+  school: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg>`,
+  personAdd: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>`,
+  copy: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>`,
+  share: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"/></svg>`,
+  trash: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>`,
+  add: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>`,
+  check: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>`,
+  checkCircle: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor" fill-opacity="0.15"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  circle: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  git: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path stroke-linecap="round" d="M6 21V9a9 9 0 009 9"/></svg>`,
+  search: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>`,
+  close: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`,
+  warn: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>`,
+  personRemove: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>`,
+  edit: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"/></svg>`,
+  lock: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>`,
+  tray: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3"/></svg>`,
+  bookmark: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/></svg>`,
+  location: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>`,
+  construct: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/></svg>`,
+  link: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>`,
+  docText: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>`,
+  socialShare: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15"/></svg>`,
+  closeCircle: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M15 9l-6 6M9 9l6 6"/></svg>`,
+  person: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>`,
+  signout: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>`,
+};
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+const sortClasses = (arr) => [...arr].sort((a, b) => {
+  const parse = s => { const [g, sec] = s.split('-'); return [parseInt(g)||0, sec||'']; };
+  const [ag, as_] = parse(a), [bg, bs] = parse(b);
+  return ag !== bg ? ag - bg : as_.localeCompare(bs);
+});
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch { return false; }
+}
+
+function shareText(text, title = 'Exhibition Details') {
+  if (navigator.share) {
+    navigator.share({ text, title }).catch(() => {});
+  } else {
+    copyText(text).then(() => showToast('📋 Copied to clipboard'));
+  }
+}
+
+function confirm(title, msg, okLabel = 'Delete', isDanger = true) {
+  return new Promise(resolve => {
+    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-msg').textContent = msg;
+    const ok = document.getElementById('confirm-ok');
+    const cancel = document.getElementById('confirm-cancel');
+    ok.textContent = okLabel;
+    ok.className = isDanger ? 'confirm-ok' : 'confirm-ok primary';
+    document.getElementById('confirm-overlay').classList.add('open');
+    const cleanup = (res) => {
+      document.getElementById('confirm-overlay').classList.remove('open');
+      ok.removeEventListener('click', onOk);
+      cancel.removeEventListener('click', onCancel);
+      resolve(res);
+    };
+    const onOk = () => cleanup(true);
+    const onCancel = () => cleanup(false);
+    ok.addEventListener('click', onOk);
+    cancel.addEventListener('click', onCancel);
+  });
+}
+
+// ── MODAL ────────────────────────────────────────────────────────────────────
+let modalCloseCallback = null;
+function openModal(contentHTML, footerHTML, onClose = null) {
+  document.getElementById('modal-content').innerHTML = contentHTML;
+  document.getElementById('modal-footer').innerHTML = footerHTML;
+  document.getElementById('modal-overlay').classList.add('open');
+  modalCloseCallback = onClose;
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  if (modalCloseCallback) { modalCloseCallback(); modalCloseCallback = null; }
+}
+function handleModalOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+function pushScreen(name, params = {}) {
+  screenStack.push({ name, params });
+  render();
+}
+function popScreen() {
+  if (screenStack.length > 1) screenStack.pop();
+  else { /* parent back */ }
+  render();
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+async function detectRole(uid) {
+  try {
+    const { data: adminRow } = await sb.from('exhibition_admins').select('id').eq('id', uid).maybeSingle();
+    if (adminRow) {
+      const { data: stRows } = await sb.from('exhibition_subject_teachers').select('subject_id').eq('teacher_id', uid);
+      role = 'admin';
+      roleData = { uid, mySubjectIds: (stRows||[]).map(r=>r.subject_id) };
+      return;
+    }
+    const { data: ctRow } = await sb.from('class_teachers').select('class').eq('teacher_id', uid).maybeSingle();
+    const { data: stRows } = await sb.from('exhibition_subject_teachers').select('subject_id').eq('teacher_id', uid);
+    const mySubjectIds = (stRows||[]).map(r=>r.subject_id);
+    if (ctRow && mySubjectIds.length > 0) {
+      role = 'both'; roleData = { uid, myClass: ctRow.class, mySubjectIds };
+    } else if (ctRow) {
+      role = 'class_teacher'; roleData = { uid, myClass: ctRow.class };
+    } else if (mySubjectIds.length > 0) {
+      role = 'subject_teacher'; roleData = { uid, mySubjectIds };
+    } else {
+      const { data: tRow } = await sb.from('teachers').select('id').eq('id', uid).maybeSingle();
+      role = tRow ? 'teacher_no_assignment' : 'unknown'; roleData = { uid };
+    }
+  } catch { role = 'unknown'; roleData = {}; }
+}
+
+// ── SCREEN CONTAINER ─────────────────────────────────────────────────────────
+function render() {
+  const root = document.getElementById('screen-root');
+  const current = screenStack[screenStack.length - 1];
+  root.innerHTML = '';
+  const div = document.createElement('div');
+  div.style.cssText = 'flex:1;display:flex;flex-direction:column;overflow:hidden;height:100%;';
+  div.classList.add('screen-enter');
+  root.appendChild(div);
+  switch (current.name) {
+    case 'loading': div.innerHTML = renderLoading('Initializing…'); break;
+    case 'login': renderLoginScreen(div); break;
+    case 'home': renderHomeScreen(div); break;
+    case 'admin_subject_teachers': renderAdminSubjectTeachers(div); break;
+    case 'admin_class_select': renderAdminClassSelect(div); break;
+    case 'admin_class_assignments': renderClassAssignments(div, current.params.class, true); break;
+    case 'class_teacher_assignments': renderClassAssignments(div, roleData.myClass, false); break;
+    case 'admin_subject_select': renderAdminSubjectSelect(div); break;
+    case 'subject_select': renderSubjectSelect(div, roleData.mySubjectIds); break;
+    case 'subject_students': renderSubjectStudents(div, current.params.subject); break;
+    case 'group_detail': renderGroupDetail(div, current.params.groupId, current.params.subject, current.params.onSaved); break;
+    default: renderHomeScreen(div);
+  }
+}
+
+function renderLoading(msg = 'Loading…') {
+  return `<div class="loading-wrap"><div class="spinner"></div><div class="loading-text">${msg}</div></div>`;
+}
+
+function makeHeader(title, subtitle, onBack, rightActionsHTML = '') {
+  return `<div class="header">
+    ${onBack ? `<button class="header-back" onclick="${onBack}">${I.back}</button>` : ''}
+    <div class="header-info">
+      <div class="header-title">${title}</div>
+      ${subtitle ? `<div class="header-subtitle">${subtitle}</div>` : ''}
+    </div>
+    ${rightActionsHTML ? `<div class="header-actions">${rightActionsHTML}</div>` : ''}
+  </div>`;
+}
+
+function makeIconBtn(iconHtml, onclick, cls = '', title = '') {
+  return `<button class="icon-btn ${cls}" onclick="${onclick}" title="${title}">${iconHtml}</button>`;
+}
+
+function makeCard(iconHtml, iconBg, title, sub, onclick, rightHtml = I.fwd) {
+  return `<button class="card" onclick="${onclick}">
+    <div class="card-icon" style="background:${iconBg}">${iconHtml}</div>
+    <div class="card-body"><div class="card-title">${title}</div><div class="card-sub">${sub}</div></div>
+    <div class="card-arrow">${rightHtml}</div>
+  </button>`;
+}
+
+function makeEmptyState(iconHtml, msg) {
+  return `<div class="empty-wrap">${iconHtml}<div class="empty-text">${msg}</div></div>`;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// LOGIN SCREEN
+// ════════════════════════════════════════════════════════════════════════════
+function renderLoginScreen(container) {
+  container.innerHTML = `
+    <div class="login-screen">
+      <div class="login-card">
+        <div class="login-icon-wrap"><div class="login-icon">${I.ribbon}</div></div>
+        <div class="login-title">Exhibition Manager</div>
+        <div class="login-sub">Sign in to continue</div>
+        <input class="form-input" id="email-input" type="email" autocomplete="email" placeholder="Email address" />
+        <input class="form-input" id="pw-input" type="password" autocomplete="current-password" placeholder="Password" />
+        <div id="login-error" class="error-msg" style="display:none"></div>
+        <button class="login-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+      </div>
+    </div>`;
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pw-input').focus(); });
+}
+
+async function doLogin() {
+  const email = document.getElementById('email-input').value.trim();
+  const pw = document.getElementById('pw-input').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn');
+  if (!email || !pw) { errEl.textContent = 'Please enter email and password.'; errEl.style.display='block'; return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  errEl.style.display = 'none';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) {
+    errEl.textContent = error.message; errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Sign In';
+  } else {
+    session = data.session;
+    screenStack = [{ name: 'loading', params: {} }]; render();
+    await detectRole(session.user.id);
+    screenStack = [{ name: 'home', params: {} }]; render();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// HOME SCREEN
+// ════════════════════════════════════════════════════════════════════════════
+function renderHomeScreen(container) {
+  const ROLE_LABEL = {
+    admin: 'Exhibition Admin',
+    class_teacher: `Class Teacher · ${roleData.myClass}`,
+    subject_teacher: 'Subject Teacher',
+    both: `Class & Subject Teacher · ${roleData.myClass}`,
+    teacher_no_assignment: 'Teacher',
+    unknown: 'No Permissions',
+  };
+  const roleLabel = ROLE_LABEL[role] || role;
+
+  const menuItems = [];
+  if (role === 'admin') {
+    menuItems.push(
+      { icon: I.personAdd, iconBg: 'var(--primary-dim)', label: 'Subject–Teacher Assignments', sub: 'Assign exhibition teachers to subjects', target: 'admin_subject_teachers', borderColor: 'rgba(79,124,255,0.25)' },
+      { icon: I.school, iconBg: 'var(--success-dim)', label: 'Student–Subject Assignments', sub: 'Assign students across all classes', target: 'admin_class_select', borderColor: 'rgba(16,201,122,0.25)' },
+      { icon: I.layers, iconBg: 'var(--warning-dim)', label: 'Manage Subject Groups', sub: 'View and manage groups by subject', target: 'admin_subject_select', borderColor: 'rgba(245,166,35,0.25)' },
+    );
+    if (roleData.mySubjectIds && roleData.mySubjectIds.length > 0) {
+      menuItems.push({ icon: I.ribbon, iconBg: 'var(--cyan-dim)', label: 'My Exhibition Subjects', sub: `Manage groups for your ${roleData.mySubjectIds.length} assigned subject${roleData.mySubjectIds.length!==1?'s':''}`, target: 'subject_select', borderColor: 'rgba(6,182,212,0.25)' });
+    }
+  }
+  if (role === 'class_teacher' || role === 'both') {
+    menuItems.push({ icon: I.school, iconBg: 'var(--success-dim)', label: `Assign My Class (${roleData.myClass})`, sub: 'Assign your students to exhibition subjects', target: 'class_teacher_assignments', borderColor: 'rgba(16,201,122,0.25)' });
+  }
+  if (role === 'subject_teacher' || role === 'both') {
+    menuItems.push({ icon: I.layers, iconBg: 'var(--warning-dim)', label: 'My Exhibition Subjects', sub: 'Manage student groups & project details', target: 'subject_select', borderColor: 'rgba(245,166,35,0.25)' });
+  }
+
+  const menuHTML = menuItems.length > 0
+    ? menuItems.map(item => `
+      <button class="card" onclick="pushScreen('${item.target}')" style="border-color:${item.borderColor}">
+        <div class="card-icon" style="background:${item.iconBg}">${item.icon}</div>
+        <div class="card-body"><div class="card-title">${item.label}</div><div class="card-sub">${item.sub}</div></div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`).join('')
+    : makeEmptyState(I.lock, role === 'teacher_no_assignment'
+        ? 'You have not been assigned to any exhibition subject yet.\nContact the Exhibition Admin.'
+        : 'You do not have exhibition management permissions.');
+
+  container.innerHTML = `
+    ${makeHeader('Exhibition Manager', roleLabel, null, makeIconBtn(I.signout, 'doLogout()', '', 'Sign Out'))}
+    <div class="content"><div class="content-inner">
+      <div class="section-label">What would you like to do?</div>
+      ${menuHTML}
+    </div></div>`;
+}
+
+async function doLogout() {
+  const ok = await confirm('Sign Out', 'Are you sure you want to sign out?', 'Sign Out', true);
+  if (ok) {
+    await sb.auth.signOut();
+    session = null; role = null; roleData = {};
+    screenStack = [{ name: 'login', params: {} }]; render();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// ADMIN: SUBJECT–TEACHER ASSIGNMENTS
+// ════════════════════════════════════════════════════════════════════════════
+let _ast = { subjects: [], teachers: [], assignments: [], expandedId: null };
+
+async function renderAdminSubjectTeachers(container) {
+  container.innerHTML = makeHeader('Subject–Teacher Assignments', 'Exhibition Admin', 'popScreen()',
+    makeIconBtn(I.copy, 'astCopy()', '', 'Copy') + makeIconBtn(I.share, 'astShare()', '', 'Share')) +
+    `<div class="content" id="ast-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const [{ data: subs }, { data: tchs }, { data: asns }] = await Promise.all([
+    sb.from('subjects').select('id, name').order('name'),
+    sb.from('teachers').select('id, name, email').order('name'),
+    sb.from('exhibition_subject_teachers').select('id, subject_id, teacher_id'),
+  ]);
+  _ast.subjects = subs || [];
+  _ast.teachers = tchs || [];
+  _ast.assignments = asns || [];
+  astRender();
+}
+
+function astGetTeachersFor(subId) {
+  const ids = _ast.assignments.filter(a=>a.subject_id===subId).map(a=>a.teacher_id);
+  return _ast.teachers.filter(t=>ids.includes(t.id));
+}
+function astGetAvailable(subId) {
+  const ids = _ast.assignments.filter(a=>a.subject_id===subId).map(a=>a.teacher_id);
+  return _ast.teachers.filter(t=>!ids.includes(t.id));
+}
+
+function astRender() {
+  const list = document.getElementById('ast-list');
+  if (!list) return;
+  list.innerHTML = `<div class="content-inner">` + _ast.subjects.map(sub => {
+    const assigned = astGetTeachersFor(sub.id);
+    const isOpen = _ast.expandedId === sub.id;
+    let inner = `<button class="card card-col no-hover" style="cursor:default;flex-direction:column;align-items:stretch;gap:0">
+      <div style="display:flex;align-items:center;gap:14px;cursor:pointer" onclick="astToggle('${sub.id}')">
+        <div class="card-icon" style="background:var(--primary-dim)">${I.book}</div>
+        <div class="card-body">
+          <div class="card-title">${sub.name}</div>
+          <div class="card-sub">${assigned.length===0?'No teacher assigned':assigned.map(t=>t.name).join(', ')}</div>
+        </div>
+        <div class="card-arrow">${isOpen?I.up:I.down}</div>
+      </div>`;
+    if (isOpen) {
+      inner += `<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">`;
+      assigned.forEach(t => {
+        const asn = _ast.assignments.find(a=>a.subject_id===sub.id&&a.teacher_id===t.id);
+        inner += `<div class="teacher-chip-row">
+          <div class="chip-tag">${I.person} <span>${t.name}</span></div>
+          <button class="remove-btn" onclick="astRemove('${asn.id}','${t.name.replace(/'/g,"\\'")}','${sub.name.replace(/'/g,"\\'")}')">${I.closeCircle}</button>
+        </div>`;
+      });
+      inner += `<button class="btn btn-secondary" style="height:36px;margin-top:10px;font-size:12px" onclick="astOpenAdd('${sub.id}')">
+        ${I.add} Add Teacher</button></div>`;
+    }
+    inner += `</button>`;
+    return inner;
+  }).join('') + '</div>';
+}
+
+function astToggle(subId) {
+  _ast.expandedId = _ast.expandedId === subId ? null : subId;
+  astRender();
+}
+
+async function astRemove(asnId, tName, subName) {
+  const ok = await confirm('Remove Teacher', `Remove ${tName} from ${subName}?`, 'Remove', true);
+  if (!ok) return;
+  await sb.from('exhibition_subject_teachers').delete().eq('id', asnId);
+  _ast.assignments = _ast.assignments.filter(a=>a.id!==asnId);
+  astRender();
+}
+
+let _astAddSubId = null;
+function astOpenAdd(subId) {
+  _astAddSubId = subId;
+  const sub = _ast.subjects.find(s=>s.id==subId);
+  const available = astGetAvailable(subId);
+  let selTeacher = null;
+  const rows = available.length === 0
+    ? `<div style="color:var(--subtext);text-align:center;padding:24px;font-size:13px">All teachers already assigned.</div>`
+    : available.map(t => `<div class="student-row" id="ta-${t.id}" style="cursor:pointer" onclick="astSelectTeacher('${t.id}')">
+        <div style="flex:1"><div class="student-name">${t.name}</div><div class="student-meta">${t.email||''}</div></div>
+        <span id="ta-chk-${t.id}" style="display:none;color:var(--primary)">${I.checkCircle}</span>
+      </div>`).join('');
+  openModal(
+    `<div class="modal-title">Assign Teacher</div>
+     <div class="modal-sub">Subject: ${sub?.name}</div>
+     <div class="modal-scroll">${rows}</div>`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" id="ast-assign-btn" onclick="astDoAssign()" disabled>Assign</button>`
+  );
+}
+window._astSelectedTeacher = null;
+function astSelectTeacher(tid) {
+  // deselect prev
+  if (window._astSelectedTeacher) {
+    const prev = document.getElementById(`ta-${window._astSelectedTeacher}`);
+    const chk = document.getElementById(`ta-chk-${window._astSelectedTeacher}`);
+    if (prev) prev.classList.remove('selected');
+    if (chk) chk.style.display = 'none';
+  }
+  window._astSelectedTeacher = tid;
+  const row = document.getElementById(`ta-${tid}`);
+  const chk = document.getElementById(`ta-chk-${tid}`);
+  if (row) row.classList.add('selected');
+  if (chk) chk.style.display = 'block';
+  const btn = document.getElementById('ast-assign-btn');
+  if (btn) btn.disabled = false;
+}
+async function astDoAssign() {
+  const tid = window._astSelectedTeacher;
+  if (!tid || !_astAddSubId) return;
+  const btn = document.getElementById('ast-assign-btn');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>';
+  const { data, error } = await sb.from('exhibition_subject_teachers')
+    .insert({ subject_id: _astAddSubId, teacher_id: tid })
+    .select('id, subject_id, teacher_id').single();
+  if (!error && data) { _ast.assignments.push(data); }
+  else if (error) showToast('❌ ' + error.message);
+  window._astSelectedTeacher = null;
+  closeModal();
+  astRender();
+}
+
+function astGenerateText() {
+  let txt = '📋 Exhibition – Subject Teacher Assignments\n═══════════════════════════════════\n\n';
+  _ast.subjects.forEach(sub => {
+    const assigned = astGetTeachersFor(sub.id);
+    txt += `📚 ${sub.name}\n`;
+    if (!assigned.length) txt += '   (No teacher assigned)\n';
+    else assigned.forEach(t => { txt += `   👤 ${t.name}\n`; });
+    txt += '\n';
+  });
+  return txt;
+}
+async function astCopy() { await copyText(astGenerateText()); showToast('📋 Copied to clipboard'); }
+function astShare() { shareText(astGenerateText(), 'Subject–Teacher Assignments'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// ADMIN: SELECT CLASS
+// ════════════════════════════════════════════════════════════════════════════
+async function renderAdminClassSelect(container) {
+  container.innerHTML = makeHeader('Student–Subject Assignments', 'Select a class', 'popScreen()') +
+    `<div class="content" id="cls-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const { data: studs } = await sb.from('students').select('id, class');
+  const allClasses = sortClasses([...new Set((studs||[]).map(s=>s.class).filter(c=>!/\(left now\)$/i.test(c)))]);
+  const ids = (studs||[]).map(s=>s.id);
+  let assignedSet = new Set();
+  if (ids.length > 0) {
+    const { data: asns } = await sb.from('exhibition_student_assignments').select('student_id').in('student_id', ids);
+    (asns||[]).forEach(a=>assignedSet.add(a.student_id));
+  }
+  const classMap = {};
+  (studs||[]).forEach(s => {
+    if (!classMap[s.class]) classMap[s.class] = { total:0, assigned:0 };
+    classMap[s.class].total++;
+    if (assignedSet.has(s.id)) classMap[s.class].assigned++;
+  });
+  const list = document.getElementById('cls-list');
+  list.innerHTML = '<div class="content-inner"><div class="section-label">All Classes</div>' +
+    (allClasses.length === 0 ? makeEmptyState(I.tray, 'No students found.') :
+    allClasses.map(cls => {
+      const c = classMap[cls]||{total:0,assigned:0};
+      const pct = c.total>0?Math.round(c.assigned/c.total*100):0;
+      const fillColor = pct===100?'var(--success)':'var(--primary)';
+      return `<button class="card" onclick="pushScreen('admin_class_assignments',{class:'${cls}'})">
+        <div class="card-icon" style="background:var(--success-dim)">${I.people}</div>
+        <div class="card-body">
+          <div class="card-title">Class ${cls}</div>
+          <div class="card-sub">${c.assigned}/${c.total} assigned · ${pct}%</div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+        </div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`;
+    }).join('')) + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CLASS ASSIGNMENTS SCREEN
+// ════════════════════════════════════════════════════════════════════════════
+let _ca = { students:[], subjects:[], assignments:{}, filterMode:'all', searchText:'' };
+
+async function renderClassAssignments(container, classFilter, isAdmin) {
+  container.innerHTML = makeHeader(`Class ${classFilter}`, 'Loading…', 'popScreen()',
+    makeIconBtn(I.copy, 'caCopy()', '', 'Copy') + makeIconBtn(I.share, 'caShare()', '', 'Share')) +
+    `<div class="loading-wrap"><div class="spinner"></div></div>`;
+  _ca = { students:[], subjects:[], assignments:{}, filterMode:'all', searchText:'', classFilter };
+  const [{ data: studs }, { data: subs }] = await Promise.all([
+    sb.from('students').select('id, name, roll_number').eq('class', classFilter).order('roll_number'),
+    sb.from('subjects').select('id, name').order('name'),
+  ]);
+  const ids = (studs||[]).map(s=>s.id);
+  if (ids.length > 0) {
+    const { data: asns } = await sb.from('exhibition_student_assignments')
+      .select('student_id, subject_id, subjects(name)').in('student_id', ids);
+    (asns||[]).forEach(a => { _ca.assignments[a.student_id] = { subject_id: a.subject_id, name: a.subjects?.name }; });
+  }
+  _ca.students = studs||[];
+  _ca.subjects = subs||[];
+  caRender(container, classFilter);
+}
+
+function caRender(container, classFilter) {
+  const assignedCount = _ca.students.filter(s=>_ca.assignments[s.id]).length;
+  // update header subtitle
+  const sub = container.querySelector('.header-subtitle');
+  if (sub) sub.textContent = `${assignedCount}/${_ca.students.length} assigned`;
+  const filtered = _ca.students.filter(s => {
+    if (_ca.filterMode==='unassigned' && _ca.assignments[s.id]) return false;
+    if (_ca.searchText && !s.name.toLowerCase().includes(_ca.searchText.toLowerCase())) return false;
+    return true;
+  });
+  const pct = Math.round(assignedCount/(_ca.students.length||1)*100);
+  let html = `
+    <div class="filter-bar">
+      <button class="chip ${_ca.filterMode==='all'?'active':''}" onclick="caFilter('all')">All (${_ca.students.length})</button>
+      <button class="chip ${_ca.filterMode==='unassigned'?'active':''}" onclick="caFilter('unassigned')">Unassigned (${_ca.students.length-assignedCount})</button>
+      <span class="pct-label">${pct}%</span>
+    </div>
+    <div class="search-wrap">
+      <div class="search-inner">
+        ${I.search}
+        <input type="text" placeholder="Search students…" id="ca-search" value="${_ca.searchText}" oninput="caSearch(this.value)">
+        ${_ca.searchText ? `<button class="search-clear" onclick="caSearch('')">${I.close}</button>` : ''}
+      </div>
+    </div>
+    <div class="content" id="ca-list-content">`;
+  html += '<div class="content-inner">';
+  if (filtered.length === 0) {
+    html += makeEmptyState(I.search, _ca.searchText ? 'No matching students.' : 'No students in this class.');
+  } else {
+    filtered.forEach(student => {
+      const asn = _ca.assignments[student.id];
+      html += `<div class="student-row ${asn?'assigned':''}" onclick="caOpenAssign('${student.id}')">
+        <div class="roll-badge">${student.roll_number===99999?'—':student.roll_number}</div>
+        <div style="flex:1">
+          <div class="student-name">${student.name}</div>
+          ${asn ? `<div class="student-subject">📚 ${asn.name}</div>`
+                : `<div class="student-meta">Tap to assign a subject</div>`}
+        </div>
+        <div style="color:var(--subtext);width:16px;height:16px">${I.edit}</div>
+      </div>`;
+    });
+  }
+  html += '</div></div>';
+  // Replace content below header
+  const headerEl = container.querySelector('.header');
+  container.innerHTML = '';
+  container.appendChild(headerEl);
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'flex:1;display:flex;flex-direction:column;overflow:hidden;';
+  wrapper.innerHTML = html;
+  container.appendChild(wrapper);
+}
+
+function caFilter(mode) {
+  _ca.filterMode = mode;
+  const container = document.getElementById('screen-root').firstChild;
+  caRender(container, _ca.classFilter);
+}
+function caSearch(val) {
+  _ca.searchText = val;
+  const container = document.getElementById('screen-root').firstChild;
+  caRender(container, _ca.classFilter);
+  // Restore focus
+  setTimeout(() => { const inp = document.getElementById('ca-search'); if (inp) { inp.focus(); inp.setSelectionRange(val.length, val.length); } }, 10);
+}
+
+let _caSelectedStudent = null;
+let _caPendingSubId = null;
+
+function caOpenAssign(studentId) {
+  _caSelectedStudent = _ca.students.find(s=>s.id===studentId);
+  _caPendingSubId = _ca.assignments[studentId]?.subject_id ?? null;
+  const rows = [
+    `<div class="subject-option ${_caPendingSubId===null?'active':''}" onclick="caSelectSub(null)">
+      <span style="color:${_caPendingSubId===null?'var(--danger)':'var(--subtext)'}">✕  Remove Assignment</span>
+      ${_caPendingSubId===null?`<span style="color:var(--primary)">${I.check}</span>`:''}
+    </div>`,
+    ..._ca.subjects.map(sub => `
+      <div class="subject-option ${_caPendingSubId===sub.id?'active':''}" id="sub-opt-${sub.id}" onclick="caSelectSub('${sub.id}')">
+        <span style="color:${_caPendingSubId===sub.id?'var(--primary)':'var(--text)'}">${sub.name}</span>
+        ${_caPendingSubId===sub.id?`<span style="color:var(--primary)">${I.check}</span>`:''}
+      </div>`)
+  ].join('');
+  openModal(
+    `<div class="modal-title">Assign Exhibition Subject</div>
+     <div class="modal-sub">${_caSelectedStudent?.name}</div>
+     <div class="modal-scroll">${rows}</div>`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" onclick="caSave()">Save</button>`
+  );
+}
+
+function caSelectSub(subId) {
+  _caPendingSubId = subId;
+  // re-render modal content
+  caOpenAssign(_caSelectedStudent.id);
+}
+
+async function caSave() {
+  if (!_caSelectedStudent) return;
+  const saveBtn = document.querySelector('#modal-footer .btn-primary');
+  if (saveBtn) { saveBtn.disabled=true; saveBtn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>'; }
+  const existing = _ca.assignments[_caSelectedStudent.id];
+  if (!_caPendingSubId) {
+    if (existing) {
+      await sb.from('exhibition_student_assignments').delete().eq('student_id', _caSelectedStudent.id);
+      delete _ca.assignments[_caSelectedStudent.id];
+    }
+  } else {
+    const subName = _ca.subjects.find(s=>s.id===_caPendingSubId)?.name;
+    if (existing) {
+      await sb.from('exhibition_student_assignments').update({subject_id:_caPendingSubId}).eq('student_id',_caSelectedStudent.id);
+    } else {
+      await sb.from('exhibition_student_assignments').insert({student_id:_caSelectedStudent.id, subject_id:_caPendingSubId});
+    }
+    _ca.assignments[_caSelectedStudent.id] = { subject_id: _caPendingSubId, name: subName };
+  }
+  closeModal();
+  const container = document.getElementById('screen-root').firstChild;
+  caRender(container, _ca.classFilter);
+}
+
+function caGenerateText() {
+  let txt = `📋 Exhibition – Class ${_ca.classFilter} Assignments\n═══════════════════════════════════\n\n`;
+  const grouped = {};
+  _ca.students.forEach(s => {
+    const key = _ca.assignments[s.id]?.name || '📭 Unassigned';
+    grouped[key] = grouped[key] || [];
+    grouped[key].push(s.name);
+  });
+  Object.keys(grouped).sort().forEach(k => {
+    txt += `📚 ${k}\n`;
+    grouped[k].forEach(n => { txt += `   • ${n}\n`; });
+    txt += '\n';
+  });
+  return txt;
+}
+async function caCopy() { await copyText(caGenerateText()); showToast('📋 Copied to clipboard'); }
+function caShare() { shareText(caGenerateText(), `Class ${_ca.classFilter} Assignments`); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// ADMIN: SELECT SUBJECT
+// ════════════════════════════════════════════════════════════════════════════
+async function renderAdminSubjectSelect(container) {
+  container.innerHTML = makeHeader('Manage Subject Groups', 'Exhibition Admin', 'popScreen()') +
+    `<div class="content" id="asub-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const [{ data: subs }, { data: asns }, { data: grps }] = await Promise.all([
+    sb.from('subjects').select('id, name').order('name'),
+    sb.from('exhibition_student_assignments').select('subject_id'),
+    sb.from('exhibition_groups').select('subject_id'),
+  ]);
+  const sc={}, gc={};
+  (asns||[]).forEach(a=>{ sc[a.subject_id]=(sc[a.subject_id]||0)+1; });
+  (grps||[]).forEach(g=>{ gc[g.subject_id]=(gc[g.subject_id]||0)+1; });
+  const list = document.getElementById('asub-list');
+  list.innerHTML = '<div class="content-inner"><div class="section-label">All Subjects</div>' +
+    ((subs||[]).length===0 ? makeEmptyState(I.tray, 'No subjects found.') :
+    (subs||[]).map(sub => `
+      <button class="card" onclick="pushScreen('subject_students',{subject:${JSON.stringify(sub).replace(/"/g,'&quot;')}})">
+        <div class="card-icon" style="background:var(--warning-dim)">${I.book}</div>
+        <div class="card-body">
+          <div class="card-title">${sub.name}</div>
+          <div class="card-sub">${sc[sub.id]||0} students · ${gc[sub.id]||0} groups</div>
+        </div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`).join('')) + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SUBJECT SELECT (Subject Teacher)
+// ════════════════════════════════════════════════════════════════════════════
+async function renderSubjectSelect(container, mySubjectIds) {
+  container.innerHTML = makeHeader('My Exhibition Subjects', 'Subject Teacher', 'popScreen()') +
+    `<div class="content" id="ss-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const { data: subs } = await sb.from('subjects').select('id, name').in('id', mySubjectIds).order('name');
+  let stats = {};
+  if ((subs||[]).length > 0) {
+    const ids = subs.map(s=>s.id);
+    const [{ data: asns }, { data: grps }] = await Promise.all([
+      sb.from('exhibition_student_assignments').select('subject_id').in('subject_id', ids),
+      sb.from('exhibition_groups').select('subject_id').in('subject_id', ids),
+    ]);
+    const sc={},gc={};
+    (asns||[]).forEach(a=>{ sc[a.subject_id]=(sc[a.subject_id]||0)+1; });
+    (grps||[]).forEach(g=>{ gc[g.subject_id]=(gc[g.subject_id]||0)+1; });
+    subs.forEach(s=>{ stats[s.id]={students:sc[s.id]||0, groups:gc[s.id]||0}; });
+  }
+  const list = document.getElementById('ss-list');
+  list.innerHTML = '<div class="content-inner"><div class="section-label">My Subjects</div>' +
+    ((subs||[]).length===0 ? makeEmptyState(I.book, 'No subjects assigned to you yet.') :
+    (subs||[]).map(sub => {
+      const st = stats[sub.id]||{};
+      return `<button class="card" onclick="pushScreen('subject_students',{subject:${JSON.stringify(sub).replace(/"/g,'&quot;')}})">
+        <div class="card-icon" style="background:var(--warning-dim)">${I.book}</div>
+        <div class="card-body">
+          <div class="card-title">${sub.name}</div>
+          <div class="card-sub">${st.students||0} student${st.students!==1?'s':''} · ${st.groups||0} group${st.groups!==1?'s':''}</div>
+        </div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`;
+    }).join('')) + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SUBJECT STUDENTS + GROUPS
+// ════════════════════════════════════════════════════════════════════════════
+let _ss = { students:[], groups:[], memberMap:{}, activeTab:'students', assignMode:false, selected:new Set(), subject:null };
+
+async function renderSubjectStudents(container, subject) {
+  _ss = { students:[], groups:[], memberMap:{}, activeTab:'students', assignMode:false, selected:new Set(), subject };
+  container.innerHTML = makeHeader(subject.name, 'Loading…', 'popScreen()') +
+    `<div class="loading-wrap"><div class="spinner"></div></div>`;
+  await ssLoad(container, subject);
+}
+
+async function ssLoad(container, subject) {
+  subject = subject || _ss.subject;
+  const [{ data: asns }, { data: grps }] = await Promise.all([
+    sb.from('exhibition_student_assignments')
+      .select('student_id, students(id, name, roll_number, class)').eq('subject_id', subject.id),
+    sb.from('exhibition_groups').select('id, group_name, project_title, room_number').eq('subject_id', subject.id).order('group_name'),
+  ]);
+  const studs = (asns||[]).map(a=>a.students).filter(Boolean);
+  const ids = studs.map(s=>s.id);
+  let mm = {};
+  if (ids.length > 0) {
+    const { data: mems } = await sb.from('exhibition_group_members')
+      .select('student_id, group_id, exhibition_groups(group_name)').in('student_id', ids);
+    (mems||[]).forEach(m => { mm[m.student_id] = { group_id: m.group_id, group_name: m.exhibition_groups?.group_name }; });
+  }
+  studs.sort((a,b)=>(a.roll_number||99999)-(b.roll_number||99999));
+  _ss.students = studs;
+  _ss.groups = grps||[];
+  _ss.memberMap = mm;
+  ssRender(container);
+}
+
+function ssRender(container) {
+  const subject = _ss.subject;
+  const { students, groups, memberMap, activeTab, assignMode, selected } = _ss;
+  const ungroupedCount = students.filter(s=>!memberMap[s.id]).length;
+  const allSelected = students.length > 0 && selected.size === students.length;
+
+  // Header
+  const backFn = assignMode ? 'ssCancelAssign()' : 'popScreen()';
+  const rightActions = !assignMode
+    ? makeIconBtn(I.copy, 'ssCopy()', '', 'Copy') + makeIconBtn(I.share, 'ssShare()', '', 'Share')
+    : '';
+  let html = makeHeader(subject.name, `${students.length} students · ${groups.length} groups`, backFn, rightActions);
+
+  // Tabs (only when not in assign mode)
+  if (!assignMode) {
+    html += `<div class="tab-bar">
+      <button class="tab ${activeTab==='students'?'active':''}" onclick="ssSetTab('students')">Students (${students.length})</button>
+      <button class="tab ${activeTab==='groups'?'active':''}" onclick="ssSetTab('groups')">Groups (${groups.length})</button>
+    </div>`;
+  }
+
+  // Assign mode banner
+  if (assignMode) {
+    html += `<div class="assign-banner">
+      <div><div class="assign-banner-title">${selected.size} selected</div><div class="assign-banner-sub">Tap students to select / deselect</div></div>
+      <button class="chip primary-border ${allSelected?'active':''}" onclick="ssToggleSelectAll()">${allSelected?'Deselect All':'Select All'}</button>
+    </div>`;
+  }
+
+  html += `<div class="content" id="ss-content">`;
+
+  // Students tab / assign mode
+  if (activeTab === 'students' || assignMode) {
+    html += '<div class="content-inner">';
+    if (students.length === 0) {
+      html += makeEmptyState(I.people, 'No students assigned to this subject yet.');
+    } else {
+      students.forEach(student => {
+        const grouped = memberMap[student.id];
+        const isSelected = selected.has(student.id);
+        html += `<div class="student-row ${grouped?'assigned':''} ${isSelected?'selected':''}"
+          onclick="${assignMode?`ssToggleSelect('${student.id}')`:''}"
+          oncontextmenu="ssLongPress(event,'${student.id}')"
+          ondblclick="ssLongPress(event,'${student.id}')"
+          ${!assignMode ? `ontouchstart="ssTouchStart('${student.id}')" ontouchend="ssTouchEnd()"` : ''}>
+          ${assignMode ? `<div style="color:${isSelected?'var(--primary)':'var(--subtext)'};width:22px;height:22px">${isSelected?I.checkCircle:I.circle}</div>` : ''}
+          <div class="roll-badge">${student.roll_number===99999?'—':student.roll_number}</div>
+          <div style="flex:1">
+            <div class="student-name">${student.name}</div>
+            <div class="student-meta">${student.class}</div>
+            ${grouped?`<div class="student-group">🔹 ${grouped.group_name}</div>`:''}
+          </div>
+          ${grouped&&!assignMode?`<button onclick="ssRemoveFromGroup(event,'${student.id}')" style="background:none;border:none;cursor:pointer;color:var(--danger);width:20px;height:20px">${I.closeCircle}</button>`:''}
+        </div>`;
+      });
+    }
+    html += '</div>';
+  }
+
+  // Groups tab
+  if (activeTab === 'groups' && !assignMode) {
+    html += '<div class="content-inner">';
+    if (ungroupedCount > 0) {
+      html += `<div class="card ungrouped-warning" onclick="ssShowUngrouped()" style="margin-bottom:8px">
+        <div class="card-icon" style="background:var(--warning-dim)">${I.warn}</div>
+        <div class="card-body"><div class="card-title">${ungroupedCount} Student${ungroupedCount!==1?'s':''} Not Grouped</div><div class="card-sub">Tap to assign to a group</div></div>
+        <div class="card-arrow">${I.fwd}</div>
+      </div>`;
+    }
+    if (groups.length === 0) {
+      html += makeEmptyState(I.layers, 'No groups yet.\nTap "Create Group" below to get started.');
+    } else {
+      groups.forEach(group => {
+        const mc = students.filter(s=>memberMap[s.id]?.group_id===group.id).length;
+        html += `<div class="card" style="padding-right:8px">
+          <button style="display:flex;align-items:center;gap:14px;flex:1;background:none;border:none;cursor:pointer;text-align:left" onclick="pushScreen('group_detail',{groupId:'${group.id}',subject:_ss.subject,onSaved:()=>ssReload()})">
+            <div class="card-icon" style="background:var(--violet-dim)">${I.people}</div>
+            <div class="card-body">
+              <div class="card-title">${group.group_name}</div>
+              <div class="card-sub">${mc} member${mc!==1?'s':''}${group.project_title?` · ${group.project_title}`:''}${group.room_number?` · Room ${group.room_number}`:''}</div>
+            </div>
+            <div class="card-arrow">${I.fwd}</div>
+          </button>
+          <button onclick="ssDeleteGroup(event,'${group.id}','${(group.group_name||'').replace(/'/g,"\\'")}\')" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--danger);width:34px;height:34px">${I.trash}</button>
+        </div>`;
+      });
+    }
+    html += '</div>';
+  }
+
+  html += '</div>'; // close content
+
+  // Footer
+  html += '<div class="footer">';
+  if (!assignMode) {
+    if (activeTab === 'groups') {
+      html += `<button class="btn btn-primary" onclick="ssCreateGroupModal()">${I.add} <span>Create Group</span></button>`;
+    } else {
+      html += `<button class="btn btn-primary" onclick="ssStartAssign()">${I.git} <span>Assign to Group</span></button>`;
+    }
+  } else {
+    html += `<button class="btn btn-secondary" onclick="ssCancelAssign()">Cancel</button>
+      <button class="btn btn-primary ${selected.size===0?'':''}\" id="ss-assign-btn" onclick="ssPickGroup()" ${selected.size===0?'disabled':''}>
+        Assign ${selected.size>0?`(${selected.size}) `:''}→
+      </button>`;
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+function ssSetTab(tab) { _ss.activeTab = tab; ssRender(document.getElementById('screen-root').firstChild); }
+function ssStartAssign() { _ss.assignMode = true; ssRender(document.getElementById('screen-root').firstChild); }
+function ssCancelAssign() { _ss.assignMode = false; _ss.selected = new Set(); ssRender(document.getElementById('screen-root').firstChild); }
+function ssToggleSelect(id) {
+  const s = new Set(_ss.selected);
+  s.has(id) ? s.delete(id) : s.add(id);
+  _ss.selected = s;
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+function ssToggleSelectAll() {
+  _ss.selected = _ss.selected.size === _ss.students.length ? new Set() : new Set(_ss.students.map(s=>s.id));
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+function ssShowUngrouped() { _ss.activeTab='students'; _ss.assignMode=true; _ss.selected=new Set(_ss.students.filter(s=>!_ss.memberMap[s.id]).map(s=>s.id)); ssRender(document.getElementById('screen-root').firstChild); }
+
+// Long press / context menu for starting assign mode
+let _ssTouchTimer = null;
+function ssTouchStart(id) { _ssTouchTimer = setTimeout(() => { ssLongPressAction(id); }, 500); }
+function ssTouchEnd() { if (_ssTouchTimer) { clearTimeout(_ssTouchTimer); _ssTouchTimer = null; } }
+function ssLongPress(e, id) { e.preventDefault(); ssLongPressAction(id); }
+function ssLongPressAction(id) {
+  if (!_ss.assignMode) { _ss.assignMode=true; _ss.selected=new Set([id]); ssRender(document.getElementById('screen-root').firstChild); }
+}
+
+async function ssRemoveFromGroup(e, studentId) {
+  e.stopPropagation();
+  const ok = await confirm('Remove from Group', 'Remove this student from their group?', 'Remove', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('student_id', studentId);
+  const mm = {..._ss.memberMap}; delete mm[studentId]; _ss.memberMap = mm;
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+
+async function ssDeleteGroup(e, groupId, groupName) {
+  e.stopPropagation();
+  const ok = await confirm('Delete Group', `Delete "${groupName}"?\n\nAll member assignments will be removed. This cannot be undone.`, 'Delete', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('group_id', groupId);
+  const { error } = await sb.from('exhibition_groups').delete().eq('id', groupId);
+  if (error) { showToast('❌ ' + error.message); return; }
+  await ssLoad(document.getElementById('screen-root').firstChild, _ss.subject);
+}
+
+function ssPickGroup() {
+  if (!_ss.groups.length) { showToast('Create a group first'); return; }
+  const rows = _ss.groups.map(g => {
+    const mc = _ss.students.filter(s=>_ss.memberMap[s.id]?.group_id===g.id).length;
+    return `<div class="student-row" style="cursor:pointer" onclick="ssAssignToGroup('${g.id}')">
+      <div class="card-icon" style="background:var(--violet-dim);width:38px;height:38px;border-radius:50%;flex-shrink:0">${I.people}</div>
+      <div style="flex:1"><div class="student-name">${g.group_name}</div><div class="student-meta">${mc} current member${mc!==1?'s':''}</div></div>
+      <div style="color:var(--subtext);width:16px;height:16px">${I.fwd}</div>
+    </div>`;
+  }).join('');
+  openModal(
+    `<div class="modal-title">Choose Group</div>
+     <div class="modal-sub">Assigning ${_ss.selected.size} student${_ss.selected.size!==1?'s':''}</div>
+     <div class="modal-scroll">${rows}</div>`,
+    `<button class="btn btn-secondary" style="flex:1" onclick="closeModal()">Cancel</button>`
+  );
+}
+
+async function ssAssignToGroup(groupId) {
+  closeModal();
+  const ids = [..._ss.selected];
+  await sb.from('exhibition_group_members').delete().in('student_id', ids);
+  await sb.from('exhibition_group_members').insert(ids.map(sid=>({group_id:groupId, student_id:sid})));
+  _ss.assignMode = false; _ss.selected = new Set();
+  showToast('✅ Students assigned');
+  await ssLoad(document.getElementById('screen-root').firstChild, _ss.subject);
+}
+
+function ssCreateGroupModal() {
+  openModal(
+    `<div class="modal-title">Create New Group</div>
+     <div class="modal-sub">Subject: ${_ss.subject.name}</div>
+     <input class="form-input" id="new-group-input" placeholder="Group name (e.g. Group A, Team 1…)" style="margin-top:12px" oninput="document.getElementById('ss-create-btn').disabled=!this.value.trim()">`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" id="ss-create-btn" onclick="ssDoCreateGroup()" disabled>Create</button>`
+  );
+  setTimeout(() => { const el = document.getElementById('new-group-input'); if(el) el.focus(); }, 100);
+}
+
+async function ssDoCreateGroup() {
+  const nameEl = document.getElementById('new-group-input');
+  if (!nameEl) return;
+  const name = nameEl.value.trim();
+  if (!name) return;
+  const btn = document.getElementById('ss-create-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>';
+  const { data, error } = await sb.from('exhibition_groups')
+    .insert({ subject_id: _ss.subject.id, group_name: name })
+    .select('id, group_name, project_title, room_number').single();
+  if (!error && data) { _ss.groups.push(data); }
+  else if (error) { showToast('❌ '+error.message); }
+  closeModal();
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+
+async function ssReload() { await ssLoad(document.getElementById('screen-root').firstChild, _ss.subject); }
+
+function ssGenerateText() {
+  const { subject, groups, students, memberMap } = _ss;
+  let txt = `📚 ${subject.name} – Exhibition Groups\n═══════════════════════════════════\n\n`;
+  if (groups.length > 0) {
+    groups.forEach(g => {
+      txt += `🔹 ${g.group_name}`;
+      if (g.project_title) txt += ` – ${g.project_title}`;
+      if (g.room_number) txt += ` (Room ${g.room_number})`;
+      txt += '\n';
+      const gs = students.filter(s=>memberMap[s.id]?.group_id===g.id);
+      if (!gs.length) txt += '   (No members yet)\n';
+      else gs.forEach(s=>{ txt+=`   • ${s.name} (${s.class})\n`; });
+      txt += '\n';
+    });
+  }
+  const ungrouped = students.filter(s=>!memberMap[s.id]);
+  if (ungrouped.length>0) { txt+=`📭 Not yet grouped:\n`; ungrouped.forEach(s=>{txt+=`   • ${s.name} (${s.class})\n`;}); }
+  return txt;
+}
+async function ssCopy() { await copyText(ssGenerateText()); showToast('📋 Copied to clipboard'); }
+function ssShare() { shareText(ssGenerateText(), _ss.subject.name + ' Groups'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// GROUP DETAIL
+// ════════════════════════════════════════════════════════════════════════════
+let _gd = { group: null, members: [], groupId: null, subject: null, onSaved: null };
+
+async function renderGroupDetail(container, groupId, subject, onSaved) {
+  _gd = { group: null, members: [], groupId, subject, onSaved };
+  container.innerHTML = makeHeader(subject.name, 'Loading…', 'popScreen()') +
+    `<div class="loading-wrap"><div class="spinner"></div></div>`;
+  await gdLoad(container);
+}
+
+async function gdLoad(container) {
+  const [{ data: grp }, { data: mems }] = await Promise.all([
+    sb.from('exhibition_groups').select('*').eq('id', _gd.groupId).single(),
+    sb.from('exhibition_group_members')
+      .select('id, student_id, students(id, name, roll_number, class)').eq('group_id', _gd.groupId),
+  ]);
+  _gd.group = grp;
+  _gd.members = (mems||[]).map(m=>({...m.students, memberId:m.id}));
+  gdRender(container || document.getElementById('screen-root').firstChild);
+}
+
+const GD_FIELDS = [
+  { key:'project_title', label:'Project Title', icon: I.bookmark, color:'var(--primary)', multi:false },
+  { key:'room_number', label:'Room Number', icon: I.location, color:'var(--success)', multi:false },
+  { key:'materials_required', label:'Materials Required', icon: I.construct, color:'var(--warning)', multi:true },
+  { key:'reference_links', label:'Reference Links', icon: I.link, color:'var(--cyan)', multi:true },
+  { key:'instructions', label:'Instructions', icon: I.docText, color:'var(--violet)', multi:true },
+];
+
+function gdRender(container) {
+  const { group, members, subject } = _gd;
+  if (!group) return;
+  let html = makeHeader(group.group_name, subject.name, 'popScreen()',
+    makeIconBtn(I.trash, 'gdDeleteGroup()', 'danger', 'Delete Group') +
+    makeIconBtn(I.copy, 'gdCopy()', '', 'Copy') +
+    makeIconBtn(I.share, 'gdShare()', '', 'Share'));
+  html += '<div class="content"><div class="content-inner">';
+  html += '<div class="section-label">Group Details</div>';
+  GD_FIELDS.forEach(f => {
+    const val = group[f.key];
+    html += `<div class="detail-row" onclick="gdOpenEdit('${f.key}')">
+      <div class="card-icon" style="background:${f.color}20;width:38px;height:38px;border-radius:50%;flex-shrink:0">${f.icon.replace('stroke: currentColor', `stroke:${f.color}`)}</div>
+      <div style="flex:1">
+        <div class="detail-label">${f.label}</div>
+        ${val ? `<div class="detail-value">${val.replace(/\n/g,'<br>')}</div>` : `<div class="detail-empty">Tap to add…</div>`}
+      </div>
+      <div class="detail-edit">${I.edit}</div>
+    </div>`;
+  });
+  html += `<div class="section-label" style="margin-top:8px">Team Members (${members.length})</div>`;
+  if (members.length === 0) {
+    html += makeEmptyState(I.people, 'No members assigned yet.\nGo back to assign students to this group.');
+  } else {
+    members.forEach(m => {
+      html += `<div class="student-row">
+        <div class="roll-badge">${m.roll_number===99999?'—':m.roll_number}</div>
+        <div style="flex:1"><div class="student-name">${m.name}</div><div class="student-meta">${m.class||''}</div></div>
+        <button onclick="gdRemoveMember('${m.memberId}','${m.name.replace(/'/g,"\\'")}\')" style="background:none;border:none;cursor:pointer;color:var(--danger);width:22px;height:22px">${I.personRemove}</button>
+      </div>`;
+    });
+  }
+  html += `<button class="card" style="margin-top:16px;border-color:var(--primary-glow);background:var(--primary-dim)" onclick="gdShare()">
+    <div class="card-icon" style="background:var(--primary-dim)">${I.socialShare.replace('currentColor','var(--primary)')}</div>
+    <div class="card-body"><div class="card-title" style="color:var(--primary)">Share Group Details</div><div class="card-sub">Share project, room, materials & members</div></div>
+  </button>`;
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+function gdOpenEdit(fieldKey) {
+  const f = GD_FIELDS.find(x=>x.key===fieldKey);
+  if (!f) return;
+  const val = _gd.group?.[fieldKey] || '';
+  openModal(
+    `<div class="modal-title">${f.label}</div>
+     ${f.multi
+       ? `<textarea class="form-textarea" id="gd-edit-input" placeholder="Enter ${f.label.toLowerCase()}…" style="margin-top:12px">${val}</textarea>`
+       : `<input class="form-input" id="gd-edit-input" placeholder="Enter ${f.label.toLowerCase()}…" value="${val}" style="margin-top:12px">`}`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" onclick="gdSaveField('${fieldKey}')">Save</button>`
+  );
+  setTimeout(() => { const el = document.getElementById('gd-edit-input'); if(el) el.focus(); }, 100);
+}
+
+async function gdSaveField(fieldKey) {
+  const el = document.getElementById('gd-edit-input');
+  if (!el) return;
+  const val = el.value.trim() || null;
+  const btn = document.querySelector('#modal-footer .btn-primary');
+  if (btn) { btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>'; }
+  const { data, error } = await sb.from('exhibition_groups').update({ [fieldKey]: val }).eq('id', _gd.groupId).select('*').single();
+  if (!error && data) { _gd.group = data; if (_gd.onSaved) _gd.onSaved(); }
+  else if (error) showToast('❌ '+error.message);
+  closeModal();
+  gdRender(document.getElementById('screen-root').firstChild);
+}
+
+async function gdRemoveMember(memberId, name) {
+  const ok = await confirm('Remove Member', `Remove ${name} from this group?`, 'Remove', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('id', memberId);
+  _gd.members = _gd.members.filter(m=>m.memberId!==memberId);
+  if (_gd.onSaved) _gd.onSaved();
+  gdRender(document.getElementById('screen-root').firstChild);
+}
+
+async function gdDeleteGroup() {
+  const ok = await confirm('Delete Group', `Delete "${_gd.group?.group_name}"?\n\nAll member assignments will be removed. This cannot be undone.`, 'Delete', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('group_id', _gd.groupId);
+  const { error } = await sb.from('exhibition_groups').delete().eq('id', _gd.groupId);
+  if (error) { showToast('❌ '+error.message); return; }
+  if (_gd.onSaved) _gd.onSaved();
+  popScreen();
+}
+
+function gdGenerateText() {
+  const { group, members, subject } = _gd;
+  if (!group) return '';
+  let txt = `🏆 ${subject.name} – ${group.group_name}\n═══════════════════════════════════\n\n`;
+  if (group.project_title) txt += `📌 Project: ${group.project_title}\n`;
+  if (group.room_number) txt += `🚪 Room: ${group.room_number}\n`;
+  if (group.materials_required) txt += `🛠 Materials: ${group.materials_required}\n`;
+  if (group.reference_links) txt += `🔗 Links: ${group.reference_links}\n`;
+  if (group.instructions) txt += `\n📝 Instructions:\n${group.instructions}\n`;
+  if (members.length > 0) { txt += `\n👥 Team Members (${members.length}):\n`; members.forEach(m=>{txt+=`   • ${m.name} (${m.class})\n`;}); }
+  return txt;
+}
+async function gdCopy() { await copyText(gdGenerateText()); showToast('📋 Copied'); }
+function gdShare() { shareText(gdGenerateText(), (_gd.group?.group_name||'Group')+' Details'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════════════════════════════════════
+async function boot() {
+  render(); // show loading
+  const { data: { session: s } } = await sb.auth.getSession();
+  if (s) {
+    session = s;
+    await detectRole(s.user.id);
+    screenStack = [{ name: 'home', params: {} }];
+  } else {
+    screenStack = [{ name: 'login', params: {} }];
+  }
+  render();
+  sb.auth.onAuthStateChange((_e, s) => {
+    if (!s && session) {
+      session = null; role = null; roleData = {};
+      screenStack = [{ name: 'login', params: {} }]; render();
+    }
+  });
+}
+
+boot();
+</script>
+</body>
+</html>
