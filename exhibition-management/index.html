@@ -2,1259 +2,1820 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Exhibition Manager</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root {
-  --sidebar:#0d1117;--sidebar2:#161b22;
-  --primary:#6366f1;--primary-h:#4f46e5;
-  --amber:#f59e0b;--cyan:#06b6d4;--green:#10b981;--red:#ef4444;
-  --bg:#f0f2f8;--card:#ffffff;--border:#e4e8f0;
-  --text:#1a1f36;--muted:#6b7280;
-  --radius:14px;
-  --sh:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
-  --sh2:0 4px 16px rgba(0,0,0,.08)
+  --bg: #0a0f1e;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d47;
+  --border2: #253650;
+  --text: #e8edf5;
+  --subtext: #6b7f99;
+  --primary: #4f7cff;
+  --primary-dim: rgba(79,124,255,0.12);
+  --primary-glow: rgba(79,124,255,0.25);
+  --success: #10c97a;
+  --success-dim: rgba(16,201,122,0.12);
+  --danger: #ff4d6d;
+  --danger-dim: rgba(255,77,109,0.12);
+  --warning: #f5a623;
+  --warning-dim: rgba(245,166,35,0.12);
+  --violet: #8b5cf6;
+  --violet-dim: rgba(139,92,246,0.12);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --transition: 200ms cubic-bezier(0.4,0,0.2,1);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
 }
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;line-height:1.5}
 
-/* LOGIN */
-#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--sidebar);background-image:radial-gradient(circle at 20% 80%,rgba(99,102,241,.25) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(6,182,212,.15) 0%,transparent 50%)}
-.login-card{background:var(--card);border-radius:20px;padding:44px 40px;width:100%;max-width:400px;box-shadow:0 25px 60px rgba(0,0,0,.35)}
-.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
-.login-logo .logo-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--primary),var(--cyan));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px}
-.login-logo h1{font-family:'Syne',sans-serif;font-size:22px;color:var(--text)}
-.login-card p{color:var(--muted);font-size:13px;margin-bottom:28px}
-.fgroup{margin-bottom:18px}
-.fgroup label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
-.fgroup input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
-.fgroup input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.12)}
-#login-error{color:var(--red);font-size:13px;margin-bottom:12px;display:none;padding:10px 12px;background:#fef2f2;border-radius:8px}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow: hidden; }
+button { font-family: var(--font-body); cursor: pointer; border: none; background: none; color: inherit; }
+input, textarea { font-family: var(--font-body); color: var(--text); }
+a { color: var(--primary); text-decoration: none; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
-/* APP SHELL */
-#app{display:flex;min-height:100vh}
-#sidebar{width:250px;min-width:250px;background:var(--sidebar);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid rgba(255,255,255,.06)}
-.sb-logo{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px}
-.sb-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--cyan));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.sb-logo h2{font-family:'Syne',sans-serif;font-size:16px;color:#fff;line-height:1.2}
-.sb-logo span{color:rgba(255,255,255,.4);font-size:11px;display:block;font-weight:400}
-.sb-nav{flex:1;padding:14px 10px}
-.sb-section-title{color:rgba(255,255,255,.25);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:10px 10px 5px}
-.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;color:rgba(255,255,255,.55);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:2px}
-.nav-item:hover{background:rgba(255,255,255,.07);color:#fff}
-.nav-item.active{background:rgba(99,102,241,.25);color:var(--primary);border:1px solid rgba(99,102,241,.3)}
-.nav-item .ni{font-size:15px;min-width:18px;text-align:center}
-.sb-footer{padding:16px;border-top:1px solid rgba(255,255,255,.07)}
-.sb-user strong{display:block;color:#fff;font-size:13px;margin-bottom:3px}
-.sb-user small{color:rgba(255,255,255,.35);font-size:11px}
-.role-pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin:6px 0 12px}
-.role-pill.admin{background:rgba(245,158,11,.2);color:var(--amber)}
-.role-pill.class_t{background:rgba(6,182,212,.2);color:var(--cyan)}
-.role-pill.subject_t{background:rgba(99,102,241,.2);color:var(--primary)}
-
-/* MAIN */
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-#topbar{background:var(--card);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-shrink:0}
-#topbar h2{font-size:18px;font-weight:700}
-#topbar-actions{display:flex;gap:8px;align-items:center;flex-shrink:0}
-#content{flex:1;padding:24px 28px;overflow-y:auto}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:9px;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-primary:hover{background:var(--primary-h);transform:translateY(-1px);box-shadow:0 4px 12px rgba(99,102,241,.3)}
-.btn-ghost{background:transparent;color:var(--text);border:1.5px solid var(--border)}
-.btn-ghost:hover{background:var(--bg)}
-.btn-danger{background:#fef2f2;color:var(--red);border:1.5px solid #fecaca}
-.btn-danger:hover{background:#fee2e2}
-.btn-copy{background:#f0f9ff;color:var(--cyan);border:1.5px solid #bae6fd}
-.btn-copy:hover{background:#e0f2fe}
-.btn-amber{background:#fffbeb;color:var(--amber);border:1.5px solid #fde68a}
-.btn-amber:hover{background:#fef3c7}
-.btn-success{background:#ecfdf5;color:var(--green);border:1.5px solid #a7f3d0}
-.btn-sm{padding:6px 12px;font-size:12px}
-.btn-xs{padding:4px 8px;font-size:11px;border-radius:6px}
-.btn-full{width:100%;justify-content:center;padding:12px}
-
-/* CARDS */
-.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--sh);padding:22px;margin-bottom:18px;border:1px solid rgba(0,0,0,.04)}
-.card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}
-.card-header-left .card-title{font-size:16px;font-weight:700}
-.card-header-left .card-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.card-header-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
-
-/* STATS */
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:24px}
-.stat-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--sh);border:1px solid rgba(0,0,0,.04)}
-.stat-val{font-size:34px;font-weight:800;color:var(--primary);line-height:1}
-.stat-val.warn{color:var(--amber)}
-.stat-val.good{color:var(--green)}
-.stat-lbl{font-size:12px;color:var(--muted);margin-top:6px;font-weight:500}
-
-/* CHIPS */
-.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:600}
-.ch-blue{background:#ede9fe;color:#5b21b6}
-.ch-green{background:#dcfce7;color:#166534}
-.ch-amber{background:#fffbeb;color:#92400e}
-.ch-cyan{background:#ecfeff;color:#155e75}
-.ch-red{background:#fef2f2;color:#991b1b}
-.ch-gray{background:#f1f5f9;color:var(--muted)}
-.chip .chip-rm{background:none;border:none;cursor:pointer;color:inherit;opacity:.7;font-size:12px;padding:0;line-height:1;margin-left:2px}
-.chip .chip-rm:hover{opacity:1}
-
-/* TABLE */
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:13.5px}
-th{text-align:left;padding:9px 14px;background:#f8fafc;color:var(--muted);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border);white-space:nowrap}
-td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafbff}
-.cb-col{width:36px}
-input[type="checkbox"]{width:15px;height:15px;cursor:pointer;accent-color:var(--primary)}
-
-/* FORMS */
-select,input[type="text"],input[type="email"],input[type="password"],textarea{border:1.5px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13.5px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;background:var(--card);color:var(--text)}
-select:focus,input:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
-textarea{resize:vertical;min-height:80px;width:100%}
-.f-lbl{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-
-/* ACTION BAR */
-.action-bar{background:#ede9fe;border-radius:10px;padding:11px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.action-bar-left{font-size:13.5px;color:#5b21b6;font-weight:600}
-
-/* TABS */
-.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:22px;overflow-x:auto}
-.tab{padding:10px 18px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s}
-.tab.active{color:var(--primary);border-bottom-color:var(--primary)}
-.tab:hover:not(.active){color:var(--text)}
-
-/* GROUPS */
-.groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.group-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--sh)}
-.group-card-hdr{padding:14px 16px;background:linear-gradient(135deg,#ede9fe,#ddd6fe);display:flex;justify-content:space-between;align-items:center;gap:8px}
-.group-card-title{font-weight:700;color:#4c1d95;font-size:14.5px}
-.group-card-body{padding:14px 16px}
-.drow{display:flex;gap:9px;margin-bottom:9px;font-size:13px;align-items:flex-start}
-.drow-icon{font-size:15px;min-width:20px;margin-top:1px}
-.drow-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-.drow-val{color:var(--text);line-height:1.4;word-break:break-word}
-.s-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-
-/* SUBJECT CARDS */
-.subj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
-.subj-card{background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);overflow:hidden;box-shadow:var(--sh)}
-.subj-card-hdr{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
-.subj-card-name{font-size:15px;font-weight:700}
-.subj-card-body{padding:14px 16px}
-.t-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;min-height:28px}
-
-/* MODAL */
-#modal-overlay{position:fixed;inset:0;background:rgba(15,17,26,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
-.modal{background:var(--card);border-radius:18px;padding:28px;max-width:540px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.3)}
-.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-.modal-title{font-size:18px;font-weight:700}
-.modal-x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);padding:2px 8px;border-radius:7px;line-height:1}
-.modal-x:hover{background:var(--bg)}
-.modal-ftr{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--border)}
-.modal-note{font-size:13px;color:var(--muted);margin-bottom:16px}
-.fgroup-m{margin-bottom:16px}
-.fgroup-m label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
-.fgroup-m input,.fgroup-m select,.fgroup-m textarea{width:100%}
-
-/* STUDENT SELECT LIST */
-.ssl{border:1.5px solid var(--border);border-radius:10px;max-height:280px;overflow-y:auto}
-.ssl-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
-.ssl-item:last-child{border-bottom:none}
-.ssl-item:hover{background:#f8fafc}
-.ssl-item.sel{background:#ede9fe}
-
-/* SHARE BOX */
-.share-box{background:#0d1117;color:#a5f3fc;padding:22px;border-radius:12px;font-family:'Courier New',monospace;font-size:12.5px;white-space:pre-wrap;line-height:1.8;max-height:420px;overflow-y:auto;border:1px solid rgba(99,102,241,.3)}
-
-/* FILTERS */
-.filters{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:18px}
-.filters select{min-width:150px}
-
-/* EMPTY */
-.empty{text-align:center;padding:52px 24px;color:var(--muted)}
-.empty-icon{font-size:46px;margin-bottom:12px}
-.empty h3{font-size:16px;color:var(--text);margin-bottom:6px}
-.empty p{font-size:13px}
-
-/* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;padding:12px 20px;border-radius:11px;font-size:13.5px;font-weight:600;color:#fff;box-shadow:var(--sh2);transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
-#toast.show{transform:translateY(0);opacity:1}
-#toast.s{background:var(--green)}
-#toast.e{background:var(--red)}
-#toast.i{background:var(--primary)}
-
-/* LOADING */
-.loading{display:flex;align-items:center;justify-content:center;padding:64px;color:var(--muted);gap:12px}
-.spin{width:22px;height:22px;border:2.5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-  #sidebar{width:210px;min-width:210px}
-  #content{padding:16px}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
+/* ── APP SHELL ────────────────────────────────────────────────────────── */
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg);
 }
-@media(max-width:580px){
-  #app{flex-direction:column}
-  #sidebar{width:100%;min-width:unset;height:auto;position:static}
-  .sb-nav{display:flex;flex-wrap:wrap;gap:4px}
-  .sb-section-title{display:none}
-  .groups-grid,.subj-grid{grid-template-columns:1fr}
-  #topbar{padding:12px 16px}
-  #content{padding:14px}
+
+/* Subtle grid background */
+#app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+}
+
+#screen-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  backdrop-filter: blur(12px);
+}
+.header-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.header-back:hover { background: var(--border2); border-color: var(--border2); }
+.header-back svg { width: 18px; height: 18px; stroke: var(--text); }
+.header-info { flex: 1; min-width: 0; }
+.header-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-subtitle {
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  margin-top: 1px;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  position: relative;
+  flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--border2); border-color: var(--border2); }
+.icon-btn svg { width: 18px; height: 18px; stroke: var(--text); }
+.icon-btn.danger svg { stroke: var(--danger); }
+.icon-btn.success svg { stroke: var(--success); }
+
+/* ── SCROLLABLE CONTENT ─────────────────────────────────────────────────── */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.content-inner { padding: 20px; padding-bottom: 40px; }
+
+/* ── CARDS ──────────────────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  transition: var(--transition);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+.card:hover { border-color: var(--border2); background: var(--surface2); transform: translateY(-1px); }
+.card:active { transform: translateY(0); }
+.card.no-hover { cursor: default; }
+.card.no-hover:hover { transform: none; border-color: var(--border); background: var(--surface); }
+.card-col { flex-direction: column; align-items: stretch; }
+.card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon svg { width: 20px; height: 20px; }
+.card-body { flex: 1; min-width: 0; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--text); font-family: var(--font-display); }
+.card-sub { font-size: 12px; color: var(--subtext); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-arrow svg { width: 16px; height: 16px; stroke: var(--subtext); flex-shrink: 0; }
+
+/* ── SECTION LABEL ──────────────────────────────────────────────────────── */
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--subtext);
+  font-family: var(--font-mono);
+  margin-bottom: 14px;
+  margin-top: 4px;
+}
+
+/* ── STUDENT ROW ────────────────────────────────────────────────────────── */
+.student-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 8px;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.student-row:hover { border-color: var(--border2); }
+.student-row.assigned { border-color: rgba(16,201,122,0.3); }
+.student-row.selected { border-color: var(--primary); background: var(--primary-dim); }
+.roll-badge {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  min-width: 38px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--subtext);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+.student-name { font-size: 14px; font-weight: 500; color: var(--text); }
+.student-meta { font-size: 11px; color: var(--subtext); margin-top: 1px; }
+.student-subject { font-size: 11px; color: var(--success); margin-top: 2px; }
+.student-group { font-size: 11px; color: var(--success); margin-top: 2px; }
+
+/* ── TAB BAR ────────────────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--subtext);
+  border-bottom: 2px solid transparent;
+  transition: var(--transition);
+  cursor: pointer;
+  font-family: var(--font-body);
+  background: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 700; }
+
+/* ── FILTER / STATS BAR ─────────────────────────────────────────────────── */
+.filter-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--subtext);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-body);
+}
+.chip:hover { border-color: var(--border2); }
+.chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+.chip.primary-border { border-color: var(--primary); color: var(--primary); background: transparent; }
+.chip.primary-border.active { background: var(--primary); color: #fff; }
+.pct-label { font-size: 13px; font-weight: 700; color: var(--success); margin-left: auto; font-family: var(--font-mono); }
+
+/* ── SEARCH BAR ─────────────────────────────────────────────────────────── */
+.search-wrap {
+  padding: 0 16px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.search-inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0 12px;
+  height: 40px;
+}
+.search-inner svg { width: 15px; height: 15px; stroke: var(--subtext); flex-shrink: 0; }
+.search-inner input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  color: var(--text);
+}
+.search-inner input::placeholder { color: var(--subtext); }
+.search-clear { background: none; border: none; cursor: pointer; display: flex; padding: 2px; }
+.search-clear svg { width: 14px; height: 14px; stroke: var(--subtext); }
+
+/* ── PROGRESS BAR ───────────────────────────────────────────────────────── */
+.progress-bg {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
+
+/* ── ASSIGN MODE BANNER ─────────────────────────────────────────────────── */
+.assign-banner {
+  background: var(--primary-dim);
+  border-bottom: 1px solid rgba(79,124,255,0.2);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.assign-banner-title { font-size: 14px; font-weight: 700; color: var(--primary); font-family: var(--font-display); }
+.assign-banner-sub { font-size: 11px; color: var(--subtext); margin-top: 1px; }
+
+/* ── CHIP TAGS ──────────────────────────────────────────────────────────── */
+.chip-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--primary-dim);
+  border: 1px solid rgba(79,124,255,0.3);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 500;
+}
+.chip-tag svg { width: 12px; height: 12px; stroke: var(--primary); }
+
+/* ── DETAIL ROWS ────────────────────────────────────────────────────────── */
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.detail-row:hover { border-color: var(--border2); background: var(--surface2); }
+.detail-label { font-size: 11px; color: var(--subtext); font-family: var(--font-mono); margin-bottom: 3px; }
+.detail-value { font-size: 14px; color: var(--text); line-height: 1.4; }
+.detail-empty { font-size: 13px; color: var(--subtext); font-style: italic; }
+.detail-edit svg { width: 15px; height: 15px; stroke: var(--subtext); }
+
+/* ── TEACHER CHIP ROW ───────────────────────────────────────────────────── */
+.teacher-chip-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(30,45,71,0.7);
+}
+.remove-btn { background: none; border: none; cursor: pointer; display: flex; padding: 2px; }
+.remove-btn svg { width: 18px; height: 18px; stroke: var(--danger); }
+
+/* ── FOOTER ─────────────────────────────────────────────────────────────── */
+.footer {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.btn {
+  height: 48px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 18px;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-display);
+  white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: #fff; flex: 1; }
+.btn-primary:hover { background: #3d6af0; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); flex: 1; }
+.btn-secondary:hover { background: var(--border2); }
+.btn svg { width: 17px; height: 17px; stroke: currentColor; }
+
+/* ── LOADING / EMPTY ────────────────────────────────────────────────────── */
+.loading-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 40px;
+}
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border2);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-size: 13px; color: var(--subtext); }
+.empty-wrap { display: flex; flex-direction: column; align-items: center; padding: 48px 20px; gap: 12px; }
+.empty-wrap svg { width: 48px; height: 48px; stroke: var(--border2); }
+.empty-text { font-size: 13px; color: var(--subtext); text-align: center; line-height: 1.6; }
+
+/* ── LOGIN ──────────────────────────────────────────────────────────────── */
+.login-screen {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+}
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 400px;
+}
+.login-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.login-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary-dim);
+  border: 1px solid rgba(79,124,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-icon svg { width: 28px; height: 28px; stroke: var(--primary); }
+.login-title { font-family: var(--font-display); font-size: 22px; font-weight: 800; text-align: center; color: var(--text); margin-bottom: 6px; }
+.login-sub { font-size: 13px; color: var(--subtext); text-align: center; margin-bottom: 28px; }
+.form-input {
+  width: 100%;
+  height: 50px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+  display: block;
+  margin-bottom: 14px;
+}
+.form-input:focus { border-color: var(--primary); }
+.form-input::placeholder { color: var(--subtext); }
+.form-input.error { border-color: var(--danger); }
+.form-textarea {
+  width: 100%;
+  min-height: 100px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text);
+  outline: none;
+  transition: var(--transition);
+  display: block;
+  margin-bottom: 14px;
+  resize: vertical;
+  font-family: var(--font-body);
+}
+.form-textarea:focus { border-color: var(--primary); }
+.form-textarea::placeholder { color: var(--subtext); }
+.login-btn {
+  width: 100%;
+  height: 50px;
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  margin-top: 8px;
+}
+.login-btn:hover { background: #3d6af0; }
+.login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.error-msg { color: var(--danger); font-size: 12px; text-align: center; margin-bottom: 12px; }
+
+/* ── MODAL ──────────────────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: flex-end;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-box {
+  background: var(--surface);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 1px solid var(--border);
+  padding: 24px 24px 0;
+  width: 100%;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 280ms cubic-bezier(0.34,1.2,0.64,1);
+}
+.modal-overlay.open .modal-box { transform: translateY(0); }
+.modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--subtext); margin-bottom: 16px; font-family: var(--font-mono); }
+.modal-scroll { overflow-y: auto; flex: 1; margin: 0 -24px; padding: 0 24px; }
+.modal-footer { display: flex; gap: 10px; padding: 14px 0 24px; border-top: 1px solid var(--border); margin: 0 -24px; padding: 14px 24px 24px; flex-shrink: 0; }
+
+/* Subject option rows in modal */
+.subject-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 4px;
+  border-bottom: 1px solid rgba(30,45,71,0.6);
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: 6px;
+}
+.subject-option:hover { background: var(--surface2); padding-left: 8px; padding-right: 8px; }
+.subject-option.active { background: var(--primary-dim); padding-left: 8px; padding-right: 8px; }
+.subject-option svg { width: 17px; height: 17px; stroke: var(--primary); flex-shrink: 0; }
+
+/* Confirmation dialog (replacing Alert) */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms;
+}
+.confirm-overlay.open { opacity: 1; pointer-events: all; }
+.confirm-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  transform: scale(0.9);
+  transition: transform 200ms cubic-bezier(0.34,1.2,0.64,1);
+}
+.confirm-overlay.open .confirm-box { transform: scale(1); }
+.confirm-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.confirm-msg { font-size: 13px; color: var(--subtext); line-height: 1.6; margin-bottom: 20px; }
+.confirm-btns { display: flex; gap: 10px; }
+.confirm-cancel { flex: 1; height: 42px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; font-family: var(--font-body); }
+.confirm-ok { flex: 1; height: 42px; background: var(--danger); border: none; border-radius: var(--radius-sm); color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: var(--font-body); }
+.confirm-ok.primary { background: var(--primary); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 30px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  z-index: 3000;
+  opacity: 0;
+  transition: opacity 250ms, transform 250ms;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ── SCREEN TRANSITION ──────────────────────────────────────────────────── */
+.screen-enter { animation: slideIn 220ms cubic-bezier(0.4,0,0.2,1) forwards; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── MISC ───────────────────────────────────────────────────────────────── */
+.ungrouped-warning {
+  border-color: rgba(245,166,35,0.4) !important;
+  background: var(--warning-dim) !important;
+}
+.ungrouped-warning .card-title { color: var(--warning); }
+.no-perm-card { border-color: rgba(255,77,109,0.2); }
+
+@media (max-width: 480px) {
+  .login-card { padding: 24px 20px; }
+  .content-inner { padding: 16px; }
+  .header { padding: 12px 16px; }
 }
 </style>
 </head>
 <body>
-
-<!-- LOGIN -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">
-      <div class="logo-icon">🎨</div>
-      <div>
-        <h1>Exhibition</h1>
-        <span style="color:var(--muted);font-size:12px;">Management System</span>
-      </div>
-    </div>
-    <p>Sign in to manage the school exhibition.</p>
-    <div class="fgroup">
-      <label>Email Address</label>
-      <input type="email" id="login-email" placeholder="teacher@school.edu" autocomplete="email">
-    </div>
-    <div class="fgroup">
-      <label>Password</label>
-      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <div id="login-error"></div>
-    <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In →</button>
+<div id="app">
+  <div id="screen-root"></div>
+</div>
+<!-- Modals (always mounted) -->
+<div id="modal-overlay" class="modal-overlay" onclick="handleModalOverlayClick(event)">
+  <div class="modal-box" id="modal-box">
+    <div id="modal-content"></div>
+    <div class="modal-footer" id="modal-footer"></div>
   </div>
 </div>
-
-<!-- APP -->
-<div id="app" hidden>
-  <aside id="sidebar">
-    <div class="sb-logo">
-      <div class="sb-logo-icon">🎨</div>
-      <div><h2>Exhibition</h2><span>Management</span></div>
+<div id="confirm-overlay" class="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirm-title"></div>
+    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" id="confirm-cancel">Cancel</button>
+      <button class="confirm-ok" id="confirm-ok">OK</button>
     </div>
-    <nav class="sb-nav" id="sidebar-nav"></nav>
-    <div class="sb-footer">
-      <div class="sb-user">
-        <strong id="sb-name">—</strong>
-        <small id="sb-email">—</small>
-      </div>
-      <div id="sb-role-pill" class="role-pill">—</div>
-      <button class="btn btn-ghost btn-sm" style="width:100%;justify-content:center;" onclick="handleLogout()">Sign Out</button>
-    </div>
-  </aside>
-  <div id="main">
-    <header id="topbar">
-      <h2 id="page-title">Dashboard</h2>
-      <div id="topbar-actions"></div>
-    </header>
-    <main id="content"><div class="loading"><div class="spin"></div> Loading…</div></main>
   </div>
 </div>
+<div class="toast" id="toast"></div>
 
-<!-- MODAL -->
-<div id="modal-overlay" onclick="handleOverlayClick(event)">
-  <div class="modal" id="modal-body"></div>
-</div>
-
-<!-- TOAST -->
-<div id="toast"></div>
-
-<script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
 <script>
+// ── CONFIG ─────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://ckltcwampaagyzneaznt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrbHRjd2FtcGFhZ3l6bmVhem50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1MDI2NjgsImV4cCI6MjA0ODA3ODY2OH0.pUT2kngS0nkzFBjI-P6g8azU5E3tZzGDQGL68-AUWFc';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ─── STATE ───────────────────────────────────────────────
-const S = {
-  userId: null, role: null,
-  teacherData: null, classData: null,
-  mySubjectIds: [],
-  subjects: [], teachers: [], allStudents: [], classStudents: [],
-  subjectTeachers: [], studentAssignments: [],
-  groups: [], groupMembers: [],
-  selectedStudents: new Set(),
-  currentView: null, currentSubjectId: null, activeTab: 'students',
-  adminClassFilter: '', adminSubjectFilter: '',
+// ── STATE ──────────────────────────────────────────────────────────────────
+let session = null;
+let role = null;
+let roleData = {};
+let screenStack = [{ name: 'loading', params: {} }];
+
+// ── ICONS (inline SVG) ─────────────────────────────────────────────────────
+const I = {
+  back: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>`,
+  fwd: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>`,
+  down: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>`,
+  up: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>`,
+  ribbon: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>`,
+  book: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>`,
+  people: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg>`,
+  layers: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"/></svg>`,
+  school: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"/></svg>`,
+  personAdd: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>`,
+  copy: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg>`,
+  share: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z"/></svg>`,
+  trash: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>`,
+  add: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>`,
+  check: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>`,
+  checkCircle: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10" fill="currentColor" fill-opacity="0.15"/><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  circle: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+  git: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path stroke-linecap="round" d="M6 21V9a9 9 0 009 9"/></svg>`,
+  search: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>`,
+  close: `<svg fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`,
+  warn: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>`,
+  personRemove: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766z"/></svg>`,
+  edit: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"/></svg>`,
+  lock: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>`,
+  tray: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3"/></svg>`,
+  bookmark: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"/></svg>`,
+  location: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>`,
+  construct: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/></svg>`,
+  link: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>`,
+  docText: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>`,
+  socialShare: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15"/></svg>`,
+  closeCircle: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M15 9l-6 6M9 9l6 6"/></svg>`,
+  person: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>`,
+  signout: `<svg fill="none" viewBox="0 0 24 24" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"/></svg>`,
 };
 
-// ─── INLINE DATA STORE (avoids JSON-in-attr issues) ──────
-// Used to safely pass complex data to onclick handlers
-const _store = {};
-let _storeIdx = 0;
-function storeData(data) {
-  const key = 'k' + (++_storeIdx);
-  _store[key] = data;
-  return key;
-}
-function loadData_store(key) { return _store[key]; }
-
-// ─── UTILS ───────────────────────────────────────────────
-function waitForSupabase(cb, start = Date.now()) {
-  if (window.checkAuth) { cb(); return; }
-  if (Date.now() - start > 8000) { console.error('Supabase timeout'); return; }
-  setTimeout(() => waitForSupabase(cb, start), 80);
-}
-function toast(msg, type = 's') {
-  const el = document.getElementById('toast');
-  el.textContent = msg; el.className = `show ${type}`;
-  clearTimeout(el._t); el._t = setTimeout(() => { el.className = ''; }, 3200);
-}
-function openModal(html) {
-  document.getElementById('modal-body').innerHTML = html;
-  document.getElementById('modal-overlay').style.display = 'flex';
-}
-function closeModal() {
-  document.getElementById('modal-overlay').style.display = 'none';
-  document.getElementById('modal-body').innerHTML = '';
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
-function setContent(html) { document.getElementById('content').innerHTML = html; }
-function setTitle(t)  { document.getElementById('page-title').textContent = t; }
-function setActions(h){ document.getElementById('topbar-actions').innerHTML = h; }
-function copyText(text) {
-  navigator.clipboard.writeText(text)
-    .then(() => toast('Copied to clipboard 📋', 'i'))
-    .catch(() => { toast('Could not auto-copy', 'e'); });
-}
-function subjName(id) { return (S.subjects.find(s => s.id == id) || {}).name || '—'; }
-function tchrName(id) { return (S.teachers.find(t => t.id === id) || {}).name || '—'; }
-function studentById(id) {
-  return S.allStudents.find(s => s.id === id) || S.classStudents.find(s => s.id === id) || null;
-}
-function getStudentSubject(studentId) {
-  const a = S.studentAssignments.find(a => a.student_id === studentId);
-  return a ? S.subjects.find(s => s.id == a.subject_id) : null;
-}
-function getSubjectStudents(subjectId) {
-  return S.studentAssignments
-    .filter(a => a.subject_id == subjectId)
-    .map(a => studentById(a.student_id)).filter(Boolean);
-}
-function getGroupStudents(groupId) {
-  return S.groupMembers
-    .filter(m => m.group_id === groupId)
-    .map(m => studentById(m.student_id)).filter(Boolean);
-}
-
-// ─── AUTH ────────────────────────────────────────────────
-async function init() {
-  try {
-    const ok = await window.checkAuth();
-    if (!ok) { showLogin(); return; }
-    S.userId = window.userId;
-    await detectRole();
-    await loadData();
-    renderApp();
-  } catch(e) { console.error(e); toast('Load failed. Refresh.', 'e'); showLogin(); }
-}
-function showLogin() {
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').hidden = true;
-}
-async function handleLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pw    = document.getElementById('login-password').value;
-  const err   = document.getElementById('login-error');
-  err.style.display = 'none';
-  if (!email || !pw) { showErr('Enter email and password.'); return; }
-  try {
-    await window.signInUser(email, pw);
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').hidden = false;
-    await init();
-  } catch(e) { showErr(e.message || 'Sign in failed.'); }
-}
-function showErr(msg) {
-  const err = document.getElementById('login-error');
-  err.textContent = msg; err.style.display = 'block';
-}
-async function handleLogout() { await window.signOutUser(); location.reload(); }
-
-// ─── ROLE DETECTION ──────────────────────────────────────
-async function detectRole() {
-  const uid = S.userId;
-  const admins = await window.selectData('exhibition_admins', false, 'id', ['id'], [uid]);
-  if (admins && admins.length > 0) { S.role = 'admin'; return; }
-  const ct = await window.selectData('class_teachers', false, '*', ['teacher_id'], [uid]);
-  if (ct && ct.length > 0) S.classData = { class: ct[0].class };
-  const tr = await window.selectData('teachers', false, '*', ['id'], [uid]);
-  if (tr && tr.length > 0) {
-    S.teacherData = tr[0];
-    const mySubs = await window.selectData('exhibition_subject_teachers', false, '*', ['teacher_id'], [uid]);
-    S.mySubjectIds = (mySubs || []).map(s => s.subject_id);
-  }
-  if (S.classData) S.role = 'class_teacher';
-  else S.role = 'subject_teacher';
-}
-
-// ─── DATA LOADING ────────────────────────────────────────
-async function loadData() {
-  const subjs = await window.selectData('subjects', false, '*', [], [], 'name', 'asc');
-  S.subjects = subjs || [];
-  if (S.role === 'admin') await loadAdminData();
-  else if (S.role === 'class_teacher') await loadClassTeacherData();
-  else await loadSubjectTeacherData();
-}
-async function loadAdminData() {
-  const [teachers, est, esa, groups, gm, students] = await Promise.all([
-    window.selectData('teachers', false, '*', [], [], 'name', 'asc'),
-    window.selectData('exhibition_subject_teachers', false, '*'),
-    window.selectData('exhibition_student_assignments', false, '*'),
-    window.selectData('exhibition_groups', false, '*'),
-    window.selectData('exhibition_group_members', false, '*'),
-    window.selectData('students', false, 'id,name,class,roll_number,gender,house', [], [], 'name', 'asc'),
-  ]);
-  S.teachers = teachers || []; S.subjectTeachers = est || [];
-  S.studentAssignments = esa || []; S.groups = groups || [];
-  S.groupMembers = gm || []; S.allStudents = students || [];
-}
-async function loadClassTeacherData() {
-  const myClass = S.classData.class;
-  const [students, esa, tr] = await Promise.all([
-    window.selectData('students', false, 'id,name,class,roll_number,gender', [], [], 'name', 'asc', [{operator:'eq',column:'class',value:myClass}]),
-    window.selectData('exhibition_student_assignments', false, '*'),
-    S.userId ? window.selectData('teachers', false, '*', ['id'], [S.userId]) : Promise.resolve(null),
-  ]);
-  S.classStudents = students || []; S.studentAssignments = esa || [];
-  if (tr && tr.length > 0) S.teacherData = tr[0];
-}
-async function loadSubjectTeacherData() {
-  if (!S.teacherData) {
-    const tr = await window.selectData('teachers', false, '*', ['id'], [S.userId]);
-    S.teacherData = tr?.[0] || { name:'Teacher', email:'' };
-  }
-  const mySubs = await window.selectData('exhibition_subject_teachers', false, '*', ['teacher_id'], [S.userId]);
-  S.mySubjectIds = (mySubs || []).map(s => s.subject_id);
-  const [esa, groups, gm, students] = await Promise.all([
-    window.selectData('exhibition_student_assignments', false, '*'),
-    window.selectData('exhibition_groups', false, '*'),
-    window.selectData('exhibition_group_members', false, '*'),
-    window.selectData('students', false, 'id,name,class,roll_number,gender'),
-  ]);
-  S.studentAssignments = esa || []; S.groups = groups || [];
-  S.groupMembers = gm || []; S.allStudents = students || [];
-}
-async function refresh() { await loadData(); }
-
-// ─── APP SHELL ───────────────────────────────────────────
-function renderApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').hidden = false;
-  renderSidebar();
-  if (S.role === 'admin') navigate('dashboard');
-  else if (S.role === 'class_teacher') navigate('class');
-  else navigate('subject', { id: S.mySubjectIds[0] });
-}
-function renderSidebar() {
-  const name  = S.teacherData?.name || S.classData?.class || 'Admin';
-  const email = S.teacherData?.email || '';
-  const roleLabel = {admin:'Exhibition Admin',class_teacher:'Class Teacher',subject_teacher:'Subject Teacher'}[S.role]||'—';
-  const roleCls   = {admin:'admin',class_teacher:'class_t',subject_teacher:'subject_t'}[S.role]||'';
-  document.getElementById('sb-name').textContent  = name;
-  document.getElementById('sb-email').textContent = email;
-  const pill = document.getElementById('sb-role-pill');
-  pill.textContent = roleLabel; pill.className = `role-pill ${roleCls}`;
-  let nav = '';
-  if (S.role === 'admin') {
-    nav = `
-      <div class="sb-section-title">Administration</div>
-      <div class="nav-item" onclick="navigate('dashboard')"><span class="ni">📊</span> Dashboard</div>
-      <div class="nav-item" onclick="navigate('subjects')"><span class="ni">📚</span> Subjects & Teachers</div>
-      <div class="nav-item" onclick="navigate('assignments')"><span class="ni">👥</span> Student Assignments</div>
-      <div class="nav-item" onclick="navigate('groups_admin')"><span class="ni">🗂️</span> Groups Overview</div>
-    `;
-  } else if (S.role === 'class_teacher') {
-    nav = `
-      <div class="sb-section-title">Class: ${S.classData?.class||''}</div>
-      <div class="nav-item" onclick="navigate('class')"><span class="ni">🏫</span> My Students</div>
-    `;
-  } else {
-    nav = `<div class="sb-section-title">My Subjects</div>`;
-    if (!S.mySubjectIds.length) {
-      nav += `<div style="color:rgba(255,255,255,.3);font-size:12px;padding:10px;">No subjects assigned</div>`;
-    } else {
-      S.mySubjectIds.forEach(sid => {
-        nav += `<div class="nav-item" onclick="navigate('subject',{id:${sid}})"><span class="ni">📖</span> ${subjName(sid)}</div>`;
-      });
-    }
-  }
-  document.getElementById('sidebar-nav').innerHTML = nav;
-}
-function updateActiveNav(view, subjectId) {
-  document.querySelectorAll('.nav-item').forEach(el => {
-    el.classList.remove('active');
-    const txt = el.textContent.trim();
-    if (view==='dashboard'    && txt.includes('Dashboard'))   el.classList.add('active');
-    if (view==='subjects'     && txt.includes('Subjects'))    el.classList.add('active');
-    if (view==='assignments'  && txt.includes('Student'))     el.classList.add('active');
-    if (view==='groups_admin' && txt.includes('Groups'))      el.classList.add('active');
-    if (view==='class'        && txt.includes('My Students')) el.classList.add('active');
-    if (view==='subject'      && subjectId && txt.includes(subjName(subjectId))) el.classList.add('active');
-  });
-}
-function navigate(view, params = {}) {
-  S.currentView = view; S.selectedStudents = new Set();
-  setActions(''); updateActiveNav(view, params.id);
-  switch(view) {
-    case 'dashboard':    renderDashboard(); break;
-    case 'subjects':     renderSubjects(); break;
-    case 'assignments':  S.adminClassFilter=''; S.adminSubjectFilter=''; renderAssignments(); break;
-    case 'groups_admin': renderGroupsAdmin(); break;
-    case 'class':        renderClassView(); break;
-    case 'subject':
-      S.currentSubjectId = params.id;
-      S.activeTab = params.tab || 'students';
-      renderSubjectView(params.id); break;
-  }
-}
-
-// ─── ADMIN: DASHBOARD ────────────────────────────────────
-function renderDashboard() {
-  setTitle('Exhibition Dashboard');
-  const total = S.allStudents.length;
-  const assigned = S.studentAssignments.length;
-  const tAssign = new Set(S.subjectTeachers.map(s => s.teacher_id)).size;
-  setContent(`
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-val">${S.subjects.length}</div><div class="stat-lbl">📚 Subjects</div></div>
-      <div class="stat-card"><div class="stat-val">${tAssign}</div><div class="stat-lbl">👩‍🏫 Teachers Active</div></div>
-      <div class="stat-card"><div class="stat-val good">${assigned}</div><div class="stat-lbl">✅ Students Assigned</div></div>
-      <div class="stat-card"><div class="stat-val ${total-assigned>0?'warn':'good'}">${total-assigned}</div><div class="stat-lbl">⏳ Unassigned</div></div>
-      <div class="stat-card"><div class="stat-val">${S.groups.length}</div><div class="stat-lbl">🗂️ Groups Created</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="card-title">Subject Overview</div>
-          <div class="card-sub">Students and groups per subject</div>
-        </div>
-        <button class="btn btn-copy btn-sm" onclick="copyFullSummary()">📋 Copy Summary</button>
-      </div>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Subject</th><th>Teachers</th><th>Students</th><th>Groups</th></tr></thead>
-          <tbody>
-            ${S.subjects.map(subj => {
-              const tids   = S.subjectTeachers.filter(st => st.subject_id == subj.id).map(st => st.teacher_id);
-              const sCount = S.studentAssignments.filter(a => a.subject_id == subj.id).length;
-              const gCount = S.groups.filter(g => g.subject_id == subj.id).length;
-              return `<tr>
-                <td><strong>${subj.name}</strong></td>
-                <td>${tids.length ? tids.map(t=>`<span class="chip ch-cyan" style="font-size:11px;">👩‍🏫 ${tchrName(t)}</span>`).join(' ') : '<span class="chip ch-gray">None</span>'}</td>
-                <td>${sCount ? `<span class="chip ch-green">${sCount}</span>` : '<span class="chip ch-gray">0</span>'}</td>
-                <td>${gCount ? `<span class="chip ch-blue">${gCount}</span>` : '<span class="chip ch-gray">0</span>'}</td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  `);
-}
-function copyFullSummary() {
-  let text = `🎨 EXHIBITION SUMMARY\n${'═'.repeat(30)}\n\n`;
-  S.subjects.forEach(subj => {
-    const studs = getSubjectStudents(subj.id);
-    const grps  = S.groups.filter(g => g.subject_id == subj.id);
-    const tids  = S.subjectTeachers.filter(st => st.subject_id == subj.id).map(st => tchrName(st.teacher_id));
-    text += `📚 ${subj.name}\n   Teachers: ${tids.join(', ') || 'None'}\n   Students: ${studs.length}  |  Groups: ${grps.length}\n\n`;
-  });
-  copyText(text);
-}
-
-// ─── ADMIN: SUBJECTS & TEACHERS ──────────────────────────
-function renderSubjects() {
-  setTitle('Subjects & Teacher Assignments');
-  setContent(`
-    <div class="subj-grid">
-      ${S.subjects.map(subj => {
-        const assigned = S.subjectTeachers.filter(st => st.subject_id == subj.id);
-        return `<div class="subj-card">
-          <div class="subj-card-hdr">
-            <span class="subj-card-name">📚 ${subj.name}</span>
-            <span class="chip ch-blue">${assigned.length} teacher${assigned.length!==1?'s':''}</span>
-          </div>
-          <div class="subj-card-body">
-            <div class="t-chips">
-              ${assigned.length ? assigned.map(a=>`
-                <span class="chip ch-cyan">👩‍🏫 ${tchrName(a.teacher_id)}
-                  <button class="chip-rm" onclick="removeTeacher('${a.id}')">✕</button>
-                </span>
-              `).join('') : '<span style="color:var(--muted);font-size:12px;">No teacher assigned</span>'}
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="modalAssignTeacher(${subj.id})">+ Add Teacher</button>
-          </div>
-        </div>`;
-      }).join('')}
-    </div>
-  `);
-}
-function modalAssignTeacher(subjectId) {
-  const already   = S.subjectTeachers.filter(st => st.subject_id == subjectId).map(st => st.teacher_id);
-  const available = S.teachers.filter(t => !already.includes(t.id));
-  const subj      = S.subjects.find(s => s.id == subjectId);
-  if (!available.length) { toast('All teachers already assigned to this subject', 'i'); return; }
-  openModal(`
-    <div class="modal-hdr"><div class="modal-title">Assign Teacher — ${subj?.name}</div><button class="modal-x" onclick="closeModal()">×</button></div>
-    <div class="fgroup-m">
-      <label>Select Teacher</label>
-      <select id="m-teacher">
-        <option value="">— Pick a teacher —</option>
-        ${available.map(t=>`<option value="${t.id}">${t.name} (${t.email})</option>`).join('')}
-      </select>
-    </div>
-    <div class="modal-ftr">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="assignTeacher(${subjectId})">Assign</button>
-    </div>
-  `);
-}
-async function assignTeacher(subjectId) {
-  const tid = document.getElementById('m-teacher').value;
-  if (!tid) { toast('Select a teacher', 'e'); return; }
-  const res = await window.insertData('exhibition_subject_teachers', { subject_id: subjectId, teacher_id: tid });
-  if (res) { toast('Teacher assigned ✅'); closeModal(); await refresh(); renderSubjects(); }
-  else toast('Failed to assign', 'e');
-}
-async function removeTeacher(assignmentId) {
-  if (!confirm('Remove this teacher from the subject?')) return;
-  const res = await window.deleteRow('exhibition_subject_teachers', ['id'], [assignmentId]);
-  if (res !== null) { toast('Teacher removed'); await refresh(); renderSubjects(); }
-  else toast('Failed', 'e');
-}
-
-// ─── ADMIN: STUDENT ASSIGNMENTS ──────────────────────────
-function renderAssignments() {
-  setTitle('Student Assignments');
-  const classes = [...new Set(S.allStudents.map(s => s.class))].sort();
-  setContent(`
-    <div class="card">
-      <div class="filters">
-        <div>
-          <div class="f-lbl">Class</div>
-          <select onchange="S.adminClassFilter=this.value; renderAssignTable()">
-            <option value="">All Classes</option>
-            ${classes.map(c=>`<option value="${c}">${c}</option>`).join('')}
-          </select>
-        </div>
-        <div>
-          <div class="f-lbl">Subject Filter</div>
-          <select onchange="S.adminSubjectFilter=this.value; renderAssignTable()">
-            <option value="">All Subjects</option>
-            <option value="__none__">⏳ Unassigned</option>
-            ${S.subjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
-          </select>
-        </div>
-        <button class="btn btn-primary" onclick="modalBulkAssign()">✏️ Assign Selected</button>
-        <button class="btn btn-copy" onclick="copyAssignmentSummary()">📋 Copy</button>
-      </div>
-      <div id="assign-table"></div>
-    </div>
-  `);
-  renderAssignTable();
-}
-function renderAssignTable() {
-  let students = [...S.allStudents];
-  if (S.adminClassFilter) students = students.filter(s => s.class === S.adminClassFilter);
-  if (S.adminSubjectFilter === '__none__') students = students.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
-  else if (S.adminSubjectFilter) students = students.filter(s => S.studentAssignments.find(a => a.student_id === s.id && a.subject_id == S.adminSubjectFilter));
-  const n = S.selectedStudents.size;
-  // FIX: store IDs safely to avoid JSON-in-attr double-quote issues
-  const allIdsKey = storeData(students.map(s => s.id));
-  document.getElementById('assign-table').innerHTML = `
-    ${n > 0 ? `<div class="action-bar">
-      <span class="action-bar-left">✅ ${n} student${n>1?'s':''} selected</span>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-ghost btn-sm" onclick="S.selectedStudents.clear(); renderAssignTable()">Clear</button>
-        <button class="btn btn-primary btn-sm" onclick="modalBulkAssign()">Assign to Subject</button>
-      </div>
-    </div>` : ''}
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr>
-          <th class="cb-col"><input type="checkbox" id="sa-all" data-ids-key="${allIdsKey}" onchange="saToggleAll(this)"></th>
-          <th>Name</th><th>Class</th><th>Subject</th><th>Actions</th>
-        </tr></thead>
-        <tbody>
-          ${!students.length ? `<tr><td colspan="5"><div class="empty"><div class="empty-icon">📭</div><h3>No students</h3></div></td></tr>` : ''}
-          ${students.map(s => {
-            const subj = getStudentSubject(s.id);
-            const sel  = S.selectedStudents.has(s.id);
-            const sname = s.name.replace(/'/g, "\\'");
-            return `<tr>
-              <td><input type="checkbox" ${sel?'checked':''} data-sid="${s.id}" onchange="saToggle(this)"></td>
-              <td><strong>${s.name}</strong></td>
-              <td><span class="chip ch-gray">${s.class}</span></td>
-              <td>${subj ? `<span class="chip ch-green">📚 ${subj.name}</span>` : '<span class="chip ch-gray">—</span>'}</td>
-              <td style="display:flex;gap:5px;">
-                <button class="btn btn-ghost btn-xs" onclick="modalSingleAssign('${s.id}','${sname}')">✏️</button>
-                ${subj ? `<button class="btn btn-danger btn-xs" onclick="unassignStudent('${s.id}')">✕</button>` : ''}
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-// FIX: saToggleAll now reads IDs from the store via data attribute
-function saToggleAll(cb) {
-  const ids = loadData_store(cb.dataset.idsKey) || [];
-  ids.forEach(id => cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id));
-  renderAssignTable();
-}
-// FIX: saToggle now re-renders the action bar by calling renderAssignTable
-function saToggle(cb) {
-  const id = cb.dataset.sid;
-  cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id);
-  // Update action bar count without full re-render
-  const n = S.selectedStudents.size;
-  const bar = document.querySelector('#assign-table .action-bar .action-bar-left');
-  if (bar) {
-    bar.textContent = n > 0 ? `✅ ${n} student${n>1?'s':''} selected` : '';
-  } else if (n > 0) {
-    // Action bar not shown yet — re-render to show it
-    renderAssignTable();
-  }
-}
-function modalBulkAssign() {
-  const ids = [...S.selectedStudents];
-  if (!ids.length) { toast('Select students first', 'i'); return; }
-  openAssignModal(ids, `${ids.length} students`);
-}
-function modalSingleAssign(id, name) { openAssignModal([id], name); }
-// FIX: store IDs in _store and pass key instead of JSON-in-attr
-function openAssignModal(ids, label) {
-  const key = storeData(ids);
-  openModal(`
-    <div class="modal-hdr"><div class="modal-title">Assign to Exhibition Subject</div><button class="modal-x" onclick="closeModal()">×</button></div>
-    <p class="modal-note">Assigning: <strong>${label}</strong></p>
-    <div class="fgroup-m">
-      <label>Select Subject</label>
-      <select id="m-subject" style="width:100%">
-        <option value="">— Pick a subject —</option>
-        ${S.subjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
-      </select>
-    </div>
-    <div class="modal-ftr">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="doAssign('${key}')">Assign →</button>
-    </div>
-  `);
-}
-async function doAssign(key) {
-  const ids = loadData_store(key);
-  const sid = document.getElementById('m-subject').value;
-  if (!sid) { toast('Select a subject', 'e'); return; }
-  let ok = 0;
-  for (const studentId of ids) {
-    await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
-    const r = await window.insertData('exhibition_student_assignments', { student_id: studentId, subject_id: parseInt(sid), assigned_by: S.userId });
-    if (r) ok++;
-  }
-  toast(`${ok} student${ok!==1?'s':''} assigned ✅`); closeModal();
-  S.selectedStudents.clear(); await refresh(); renderAssignTable();
-}
-async function unassignStudent(studentId) {
-  if (!confirm('Remove from subject?')) return;
-  const r = await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
-  if (r !== null) { toast('Unassigned'); await refresh(); renderAssignTable(); }
-  else toast('Failed', 'e');
-}
-function copyAssignmentSummary() {
-  let text = `📋 Exhibition Student Assignments\n${'═'.repeat(32)}\n\n`;
-  S.subjects.forEach(subj => {
-    const studs = getSubjectStudents(subj.id);
-    if (!studs.length) return;
-    text += `📚 ${subj.name} (${studs.length})\n`;
-    studs.forEach((s,i) => { text += `  ${i+1}. ${s.name} — ${s.class}\n`; });
-    text += '\n';
-  });
-  const unassigned = S.allStudents.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
-  if (unassigned.length) {
-    text += `⏳ Unassigned (${unassigned.length})\n`;
-    unassigned.forEach((s,i) => { text += `  ${i+1}. ${s.name} — ${s.class}\n`; });
-  }
-  copyText(text);
-}
-
-// ─── ADMIN: GROUPS OVERVIEW ──────────────────────────────
-function renderGroupsAdmin() {
-  setTitle('Groups & Projects Overview');
-  const withGroups = S.subjects.filter(s => S.groups.some(g => g.subject_id == s.id));
-  if (!withGroups.length) {
-    setContent(`<div class="empty"><div class="empty-icon">🗂️</div><h3>No groups created yet</h3><p>Subject teachers will create groups in their subjects.</p></div>`);
-    return;
-  }
-  setContent(`
-    <div class="tabs" id="g-tabs">
-      ${withGroups.map(s=>`<div class="tab" onclick="showAdminGroups(${s.id})" data-sid="${s.id}">${s.name}</div>`).join('')}
-    </div>
-    <div id="g-content"></div>
-  `);
-  showAdminGroups(withGroups[0].id);
-}
-function showAdminGroups(subjectId) {
-  // FIX: use == for type-safe comparison (sid stored as string attr, subjectId may be number)
-  document.querySelectorAll('#g-tabs .tab').forEach(t => t.classList.toggle('active', t.dataset.sid == subjectId));
-  const grps = S.groups.filter(g => g.subject_id == subjectId);
-  document.getElementById('g-content').innerHTML = grps.length
-    ? `<div class="groups-grid">${grps.map(g => groupCard(g, false)).join('')}</div>`
-    : `<div class="empty"><div class="empty-icon">📂</div><h3>No groups yet</h3></div>`;
-}
-
-// ─── CLASS TEACHER VIEW ──────────────────────────────────
-function renderClassView() {
-  setTitle(`My Class: ${S.classData?.class||''}`);
-  const students   = S.classStudents;
-  const assigned   = students.filter(s =>  S.studentAssignments.find(a => a.student_id === s.id));
-  const unassigned = students.filter(s => !S.studentAssignments.find(a => a.student_id === s.id));
-  setActions(`<button class="btn btn-copy" onclick="copyClassList()">📋 Copy List</button>`);
-  setContent(`
-    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
-      <div class="stat-card"><div class="stat-val">${students.length}</div><div class="stat-lbl">Total Students</div></div>
-      <div class="stat-card"><div class="stat-val good">${assigned.length}</div><div class="stat-lbl">✅ Assigned</div></div>
-      <div class="stat-card"><div class="stat-val ${unassigned.length?'warn':'good'}">${unassigned.length}</div><div class="stat-lbl">⏳ Pending</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="card-title">Students — ${S.classData?.class}</div>
-          <div class="card-sub">Select students and assign them to exhibition subjects</div>
-        </div>
-        <div class="card-header-actions">
-          <button class="btn btn-ghost btn-sm" onclick="ctSelectUnassigned()">Select Unassigned</button>
-          <button class="btn btn-primary" onclick="ctShowAssign()">✏️ Assign Selected</button>
-        </div>
-      </div>
-      <div class="action-bar" style="margin-bottom:12px;">
-        <span id="ct-sel-lbl" style="color:#5b21b6;font-weight:600;font-size:13px;">Select students to assign</span>
-        <div style="display:flex;gap:7px;">
-          <button class="btn btn-ghost btn-xs" onclick="ctSelectAll()">All</button>
-          <button class="btn btn-ghost btn-xs" onclick="S.selectedStudents.clear(); ctRender()">Clear</button>
-        </div>
-      </div>
-      <div id="ct-table"></div>
-    </div>
-  `);
-  ctRender();
-}
-function ctRender() {
-  const n = S.selectedStudents.size;
-  const el = document.getElementById('ct-sel-lbl');
-  if (el) el.textContent = n ? `${n} student${n>1?'s':''} selected` : 'Select students to assign';
-  document.getElementById('ct-table').innerHTML = `
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr>
-          <th class="cb-col"><input type="checkbox" onchange="ctToggleAll(this)"></th>
-          <th>Name</th><th>Roll</th><th>Subject</th><th>Action</th>
-        </tr></thead>
-        <tbody>
-          ${S.classStudents.map(s => {
-            const subj = getStudentSubject(s.id);
-            const sel  = S.selectedStudents.has(s.id);
-            const sname = s.name.replace(/'/g, "\\'");
-            return `<tr>
-              <td><input type="checkbox" ${sel?'checked':''} data-sid="${s.id}" onchange="ctTgl(this)"></td>
-              <td><strong>${s.name}</strong></td>
-              <td style="color:var(--muted)">${s.roll_number||'—'}</td>
-              <td>${subj ? `<span class="chip ch-green">📚 ${subj.name}</span>` : '<span class="chip ch-gray">—</span>'}</td>
-              <td style="display:flex;gap:5px;">
-                <button class="btn btn-ghost btn-xs" onclick="ctSingleAssign('${s.id}','${sname}')">✏️</button>
-                ${subj ? `<button class="btn btn-danger btn-xs" onclick="ctUnassign('${s.id}')">✕</button>` : ''}
-              </td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-// FIX: read sid from data attribute
-function ctTgl(cb) {
-  const id = cb.dataset.sid;
-  cb.checked ? S.selectedStudents.add(id) : S.selectedStudents.delete(id);
-  ctRender();
-}
-function ctToggleAll(cb) { S.classStudents.forEach(s => cb.checked ? S.selectedStudents.add(s.id) : S.selectedStudents.delete(s.id)); ctRender(); }
-function ctSelectAll()        { S.classStudents.forEach(s => S.selectedStudents.add(s.id)); ctRender(); }
-function ctSelectUnassigned() { S.classStudents.filter(s => !S.studentAssignments.find(a => a.student_id===s.id)).forEach(s => S.selectedStudents.add(s.id)); ctRender(); }
-function ctShowAssign()       { if (!S.selectedStudents.size) { toast('Select students first','i'); return; } ctOpenAssignModal([...S.selectedStudents], `${S.selectedStudents.size} students`); }
-function ctSingleAssign(id, name) { ctOpenAssignModal([id], name); }
-// FIX: store IDs safely
-function ctOpenAssignModal(ids, label) {
-  const key = storeData(ids);
-  openModal(`
-    <div class="modal-hdr"><div class="modal-title">Assign to Subject</div><button class="modal-x" onclick="closeModal()">×</button></div>
-    <p class="modal-note">Assigning: <strong>${label}</strong></p>
-    <div class="fgroup-m">
-      <label>Select Subject</label>
-      <select id="m-ct-sub" style="width:100%">
-        <option value="">— Pick a subject —</option>
-        ${S.subjects.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}
-      </select>
-    </div>
-    <div class="modal-ftr">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="ctDoAssign('${key}')">Assign →</button>
-    </div>
-  `);
-}
-async function ctDoAssign(key) {
-  const ids = loadData_store(key);
-  const sid = document.getElementById('m-ct-sub').value;
-  if (!sid) { toast('Select a subject', 'e'); return; }
-  let ok = 0;
-  for (const studentId of ids) {
-    await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
-    const r = await window.insertData('exhibition_student_assignments', { student_id: studentId, subject_id: parseInt(sid), assigned_by: S.userId });
-    if (r) ok++;
-  }
-  toast(`${ok} student${ok!==1?'s':''} assigned ✅`); closeModal();
-  S.selectedStudents.clear();
-  await refresh();
-  // FIX: call renderClassView() to also update the stats, not just ctRender()
-  renderClassView();
-}
-async function ctUnassign(studentId) {
-  if (!confirm('Remove from subject?')) return;
-  const r = await window.deleteRow('exhibition_student_assignments', ['student_id'], [studentId]);
-  if (r !== null) {
-    toast('Removed');
-    await refresh();
-    // FIX: call renderClassView() to update stats
-    renderClassView();
-  } else toast('Failed', 'e');
-}
-function copyClassList() {
-  let text = `📋 Class ${S.classData?.class} — Exhibition Assignments\n${'═'.repeat(34)}\n\n`;
-  S.classStudents.forEach((s,i) => {
-    const subj = getStudentSubject(s.id);
-    text += `${String(i+1).padStart(2,'0')}. ${s.name.padEnd(25,' ')} → ${subj ? subj.name : 'Not assigned'}\n`;
-  });
-  copyText(text);
-}
-
-// ─── SUBJECT TEACHER VIEW ────────────────────────────────
-function renderSubjectView(subjectId) {
-  if (!subjectId) {
-    setTitle('My Subjects'); setActions('');
-    setContent(`<div class="empty"><div class="empty-icon">📚</div><h3>No subjects assigned</h3><p>Ask an Exhibition Admin to assign you to a subject.</p></div>`);
-    return;
-  }
-  const subj  = S.subjects.find(s => s.id == subjectId) || {};
-  const studs = getSubjectStudents(subjectId);
-  const grps  = S.groups.filter(g => g.subject_id == subjectId);
-  setTitle(`📚 ${subj.name}`);
-  setActions(`
-    <button class="btn btn-copy" onclick="copySubjectDetails(${subjectId})">📋 Copy All</button>
-    <button class="btn btn-amber" onclick="shareWhatsApp(${subjectId})">📱 WhatsApp</button>
-  `);
-  setContent(`
-    <div class="tabs">
-      <div class="tab ${S.activeTab==='students'?'active':''}" onclick="stTab('students',${subjectId})">👥 Students (${studs.length})</div>
-      <div class="tab ${S.activeTab==='groups'?'active':''}" onclick="stTab('groups',${subjectId})">🗂️ Groups (${grps.length})</div>
-      <div class="tab ${S.activeTab==='share'?'active':''}" onclick="stTab('share',${subjectId})">📤 Share</div>
-    </div>
-    <div id="st-content"></div>
-  `);
-  renderStTab(subjectId);
-}
-function stTab(tab, sid) { S.activeTab = tab; renderSubjectView(sid); }
-function renderStTab(subjectId) {
-  if (S.activeTab === 'students') renderStudentsTab(subjectId);
-  else if (S.activeTab === 'groups') renderGroupsTab(subjectId);
-  else renderShareTab(subjectId);
-}
-function renderStudentsTab(subjectId) {
-  const studs = getSubjectStudents(subjectId);
-  document.getElementById('st-content').innerHTML = `
-    <div class="card">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="card-title">Assigned Students (${studs.length})</div>
-          <div class="card-sub">${studs.filter(s=>!S.groupMembers.find(m=>m.student_id===s.id)).length} ungrouped</div>
-        </div>
-        <button class="btn btn-copy btn-sm" onclick="copyStudentList(${subjectId})">📋 Copy</button>
-      </div>
-      ${!studs.length ? `<div class="empty"><div class="empty-icon">👤</div><h3>No students assigned yet</h3><p>Class teachers or admins assign students here.</p></div>` : `
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Name</th><th>Class</th><th>Group</th></tr></thead>
-          <tbody>
-            ${studs.map(s => {
-              const gm  = S.groupMembers.find(m => m.student_id === s.id);
-              const grp = gm ? S.groups.find(g => g.id === gm.group_id) : null;
-              return `<tr>
-                <td><strong>${s.name}</strong></td>
-                <td><span class="chip ch-gray">${s.class}</span></td>
-                <td>${grp ? `<span class="chip ch-blue">🗂️ ${grp.group_name}</span>` : '<span class="chip ch-gray">Not grouped</span>'}</td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-        </table>
-      </div>`}
-    </div>
-  `;
-}
-function renderGroupsTab(subjectId) {
-  const grps = S.groups.filter(g => g.subject_id == subjectId);
-  document.getElementById('st-content').innerHTML = `
-    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-      <button class="btn btn-primary" onclick="modalCreateGroup(${subjectId})">+ Create Group</button>
-    </div>
-    ${!grps.length ? `
-      <div class="empty"><div class="empty-icon">🗂️</div><h3>No groups yet</h3>
-      <p>Create groups to organize students and assign projects.</p>
-      <button class="btn btn-primary" style="margin-top:16px;" onclick="modalCreateGroup(${subjectId})">+ Create First Group</button></div>
-    ` : `<div class="groups-grid">${grps.map(g => groupCard(g, true)).join('')}</div>`}
-  `;
-}
-function renderShareTab(subjectId) {
-  const text = buildShareText(subjectId);
-  // FIX: store share text to avoid inline string issues
-  const key = storeData(text);
-  document.getElementById('st-content').innerHTML = `
-    <div class="card">
-      <div class="card-header">
-        <div class="card-header-left">
-          <div class="card-title">Exhibition Details — ${subjName(subjectId)}</div>
-          <div class="card-sub">Copy or share this formatted summary</div>
-        </div>
-        <div class="card-header-actions">
-          <button class="btn btn-copy" onclick="copyShareTabText()">📋 Copy</button>
-          <button class="btn btn-amber" onclick="shareWhatsApp(${subjectId})">📱 WhatsApp</button>
-          <button class="btn btn-success" onclick="shareNative(${subjectId})">📤 Share</button>
-        </div>
-      </div>
-      <div class="share-box" id="share-txt">${text}</div>
-    </div>
-  `;
-}
-function copyShareTabText() {
-  const el = document.getElementById('share-txt');
-  if (el) copyText(el.textContent);
-}
-
-// ─── GROUP CARD ──────────────────────────────────────────
-function groupCard(group, editable) {
-  const members = getGroupStudents(group.id);
-  const shareText = buildGroupText(group, members);
-  // FIX: store share text in _store to safely pass to onclick without quote/encoding issues
-  const textKey = storeData(shareText);
-  return `
-    <div class="group-card">
-      <div class="group-card-hdr">
-        <span class="group-card-title">🗂️ ${group.group_name}</span>
-        <div style="display:flex;gap:5px;">
-          <button class="btn btn-xs btn-copy" onclick="copyText(loadData_store('${textKey}'))" title="Copy">📋</button>
-          ${editable ? `<button class="btn btn-xs btn-ghost" onclick="modalEditGroup('${group.id}')">✏️</button>
-          <button class="btn btn-xs btn-danger" onclick="deleteGroup('${group.id}',${group.subject_id})">🗑️</button>` : ''}
-        </div>
-      </div>
-      <div class="group-card-body">
-        ${group.project_title      ? `<div class="drow"><span class="drow-icon">💡</span><div><div class="drow-lbl">Project</div><div class="drow-val">${group.project_title}</div></div></div>` : ''}
-        ${group.room_number        ? `<div class="drow"><span class="drow-icon">🚪</span><div><div class="drow-lbl">Room</div><div class="drow-val">${group.room_number}</div></div></div>` : ''}
-        ${group.materials_required ? `<div class="drow"><span class="drow-icon">📦</span><div><div class="drow-lbl">Materials</div><div class="drow-val">${group.materials_required}</div></div></div>` : ''}
-        ${group.reference_links    ? `<div class="drow"><span class="drow-icon">🔗</span><div><div class="drow-lbl">Links</div><div class="drow-val" style="word-break:break-all">${group.reference_links}</div></div></div>` : ''}
-        ${group.instructions       ? `<div class="drow"><span class="drow-icon">📋</span><div><div class="drow-lbl">Instructions</div><div class="drow-val">${group.instructions}</div></div></div>` : ''}
-        <div class="drow">
-          <span class="drow-icon">👨‍🎓</span>
-          <div>
-            <div class="drow-lbl">Students (${members.length})</div>
-            <div class="s-chips">
-              ${members.map(m=>`<span class="chip ch-blue">${m.name}${editable?`<button class="chip-rm" onclick="removeFromGroup('${group.id}','${m.id}',${group.subject_id})">✕</button>`:''}</span>`).join('')||'<span style="color:var(--muted);font-size:12px;">No students</span>'}
-              ${editable ? `<button class="btn btn-xs btn-ghost" onclick="modalAddToGroup('${group.id}',${group.subject_id})">+ Add</button>` : ''}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// ─── GROUP CRUD ──────────────────────────────────────────
-function groupFormFields(g = {}) {
-  return `
-    <div class="fgroup-m"><label>Group Name *</label><input type="text" id="gf-name" value="${(g.group_name||'').replace(/"/g,'&quot;')}" placeholder="e.g. Group A, Team Stars…"></div>
-    <div class="fgroup-m"><label>Project Title</label><input type="text" id="gf-project" value="${(g.project_title||'').replace(/"/g,'&quot;')}" placeholder="Project topic or title"></div>
-    <div class="fgroup-m"><label>Room Number</label><input type="text" id="gf-room" value="${(g.room_number||'').replace(/"/g,'&quot;')}" placeholder="e.g. Room 101, Science Lab…"></div>
-    <div class="fgroup-m"><label>Materials Required</label><textarea id="gf-materials" placeholder="List materials needed…">${g.materials_required||''}</textarea></div>
-    <div class="fgroup-m"><label>Reference Links</label><input type="text" id="gf-links" value="${(g.reference_links||'').replace(/"/g,'&quot;')}" placeholder="https://…"></div>
-    <div class="fgroup-m"><label>Instructions</label><textarea id="gf-instructions" placeholder="Instructions or notes…">${g.instructions||''}</textarea></div>
-  `;
-}
-function getGroupFormValues() {
-  return {
-    group_name:         document.getElementById('gf-name').value.trim(),
-    project_title:      document.getElementById('gf-project').value.trim() || null,
-    room_number:        document.getElementById('gf-room').value.trim() || null,
-    materials_required: document.getElementById('gf-materials').value.trim() || null,
-    reference_links:    document.getElementById('gf-links').value.trim() || null,
-    instructions:       document.getElementById('gf-instructions').value.trim() || null,
-  };
-}
-function modalCreateGroup(subjectId) {
-  openModal(`
-    <div class="modal-hdr"><div class="modal-title">Create Group</div><button class="modal-x" onclick="closeModal()">×</button></div>
-    ${groupFormFields()}
-    <div class="modal-ftr">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="createGroup(${subjectId})">Create Group</button>
-    </div>
-  `);
-}
-async function createGroup(subjectId) {
-  const vals = getGroupFormValues();
-  if (!vals.group_name) { toast('Group name is required', 'e'); return; }
-  const r = await window.insertData('exhibition_groups', { subject_id: subjectId, ...vals });
-  if (r) { toast('Group created ✅'); closeModal(); await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
-  else toast('Failed to create group', 'e');
-}
-function modalEditGroup(groupId) {
-  const g = S.groups.find(g => g.id === groupId); if (!g) return;
-  openModal(`
-    <div class="modal-hdr"><div class="modal-title">Edit Group</div><button class="modal-x" onclick="closeModal()">×</button></div>
-    ${groupFormFields(g)}
-    <div class="modal-ftr">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="updateGroup('${groupId}',${g.subject_id})">Save Changes</button>
-    </div>
-  `);
-}
-async function updateGroup(groupId, subjectId) {
-  const vals = getGroupFormValues();
-  if (!vals.group_name) { toast('Group name required', 'e'); return; }
-  const r = await window.updateRow('exhibition_groups', ['id'], [groupId], Object.keys(vals), Object.values(vals));
-  if (r) { toast('Group updated ✅'); closeModal(); await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
-  else toast('Failed to update', 'e');
-}
-async function deleteGroup(groupId, subjectId) {
-  const g = S.groups.find(g => g.id === groupId);
-  if (!confirm(`Delete group "${g?.group_name}"? Members will be ungrouped.`)) return;
-  const r = await window.deleteRow('exhibition_groups', ['id'], [groupId]);
-  if (r !== null) { toast('Group deleted'); await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
-  else toast('Failed', 'e');
-}
-function modalAddToGroup(groupId, subjectId) {
-  const available = getSubjectStudents(subjectId).filter(s => !S.groupMembers.find(m => m.student_id === s.id));
-  if (!available.length) { toast('All students already in groups', 'i'); return; }
-  const grp = S.groups.find(g => g.id === groupId);
-  openModal(`
-    <div class="modal-hdr"><div class="modal-title">Add Students — ${grp?.group_name}</div><button class="modal-x" onclick="closeModal()">×</button></div>
-    <p class="modal-note">Select ungrouped students:</p>
-    <div class="ssl" id="m-ssl">
-      ${available.map(s=>`
-        <div class="ssl-item" onclick="sslToggle(this)">
-          <input type="checkbox" value="${s.id}" onclick="event.stopPropagation()">
-          <span><strong>${s.name}</strong> <span class="chip ch-gray" style="font-size:11px;">${s.class}</span></span>
-        </div>
-      `).join('')}
-    </div>
-    <div class="modal-ftr">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="addToGroup('${groupId}',${subjectId})">Add Selected</button>
-    </div>
-  `);
-}
-// FIX: unified toggle handler so both row click and checkbox click work correctly
-function sslToggle(row) {
-  row.classList.toggle('sel');
-  const cb = row.querySelector('input[type="checkbox"]');
-  if (cb) cb.checked = row.classList.contains('sel');
-}
-async function addToGroup(groupId, subjectId) {
-  const cbs = document.querySelectorAll('#m-ssl input[type="checkbox"]:checked');
-  const ids = [...cbs].map(c => c.value);
-  if (!ids.length) { toast('Select at least one student', 'i'); return; }
-  let ok = 0;
-  for (const sid of ids) {
-    const r = await window.insertData('exhibition_group_members', { group_id: groupId, student_id: sid });
-    if (r) ok++;
-  }
-  toast(`${ok} student${ok!==1?'s':''} added ✅`); closeModal();
-  await refresh(); S.activeTab='groups'; renderSubjectView(subjectId);
-}
-async function removeFromGroup(groupId, studentId, subjectId) {
-  const r = await window.deleteRow('exhibition_group_members', ['group_id','student_id'], [groupId, studentId]);
-  if (r !== null) { await refresh(); S.activeTab='groups'; renderSubjectView(subjectId); }
-  else toast('Failed', 'e');
-}
-
-// ─── SHARE TEXT BUILDERS ─────────────────────────────────
-function buildGroupText(group, members) {
-  const subj = subjName(group.subject_id);
-  let t = `📚 Subject: ${subj}\n🗂️  Group: ${group.group_name}\n`;
-  if (group.project_title)      t += `💡 Project: ${group.project_title}\n`;
-  if (group.room_number)        t += `🚪 Room: ${group.room_number}\n`;
-  if (group.materials_required) t += `📦 Materials: ${group.materials_required}\n`;
-  if (group.reference_links)    t += `🔗 Links: ${group.reference_links}\n`;
-  if (group.instructions)       t += `📋 Instructions: ${group.instructions}\n`;
-  t += `\n👨‍🎓 Students (${members.length}):\n`;
-  members.forEach((m,i) => { t += `  ${i+1}. ${m.name} — ${m.class}\n`; });
-  return t;
-}
-function buildShareText(subjectId) {
-  const name  = subjName(subjectId);
-  const grps  = S.groups.filter(g => g.subject_id == subjectId);
-  const studs = getSubjectStudents(subjectId);
-  let t = `🎨 EXHIBITION — ${name.toUpperCase()}\n${'═'.repeat(34)}\n`;
-  t += `👥 Total Students: ${studs.length}  |  🗂️ Groups: ${grps.length}\n\n`;
-  if (grps.length) {
-    grps.forEach(g => { t += buildGroupText(g, getGroupStudents(g.id)); t += `\n${'─'.repeat(28)}\n\n`; });
-  } else {
-    t += `📋 Students:\n`;
-    studs.forEach((s,i) => { t += `  ${i+1}. ${s.name} — ${s.class}\n`; });
-  }
-  return t;
-}
-function copySubjectDetails(subjectId) { copyText(buildShareText(subjectId)); }
-function copyStudentList(subjectId) {
-  const studs = getSubjectStudents(subjectId);
-  let t = `👥 ${subjName(subjectId)} — Student List\n\n`;
-  studs.forEach((s,i) => { t += `${i+1}. ${s.name} (${s.class})\n`; });
-  copyText(t);
-}
-function shareWhatsApp(subjectId) {
-  const text = buildShareText(subjectId);
-  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-}
-async function shareNative(subjectId) {
-  const text = buildShareText(subjectId);
-  if (navigator.share) {
-    try { await navigator.share({ title: `Exhibition — ${subjName(subjectId)}`, text }); }
-    catch(e) { copyText(text); }
-  } else { copyText(text); }
-}
-
-// ─── KEYBOARD SHORTCUTS ───────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') {
-    const ls = document.getElementById('login-screen');
-    // FIX: check computed visibility, not just inline style
-    if (ls && ls.offsetParent !== null && getComputedStyle(ls).display !== 'none') {
-      handleLogin();
-    }
-  }
-  if (e.key === 'Escape') closeModal();
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+const sortClasses = (arr) => [...arr].sort((a, b) => {
+  const parse = s => { const [g, sec] = s.split('-'); return [parseInt(g)||0, sec||'']; };
+  const [ag, as_] = parse(a), [bg, bs] = parse(b);
+  return ag !== bg ? ag - bg : as_.localeCompare(bs);
 });
 
-// ─── BOOT ─────────────────────────────────────────────────
-waitForSupabase(init);
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch { return false; }
+}
+
+function shareText(text, title = 'Exhibition Details') {
+  if (navigator.share) {
+    navigator.share({ text, title }).catch(() => {});
+  } else {
+    copyText(text).then(() => showToast('📋 Copied to clipboard'));
+  }
+}
+
+function confirm(title, msg, okLabel = 'Delete', isDanger = true) {
+  return new Promise(resolve => {
+    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-msg').textContent = msg;
+    const ok = document.getElementById('confirm-ok');
+    const cancel = document.getElementById('confirm-cancel');
+    ok.textContent = okLabel;
+    ok.className = isDanger ? 'confirm-ok' : 'confirm-ok primary';
+    document.getElementById('confirm-overlay').classList.add('open');
+    const cleanup = (res) => {
+      document.getElementById('confirm-overlay').classList.remove('open');
+      ok.removeEventListener('click', onOk);
+      cancel.removeEventListener('click', onCancel);
+      resolve(res);
+    };
+    const onOk = () => cleanup(true);
+    const onCancel = () => cleanup(false);
+    ok.addEventListener('click', onOk);
+    cancel.addEventListener('click', onCancel);
+  });
+}
+
+// ── MODAL ────────────────────────────────────────────────────────────────────
+let modalCloseCallback = null;
+function openModal(contentHTML, footerHTML, onClose = null) {
+  document.getElementById('modal-content').innerHTML = contentHTML;
+  document.getElementById('modal-footer').innerHTML = footerHTML;
+  document.getElementById('modal-overlay').classList.add('open');
+  modalCloseCallback = onClose;
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  if (modalCloseCallback) { modalCloseCallback(); modalCloseCallback = null; }
+}
+function handleModalOverlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────────────────────
+function pushScreen(name, params = {}) {
+  screenStack.push({ name, params });
+  render();
+}
+function popScreen() {
+  if (screenStack.length > 1) screenStack.pop();
+  else { /* parent back */ }
+  render();
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────────────────
+async function detectRole(uid) {
+  try {
+    const { data: adminRow } = await sb.from('exhibition_admins').select('id').eq('id', uid).maybeSingle();
+    if (adminRow) {
+      const { data: stRows } = await sb.from('exhibition_subject_teachers').select('subject_id').eq('teacher_id', uid);
+      role = 'admin';
+      roleData = { uid, mySubjectIds: (stRows||[]).map(r=>r.subject_id) };
+      return;
+    }
+    const { data: ctRow } = await sb.from('class_teachers').select('class').eq('teacher_id', uid).maybeSingle();
+    const { data: stRows } = await sb.from('exhibition_subject_teachers').select('subject_id').eq('teacher_id', uid);
+    const mySubjectIds = (stRows||[]).map(r=>r.subject_id);
+    if (ctRow && mySubjectIds.length > 0) {
+      role = 'both'; roleData = { uid, myClass: ctRow.class, mySubjectIds };
+    } else if (ctRow) {
+      role = 'class_teacher'; roleData = { uid, myClass: ctRow.class };
+    } else if (mySubjectIds.length > 0) {
+      role = 'subject_teacher'; roleData = { uid, mySubjectIds };
+    } else {
+      const { data: tRow } = await sb.from('teachers').select('id').eq('id', uid).maybeSingle();
+      role = tRow ? 'teacher_no_assignment' : 'unknown'; roleData = { uid };
+    }
+  } catch { role = 'unknown'; roleData = {}; }
+}
+
+// ── SCREEN CONTAINER ─────────────────────────────────────────────────────────
+function render() {
+  const root = document.getElementById('screen-root');
+  const current = screenStack[screenStack.length - 1];
+  root.innerHTML = '';
+  const div = document.createElement('div');
+  div.style.cssText = 'flex:1;display:flex;flex-direction:column;overflow:hidden;height:100%;';
+  div.classList.add('screen-enter');
+  root.appendChild(div);
+  switch (current.name) {
+    case 'loading': div.innerHTML = renderLoading('Initializing…'); break;
+    case 'login': renderLoginScreen(div); break;
+    case 'home': renderHomeScreen(div); break;
+    case 'admin_subject_teachers': renderAdminSubjectTeachers(div); break;
+    case 'admin_class_select': renderAdminClassSelect(div); break;
+    case 'admin_class_assignments': renderClassAssignments(div, current.params.class, true); break;
+    case 'class_teacher_assignments': renderClassAssignments(div, roleData.myClass, false); break;
+    case 'admin_subject_select': renderAdminSubjectSelect(div); break;
+    case 'subject_select': renderSubjectSelect(div, roleData.mySubjectIds); break;
+    case 'subject_students': renderSubjectStudents(div, current.params.subject); break;
+    case 'group_detail': renderGroupDetail(div, current.params.groupId, current.params.subject, current.params.onSaved); break;
+    default: renderHomeScreen(div);
+  }
+}
+
+function renderLoading(msg = 'Loading…') {
+  return `<div class="loading-wrap"><div class="spinner"></div><div class="loading-text">${msg}</div></div>`;
+}
+
+function makeHeader(title, subtitle, onBack, rightActionsHTML = '') {
+  return `<div class="header">
+    ${onBack ? `<button class="header-back" onclick="${onBack}">${I.back}</button>` : ''}
+    <div class="header-info">
+      <div class="header-title">${title}</div>
+      ${subtitle ? `<div class="header-subtitle">${subtitle}</div>` : ''}
+    </div>
+    ${rightActionsHTML ? `<div class="header-actions">${rightActionsHTML}</div>` : ''}
+  </div>`;
+}
+
+function makeIconBtn(iconHtml, onclick, cls = '', title = '') {
+  return `<button class="icon-btn ${cls}" onclick="${onclick}" title="${title}">${iconHtml}</button>`;
+}
+
+function makeCard(iconHtml, iconBg, title, sub, onclick, rightHtml = I.fwd) {
+  return `<button class="card" onclick="${onclick}">
+    <div class="card-icon" style="background:${iconBg}">${iconHtml}</div>
+    <div class="card-body"><div class="card-title">${title}</div><div class="card-sub">${sub}</div></div>
+    <div class="card-arrow">${rightHtml}</div>
+  </button>`;
+}
+
+function makeEmptyState(iconHtml, msg) {
+  return `<div class="empty-wrap">${iconHtml}<div class="empty-text">${msg}</div></div>`;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// LOGIN SCREEN
+// ════════════════════════════════════════════════════════════════════════════
+function renderLoginScreen(container) {
+  container.innerHTML = `
+    <div class="login-screen">
+      <div class="login-card">
+        <div class="login-icon-wrap"><div class="login-icon">${I.ribbon}</div></div>
+        <div class="login-title">Exhibition Manager</div>
+        <div class="login-sub">Sign in to continue</div>
+        <input class="form-input" id="email-input" type="email" autocomplete="email" placeholder="Email address" />
+        <input class="form-input" id="pw-input" type="password" autocomplete="current-password" placeholder="Password" />
+        <div id="login-error" class="error-msg" style="display:none"></div>
+        <button class="login-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+      </div>
+    </div>`;
+  document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('email-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('pw-input').focus(); });
+}
+
+async function doLogin() {
+  const email = document.getElementById('email-input').value.trim();
+  const pw = document.getElementById('pw-input').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('login-btn');
+  if (!email || !pw) { errEl.textContent = 'Please enter email and password.'; errEl.style.display='block'; return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  errEl.style.display = 'none';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
+  if (error) {
+    errEl.textContent = error.message; errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Sign In';
+  } else {
+    session = data.session;
+    screenStack = [{ name: 'loading', params: {} }]; render();
+    await detectRole(session.user.id);
+    screenStack = [{ name: 'home', params: {} }]; render();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// HOME SCREEN
+// ════════════════════════════════════════════════════════════════════════════
+function renderHomeScreen(container) {
+  const ROLE_LABEL = {
+    admin: 'Exhibition Admin',
+    class_teacher: `Class Teacher · ${roleData.myClass}`,
+    subject_teacher: 'Subject Teacher',
+    both: `Class & Subject Teacher · ${roleData.myClass}`,
+    teacher_no_assignment: 'Teacher',
+    unknown: 'No Permissions',
+  };
+  const roleLabel = ROLE_LABEL[role] || role;
+
+  const menuItems = [];
+  if (role === 'admin') {
+    menuItems.push(
+      { icon: I.personAdd, iconBg: 'var(--primary-dim)', label: 'Subject–Teacher Assignments', sub: 'Assign exhibition teachers to subjects', target: 'admin_subject_teachers', borderColor: 'rgba(79,124,255,0.25)' },
+      { icon: I.school, iconBg: 'var(--success-dim)', label: 'Student–Subject Assignments', sub: 'Assign students across all classes', target: 'admin_class_select', borderColor: 'rgba(16,201,122,0.25)' },
+      { icon: I.layers, iconBg: 'var(--warning-dim)', label: 'Manage Subject Groups', sub: 'View and manage groups by subject', target: 'admin_subject_select', borderColor: 'rgba(245,166,35,0.25)' },
+    );
+    if (roleData.mySubjectIds && roleData.mySubjectIds.length > 0) {
+      menuItems.push({ icon: I.ribbon, iconBg: 'var(--cyan-dim)', label: 'My Exhibition Subjects', sub: `Manage groups for your ${roleData.mySubjectIds.length} assigned subject${roleData.mySubjectIds.length!==1?'s':''}`, target: 'subject_select', borderColor: 'rgba(6,182,212,0.25)' });
+    }
+  }
+  if (role === 'class_teacher' || role === 'both') {
+    menuItems.push({ icon: I.school, iconBg: 'var(--success-dim)', label: `Assign My Class (${roleData.myClass})`, sub: 'Assign your students to exhibition subjects', target: 'class_teacher_assignments', borderColor: 'rgba(16,201,122,0.25)' });
+  }
+  if (role === 'subject_teacher' || role === 'both') {
+    menuItems.push({ icon: I.layers, iconBg: 'var(--warning-dim)', label: 'My Exhibition Subjects', sub: 'Manage student groups & project details', target: 'subject_select', borderColor: 'rgba(245,166,35,0.25)' });
+  }
+
+  const menuHTML = menuItems.length > 0
+    ? menuItems.map(item => `
+      <button class="card" onclick="pushScreen('${item.target}')" style="border-color:${item.borderColor}">
+        <div class="card-icon" style="background:${item.iconBg}">${item.icon}</div>
+        <div class="card-body"><div class="card-title">${item.label}</div><div class="card-sub">${item.sub}</div></div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`).join('')
+    : makeEmptyState(I.lock, role === 'teacher_no_assignment'
+        ? 'You have not been assigned to any exhibition subject yet.\nContact the Exhibition Admin.'
+        : 'You do not have exhibition management permissions.');
+
+  container.innerHTML = `
+    ${makeHeader('Exhibition Manager', roleLabel, null, makeIconBtn(I.signout, 'doLogout()', '', 'Sign Out'))}
+    <div class="content"><div class="content-inner">
+      <div class="section-label">What would you like to do?</div>
+      ${menuHTML}
+    </div></div>`;
+}
+
+async function doLogout() {
+  const ok = await confirm('Sign Out', 'Are you sure you want to sign out?', 'Sign Out', true);
+  if (ok) {
+    await sb.auth.signOut();
+    session = null; role = null; roleData = {};
+    screenStack = [{ name: 'login', params: {} }]; render();
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// ADMIN: SUBJECT–TEACHER ASSIGNMENTS
+// ════════════════════════════════════════════════════════════════════════════
+let _ast = { subjects: [], teachers: [], assignments: [], expandedId: null };
+
+async function renderAdminSubjectTeachers(container) {
+  container.innerHTML = makeHeader('Subject–Teacher Assignments', 'Exhibition Admin', 'popScreen()',
+    makeIconBtn(I.copy, 'astCopy()', '', 'Copy') + makeIconBtn(I.share, 'astShare()', '', 'Share')) +
+    `<div class="content" id="ast-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const [{ data: subs }, { data: tchs }, { data: asns }] = await Promise.all([
+    sb.from('subjects').select('id, name').order('name'),
+    sb.from('teachers').select('id, name, email').order('name'),
+    sb.from('exhibition_subject_teachers').select('id, subject_id, teacher_id'),
+  ]);
+  _ast.subjects = subs || [];
+  _ast.teachers = tchs || [];
+  _ast.assignments = asns || [];
+  astRender();
+}
+
+function astGetTeachersFor(subId) {
+  const ids = _ast.assignments.filter(a=>a.subject_id===subId).map(a=>a.teacher_id);
+  return _ast.teachers.filter(t=>ids.includes(t.id));
+}
+function astGetAvailable(subId) {
+  const ids = _ast.assignments.filter(a=>a.subject_id===subId).map(a=>a.teacher_id);
+  return _ast.teachers.filter(t=>!ids.includes(t.id));
+}
+
+function astRender() {
+  const list = document.getElementById('ast-list');
+  if (!list) return;
+  list.innerHTML = `<div class="content-inner">` + _ast.subjects.map(sub => {
+    const assigned = astGetTeachersFor(sub.id);
+    const isOpen = _ast.expandedId === sub.id;
+    let inner = `<button class="card card-col no-hover" style="cursor:default;flex-direction:column;align-items:stretch;gap:0">
+      <div style="display:flex;align-items:center;gap:14px;cursor:pointer" onclick="astToggle('${sub.id}')">
+        <div class="card-icon" style="background:var(--primary-dim)">${I.book}</div>
+        <div class="card-body">
+          <div class="card-title">${sub.name}</div>
+          <div class="card-sub">${assigned.length===0?'No teacher assigned':assigned.map(t=>t.name).join(', ')}</div>
+        </div>
+        <div class="card-arrow">${isOpen?I.up:I.down}</div>
+      </div>`;
+    if (isOpen) {
+      inner += `<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">`;
+      assigned.forEach(t => {
+        const asn = _ast.assignments.find(a=>a.subject_id===sub.id&&a.teacher_id===t.id);
+        inner += `<div class="teacher-chip-row">
+          <div class="chip-tag">${I.person} <span>${t.name}</span></div>
+          <button class="remove-btn" onclick="astRemove('${asn.id}','${t.name.replace(/'/g,"\\'")}','${sub.name.replace(/'/g,"\\'")}')">${I.closeCircle}</button>
+        </div>`;
+      });
+      inner += `<button class="btn btn-secondary" style="height:36px;margin-top:10px;font-size:12px" onclick="astOpenAdd('${sub.id}')">
+        ${I.add} Add Teacher</button></div>`;
+    }
+    inner += `</button>`;
+    return inner;
+  }).join('') + '</div>';
+}
+
+function astToggle(subId) {
+  _ast.expandedId = _ast.expandedId === subId ? null : subId;
+  astRender();
+}
+
+async function astRemove(asnId, tName, subName) {
+  const ok = await confirm('Remove Teacher', `Remove ${tName} from ${subName}?`, 'Remove', true);
+  if (!ok) return;
+  await sb.from('exhibition_subject_teachers').delete().eq('id', asnId);
+  _ast.assignments = _ast.assignments.filter(a=>a.id!==asnId);
+  astRender();
+}
+
+let _astAddSubId = null;
+function astOpenAdd(subId) {
+  _astAddSubId = subId;
+  const sub = _ast.subjects.find(s=>s.id==subId);
+  const available = astGetAvailable(subId);
+  let selTeacher = null;
+  const rows = available.length === 0
+    ? `<div style="color:var(--subtext);text-align:center;padding:24px;font-size:13px">All teachers already assigned.</div>`
+    : available.map(t => `<div class="student-row" id="ta-${t.id}" style="cursor:pointer" onclick="astSelectTeacher('${t.id}')">
+        <div style="flex:1"><div class="student-name">${t.name}</div><div class="student-meta">${t.email||''}</div></div>
+        <span id="ta-chk-${t.id}" style="display:none;color:var(--primary)">${I.checkCircle}</span>
+      </div>`).join('');
+  openModal(
+    `<div class="modal-title">Assign Teacher</div>
+     <div class="modal-sub">Subject: ${sub?.name}</div>
+     <div class="modal-scroll">${rows}</div>`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" id="ast-assign-btn" onclick="astDoAssign()" disabled>Assign</button>`
+  );
+}
+window._astSelectedTeacher = null;
+function astSelectTeacher(tid) {
+  // deselect prev
+  if (window._astSelectedTeacher) {
+    const prev = document.getElementById(`ta-${window._astSelectedTeacher}`);
+    const chk = document.getElementById(`ta-chk-${window._astSelectedTeacher}`);
+    if (prev) prev.classList.remove('selected');
+    if (chk) chk.style.display = 'none';
+  }
+  window._astSelectedTeacher = tid;
+  const row = document.getElementById(`ta-${tid}`);
+  const chk = document.getElementById(`ta-chk-${tid}`);
+  if (row) row.classList.add('selected');
+  if (chk) chk.style.display = 'block';
+  const btn = document.getElementById('ast-assign-btn');
+  if (btn) btn.disabled = false;
+}
+async function astDoAssign() {
+  const tid = window._astSelectedTeacher;
+  if (!tid || !_astAddSubId) return;
+  const btn = document.getElementById('ast-assign-btn');
+  btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>';
+  const { data, error } = await sb.from('exhibition_subject_teachers')
+    .insert({ subject_id: _astAddSubId, teacher_id: tid })
+    .select('id, subject_id, teacher_id').single();
+  if (!error && data) { _ast.assignments.push(data); }
+  else if (error) showToast('❌ ' + error.message);
+  window._astSelectedTeacher = null;
+  closeModal();
+  astRender();
+}
+
+function astGenerateText() {
+  let txt = '📋 Exhibition – Subject Teacher Assignments\n═══════════════════════════════════\n\n';
+  _ast.subjects.forEach(sub => {
+    const assigned = astGetTeachersFor(sub.id);
+    txt += `📚 ${sub.name}\n`;
+    if (!assigned.length) txt += '   (No teacher assigned)\n';
+    else assigned.forEach(t => { txt += `   👤 ${t.name}\n`; });
+    txt += '\n';
+  });
+  return txt;
+}
+async function astCopy() { await copyText(astGenerateText()); showToast('📋 Copied to clipboard'); }
+function astShare() { shareText(astGenerateText(), 'Subject–Teacher Assignments'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// ADMIN: SELECT CLASS
+// ════════════════════════════════════════════════════════════════════════════
+async function renderAdminClassSelect(container) {
+  container.innerHTML = makeHeader('Student–Subject Assignments', 'Select a class', 'popScreen()') +
+    `<div class="content" id="cls-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const { data: studs } = await sb.from('students').select('id, class');
+  const allClasses = sortClasses([...new Set((studs||[]).map(s=>s.class).filter(c=>!/\(left now\)$/i.test(c)))]);
+  const ids = (studs||[]).map(s=>s.id);
+  let assignedSet = new Set();
+  if (ids.length > 0) {
+    const { data: asns } = await sb.from('exhibition_student_assignments').select('student_id').in('student_id', ids);
+    (asns||[]).forEach(a=>assignedSet.add(a.student_id));
+  }
+  const classMap = {};
+  (studs||[]).forEach(s => {
+    if (!classMap[s.class]) classMap[s.class] = { total:0, assigned:0 };
+    classMap[s.class].total++;
+    if (assignedSet.has(s.id)) classMap[s.class].assigned++;
+  });
+  const list = document.getElementById('cls-list');
+  list.innerHTML = '<div class="content-inner"><div class="section-label">All Classes</div>' +
+    (allClasses.length === 0 ? makeEmptyState(I.tray, 'No students found.') :
+    allClasses.map(cls => {
+      const c = classMap[cls]||{total:0,assigned:0};
+      const pct = c.total>0?Math.round(c.assigned/c.total*100):0;
+      const fillColor = pct===100?'var(--success)':'var(--primary)';
+      return `<button class="card" onclick="pushScreen('admin_class_assignments',{class:'${cls}'})">
+        <div class="card-icon" style="background:var(--success-dim)">${I.people}</div>
+        <div class="card-body">
+          <div class="card-title">Class ${cls}</div>
+          <div class="card-sub">${c.assigned}/${c.total} assigned · ${pct}%</div>
+          <div class="progress-bg"><div class="progress-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+        </div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`;
+    }).join('')) + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CLASS ASSIGNMENTS SCREEN
+// ════════════════════════════════════════════════════════════════════════════
+let _ca = { students:[], subjects:[], assignments:{}, filterMode:'all', searchText:'' };
+
+async function renderClassAssignments(container, classFilter, isAdmin) {
+  container.innerHTML = makeHeader(`Class ${classFilter}`, 'Loading…', 'popScreen()',
+    makeIconBtn(I.copy, 'caCopy()', '', 'Copy') + makeIconBtn(I.share, 'caShare()', '', 'Share')) +
+    `<div class="loading-wrap"><div class="spinner"></div></div>`;
+  _ca = { students:[], subjects:[], assignments:{}, filterMode:'all', searchText:'', classFilter };
+  const [{ data: studs }, { data: subs }] = await Promise.all([
+    sb.from('students').select('id, name, roll_number').eq('class', classFilter).order('roll_number'),
+    sb.from('subjects').select('id, name').order('name'),
+  ]);
+  const ids = (studs||[]).map(s=>s.id);
+  if (ids.length > 0) {
+    const { data: asns } = await sb.from('exhibition_student_assignments')
+      .select('student_id, subject_id, subjects(name)').in('student_id', ids);
+    (asns||[]).forEach(a => { _ca.assignments[a.student_id] = { subject_id: a.subject_id, name: a.subjects?.name }; });
+  }
+  _ca.students = studs||[];
+  _ca.subjects = subs||[];
+  caRender(container, classFilter);
+}
+
+function caRender(container, classFilter) {
+  const assignedCount = _ca.students.filter(s=>_ca.assignments[s.id]).length;
+  // update header subtitle
+  const sub = container.querySelector('.header-subtitle');
+  if (sub) sub.textContent = `${assignedCount}/${_ca.students.length} assigned`;
+  const filtered = _ca.students.filter(s => {
+    if (_ca.filterMode==='unassigned' && _ca.assignments[s.id]) return false;
+    if (_ca.searchText && !s.name.toLowerCase().includes(_ca.searchText.toLowerCase())) return false;
+    return true;
+  });
+  const pct = Math.round(assignedCount/(_ca.students.length||1)*100);
+  let html = `
+    <div class="filter-bar">
+      <button class="chip ${_ca.filterMode==='all'?'active':''}" onclick="caFilter('all')">All (${_ca.students.length})</button>
+      <button class="chip ${_ca.filterMode==='unassigned'?'active':''}" onclick="caFilter('unassigned')">Unassigned (${_ca.students.length-assignedCount})</button>
+      <span class="pct-label">${pct}%</span>
+    </div>
+    <div class="search-wrap">
+      <div class="search-inner">
+        ${I.search}
+        <input type="text" placeholder="Search students…" id="ca-search" value="${_ca.searchText}" oninput="caSearch(this.value)">
+        ${_ca.searchText ? `<button class="search-clear" onclick="caSearch('')">${I.close}</button>` : ''}
+      </div>
+    </div>
+    <div class="content" id="ca-list-content">`;
+  html += '<div class="content-inner">';
+  if (filtered.length === 0) {
+    html += makeEmptyState(I.search, _ca.searchText ? 'No matching students.' : 'No students in this class.');
+  } else {
+    filtered.forEach(student => {
+      const asn = _ca.assignments[student.id];
+      html += `<div class="student-row ${asn?'assigned':''}" onclick="caOpenAssign('${student.id}')">
+        <div class="roll-badge">${student.roll_number===99999?'—':student.roll_number}</div>
+        <div style="flex:1">
+          <div class="student-name">${student.name}</div>
+          ${asn ? `<div class="student-subject">📚 ${asn.name}</div>`
+                : `<div class="student-meta">Tap to assign a subject</div>`}
+        </div>
+        <div style="color:var(--subtext);width:16px;height:16px">${I.edit}</div>
+      </div>`;
+    });
+  }
+  html += '</div></div>';
+  // Replace content below header
+  const headerEl = container.querySelector('.header');
+  container.innerHTML = '';
+  container.appendChild(headerEl);
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'flex:1;display:flex;flex-direction:column;overflow:hidden;';
+  wrapper.innerHTML = html;
+  container.appendChild(wrapper);
+}
+
+function caFilter(mode) {
+  _ca.filterMode = mode;
+  const container = document.getElementById('screen-root').firstChild;
+  caRender(container, _ca.classFilter);
+}
+function caSearch(val) {
+  _ca.searchText = val;
+  const container = document.getElementById('screen-root').firstChild;
+  caRender(container, _ca.classFilter);
+  // Restore focus
+  setTimeout(() => { const inp = document.getElementById('ca-search'); if (inp) { inp.focus(); inp.setSelectionRange(val.length, val.length); } }, 10);
+}
+
+let _caSelectedStudent = null;
+let _caPendingSubId = null;
+
+function caOpenAssign(studentId) {
+  _caSelectedStudent = _ca.students.find(s=>s.id===studentId);
+  _caPendingSubId = _ca.assignments[studentId]?.subject_id ?? null;
+  const rows = [
+    `<div class="subject-option ${_caPendingSubId===null?'active':''}" onclick="caSelectSub(null)">
+      <span style="color:${_caPendingSubId===null?'var(--danger)':'var(--subtext)'}">✕  Remove Assignment</span>
+      ${_caPendingSubId===null?`<span style="color:var(--primary)">${I.check}</span>`:''}
+    </div>`,
+    ..._ca.subjects.map(sub => `
+      <div class="subject-option ${_caPendingSubId===sub.id?'active':''}" id="sub-opt-${sub.id}" onclick="caSelectSub('${sub.id}')">
+        <span style="color:${_caPendingSubId===sub.id?'var(--primary)':'var(--text)'}">${sub.name}</span>
+        ${_caPendingSubId===sub.id?`<span style="color:var(--primary)">${I.check}</span>`:''}
+      </div>`)
+  ].join('');
+  openModal(
+    `<div class="modal-title">Assign Exhibition Subject</div>
+     <div class="modal-sub">${_caSelectedStudent?.name}</div>
+     <div class="modal-scroll">${rows}</div>`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" onclick="caSave()">Save</button>`
+  );
+}
+
+function caSelectSub(subId) {
+  _caPendingSubId = subId;
+  // re-render modal content
+  caOpenAssign(_caSelectedStudent.id);
+}
+
+async function caSave() {
+  if (!_caSelectedStudent) return;
+  const saveBtn = document.querySelector('#modal-footer .btn-primary');
+  if (saveBtn) { saveBtn.disabled=true; saveBtn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>'; }
+  const existing = _ca.assignments[_caSelectedStudent.id];
+  if (!_caPendingSubId) {
+    if (existing) {
+      await sb.from('exhibition_student_assignments').delete().eq('student_id', _caSelectedStudent.id);
+      delete _ca.assignments[_caSelectedStudent.id];
+    }
+  } else {
+    const subName = _ca.subjects.find(s=>s.id===_caPendingSubId)?.name;
+    if (existing) {
+      await sb.from('exhibition_student_assignments').update({subject_id:_caPendingSubId}).eq('student_id',_caSelectedStudent.id);
+    } else {
+      await sb.from('exhibition_student_assignments').insert({student_id:_caSelectedStudent.id, subject_id:_caPendingSubId});
+    }
+    _ca.assignments[_caSelectedStudent.id] = { subject_id: _caPendingSubId, name: subName };
+  }
+  closeModal();
+  const container = document.getElementById('screen-root').firstChild;
+  caRender(container, _ca.classFilter);
+}
+
+function caGenerateText() {
+  let txt = `📋 Exhibition – Class ${_ca.classFilter} Assignments\n═══════════════════════════════════\n\n`;
+  const grouped = {};
+  _ca.students.forEach(s => {
+    const key = _ca.assignments[s.id]?.name || '📭 Unassigned';
+    grouped[key] = grouped[key] || [];
+    grouped[key].push(s.name);
+  });
+  Object.keys(grouped).sort().forEach(k => {
+    txt += `📚 ${k}\n`;
+    grouped[k].forEach(n => { txt += `   • ${n}\n`; });
+    txt += '\n';
+  });
+  return txt;
+}
+async function caCopy() { await copyText(caGenerateText()); showToast('📋 Copied to clipboard'); }
+function caShare() { shareText(caGenerateText(), `Class ${_ca.classFilter} Assignments`); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// ADMIN: SELECT SUBJECT
+// ════════════════════════════════════════════════════════════════════════════
+async function renderAdminSubjectSelect(container) {
+  container.innerHTML = makeHeader('Manage Subject Groups', 'Exhibition Admin', 'popScreen()') +
+    `<div class="content" id="asub-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const [{ data: subs }, { data: asns }, { data: grps }] = await Promise.all([
+    sb.from('subjects').select('id, name').order('name'),
+    sb.from('exhibition_student_assignments').select('subject_id'),
+    sb.from('exhibition_groups').select('subject_id'),
+  ]);
+  const sc={}, gc={};
+  (asns||[]).forEach(a=>{ sc[a.subject_id]=(sc[a.subject_id]||0)+1; });
+  (grps||[]).forEach(g=>{ gc[g.subject_id]=(gc[g.subject_id]||0)+1; });
+  const list = document.getElementById('asub-list');
+  list.innerHTML = '<div class="content-inner"><div class="section-label">All Subjects</div>' +
+    ((subs||[]).length===0 ? makeEmptyState(I.tray, 'No subjects found.') :
+    (subs||[]).map(sub => `
+      <button class="card" onclick="pushScreen('subject_students',{subject:${JSON.stringify(sub).replace(/"/g,'&quot;')}})">
+        <div class="card-icon" style="background:var(--warning-dim)">${I.book}</div>
+        <div class="card-body">
+          <div class="card-title">${sub.name}</div>
+          <div class="card-sub">${sc[sub.id]||0} students · ${gc[sub.id]||0} groups</div>
+        </div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`).join('')) + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SUBJECT SELECT (Subject Teacher)
+// ════════════════════════════════════════════════════════════════════════════
+async function renderSubjectSelect(container, mySubjectIds) {
+  container.innerHTML = makeHeader('My Exhibition Subjects', 'Subject Teacher', 'popScreen()') +
+    `<div class="content" id="ss-list"><div class="loading-wrap"><div class="spinner"></div></div></div>`;
+  const { data: subs } = await sb.from('subjects').select('id, name').in('id', mySubjectIds).order('name');
+  let stats = {};
+  if ((subs||[]).length > 0) {
+    const ids = subs.map(s=>s.id);
+    const [{ data: asns }, { data: grps }] = await Promise.all([
+      sb.from('exhibition_student_assignments').select('subject_id').in('subject_id', ids),
+      sb.from('exhibition_groups').select('subject_id').in('subject_id', ids),
+    ]);
+    const sc={},gc={};
+    (asns||[]).forEach(a=>{ sc[a.subject_id]=(sc[a.subject_id]||0)+1; });
+    (grps||[]).forEach(g=>{ gc[g.subject_id]=(gc[g.subject_id]||0)+1; });
+    subs.forEach(s=>{ stats[s.id]={students:sc[s.id]||0, groups:gc[s.id]||0}; });
+  }
+  const list = document.getElementById('ss-list');
+  list.innerHTML = '<div class="content-inner"><div class="section-label">My Subjects</div>' +
+    ((subs||[]).length===0 ? makeEmptyState(I.book, 'No subjects assigned to you yet.') :
+    (subs||[]).map(sub => {
+      const st = stats[sub.id]||{};
+      return `<button class="card" onclick="pushScreen('subject_students',{subject:${JSON.stringify(sub).replace(/"/g,'&quot;')}})">
+        <div class="card-icon" style="background:var(--warning-dim)">${I.book}</div>
+        <div class="card-body">
+          <div class="card-title">${sub.name}</div>
+          <div class="card-sub">${st.students||0} student${st.students!==1?'s':''} · ${st.groups||0} group${st.groups!==1?'s':''}</div>
+        </div>
+        <div class="card-arrow">${I.fwd}</div>
+      </button>`;
+    }).join('')) + '</div>';
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// SUBJECT STUDENTS + GROUPS
+// ════════════════════════════════════════════════════════════════════════════
+let _ss = { students:[], groups:[], memberMap:{}, activeTab:'students', assignMode:false, selected:new Set(), subject:null };
+
+async function renderSubjectStudents(container, subject) {
+  _ss = { students:[], groups:[], memberMap:{}, activeTab:'students', assignMode:false, selected:new Set(), subject };
+  container.innerHTML = makeHeader(subject.name, 'Loading…', 'popScreen()') +
+    `<div class="loading-wrap"><div class="spinner"></div></div>`;
+  await ssLoad(container, subject);
+}
+
+async function ssLoad(container, subject) {
+  subject = subject || _ss.subject;
+  const [{ data: asns }, { data: grps }] = await Promise.all([
+    sb.from('exhibition_student_assignments')
+      .select('student_id, students(id, name, roll_number, class)').eq('subject_id', subject.id),
+    sb.from('exhibition_groups').select('id, group_name, project_title, room_number').eq('subject_id', subject.id).order('group_name'),
+  ]);
+  const studs = (asns||[]).map(a=>a.students).filter(Boolean);
+  const ids = studs.map(s=>s.id);
+  let mm = {};
+  if (ids.length > 0) {
+    const { data: mems } = await sb.from('exhibition_group_members')
+      .select('student_id, group_id, exhibition_groups(group_name)').in('student_id', ids);
+    (mems||[]).forEach(m => { mm[m.student_id] = { group_id: m.group_id, group_name: m.exhibition_groups?.group_name }; });
+  }
+  studs.sort((a,b)=>(a.roll_number||99999)-(b.roll_number||99999));
+  _ss.students = studs;
+  _ss.groups = grps||[];
+  _ss.memberMap = mm;
+  ssRender(container);
+}
+
+function ssRender(container) {
+  const subject = _ss.subject;
+  const { students, groups, memberMap, activeTab, assignMode, selected } = _ss;
+  const ungroupedCount = students.filter(s=>!memberMap[s.id]).length;
+  const allSelected = students.length > 0 && selected.size === students.length;
+
+  // Header
+  const backFn = assignMode ? 'ssCancelAssign()' : 'popScreen()';
+  const rightActions = !assignMode
+    ? makeIconBtn(I.copy, 'ssCopy()', '', 'Copy') + makeIconBtn(I.share, 'ssShare()', '', 'Share')
+    : '';
+  let html = makeHeader(subject.name, `${students.length} students · ${groups.length} groups`, backFn, rightActions);
+
+  // Tabs (only when not in assign mode)
+  if (!assignMode) {
+    html += `<div class="tab-bar">
+      <button class="tab ${activeTab==='students'?'active':''}" onclick="ssSetTab('students')">Students (${students.length})</button>
+      <button class="tab ${activeTab==='groups'?'active':''}" onclick="ssSetTab('groups')">Groups (${groups.length})</button>
+    </div>`;
+  }
+
+  // Assign mode banner
+  if (assignMode) {
+    html += `<div class="assign-banner">
+      <div><div class="assign-banner-title">${selected.size} selected</div><div class="assign-banner-sub">Tap students to select / deselect</div></div>
+      <button class="chip primary-border ${allSelected?'active':''}" onclick="ssToggleSelectAll()">${allSelected?'Deselect All':'Select All'}</button>
+    </div>`;
+  }
+
+  html += `<div class="content" id="ss-content">`;
+
+  // Students tab / assign mode
+  if (activeTab === 'students' || assignMode) {
+    html += '<div class="content-inner">';
+    if (students.length === 0) {
+      html += makeEmptyState(I.people, 'No students assigned to this subject yet.');
+    } else {
+      students.forEach(student => {
+        const grouped = memberMap[student.id];
+        const isSelected = selected.has(student.id);
+        html += `<div class="student-row ${grouped?'assigned':''} ${isSelected?'selected':''}"
+          onclick="${assignMode?`ssToggleSelect('${student.id}')`:''}"
+          oncontextmenu="ssLongPress(event,'${student.id}')"
+          ondblclick="ssLongPress(event,'${student.id}')"
+          ${!assignMode ? `ontouchstart="ssTouchStart('${student.id}')" ontouchend="ssTouchEnd()"` : ''}>
+          ${assignMode ? `<div style="color:${isSelected?'var(--primary)':'var(--subtext)'};width:22px;height:22px">${isSelected?I.checkCircle:I.circle}</div>` : ''}
+          <div class="roll-badge">${student.roll_number===99999?'—':student.roll_number}</div>
+          <div style="flex:1">
+            <div class="student-name">${student.name}</div>
+            <div class="student-meta">${student.class}</div>
+            ${grouped?`<div class="student-group">🔹 ${grouped.group_name}</div>`:''}
+          </div>
+          ${grouped&&!assignMode?`<button onclick="ssRemoveFromGroup(event,'${student.id}')" style="background:none;border:none;cursor:pointer;color:var(--danger);width:20px;height:20px">${I.closeCircle}</button>`:''}
+        </div>`;
+      });
+    }
+    html += '</div>';
+  }
+
+  // Groups tab
+  if (activeTab === 'groups' && !assignMode) {
+    html += '<div class="content-inner">';
+    if (ungroupedCount > 0) {
+      html += `<div class="card ungrouped-warning" onclick="ssShowUngrouped()" style="margin-bottom:8px">
+        <div class="card-icon" style="background:var(--warning-dim)">${I.warn}</div>
+        <div class="card-body"><div class="card-title">${ungroupedCount} Student${ungroupedCount!==1?'s':''} Not Grouped</div><div class="card-sub">Tap to assign to a group</div></div>
+        <div class="card-arrow">${I.fwd}</div>
+      </div>`;
+    }
+    if (groups.length === 0) {
+      html += makeEmptyState(I.layers, 'No groups yet.\nTap "Create Group" below to get started.');
+    } else {
+      groups.forEach(group => {
+        const mc = students.filter(s=>memberMap[s.id]?.group_id===group.id).length;
+        html += `<div class="card" style="padding-right:8px">
+          <button style="display:flex;align-items:center;gap:14px;flex:1;background:none;border:none;cursor:pointer;text-align:left" onclick="pushScreen('group_detail',{groupId:'${group.id}',subject:_ss.subject,onSaved:()=>ssReload()})">
+            <div class="card-icon" style="background:var(--violet-dim)">${I.people}</div>
+            <div class="card-body">
+              <div class="card-title">${group.group_name}</div>
+              <div class="card-sub">${mc} member${mc!==1?'s':''}${group.project_title?` · ${group.project_title}`:''}${group.room_number?` · Room ${group.room_number}`:''}</div>
+            </div>
+            <div class="card-arrow">${I.fwd}</div>
+          </button>
+          <button onclick="ssDeleteGroup(event,'${group.id}','${(group.group_name||'').replace(/'/g,"\\'")}\')" style="background:none;border:none;cursor:pointer;padding:8px;color:var(--danger);width:34px;height:34px">${I.trash}</button>
+        </div>`;
+      });
+    }
+    html += '</div>';
+  }
+
+  html += '</div>'; // close content
+
+  // Footer
+  html += '<div class="footer">';
+  if (!assignMode) {
+    if (activeTab === 'groups') {
+      html += `<button class="btn btn-primary" onclick="ssCreateGroupModal()">${I.add} <span>Create Group</span></button>`;
+    } else {
+      html += `<button class="btn btn-primary" onclick="ssStartAssign()">${I.git} <span>Assign to Group</span></button>`;
+    }
+  } else {
+    html += `<button class="btn btn-secondary" onclick="ssCancelAssign()">Cancel</button>
+      <button class="btn btn-primary ${selected.size===0?'':''}\" id="ss-assign-btn" onclick="ssPickGroup()" ${selected.size===0?'disabled':''}>
+        Assign ${selected.size>0?`(${selected.size}) `:''}→
+      </button>`;
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+}
+
+function ssSetTab(tab) { _ss.activeTab = tab; ssRender(document.getElementById('screen-root').firstChild); }
+function ssStartAssign() { _ss.assignMode = true; ssRender(document.getElementById('screen-root').firstChild); }
+function ssCancelAssign() { _ss.assignMode = false; _ss.selected = new Set(); ssRender(document.getElementById('screen-root').firstChild); }
+function ssToggleSelect(id) {
+  const s = new Set(_ss.selected);
+  s.has(id) ? s.delete(id) : s.add(id);
+  _ss.selected = s;
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+function ssToggleSelectAll() {
+  _ss.selected = _ss.selected.size === _ss.students.length ? new Set() : new Set(_ss.students.map(s=>s.id));
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+function ssShowUngrouped() { _ss.activeTab='students'; _ss.assignMode=true; _ss.selected=new Set(_ss.students.filter(s=>!_ss.memberMap[s.id]).map(s=>s.id)); ssRender(document.getElementById('screen-root').firstChild); }
+
+// Long press / context menu for starting assign mode
+let _ssTouchTimer = null;
+function ssTouchStart(id) { _ssTouchTimer = setTimeout(() => { ssLongPressAction(id); }, 500); }
+function ssTouchEnd() { if (_ssTouchTimer) { clearTimeout(_ssTouchTimer); _ssTouchTimer = null; } }
+function ssLongPress(e, id) { e.preventDefault(); ssLongPressAction(id); }
+function ssLongPressAction(id) {
+  if (!_ss.assignMode) { _ss.assignMode=true; _ss.selected=new Set([id]); ssRender(document.getElementById('screen-root').firstChild); }
+}
+
+async function ssRemoveFromGroup(e, studentId) {
+  e.stopPropagation();
+  const ok = await confirm('Remove from Group', 'Remove this student from their group?', 'Remove', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('student_id', studentId);
+  const mm = {..._ss.memberMap}; delete mm[studentId]; _ss.memberMap = mm;
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+
+async function ssDeleteGroup(e, groupId, groupName) {
+  e.stopPropagation();
+  const ok = await confirm('Delete Group', `Delete "${groupName}"?\n\nAll member assignments will be removed. This cannot be undone.`, 'Delete', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('group_id', groupId);
+  const { error } = await sb.from('exhibition_groups').delete().eq('id', groupId);
+  if (error) { showToast('❌ ' + error.message); return; }
+  await ssLoad(document.getElementById('screen-root').firstChild, _ss.subject);
+}
+
+function ssPickGroup() {
+  if (!_ss.groups.length) { showToast('Create a group first'); return; }
+  const rows = _ss.groups.map(g => {
+    const mc = _ss.students.filter(s=>_ss.memberMap[s.id]?.group_id===g.id).length;
+    return `<div class="student-row" style="cursor:pointer" onclick="ssAssignToGroup('${g.id}')">
+      <div class="card-icon" style="background:var(--violet-dim);width:38px;height:38px;border-radius:50%;flex-shrink:0">${I.people}</div>
+      <div style="flex:1"><div class="student-name">${g.group_name}</div><div class="student-meta">${mc} current member${mc!==1?'s':''}</div></div>
+      <div style="color:var(--subtext);width:16px;height:16px">${I.fwd}</div>
+    </div>`;
+  }).join('');
+  openModal(
+    `<div class="modal-title">Choose Group</div>
+     <div class="modal-sub">Assigning ${_ss.selected.size} student${_ss.selected.size!==1?'s':''}</div>
+     <div class="modal-scroll">${rows}</div>`,
+    `<button class="btn btn-secondary" style="flex:1" onclick="closeModal()">Cancel</button>`
+  );
+}
+
+async function ssAssignToGroup(groupId) {
+  closeModal();
+  const ids = [..._ss.selected];
+  await sb.from('exhibition_group_members').delete().in('student_id', ids);
+  await sb.from('exhibition_group_members').insert(ids.map(sid=>({group_id:groupId, student_id:sid})));
+  _ss.assignMode = false; _ss.selected = new Set();
+  showToast('✅ Students assigned');
+  await ssLoad(document.getElementById('screen-root').firstChild, _ss.subject);
+}
+
+function ssCreateGroupModal() {
+  openModal(
+    `<div class="modal-title">Create New Group</div>
+     <div class="modal-sub">Subject: ${_ss.subject.name}</div>
+     <input class="form-input" id="new-group-input" placeholder="Group name (e.g. Group A, Team 1…)" style="margin-top:12px" oninput="document.getElementById('ss-create-btn').disabled=!this.value.trim()">`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" id="ss-create-btn" onclick="ssDoCreateGroup()" disabled>Create</button>`
+  );
+  setTimeout(() => { const el = document.getElementById('new-group-input'); if(el) el.focus(); }, 100);
+}
+
+async function ssDoCreateGroup() {
+  const nameEl = document.getElementById('new-group-input');
+  if (!nameEl) return;
+  const name = nameEl.value.trim();
+  if (!name) return;
+  const btn = document.getElementById('ss-create-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>';
+  const { data, error } = await sb.from('exhibition_groups')
+    .insert({ subject_id: _ss.subject.id, group_name: name })
+    .select('id, group_name, project_title, room_number').single();
+  if (!error && data) { _ss.groups.push(data); }
+  else if (error) { showToast('❌ '+error.message); }
+  closeModal();
+  ssRender(document.getElementById('screen-root').firstChild);
+}
+
+async function ssReload() { await ssLoad(document.getElementById('screen-root').firstChild, _ss.subject); }
+
+function ssGenerateText() {
+  const { subject, groups, students, memberMap } = _ss;
+  let txt = `📚 ${subject.name} – Exhibition Groups\n═══════════════════════════════════\n\n`;
+  if (groups.length > 0) {
+    groups.forEach(g => {
+      txt += `🔹 ${g.group_name}`;
+      if (g.project_title) txt += ` – ${g.project_title}`;
+      if (g.room_number) txt += ` (Room ${g.room_number})`;
+      txt += '\n';
+      const gs = students.filter(s=>memberMap[s.id]?.group_id===g.id);
+      if (!gs.length) txt += '   (No members yet)\n';
+      else gs.forEach(s=>{ txt+=`   • ${s.name} (${s.class})\n`; });
+      txt += '\n';
+    });
+  }
+  const ungrouped = students.filter(s=>!memberMap[s.id]);
+  if (ungrouped.length>0) { txt+=`📭 Not yet grouped:\n`; ungrouped.forEach(s=>{txt+=`   • ${s.name} (${s.class})\n`;}); }
+  return txt;
+}
+async function ssCopy() { await copyText(ssGenerateText()); showToast('📋 Copied to clipboard'); }
+function ssShare() { shareText(ssGenerateText(), _ss.subject.name + ' Groups'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// GROUP DETAIL
+// ════════════════════════════════════════════════════════════════════════════
+let _gd = { group: null, members: [], groupId: null, subject: null, onSaved: null };
+
+async function renderGroupDetail(container, groupId, subject, onSaved) {
+  _gd = { group: null, members: [], groupId, subject, onSaved };
+  container.innerHTML = makeHeader(subject.name, 'Loading…', 'popScreen()') +
+    `<div class="loading-wrap"><div class="spinner"></div></div>`;
+  await gdLoad(container);
+}
+
+async function gdLoad(container) {
+  const [{ data: grp }, { data: mems }] = await Promise.all([
+    sb.from('exhibition_groups').select('*').eq('id', _gd.groupId).single(),
+    sb.from('exhibition_group_members')
+      .select('id, student_id, students(id, name, roll_number, class)').eq('group_id', _gd.groupId),
+  ]);
+  _gd.group = grp;
+  _gd.members = (mems||[]).map(m=>({...m.students, memberId:m.id}));
+  gdRender(container || document.getElementById('screen-root').firstChild);
+}
+
+const GD_FIELDS = [
+  { key:'project_title', label:'Project Title', icon: I.bookmark, color:'var(--primary)', multi:false },
+  { key:'room_number', label:'Room Number', icon: I.location, color:'var(--success)', multi:false },
+  { key:'materials_required', label:'Materials Required', icon: I.construct, color:'var(--warning)', multi:true },
+  { key:'reference_links', label:'Reference Links', icon: I.link, color:'var(--cyan)', multi:true },
+  { key:'instructions', label:'Instructions', icon: I.docText, color:'var(--violet)', multi:true },
+];
+
+function gdRender(container) {
+  const { group, members, subject } = _gd;
+  if (!group) return;
+  let html = makeHeader(group.group_name, subject.name, 'popScreen()',
+    makeIconBtn(I.trash, 'gdDeleteGroup()', 'danger', 'Delete Group') +
+    makeIconBtn(I.copy, 'gdCopy()', '', 'Copy') +
+    makeIconBtn(I.share, 'gdShare()', '', 'Share'));
+  html += '<div class="content"><div class="content-inner">';
+  html += '<div class="section-label">Group Details</div>';
+  GD_FIELDS.forEach(f => {
+    const val = group[f.key];
+    html += `<div class="detail-row" onclick="gdOpenEdit('${f.key}')">
+      <div class="card-icon" style="background:${f.color}20;width:38px;height:38px;border-radius:50%;flex-shrink:0">${f.icon.replace('stroke: currentColor', `stroke:${f.color}`)}</div>
+      <div style="flex:1">
+        <div class="detail-label">${f.label}</div>
+        ${val ? `<div class="detail-value">${val.replace(/\n/g,'<br>')}</div>` : `<div class="detail-empty">Tap to add…</div>`}
+      </div>
+      <div class="detail-edit">${I.edit}</div>
+    </div>`;
+  });
+  html += `<div class="section-label" style="margin-top:8px">Team Members (${members.length})</div>`;
+  if (members.length === 0) {
+    html += makeEmptyState(I.people, 'No members assigned yet.\nGo back to assign students to this group.');
+  } else {
+    members.forEach(m => {
+      html += `<div class="student-row">
+        <div class="roll-badge">${m.roll_number===99999?'—':m.roll_number}</div>
+        <div style="flex:1"><div class="student-name">${m.name}</div><div class="student-meta">${m.class||''}</div></div>
+        <button onclick="gdRemoveMember('${m.memberId}','${m.name.replace(/'/g,"\\'")}\')" style="background:none;border:none;cursor:pointer;color:var(--danger);width:22px;height:22px">${I.personRemove}</button>
+      </div>`;
+    });
+  }
+  html += `<button class="card" style="margin-top:16px;border-color:var(--primary-glow);background:var(--primary-dim)" onclick="gdShare()">
+    <div class="card-icon" style="background:var(--primary-dim)">${I.socialShare.replace('currentColor','var(--primary)')}</div>
+    <div class="card-body"><div class="card-title" style="color:var(--primary)">Share Group Details</div><div class="card-sub">Share project, room, materials & members</div></div>
+  </button>`;
+  html += '</div></div>';
+  container.innerHTML = html;
+}
+
+function gdOpenEdit(fieldKey) {
+  const f = GD_FIELDS.find(x=>x.key===fieldKey);
+  if (!f) return;
+  const val = _gd.group?.[fieldKey] || '';
+  openModal(
+    `<div class="modal-title">${f.label}</div>
+     ${f.multi
+       ? `<textarea class="form-textarea" id="gd-edit-input" placeholder="Enter ${f.label.toLowerCase()}…" style="margin-top:12px">${val}</textarea>`
+       : `<input class="form-input" id="gd-edit-input" placeholder="Enter ${f.label.toLowerCase()}…" value="${val}" style="margin-top:12px">`}`,
+    `<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+     <button class="btn btn-primary" onclick="gdSaveField('${fieldKey}')">Save</button>`
+  );
+  setTimeout(() => { const el = document.getElementById('gd-edit-input'); if(el) el.focus(); }, 100);
+}
+
+async function gdSaveField(fieldKey) {
+  const el = document.getElementById('gd-edit-input');
+  if (!el) return;
+  const val = el.value.trim() || null;
+  const btn = document.querySelector('#modal-footer .btn-primary');
+  if (btn) { btn.disabled=true; btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div>'; }
+  const { data, error } = await sb.from('exhibition_groups').update({ [fieldKey]: val }).eq('id', _gd.groupId).select('*').single();
+  if (!error && data) { _gd.group = data; if (_gd.onSaved) _gd.onSaved(); }
+  else if (error) showToast('❌ '+error.message);
+  closeModal();
+  gdRender(document.getElementById('screen-root').firstChild);
+}
+
+async function gdRemoveMember(memberId, name) {
+  const ok = await confirm('Remove Member', `Remove ${name} from this group?`, 'Remove', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('id', memberId);
+  _gd.members = _gd.members.filter(m=>m.memberId!==memberId);
+  if (_gd.onSaved) _gd.onSaved();
+  gdRender(document.getElementById('screen-root').firstChild);
+}
+
+async function gdDeleteGroup() {
+  const ok = await confirm('Delete Group', `Delete "${_gd.group?.group_name}"?\n\nAll member assignments will be removed. This cannot be undone.`, 'Delete', true);
+  if (!ok) return;
+  await sb.from('exhibition_group_members').delete().eq('group_id', _gd.groupId);
+  const { error } = await sb.from('exhibition_groups').delete().eq('id', _gd.groupId);
+  if (error) { showToast('❌ '+error.message); return; }
+  if (_gd.onSaved) _gd.onSaved();
+  popScreen();
+}
+
+function gdGenerateText() {
+  const { group, members, subject } = _gd;
+  if (!group) return '';
+  let txt = `🏆 ${subject.name} – ${group.group_name}\n═══════════════════════════════════\n\n`;
+  if (group.project_title) txt += `📌 Project: ${group.project_title}\n`;
+  if (group.room_number) txt += `🚪 Room: ${group.room_number}\n`;
+  if (group.materials_required) txt += `🛠 Materials: ${group.materials_required}\n`;
+  if (group.reference_links) txt += `🔗 Links: ${group.reference_links}\n`;
+  if (group.instructions) txt += `\n📝 Instructions:\n${group.instructions}\n`;
+  if (members.length > 0) { txt += `\n👥 Team Members (${members.length}):\n`; members.forEach(m=>{txt+=`   • ${m.name} (${m.class})\n`;}); }
+  return txt;
+}
+async function gdCopy() { await copyText(gdGenerateText()); showToast('📋 Copied'); }
+function gdShare() { shareText(gdGenerateText(), (_gd.group?.group_name||'Group')+' Details'); }
+
+// ════════════════════════════════════════════════════════════════════════════
+// BOOT
+// ════════════════════════════════════════════════════════════════════════════
+async function boot() {
+  render(); // show loading
+  const { data: { session: s } } = await sb.auth.getSession();
+  if (s) {
+    session = s;
+    await detectRole(s.user.id);
+    screenStack = [{ name: 'home', params: {} }];
+  } else {
+    screenStack = [{ name: 'login', params: {} }];
+  }
+  render();
+  sb.auth.onAuthStateChange((_e, s) => {
+    if (!s && session) {
+      session = null; role = null; roleData = {};
+      screenStack = [{ name: 'login', params: {} }]; render();
+    }
+  });
+}
+
+boot();
 </script>
 </body>
 </html>
