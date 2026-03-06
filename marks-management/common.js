@@ -270,7 +270,8 @@ const examMarksConfig = [
       "classes": [3, 4, 5],
       "subjects": ["GK", "Computer"],
       "exams": {
-        "Term-1 (Theory)": 30
+        "Term-1 (Theory)": 30,
+        "Term-2 (Theory)": 30
       }
     },
     {
