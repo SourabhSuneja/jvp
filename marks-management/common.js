@@ -246,14 +246,19 @@ const examMarksConfig = [
         "Term-1 (Objective)": 20,
         "Term-1 (Theory)": 50,
         "Term-1 (SEA)": 5,
-        "Term-1 (PP)": 5
+        "Term-1 (PP)": 5,
+        "Term-2 (Objective)": 20,
+        "Term-2 (Theory)": 50,
+        "Term-2 (SEA)": 5,
+        "Term-2 (PP)": 5
       }
     },
     {
       "classes": [1, 2],
       "subjects": ["GK", "Computer"],
       "exams": {
-        "Term-1 (Theory)": 30
+        "Term-1 (Theory)": 30,
+        "Term-2 (Theory)": 30
       }
     },
     {
@@ -263,7 +268,11 @@ const examMarksConfig = [
         "Term-1 (Objective)": 20,
         "Term-1 (Theory)": 50,
         "Term-1 (SEA)": 5,
-        "Term-1 (PP)": 5
+        "Term-1 (PP)": 5,
+        "Term-2 (Objective)": 20,
+        "Term-2 (Theory)": 50,
+        "Term-2 (SEA)": 5,
+        "Term-2 (PP)": 5
       }
     },
     {
@@ -279,7 +288,9 @@ const examMarksConfig = [
       "subjects": ["English", "Hindi", "Science", "Maths", "Social Science"],
       "exams": {
         "Term-1 (Objective)": 20,
-        "Term-1 (Theory)": 60
+        "Term-1 (Theory)": 60,
+        "Term-2 (Objective)": 20,
+        "Term-2 (Theory)": 60
       }
     },
     {
@@ -294,7 +305,8 @@ const examMarksConfig = [
       "classes": [6, 7, 8],
       "subjects": ["Sanskrit"],
       "exams": {
-        "Term-1 (Theory)": 80
+        "Term-1 (Theory)": 80,
+        "Term-2 (Theory)": 80
       }
     },
     {
