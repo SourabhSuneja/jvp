@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Student · JVP School Exhibition</title>
+  <meta name="description" content="Watch the best moments of a student's literary recitation from the English Department at our Annual Exhibition—celebrating expression, creativity, and confidence.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* ========== CSS VARIABLES ========== */
+    :root {
+      --bg:           #FFF8F0;
+      --bg2:          #FFF0E3;
+      --text:         #1A1040;
+      --muted:        #7B6B9B;
+      --gold:         #E8952A;
+      --coral:        #E8534A;
+      --violet:       #9B7FE8;
+      --card:         rgba(255,255,255,0.82);
+      --border:       rgba(26,16,64,0.10);
+      --shadow:       rgba(26,16,64,0.14);
+      --logo-blend:   multiply;
+      --nav-bg:       rgba(255,248,240,0.82);
+    }
+    [data-theme="dark"] {
+      --bg:           #0C0919;
+      --bg2:          #130F24;
+      --text:         #EFE4D0;
+      --muted:        #A895D8;
+      --gold:         #F5B840;
+      --coral:        #FF7B6E;
+      --violet:       #B49EFF;
+      --card:         rgba(19,15,36,0.85);
+      --border:       rgba(239,228,208,0.10);
+      --shadow:       rgba(0,0,0,0.45);
+      --logo-blend:   screen;
+      --nav-bg:       rgba(12,9,25,0.85);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+
+    body {
+      font-family:'Nunito',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      transition:background .4s, color .4s;
+      overflow-x:hidden;
+    }
+
+    /* Grain overlay */
+    body::after {
+      content:'';
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:9999; opacity:.5;
+    }
+
+    /* ========== NAVBAR ========== */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:500;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 32px;
+      background:var(--nav-bg);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--border);
+      transition:all .35s;
+    }
+    nav.scrolled { box-shadow:0 4px 24px var(--shadow); }
+
+    .nav-logo { display:flex; align-items:center; gap:12px; }
+    .nav-logo img {
+      height:42px; width:auto;
+      mix-blend-mode:var(--logo-blend);
+      border-radius:8px;
+      object-fit:contain;
+    }
+    .nav-brand {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1rem; font-weight:700;
+      color:var(--text); line-height:1.2;
+    }
+    .nav-brand small {
+      display:block;
+      font-family:'Nunito',sans-serif;
+      font-size:.67rem; font-weight:600;
+      letter-spacing:.12em; text-transform:uppercase;
+      color:var(--muted); margin-top:1px;
+    }
+
+    .theme-btn {
+      display:flex; align-items:center; gap:8px;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:50px; padding:7px 18px;
+      font-family:'Nunito',sans-serif; font-size:.82rem; font-weight:700;
+      color:var(--text); cursor:pointer;
+      transition:all .3s;
+      box-shadow:0 2px 10px var(--shadow);
+    }
+    .theme-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px var(--shadow); }
+    .theme-btn i { color:var(--gold); font-size:.95rem; }
+
+    /* ========== HERO ========== */
+    .hero {
+      min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      padding:110px 24px 72px;
+      position:relative; overflow:hidden;
+    }
+
+    /* Parallax BG blobs */
+    .hero-blobs {
+      position:absolute; inset:0; pointer-events:none;
+      will-change:transform;
+    }
+    .blob {
+      position:absolute; border-radius:50%; filter:blur(70px);
+      animation:blobFloat 9s ease-in-out infinite;
+    }
+    .blob-1 { width:420px;height:420px; background:rgba(232,149,42,.18); top:-5%;left:-8%; animation-delay:0s; }
+    .blob-2 { width:300px;height:300px; background:rgba(232,83,74,.14); top:55%;right:-5%; animation-delay:3.5s; }
+    .blob-3 { width:260px;height:260px; background:rgba(155,127,232,.18); bottom:5%;left:35%; animation-delay:6s; }
+
+    @keyframes blobFloat {
+      0%,100%{ transform:translateY(0) scale(1); }
+      50%{ transform:translateY(-28px) scale(1.06); }
+    }
+
+    /* Floating stars */
+    .stars-layer { position:absolute; inset:0; pointer-events:none; }
+    .star {
+      position:absolute; border-radius:50%;
+      background:var(--gold);
+      animation:starTwinkle 4s ease-in-out infinite;
+    }
+    @keyframes starTwinkle {
+      0%,100%{ opacity:0; transform:scale(.4); }
+      50%{ opacity:.9; transform:scale(1.3); }
+    }
+
+    /* Hero grid */
+    .hero-grid {
+      position:relative; z-index:2;
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:72px; align-items:center;
+      max-width:1100px; width:100%;
+    }
+
+    /* ---- Profile image ---- */
+    .profile-side {
+      display:flex; align-items:center; justify-content:center;
+      animation:slideLeft .9s .15s ease both;
+    }
+    @keyframes slideLeft {
+      from{ opacity:0; transform:translateX(-44px); }
+      to{ opacity:1; transform:translateX(0); }
+    }
+
+    .profile-shell { position:relative; width:310px; height:310px; }
+
+    /* Rotating gradient ring */
+    .profile-shell::before {
+      content:'';
+      position:absolute; inset:-14px;
+      border-radius:62% 38% 46% 54% / 60% 44% 56% 40%;
+      background:conic-gradient(from 0deg, var(--gold), var(--coral), var(--violet), var(--gold));
+      animation:morphRing 8s ease-in-out infinite, spinRing 10s linear infinite;
+      z-index:0;
+    }
+    @keyframes morphRing {
+      0%,100%{ border-radius:62% 38% 46% 54%/60% 44% 56% 40%; }
+      25%{ border-radius:32% 68% 60% 40%/46% 62% 38% 54%; }
+      50%{ border-radius:50% 50% 34% 66%/38% 62% 58% 42%; }
+      75%{ border-radius:44% 56% 52% 48%/60% 38% 62% 40%; }
+    }
+    @keyframes spinRing { to{ filter:hue-rotate(360deg); } }
+
+    .profile-img {
+      position:relative; z-index:1;
+      width:100%; height:100%;
+      border-radius:62% 38% 46% 54%/60% 44% 56% 40%;
+      overflow:hidden;
+      border:5px solid var(--bg);
+      animation:morphRing 8s ease-in-out infinite;
+      background:linear-gradient(135deg, #FFE8D6, #E8D5FF);
+    }
+    .profile-img img {
+      width:100%; height:100%;
+      object-fit:cover;
+    }
+
+    /* Floating pills */
+    .pill {
+      position:absolute; z-index:3;
+      background:var(--card); border:1px solid var(--border);
+      backdrop-filter:blur(10px);
+      border-radius:50px; padding:7px 16px;
+      display:flex; align-items:center; gap:8px;
+      font-size:.78rem; font-weight:700; color:var(--text);
+      box-shadow:0 6px 24px var(--shadow);
+      animation:pillFloat 5s ease-in-out infinite;
+    }
+    .pill i { color:var(--gold); }
+    .pill-a { top:-16px; right:-24px; animation-delay:0s; }
+    .pill-b { bottom:10px; left:-36px; animation-delay:2.2s; }
+    @keyframes pillFloat {
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-9px); }
+    }
+
+    /* ---- Hero text ---- */
+    .hero-text-side {
+      animation:slideRight .9s .3s ease both;
+    }
+    @keyframes slideRight {
+      from{ opacity:0; transform:translateX(44px); }
+      to{ opacity:1; transform:translateX(0); }
+    }
+
+    .tag-chip {
+      display:inline-flex; align-items:center; gap:8px;
+      background:linear-gradient(135deg, rgba(232,149,42,.14), rgba(232,83,74,.10));
+      border:1px solid rgba(232,149,42,.32);
+      border-radius:50px; padding:5px 16px;
+      font-size:.7rem; font-weight:800;
+      letter-spacing:.15em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:18px;
+    }
+
+    h1.hero-name {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(3.2rem,6vw,5.8rem);
+      font-weight:700; line-height:1.02;
+      margin-bottom:10px;
+    }
+    .name-grad {
+      background:linear-gradient(130deg, var(--gold) 0%, var(--coral) 60%, var(--violet) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    .hero-meta {
+      display:flex; align-items:center; gap:10px;
+      font-size:.9rem; font-weight:600; color:var(--muted);
+      margin-bottom:22px;
+    }
+    .hero-meta i { color:var(--gold); }
+    .dot-sep { width:4px;height:4px; border-radius:50%; background:var(--muted); }
+
+    .hero-desc {
+      font-size:1rem; line-height:1.85;
+      color:var(--text); opacity:.82;
+      max-width:460px; margin-bottom:34px;
+    }
+    .hero-desc em {
+      font-style:italic; font-family:'Cormorant Garamond',serif;
+      font-size:1.12rem; color:var(--gold);
+      -webkit-text-fill-color:var(--gold);
+    }
+
+    .cta-row { display:flex; gap:14px; flex-wrap:wrap; }
+
+    .btn-fill {
+      display:inline-flex; align-items:center; gap:10px;
+      background:linear-gradient(130deg, var(--gold), var(--coral));
+      color:#fff; padding:13px 28px; border-radius:50px;
+      font-family:'Nunito',sans-serif; font-weight:800;
+      font-size:.92rem; text-decoration:none; border:none;
+      cursor:pointer; transition:all .3s;
+      box-shadow:0 8px 22px rgba(232,149,42,.38);
+    }
+    .btn-fill:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(232,149,42,.46); }
+
+    .btn-ghost {
+      display:inline-flex; align-items:center; gap:10px;
+      background:transparent; color:var(--text);
+      padding:13px 28px; border-radius:50px;
+      font-family:'Nunito',sans-serif; font-weight:800;
+      font-size:.92rem; text-decoration:none;
+      border:2px solid var(--border); cursor:pointer;
+      transition:all .3s;
+    }
+    .btn-ghost:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-3px); }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      font-size:.68rem; font-weight:700; letter-spacing:.16em;
+      text-transform:uppercase; color:var(--muted); z-index:2;
+      animation:fadeUp .8s 1.3s ease both;
+    }
+    .scroll-ring {
+      width:30px;height:30px; border-radius:50%;
+      border:1.5px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.65rem; color:var(--muted);
+      animation:bounce 2.2s ease-in-out infinite;
+    }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+    /* ========== SECTION COMMONS ========== */
+    .section-wrap { max-width:1100px; margin:0 auto; padding:80px 24px; }
+
+    .sec-label {
+      display:flex; align-items:center; gap:12px; margin-bottom:44px;
+    }
+    .sec-icon {
+      width:34px;height:34px; border-radius:10px;
+      background:linear-gradient(130deg,var(--gold),var(--coral));
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-size:.8rem; flex-shrink:0;
+    }
+    .sec-label-text {
+      font-size:.68rem; font-weight:800; letter-spacing:.2em;
+      text-transform:uppercase; color:var(--muted);
+    }
+    .sec-rule { flex:1; height:1px; background:linear-gradient(to right, var(--border), transparent); }
+
+    .sec-title {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(2rem,4vw,3.2rem);
+      font-weight:700; line-height:1.15;
+      margin-bottom:8px; color:var(--text);
+    }
+
+    /* ========== ABOUT / TALENT CARDS ========== */
+    .about-bg { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+
+    .talent-grid {
+      display:grid; grid-template-columns:repeat(3,1fr);
+      gap:20px; margin-top:40px;
+    }
+
+    .t-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:22px; padding:30px 24px;
+      text-align:center; cursor:default;
+      backdrop-filter:blur(8px);
+      transition:all .35s ease;
+      position:relative; overflow:hidden;
+    }
+    .t-card::after {
+      content:'';
+      position:absolute; top:0;left:0;right:0; height:3px;
+      background:linear-gradient(90deg,var(--gold),var(--coral));
+      transform:scaleX(0); transform-origin:left;
+      transition:transform .35s ease;
+    }
+    .t-card:hover { transform:translateY(-10px); box-shadow:0 20px 48px var(--shadow); }
+    .t-card:hover::after { transform:scaleX(1); }
+
+    .t-icon {
+      width:60px;height:60px; border-radius:18px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem; margin:0 auto 18px;
+    }
+    .ti-1{ background:rgba(232,149,42,.14); color:var(--gold); }
+    .ti-2{ background:rgba(232,83,74,.14); color:var(--coral); }
+    .ti-3{ background:rgba(155,127,232,.14); color:var(--violet); }
+
+    .t-card h3 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.3rem; font-weight:700; margin-bottom:10px;
+    }
+    .t-card p { font-size:.88rem; line-height:1.7; color:var(--muted); }
+
+    /* ========== VIDEO SECTION ========== */
+    .video-wrap { position:relative; margin-top:48px; }
+
+    /* Glowing border frame */
+    .vid-border {
+      position:absolute; inset:-3px; border-radius:28px; z-index:0;
+      background:conic-gradient(from 180deg, var(--gold),var(--coral),var(--violet),var(--gold));
+      animation:borderSpin 6s linear infinite;
+    }
+    @keyframes borderSpin { to{ filter:hue-rotate(360deg); } }
+
+    .vid-inner {
+      position:relative; z-index:1;
+      border-radius:24px; overflow:hidden;
+      box-shadow:0 28px 72px var(--shadow);
+      background:#000;
+    }
+
+    /* Shimmer loader */
+    .vid-shimmer {
+      position:absolute; inset:0; z-index:2; pointer-events:none;
+      background:linear-gradient(90deg,transparent 0%,rgba(232,149,42,.10) 50%,transparent 100%);
+      animation:shimmer 2.2s ease-in-out infinite;
+      border-radius:24px;
+    }
+    @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+
+    .vid-ratio { position:relative; padding-bottom:56.25%; height:0; }
+    .vid-ratio iframe {
+      position:absolute; top:0;left:0;
+      width:100%; height:100%; border:none;
+    }
+
+    .live-pill {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(232,83,74,.14); border:1px solid rgba(232,83,74,.28);
+      border-radius:50px; padding:4px 14px;
+      font-size:.72rem; font-weight:800; letter-spacing:.08em;
+      color:var(--coral); margin-bottom:18px;
+    }
+    .live-dot {
+      width:7px;height:7px; background:var(--coral); border-radius:50%;
+      animation:livePulse 1.6s ease-in-out infinite;
+    }
+    @keyframes livePulse{ 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.65)} }
+
+    .vid-caption { text-align:center; margin-top:20px; }
+    .vid-caption em {
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic; font-size:1.1rem; color:var(--muted);
+    }
+    .vid-caption small {
+      display:block; margin-top:5px;
+      font-size:.76rem; color:var(--muted);
+    }
+
+    /* ========== QUOTE ========== */
+    .quote-outer { max-width:860px; margin:0 auto; padding:80px 24px; }
+
+    .quote-card {
+      position:relative; padding:52px 56px;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:28px; backdrop-filter:blur(10px);
+      overflow:hidden;
+    }
+    .quote-card::before {
+      content:'';
+      position:absolute; inset:0;
+      background:radial-gradient(ellipse at top left, rgba(232,149,42,.08), transparent 60%);
+      pointer-events:none;
+    }
+    .quote-mark {
+      font-family:'Cormorant Garamond',serif;
+      font-size:9rem; line-height:.45;
+      color:var(--gold); opacity:.25;
+      position:absolute; top:36px; left:36px;
+      font-weight:700; user-select:none;
+    }
+    blockquote {
+      font-family:'Cormorant Garamond',serif;
+      font-size:clamp(1.25rem,2.8vw,1.85rem);
+      font-style:italic; line-height:1.65;
+      color:var(--text); position:relative; z-index:1;
+    }
+    cite {
+      display:block; margin-top:22px;
+      font-family:'Nunito',sans-serif;
+      font-size:.8rem; font-weight:700; font-style:normal;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background:var(--bg2);
+      border-top:1px solid var(--border);
+      padding:44px 24px 36px;
+      text-align:center;
+    }
+    footer img {
+      height:50px; mix-blend-mode:var(--logo-blend);
+      margin-bottom:14px; object-fit:contain;
+    }
+    .footer-name {
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.15rem; font-weight:700; margin-bottom:6px;
+    }
+    footer p { font-size:.84rem; line-height:1.75; color:var(--muted); }
+    .heart-red { color:var(--coral); }
+
+    /* ========== FALLBACK MESSAGE ========== */
+    .fallback-outer {
+      min-height:80vh;
+      display:flex; align-items:center; justify-content:center;
+      padding:140px 24px 80px;
+    }
+    .fallback-card {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:28px; padding:60px 48px;
+      text-align:center; max-width:520px;
+      backdrop-filter:blur(10px);
+    }
+    .fallback-icon {
+      font-size:3rem; color:var(--gold);
+      margin-bottom:24px; display:block;
+    }
+    .fallback-card h2 {
+      font-family:'Cormorant Garamond',serif;
+      font-size:2rem; font-weight:700; margin-bottom:12px;
+    }
+    .fallback-card p { color:var(--muted); font-size:.95rem; line-height:1.75; }
+
+    /* ========== REVEAL ANIMATION ========== */
+    .reveal {
+      opacity:0; transform:translateY(28px);
+      transition:opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Staggered children */
+    .stagger-1 { transition-delay:.10s; }
+    .stagger-2 { transition-delay:.22s; }
+    .stagger-3 { transition-delay:.34s; }
+
+    /* ========== RESPONSIVE ========== */
+    @media(max-width:900px) {
+      .hero-grid {
+        grid-template-columns:1fr;
+        text-align:center; gap:44px;
+      }
+      .profile-side { order:-1; }
+      .hero-desc { max-width:100%; }
+      .hero-meta { justify-content:center; }
+      .cta-row { justify-content:center; }
+      .talent-grid { grid-template-columns:1fr; max-width:420px; margin:36px auto 0; }
+      .sec-rule { display:none; }
+      .nav-brand { display:none; }
+      nav { padding:10px 20px; }
+      .quote-card { padding:36px 28px; }
+    }
+    @media(max-width:520px) {
+      .profile-shell { width:250px;height:250px; }
+      .hero-name { font-size:2.8rem; }
+      .cta-row { flex-direction:column; align-items:center; }
+    }
+
+    /* fadeUp utility */
+    @keyframes fadeUp {
+      from{ opacity:0; transform:translateY(18px); }
+      to{ opacity:1; transform:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========================================= -->
+<!--  NAVBAR                                   -->
+<!-- ========================================= -->
+<nav id="nav">
+  <div class="nav-logo">
+    <img src="https://myjvp.in/commons/school-logo.jpg" alt="JVP Logo"
+         onerror="this.style.display='none'">
+    <div class="nav-brand">
+      Jamna Vidyapeeth
+      <small>School Exhibition 2025</small>
+    </div>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+    <i class="fas fa-moon" id="themeIcon"></i>
+    <span id="themeLabel">Dark Mode</span>
+  </button>
+</nav>
+
+
+<!-- ========================================= -->
+<!--  DYNAMIC CONTENT CONTAINER                -->
+<!-- ========================================= -->
+<div id="mainContent"></div>
+
+
+<!-- ========================================= -->
+<!--  FOOTER                                   -->
+<!-- ========================================= -->
+<footer id="siteFooter" style="display:none">
+  <img src="https://myjvp.in/commons/school-logo.jpg" alt="JVP Logo" onerror="this.style.display='none'">
+  <p class="footer-name">Jamna Vidyapeeth (JVP)</p>
+  <p>Annual School Exhibition · English Department<br>
+     Showcasing the brilliance of our brightest young minds</p>
+  <p style="margin-top:14px;font-size:.74rem;opacity:.55;">
+    Made with <i class="fas fa-heart heart-red"></i> for <strong id="footerStudentName"></strong>
+  </p>
+</footer>
+
+
+<!-- ========================================= -->
+<!--  JAVASCRIPT                               -->
+<!-- ========================================= -->
+<script>
+
+/* ============================================================
+   STUDENT DATA
+   ============================================================
+   HOW TO EDIT:
+   - Add or remove entries in the STUDENTS array below.
+   - Each student has:
+       name        : Student's full name (also used in the ?student= URL param)
+       class       : Class/section label shown on the page
+       image       : URL to the student's profile photo
+       videoEmbed  : Full YouTube embed URL (https://www.youtube.com/embed/VIDEO_ID)
+   - The "About", "Talents", and "Achievements" sections use
+     generic content defined separately below and apply to ALL students.
+   - The teacher name and quote text are also defined separately below.
+   ============================================================ */
+
+const STUDENTS = [
+  {
+    name:       "Krishnika",
+    class:      "Class 7",
+    image:      "https://sourabhsuneja.github.io/redirect/kavya2.jpeg",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Aarav",
+    class:      "Class 8",
+    image:      "https://placehold.co/310x310/FFE8D6/1A1040?text=Aarav",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Priya",
+    class:      "Class 6",
+    image:      "https://placehold.co/310x310/E8D5FF/1A1040?text=Priya",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Rohan",
+    class:      "Class 9",
+    image:      "https://placehold.co/310x310/D5FFE8/1A1040?text=Rohan",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Ananya",
+    class:      "Class 7",
+    image:      "https://placehold.co/310x310/FFD5E8/1A1040?text=Ananya",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Vivaan",
+    class:      "Class 8",
+    image:      "https://placehold.co/310x310/D5E8FF/1A1040?text=Vivaan",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Diya",
+    class:      "Class 6",
+    image:      "https://placehold.co/310x310/FFF0D5/1A1040?text=Diya",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Arjun",
+    class:      "Class 9",
+    image:      "https://placehold.co/310x310/E8FFD5/1A1040?text=Arjun",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Meera",
+    class:      "Class 7",
+    image:      "https://placehold.co/310x310/FFD5FF/1A1040?text=Meera",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Kabir",
+    class:      "Class 8",
+    image:      "https://placehold.co/310x310/D5FFFF/1A1040?text=Kabir",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Ishaan",
+    class:      "Class 9",
+    image:      "https://placehold.co/310x310/FFE8E8/1A1040?text=Ishaan",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  },
+  {
+    name:       "Sanya",
+    class:      "Class 6",
+    image:      "https://placehold.co/310x310/E8E8FF/1A1040?text=Sanya",
+    videoEmbed: "https://www.youtube.com/embed/aqz-KE-bpKQ?rel=0&modestbranding=1"
+  }
+];
+
+/* ============================================================
+   TEACHER DETAILS  (same for every student page)
+   ============================================================ */
+const TEACHER_NAME  = "Kajal Jha";
+const TEACHER_TITLE = "JVP English Department";
+
+/* ============================================================
+   GENERIC ABOUT / TALENT / ACHIEVEMENT CONTENT
+   Used consistently across all students.
+   The placeholder {name} is replaced with the student's name.
+   ============================================================ */
+const GENERIC = {
+  heroBadge: "JVP School Exhibition",
+
+  // Short description shown in the Hero section
+  heroDesc: `{name} is one of the shining stars of our English Department — a
+    student whose love for language goes far beyond the classroom.
+    Through consistent dedication and a genuine passion for
+    literary expression, <em>their voice has the power to move, inspire, and
+    connect.</em>`,
+
+  // Three talent cards (icon, title, description)
+  talents: [
+    {
+      icon:  "fas fa-feather-alt",
+      style: "ti-1",
+      title: "Literary Expression",
+      desc:  "A natural command of language and a flair for creative writing makes this student's work stand out for its depth, clarity, and originality."
+    },
+    {
+      icon:  "fas fa-book-open",
+      style: "ti-2",
+      title: "Reading & Comprehension",
+      desc:  "An avid reader with the ability to interpret, analyse, and reflect on texts with remarkable thoughtfulness and maturity."
+    },
+    {
+      icon:  "fas fa-microphone",
+      style: "ti-3",
+      title: "Public Speaking",
+      desc:  "Confident stage presence and clear articulation make every recitation and presentation a truly memorable experience for the audience."
+    }
+  ],
+
+  // Teacher's quote (place {name} anywhere you want the student's name)
+  teacherQuote: `Words are the most powerful force available to humanity — and {name} fills theirs with magic, warmth, and a wisdom far beyond their years.`,
+
+  // Video section label
+  videoLabel: "Featured Performance"
+};
+
+/* ============================================================
+   PAGE RENDERING
+   ============================================================ */
+
+function getStudentFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const param  = (params.get("student") || "").trim().toLowerCase();
+  return STUDENTS.find(s => s.name.toLowerCase() === param) || null;
+}
+
+function renderPage() {
+  const student = getStudentFromURL();
+
+  if (!student) {
+    renderFallback();
+    return;
+  }
+
+  renderStudent(student);
+}
+
+function renderFallback() {
+  document.getElementById("pageTitle").textContent = "JVP School Exhibition";
+  document.getElementById("mainContent").innerHTML = `
+    <div class="fallback-outer">
+      <div class="fallback-card">
+        <i class="fas fa-search fallback-icon"></i>
+        <h2>Student Not Found</h2>
+        <p>
+          No student profile matched your request.<br>
+          Please check the URL and try again.<br><br>
+          <strong>Example:</strong> <code>?student=Krishnika</code>
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function fill(template, name) {
+  return template.replace(/\{name\}/g, name);
+}
+
+function renderStudent(s) {
+  /* ---- Page title & footer ---- */
+  document.getElementById("pageTitle").textContent       = `${s.name} · JVP School Exhibition`;
+  document.getElementById("footerStudentName").textContent = s.name;
+  document.getElementById("siteFooter").style.display    = "";
+
+  /* ---- Build hero description HTML ---- */
+  const heroDescRaw = fill(GENERIC.heroDesc, s.name);
+
+  /* ---- Build talent cards HTML ---- */
+  const talentCards = GENERIC.talents.map((t, i) => `
+    <div class="t-card reveal stagger-${i+1}">
+      <div class="t-icon ${t.style}"><i class="${t.icon}"></i></div>
+      <h3>${t.title}</h3>
+      <p>${t.desc}</p>
+    </div>
+  `).join("");
+
+  /* ---- Build teacher quote ---- */
+  const quoteText = fill(GENERIC.teacherQuote, s.name);
+
+  /* ---- Placeholder initial for fallback image ---- */
+  const initial = s.name.charAt(0).toUpperCase();
+
+  /* ---- Inject all HTML ---- */
+  document.getElementById("mainContent").innerHTML = `
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="home">
+      <div class="hero-blobs" id="heroBg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+      </div>
+      <div class="stars-layer" id="stars"></div>
+
+      <div class="hero-grid">
+
+        <!-- Profile image -->
+        <div class="profile-side">
+          <div class="profile-shell">
+            <div class="profile-img">
+              <img
+                src="${s.image}"
+                alt="${s.name} – Student Profile"
+                onerror="this.src='https://placehold.co/310x310/FFE8D6/1A1040?text=${initial}'"
+              />
+            </div>
+            <div class="pill pill-a"><i class="fas fa-star"></i> ${s.class}</div>
+            <div class="pill pill-b"><i class="fas fa-feather-alt"></i> English Dept</div>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="hero-text-side">
+          <div class="tag-chip"><i class="fas fa-graduation-cap"></i> ${GENERIC.heroBadge}</div>
+
+          <h1 class="hero-name">
+            <span class="name-grad">${s.name}</span>
+          </h1>
+
+          <div class="hero-meta">
+            <i class="fas fa-book-open"></i>
+            ${s.class}
+            <span class="dot-sep"></span>
+            English Department
+          </div>
+
+          <p class="hero-desc">${heroDescRaw}</p>
+
+          <div class="cta-row">
+            <a href="#video" class="btn-fill">
+              <i class="fas fa-play-circle"></i> Watch Performance
+            </a>
+            <a href="#about" class="btn-ghost">
+              <i class="fas fa-user"></i> About ${s.name}
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="scroll-hint">
+        <div class="scroll-ring"><i class="fas fa-chevron-down"></i></div>
+        Scroll to explore
+      </div>
+    </section>
+
+    <!-- ===== ABOUT / TALENTS ===== -->
+    <div class="about-bg" id="about">
+      <div class="section-wrap">
+
+        <div class="sec-label reveal">
+          <div class="sec-icon"><i class="fas fa-user-circle"></i></div>
+          <span class="sec-label-text">About the Student</span>
+          <div class="sec-rule"></div>
+        </div>
+
+        <h2 class="sec-title reveal">Talents &amp;<br>Achievements</h2>
+
+        <div class="talent-grid">
+          ${talentCards}
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== VIDEO ===== -->
+    <div class="section-wrap" id="video">
+
+      <div class="sec-label reveal">
+        <div class="sec-icon"><i class="fas fa-video"></i></div>
+        <span class="sec-label-text">${GENERIC.videoLabel}</span>
+        <div class="sec-rule"></div>
+      </div>
+
+      <h2 class="sec-title reveal">Watch ${s.name}'s<br>Performance</h2>
+
+      <div class="live-pill reveal">
+        <span class="live-dot"></span> FEATURED RECITATION
+      </div>
+
+      <div class="video-wrap reveal">
+        <div class="vid-border"></div>
+        <div class="vid-inner">
+          <div class="vid-shimmer" id="vidShimmer"></div>
+          <div class="vid-ratio">
+            <iframe
+              src="${s.videoEmbed}"
+              title="${s.name} – Recitation"
+              allowfullscreen
+              loading="lazy"
+              onload="document.getElementById('vidShimmer').style.display='none'"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="vid-caption reveal">
+        <em>"A Performance that Speaks from the Heart"</em>
+        <small><i class="fas fa-map-marker-alt"></i> Jamna Vidyapeeth Annual Exhibition · English Department</small>
+      </div>
+
+    </div>
+
+    <!-- ===== QUOTE ===== -->
+    <div class="quote-outer">
+      <div class="quote-card reveal">
+        <div class="quote-mark">"</div>
+        <blockquote>
+          ${quoteText}
+          <cite>— ${TEACHER_NAME}, ${TEACHER_TITLE}</cite>
+        </blockquote>
+      </div>
+    </div>
+
+  `;
+
+  /* ---- Re-initialise interactive features after DOM inject ---- */
+  createStars();
+  initReveal();
+  initParallax();
+}
+
+/* ---- Theme Toggle ---- */
+let dark = false;
+function toggleTheme() {
+  dark = !dark;
+  document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
+  document.getElementById("themeIcon").className  = dark ? "fas fa-sun"  : "fas fa-moon";
+  document.getElementById("themeLabel").textContent = dark ? "Light Mode" : "Dark Mode";
+  document.getElementById("nav").style.background = dark
+    ? "rgba(12,9,25,0.87)"
+    : "rgba(255,248,240,0.87)";
+}
+
+/* ---- Generate Stars ---- */
+function createStars() {
+  const c = document.getElementById("stars");
+  if (!c) return;
+  c.innerHTML = "";
+  for (let i = 0; i < 30; i++) {
+    const s = document.createElement("div");
+    s.className = "star";
+    s.style.cssText = `
+      left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      width:${2+Math.random()*4}px;
+      height:${2+Math.random()*4}px;
+      animation-delay:${Math.random()*5}s;
+      animation-duration:${2.5+Math.random()*3.5}s;
+    `;
+    c.appendChild(s);
+  }
+}
+
+/* ---- Parallax on scroll ---- */
+function initParallax() {
+  window.addEventListener("scroll", () => {
+    const y  = window.scrollY;
+    const bg = document.getElementById("heroBg");
+    if (bg) bg.style.transform = `translateY(${y * 0.33}px)`;
+    document.getElementById("nav").classList.toggle("scrolled", y > 30);
+  }, { passive: true });
+}
+
+/* ---- Scroll reveal (IntersectionObserver) ---- */
+function initReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+  }, { threshold: 0.14 });
+  document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
+}
+
+/* ---- Boot ---- */
+renderPage();
+
+</script>
+
+</body>
+</html>
