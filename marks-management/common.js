@@ -38,9 +38,9 @@ let optionalSubjects = {
 '11-HUM': ['Applied Maths', 'Maths', 'P.E.', 'I.P.', 'Economics', 'Fine Arts', 'Psychology'],
 '11-COM': ['Applied Maths', 'Maths', 'P.E.', 'I.P.', 'Fine Arts', 'Psychology'],
 '11-SCI': ['Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'Fine Arts', 'Psychology'],
-'12-HUM': ['Maths', 'P.E.', 'I.P.', 'Economics'],
-'12-COM': ['Maths', 'P.E.', 'I.P.'],
-'12-SCI': ['Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics']
+'12-HUM': ['Applied Maths', 'Maths', 'P.E.', 'I.P.', 'Economics', 'Fine Arts', 'Psychology'],
+'12-COM': ['Applied Maths', 'Maths', 'P.E.', 'I.P.', 'Fine Arts', 'Psychology'],
+'12-SCI': ['Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'Fine Arts', 'Psychology']
 };
 
 // Class and exam-wise aggregate maximum marks, considering all subjects
@@ -68,15 +68,15 @@ const classwiseSubjects = {
   5: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
   6: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
   7: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
-  8: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Data Science', 'GK', 'All Subjects (Enthusiasm)'],
+  8: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Sanskrit', 'Computer', 'GK', 'All Subjects (Enthusiasm)'],
    9: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'],
    10: ['English', 'Hindi', 'Maths', 'Science', 'Social Science', 'Data Science', 'All Subjects (Enthusiasm)'],
   '11-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'Psychology', 'All Subjects (Enthusiasm)', 'Fine Arts'],
   '11-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts'],
   '11-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts'],
-  '12-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'All Subjects (Enthusiasm)'],
-  '12-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)'],
-  '12-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)']
+  '12-SCI': ['English', 'Physics', 'Chemistry', 'Biology', 'Maths', 'P.E.', 'I.P.', 'Geography', 'Economics', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts'],
+  '12-COM': ['English', 'Accountancy', 'B.St.', 'Economics', 'Maths', 'P.E.', 'I.P.', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts'],
+  '12-HUM': ['English', 'History', 'Geography', 'Pol. Sci.', 'Maths', 'P.E.', 'I.P.', 'Economics', 'All Subjects (Enthusiasm)', 'Applied Maths', 'Psychology', 'Fine Arts']
 }
 
 let filteredClasses = [];
