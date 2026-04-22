@@ -27,7 +27,12 @@
     {"name": "Pre-Term Test 1", "mm": 15},
     {"name": "Pre-Term Test 2", "mm": 15},
     {"name": "Enthusiasm (July)", "mm": 300},
-    {"name": "Enthusiasm (August)", "mm": 300}
+    {"name": "Enthusiasm (August)", "mm": 300},
+    {"name": "MT-1", "mm": 20},
+    {"name": "MT-2", "mm": 20},
+    {"name": "MT-3", "mm": 20},
+    {"name": "MT-4", "mm": 20},
+    {"name": "MT-5", "mm": 20}
   ],
   "EXAM_MARKS_CONFIG": [
     {
