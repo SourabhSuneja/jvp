@@ -104,7 +104,12 @@ const exams = [
              {'name': 'Pre-Term Test 2', 'mm': 15},
              {'name': 'Enthusiasm (July)', 'mm': 300},
              {'name': 'Enthusiasm (August)', 'mm': 300},
-             {'name': 'Pre-Board-2', 'mm': 100}
+             {'name': 'Pre-Board-2', 'mm': 100},
+             {'name': 'MT-1', 'mm': 20},
+             {'name': 'MT-2', 'mm': 20},
+             {'name': 'MT-3', 'mm': 20},
+             {'name': 'MT-4', 'mm': 20},
+             {'name': 'MT-5', 'mm': 20}
         ];
 
 // Color mapping for updated remarks
