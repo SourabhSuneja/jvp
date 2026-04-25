@@ -349,7 +349,7 @@
 
     <script>
         // Global array       
-        let examsArray = ['PT-1', 'PT-2', 'PT-3', 'PT-4', 'Term-1', 'Term-2'];
+        let examsArray = ['PT-1', 'PT-2', 'PT-3', 'PT-4', 'Term-1', 'Term-2', 'MT-1', 'MT-2', 'MT-3', 'MT-4', 'MT-5', 'MT-6'];
 
         // DOM elements
         const classSelect = document.getElementById('classSelect');
@@ -457,14 +457,18 @@
             if (statementType === 'consolidated') {
                 if(examValue.startsWith('Term-')) {
                     baseUrl = 'https://myjvp.in/marks-management/consolidated-term-marks.html';
-                 } else {
-                   baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
+                 } else if(examValue.startsWith('PT-')) {
+                    baseUrl = 'https://myjvp.in/marks-management/consolidated-pt-marks.html';
+                 } else if(examValue.startsWith('MT-')) {
+                    baseUrl = 'https://myjvp.in/marks-management/consolidated-mt-marks.html';
                  }
             } else {
                 if(examValue.startsWith('Term-')) {
                     baseUrl = 'https://myjvp.in/marks-management/subjectwise-term-marks.html';
-                 } else {
+                 } else if(examValue.startsWith('PT-')) {
                    baseUrl = 'https://myjvp.in/marks-management/subjectwise-pt-marks.html';
+                 } else if(examValue.startsWith('MT-')) {
+                   baseUrl = 'https://myjvp.in/marks-management/subjectwise-mt-marks.html';
                  }
             }
 
