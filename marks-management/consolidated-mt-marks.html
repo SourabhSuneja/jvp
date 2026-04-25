@@ -152,6 +152,9 @@
          .print-btn:hover, .anomaly-btn:hover {
          background-color: #45a049;
          }
+         .hidden {
+         display: none;
+         }
          @media print {
          .print-btn, .anomaly-btn {
          display: none;
@@ -398,6 +401,7 @@
          const mark10Header = document.createElement('th');
          mark10Header.textContent = '10M';
          mark10Header.classList.add('mark-col');
+         mark10Header.classList.add('hidden');
          headerRow2.appendChild(mark10Header);
          });
          
@@ -416,6 +420,7 @@
          
          const total10Header = document.createElement('th');
          total10Header.textContent = aggregateTotal10 + "M";
+         total10Header.classList.add('hidden');
          headerRow2.appendChild(total10Header);
          
          // Add Rank header
@@ -430,6 +435,7 @@
          
          const rank10Header = document.createElement('th');
          rank10Header.textContent = '10M';
+         rank10Header.classList.add('hidden');
          headerRow2.appendChild(rank10Header);
          
          table.appendChild(headerRow1);
@@ -489,6 +495,7 @@
             
             // 10M cell
             const mark10Cell = document.createElement('td');
+            mark10Cell.classList.add('hidden');
             if (studentSubjectMark) {
                 if (studentSubjectMark.marks === null) {
                     mark10Cell.textContent = 'Ab';
@@ -510,6 +517,7 @@
          
          const total10Cell = document.createElement('td');
          total10Cell.textContent = total10M;
+         total10Cell.classList.add('hidden');
          row.appendChild(total10Cell);
          
          // Add empty rank cells (to be filled later)
@@ -519,6 +527,7 @@
          
          const rank10Cell = document.createElement('td');
          rank10Cell.classList.add('rank-10m-cell');
+         rank10Cell.classList.add('hidden');
          row.appendChild(rank10Cell);
          
          // Store the row, total20M, and total10M for later use
