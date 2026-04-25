@@ -132,6 +132,9 @@
          .print-btn:hover {
          background-color: #45a049;
          }
+         .hidden {
+         display: none;
+         }
          @media print {
          .print-btn {
          display: none;
@@ -330,7 +333,7 @@
              // Add marks headers
              const marksHeader = document.createElement('th');
              marksHeader.textContent = 'Marks';
-             marksHeader.colSpan = 2;
+             marksHeader.colSpan = 1;
              headerRow1.appendChild(marksHeader);
              
              const mark20Header = document.createElement('th');
@@ -341,6 +344,7 @@
              const mark10Header = document.createElement('th');
              mark10Header.textContent = '10M';
              mark10Header.classList.add('mark-col');
+             mark10Header.classList.add('hidden');
              headerRow2.appendChild(mark10Header);
              
              table.appendChild(headerRow1);
@@ -392,6 +396,7 @@
                  
                  // 10M cell
                  const mark10Cell = document.createElement('td');
+                 mark10Cell.classList.add('hidden');
                  if (studentSubjectMark) {
                      if (studentSubjectMark.marks === null) {
                          mark10Cell.textContent = 'Ab';
