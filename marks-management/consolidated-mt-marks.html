@@ -389,7 +389,7 @@
          selectedSubjects.forEach(subject => {
          const subjectHeader = document.createElement('th');
          subjectHeader.textContent = subject;
-         subjectHeader.colSpan = 2;
+         subjectHeader.colSpan = 1;
          subjectHeader.classList.add('subject-header');
          headerRow1.appendChild(subjectHeader);
          
@@ -408,7 +408,7 @@
          // Add Total header
          const totalHeader = document.createElement('th');
          totalHeader.textContent = 'Total';
-         totalHeader.colSpan = 2;
+         totalHeader.colSpan = 1;
          headerRow1.appendChild(totalHeader);
          
          const aggregateTotal20 = getAggregateMarks(selectedClass, selectedExam);
@@ -426,7 +426,7 @@
          // Add Rank header
          const rankHeader = document.createElement('th');
          rankHeader.textContent = 'Rank';
-         rankHeader.colSpan = 2;
+         rankHeader.colSpan = 1;
          headerRow1.appendChild(rankHeader);
          
          const rank20Header = document.createElement('th');
