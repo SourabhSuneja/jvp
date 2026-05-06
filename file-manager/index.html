@@ -778,7 +778,7 @@ const ALLOWED_EXT      = ['pdf', 'doc', 'docx'];
 const ALLOWED_MIME     = ['application/pdf','application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 let session     = null;
@@ -868,7 +868,7 @@ async function handleLogin() {
   btn.disabled = true;
   btnText.innerHTML = '<div class="spinner" style="border-top-color:#051612;width:16px;height:16px"></div>';
 
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
 
   btn.disabled = false;
   btnText.textContent = 'Sign In';
@@ -884,7 +884,7 @@ async function handleLogin() {
 }
 
 async function handleSignOut() {
-  await supabase.auth.signOut();
+  await sb.auth.signOut();
   session = null; isAdmin = false; assignments = []; currentPath = [];
   document.getElementById('main-app').classList.add('hidden');
   document.getElementById('login-screen').classList.remove('hidden');
@@ -895,7 +895,7 @@ async function handleSignOut() {
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 async function init() {
-  const { data: { session: s } } = await supabase.auth.getSession();
+  const { data: { session: s } } = await sb.auth.getSession();
   if (s) { session = s; showMainApp(); }
   else {
     document.getElementById('login-screen').classList.remove('hidden');
@@ -913,10 +913,10 @@ async function initUserData() {
   const uid = session?.user?.id;
   if (!uid) return;
 
-  const { data: adminRow } = await supabase.from('admins').select('id').eq('id', uid).maybeSingle();
+  const { data: adminRow } = await sb.from('admins').select('id').eq('id', uid).maybeSingle();
   isAdmin = !!adminRow;
 
-  let q = supabase.from('class_subject_assignments').select('class, subject');
+  let q = sb.from('class_subject_assignments').select('class, subject');
   if (!isAdmin) q = q.eq('teacher_id', uid);
   const { data: rows } = await q;
 
@@ -1014,7 +1014,7 @@ async function loadItems() {
 
     } else {
       const prefix = currentPath.join('/');
-      const { data, error } = await supabase.storage.from(BUCKET).list(prefix, {
+      const { data, error } = await sb.storage.from(BUCKET).list(prefix, {
         limit: 200, sortBy: { column:'name', order:'asc' },
       });
       if (error) throw error;
@@ -1160,7 +1160,7 @@ async function submitRename() {
   const oldPath = `${currentPath.join('/')}/${selectedFile.name}`;
   const newPath = `${currentPath.join('/')}/${newName}`;
 
-  const { error } = await supabase.storage.from(BUCKET).move(oldPath, newPath);
+  const { error } = await sb.storage.from(BUCKET).move(oldPath, newPath);
 
   btn.disabled = false;
   btnText.textContent = 'Rename';
@@ -1197,7 +1197,7 @@ async function executeDelete() {
   btnText.innerHTML = '<div class="spinner" style="border-top-color:#fff;width:16px;height:16px"></div>';
 
   const path = `${currentPath.join('/')}/${selectedFile.name}`;
-  const { error } = await supabase.storage.from(BUCKET).remove([path]);
+  const { error } = await sb.storage.from(BUCKET).remove([path]);
 
   btn.disabled = false;
   btnText.textContent = 'Delete';
@@ -1244,7 +1244,7 @@ async function doUpload(upsert) {
   const uploadPath = `${currentPath.join('/')}/${file.name}`;
   const arrayBuffer = await file.arrayBuffer();
 
-  const { error } = await supabase.storage.from(BUCKET).upload(uploadPath, arrayBuffer, {
+  const { error } = await sb.storage.from(BUCKET).upload(uploadPath, arrayBuffer, {
     contentType: file.type || 'application/octet-stream',
     upsert,
   });
