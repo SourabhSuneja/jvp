@@ -787,6 +787,7 @@ let assignments = [];   // [{classNum, subject}]
 let currentPath = [];   // ['8', 'Science'] etc.
 let selectedFile= null;
 let pendingUploadFile = null;   // for replace flow
+let fileItemsMap = {};          // idx -> file item, avoids JSON-in-onclick
 
 // ─── UTILS ────────────────────────────────────────────────────────────────────
 function formatBytes(b) {
@@ -1050,8 +1051,9 @@ function renderList(items, level) {
     return;
   }
 
-  const html = items.map(item => item.type === 'folder'
-    ? renderFolderCard(item) : renderFileCard(item)
+  fileItemsMap = {};
+  const html = items.map((item, idx) => item.type === 'folder'
+    ? renderFolderCard(item) : renderFileCard(item, idx)
   ).join('');
   content.innerHTML = `<div style="padding-bottom:100px">${html}</div>`;
 }
@@ -1085,9 +1087,9 @@ function renderFolderCard(item) {
   </div>`;
 }
 
-function renderFileCard(item) {
+function renderFileCard(item, idx) {
+  fileItemsMap[idx] = item;
   const { color, label } = getFileInfo(item.name);
-  const safeId = CSS.escape(item.name);
   return `<div class="file-card">
     <div class="file-icon" style="background:${color}18">${fileIconSVG(item.name)}</div>
     <div class="file-info">
@@ -1098,7 +1100,7 @@ function renderFileCard(item) {
         ${item.updated_at ? `<span class="file-date">${formatDate(item.updated_at)}</span>` : ''}
       </div>
     </div>
-    <button class="more-btn" onclick="openActionSheet(${JSON.stringify(JSON.stringify(item))})">
+    <button class="more-btn" onclick="openActionSheet(${idx})">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
       </svg>
@@ -1107,8 +1109,8 @@ function renderFileCard(item) {
 }
 
 // ─── ACTION SHEET ─────────────────────────────────────────────────────────────
-function openActionSheet(itemJson) {
-  selectedFile = JSON.parse(itemJson);
+function openActionSheet(idx) {
+  selectedFile = fileItemsMap[idx];
   const { color } = getFileInfo(selectedFile.name);
 
   document.getElementById('sheet-file-header').innerHTML = `
