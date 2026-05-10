@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>School File Manager</title>
 <style>
-  /* ── Design: Clean institutional dark theme ── */
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,7 +34,6 @@
     line-height: 1.6;
   }
 
-  /* ── Layout ── */
   .app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
 
   header {
@@ -63,9 +61,26 @@
     font-family: var(--mono); font-size: 11px;
   }
 
+  /* Session badge shown in header */
+  #sessionBadge {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #sessionBadge .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted);
+    flex-shrink: 0;
+  }
+  #sessionBadge.authed .dot { background: var(--success); }
+  #sessionBadge.authed { color: var(--success); }
+
   .main { display: grid; grid-template-columns: 280px 1fr; }
 
-  /* ── Sidebar ── */
   aside {
     background: var(--surface);
     border-right: 1px solid var(--border);
@@ -101,10 +116,8 @@
   input:focus, select:focus { border-color: var(--accent); }
   input::placeholder { color: var(--muted); }
 
-  /* ── Content area ── */
   .content { display: flex; flex-direction: column; overflow: hidden; }
 
-  /* ── Tabs ── */
   .tabs {
     display: flex;
     border-bottom: 1px solid var(--border);
@@ -128,11 +141,9 @@
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-  /* ── Tab panels ── */
   .panel { display: none; padding: 24px; flex: 1; overflow-y: auto; }
   .panel.active { display: block; }
 
-  /* ── Upload panel ── */
   .upload-zone {
     border: 2px dashed var(--border);
     border-radius: 12px;
@@ -154,7 +165,6 @@
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .form-full { margin-bottom: 12px; }
 
-  /* ── Progress ── */
   .progress-wrap {
     display: none;
     background: var(--panel);
@@ -174,7 +184,6 @@
     transition: width .3s;
   }
 
-  /* ── Buttons ── */
   .btn {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 8px 16px; border-radius: 7px; border: none;
@@ -196,7 +205,6 @@
 
   .action-row { display: flex; gap: 8px; margin-top: 16px; }
 
-  /* ── Files list ── */
   .list-toolbar {
     display: flex; align-items: center; gap: 10px;
     margin-bottom: 16px; flex-wrap: wrap;
@@ -243,7 +251,6 @@
 
   .file-actions { display: flex; gap: 6px; margin-top: 2px; }
 
-  /* ── Status dots ── */
   .status-dot {
     display: inline-block;
     width: 7px; height: 7px;
@@ -254,13 +261,11 @@
   .dot-pending { background: var(--warning); }
   .dot-done    { background: var(--success); }
 
-  /* ── Pagination ── */
   .pagination {
     display: flex; justify-content: center; align-items: center; gap: 8px;
     margin-top: 24px; font-size: 13px; color: var(--muted);
   }
 
-  /* ── Toast ── */
   #toast {
     position: fixed; bottom: 24px; right: 24px;
     background: var(--panel);
@@ -281,7 +286,6 @@
   #toast.toast-err   { border-color: var(--danger);  color: var(--danger); }
   #toast.toast-info  { border-color: var(--accent);  color: var(--accent); }
 
-  /* ── Empty state ── */
   .empty {
     text-align: center;
     padding: 60px 24px;
@@ -289,48 +293,40 @@
   }
   .empty svg { opacity: .3; margin-bottom: 12px; }
 
-  /* ── Config notice ── */
-  .config-notice {
-    background: color-mix(in srgb, var(--warning) 10%, transparent);
-    border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+  /* Auth error banner */
+  .auth-error {
+    background: color-mix(in srgb, var(--danger) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
     border-radius: 8px;
     padding: 12px 14px;
     font-size: 12px;
-    color: var(--warning);
+    color: var(--danger);
     margin-bottom: 20px;
+    display: none;
   }
+  .auth-error.visible { display: block; }
 </style>
 </head>
 <body>
 <div class="app">
 
-  <!-- ── Header ── -->
+  <!-- Header -->
   <header>
     <div class="logo">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
       School File Manager
     </div>
     <span class="badge">TEACHER PORTAL</span>
+    <div id="sessionBadge">
+      <span class="dot"></span>
+      <span id="sessionLabel">Checking session…</span>
+    </div>
   </header>
 
   <div class="main">
 
-    <!-- ── Sidebar: Config ── -->
+    <!-- Sidebar: File Scope only (no connection config needed) -->
     <aside>
-      <div>
-        <div class="section-label">Connection</div>
-        <div class="config-group">
-          <div>
-            <label>Edge Function URL</label>
-            <input id="cfgUrl" type="url" placeholder="https://xxx.supabase.co/functions/v1/file-manager" />
-          </div>
-          <div>
-            <label>Teacher JWT (Bearer token)</label>
-            <input id="cfgToken" type="password" placeholder="eyJhbGciOiJIUzI1NiIs…" />
-          </div>
-        </div>
-      </div>
-
       <div>
         <div class="section-label">File Scope</div>
         <div class="config-group">
@@ -358,7 +354,7 @@
       </div>
     </aside>
 
-    <!-- ── Content ── -->
+    <!-- Content -->
     <div class="content">
 
       <!-- Tabs -->
@@ -369,8 +365,10 @@
 
       <!-- Upload panel -->
       <div id="panel-upload" class="panel active">
-        <div class="config-notice">
-          ⚠ Configure the Edge Function URL and your JWT token in the sidebar before uploading.
+
+        <!-- Auth error (shown only if session is missing) -->
+        <div class="auth-error" id="authError">
+          ⚠ No active session found. Please log in through the main portal before using this page.
         </div>
 
         <!-- Drop zone -->
@@ -439,11 +437,11 @@
   </div>
 </div>
 
-<!-- Toast notification -->
+<!-- Toast -->
 <div id="toast"></div>
 
-<!-- Rename modal (lightweight) -->
-<div id="renameModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center">
+<!-- Rename modal -->
+<div id="renameModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center">
   <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;width:360px;max-width:90vw">
     <div style="font-weight:600;margin-bottom:12px">Rename File</div>
     <input id="renameInput" type="text" placeholder="New display name" />
@@ -456,6 +454,76 @@
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────────
+//  Constants
+// ─────────────────────────────────────────────────────────────────────────────
+const EDGE_URL = 'https://ckltcwampaagyzneaznt.supabase.co/functions/v1/file-manager';
+const SUPABASE_PROJECT_REF = 'ckltcwampaagyzneaznt';
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Session: retrieve JWT from Supabase's localStorage entry
+//  Supabase stores the session under the key:
+//    sb-<project-ref>-auth-token
+// ─────────────────────────────────────────────────────────────────────────────
+function getSessionToken() {
+  try {
+    // Primary key used by Supabase JS v2
+    const key = `sb-${SUPABASE_PROJECT_REF}-auth-token`;
+    const raw = localStorage.getItem(key);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return parsed?.access_token || null;
+    }
+
+    // Fallback: some integrations store it under a legacy key format
+    const legacyKey = `supabase.auth.token`;
+    const legacy = localStorage.getItem(legacyKey);
+    if (legacy) {
+      const parsed = JSON.parse(legacy);
+      return parsed?.currentSession?.access_token || null;
+    }
+
+    // Fallback: search all localStorage keys for a Supabase-like session
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith('sb-') && k.endsWith('-auth-token')) {
+        const val = JSON.parse(localStorage.getItem(k));
+        if (val?.access_token) return val.access_token;
+      }
+    }
+  } catch (e) {
+    console.warn('Could not read session from localStorage:', e);
+  }
+  return null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Session status UI
+// ─────────────────────────────────────────────────────────────────────────────
+function updateSessionUI() {
+  const token = getSessionToken();
+  const badge = document.getElementById('sessionBadge');
+  const label = document.getElementById('sessionLabel');
+  const authErr = document.getElementById('authError');
+
+  if (token) {
+    badge.classList.add('authed');
+    // Decode just the payload to show the user's email if present
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const email = payload.email || payload.sub || 'teacher';
+      label.textContent = `Signed in as ${email}`;
+    } catch {
+      label.textContent = 'Session active';
+    }
+    authErr.classList.remove('visible');
+  } else {
+    badge.classList.remove('authed');
+    label.textContent = 'No session';
+    authErr.classList.add('visible');
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 //  State
 // ─────────────────────────────────────────────────────────────────────────────
 let chosenFile = null;
@@ -464,12 +532,10 @@ let renameFileId = null;
 let searchDebounce = null;
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Helpers
+//  Scope helpers
 // ─────────────────────────────────────────────────────────────────────────────
-function cfg() {
+function scopeCfg() {
   return {
-    url:     document.getElementById('cfgUrl').value.trim().replace(/\/$/, ''),
-    token:   document.getElementById('cfgToken').value.trim(),
     scope:   document.getElementById('cfgScope').value,
     grade:   document.getElementById('cfgGrade').value.trim() || null,
     section: document.getElementById('cfgSection').value.trim() || null,
@@ -477,14 +543,22 @@ function cfg() {
   };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Edge function caller — token is auto-retrieved from session
+// ─────────────────────────────────────────────────────────────────────────────
 async function callEdge(body) {
-  const { url, token } = cfg();
-  if (!url)   { toast('Enter the Edge Function URL in sidebar', 'err'); return null; }
-  if (!token) { toast('Enter your JWT token in sidebar', 'err'); return null; }
+  const token = getSessionToken();
+  if (!token) {
+    toast('No active session. Please log in through the main portal.', 'err');
+    return null;
+  }
   try {
-    const res = await fetch(url, {
+    const res = await fetch(EDGE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
       body: JSON.stringify(body),
     });
     const data = await res.json();
@@ -496,6 +570,9 @@ async function callEdge(body) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Utilities
+// ─────────────────────────────────────────────────────────────────────────────
 function toast(msg, type = 'info') {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -527,6 +604,10 @@ function fmtBytes(bytes) {
 
 function fmtDate(iso) {
   return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -576,7 +657,7 @@ function clearUpload() {
 
 async function startUpload() {
   if (!chosenFile) return;
-  const { scope, grade, section, subject } = cfg();
+  const { scope, grade, section, subject } = scopeCfg();
   const title = document.getElementById('fldTitle').value.trim();
   if (!title) { toast('Please enter a display title', 'err'); return; }
 
@@ -584,7 +665,6 @@ async function startUpload() {
   document.getElementById('progressWrap').classList.add('visible');
   setProgress(0, 'Requesting upload URL…');
 
-  // Step 1: get presigned upload URL
   const meta = await callEdge({
     action:    'get_upload_url',
     title,
@@ -600,7 +680,6 @@ async function startUpload() {
 
   setProgress(15, 'Uploading to cloud…');
 
-  // Step 2: PUT the file directly to R2 via the presigned URL
   try {
     await uploadWithProgress(meta.upload_url, chosenFile);
   } catch (e) {
@@ -610,7 +689,6 @@ async function startUpload() {
 
   setProgress(95, 'Confirming…');
 
-  // Step 3: confirm
   const confirmed = await callEdge({ action: 'confirm_upload', file_id: meta.file_id });
   if (!confirmed) { resetUploadBtn(); return; }
 
@@ -657,9 +735,9 @@ function debounceSearch() {
 
 async function loadFiles(page = 1) {
   currentPage = page;
-  const { scope, grade, section, subject } = cfg();
-  const search       = document.getElementById('searchInput').value.trim() || undefined;
-  const statusFilter = document.getElementById('filterStatus').value;
+  const { scope, grade, section, subject } = scopeCfg();
+  const search        = document.getElementById('searchInput').value.trim() || undefined;
+  const statusFilter  = document.getElementById('filterStatus').value;
   const upload_status = statusFilter !== '' ? Number(statusFilter) : undefined;
 
   const grid = document.getElementById('fileGrid');
@@ -719,7 +797,6 @@ async function loadFiles(page = 1) {
     </div>
   `).join('');
 
-  // Pagination
   const { page: pg, total_pages: total } = data.pagination;
   const bar = document.getElementById('paginationBar');
   if (total <= 1) { bar.innerHTML = ''; return; }
@@ -737,7 +814,6 @@ async function downloadFile(fileId) {
   toast('Generating download link…', 'info');
   const data = await callEdge({ action: 'get_download_url', file_id: fileId });
   if (!data) return;
-  // Open in new tab (supports streaming/progressive load for video & audio)
   window.open(data.download_url, '_blank');
   toast('Download link opened in new tab', 'ok');
 }
@@ -765,7 +841,6 @@ async function confirmRename() {
   closeRename();
   loadFiles(currentPage);
 }
-// Close modal on backdrop click
 document.getElementById('renameModal').addEventListener('click', function(e) {
   if (e.target === this) closeRename();
 });
@@ -782,11 +857,9 @@ async function deleteFile(fileId) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-//  Util
+//  Init
 // ─────────────────────────────────────────────────────────────────────────────
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+updateSessionUI();
 </script>
 </body>
 </html>
