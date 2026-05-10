@@ -1,1304 +1,792 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jamna Vidyapeeth - Sports Meet Winner Submission</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>School File Manager</title>
+<style>
+  /* ── Design: Clean institutional dark theme ── */
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
-    <!-- Supabase CRUD Functions -->
-    <script type="module" src="https://myjvp.in/commons/supabase-crud.js"></script>
-    <!-- Dialog Box Styles -->
-    <link rel="stylesheet" href="https://myjvp.in/commons/dialog.css">
-    <!-- Dialog Box Scripts -->
-    <script src="https://myjvp.in/commons/dialog.js"></script>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        :root {
-            --primary-color: #1e40af;
-            --primary-dark: #1e3a8a;
-            --primary-light: #3b82f6;
-            --secondary-color: #0ea5e9;
-            --success-color: #10b981;
-            --success-dark: #059669;
-            --danger-color: #ef4444;
-            --danger-dark: #dc2626;
-            --warning-color: #f59e0b;
-            --light-bg: #f8fafc;
-            --card-bg: #ffffff;
-            --dark-text: #0f172a;
-            --medium-text: #475569;
-            --light-text: #ffffff;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-            
-            /* House Colors */
-            --ruby: #dc2626;
-            --emerald: #059669;
-            --sapphire: #2563eb;
-            --topaz: #f59e0b;
-        }
+  :root {
+    --bg:       #0f1117;
+    --surface:  #181c27;
+    --panel:    #1e2333;
+    --border:   #2a3047;
+    --accent:   #4f72ff;
+    --accent2:  #7c3aed;
+    --success:  #22c55e;
+    --warning:  #f59e0b;
+    --danger:   #ef4444;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --mono:     'DM Mono', monospace;
+    --sans:     'DM Sans', sans-serif;
+  }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--light-bg);
-            color: var(--dark-text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            line-height: 1.6;
-        }
+  /* ── Layout ── */
+  .app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
 
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 60000;
-            pointer-events: none;
-        }
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 56px;
+  }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 30px 20px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            max-width: 600px;
-            width: 100%;
-        }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 16px; letter-spacing: -0.02em;
+  }
+  .logo svg { color: var(--accent); }
 
-        header h1 {
-            font-weight: 700;
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
+  .badge {
+    display: inline-flex; align-items: center;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 4px; padding: 1px 8px;
+    font-family: var(--mono); font-size: 11px;
+  }
 
-        header h1 i {
-            margin-right: 12px;
-            color: var(--warning-color);
-            font-size: 2.2rem;
-            vertical-align: middle;
-        }
+  .main { display: grid; grid-template-columns: 280px 1fr; }
 
-        header h2 {
-            font-weight: 500;
-            font-size: 1rem;
-            color: var(--medium-text);
-            letter-spacing: 0.3px;
-        }
+  /* ── Sidebar ── */
+  aside {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 20px 16px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
 
-        .container {
-            max-width: 600px;
-            width: 100%;
-        }
+  .section-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow-md);
-            padding: 32px;
-            margin-bottom: 24px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border-color);
-        }
-        
-        .card:hover {
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .card h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .card h3 i {
-            font-size: 1.6rem;
-            color: var(--secondary-color);
-        }
-        
-        /* QR Section */
-        #qr-reader {
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid var(--border-color);
-            background: var(--light-bg);
-        }
-        
-        #qr-scanner-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
+  .config-group { display: flex; flex-direction: column; gap: 8px; }
 
-        .qr-close-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: var(--danger-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            width: 36px;
-            height: 36px;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: all 0.2s ease;
-            box-shadow: var(--shadow-md);
-        }
-        
-        .qr-close-btn:hover {
-            background: var(--danger-dark);
-            transform: scale(1.05);
-        }
-        
-        .qr-scanner-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+  label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 3px; }
 
-        .qr-action-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            width: 100%;
-            padding: 16px 24px;
-            border: 2px solid transparent;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .qr-action-btn i {
-            font-size: 1.3rem;
-        }
+  input, select {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 8px 10px;
+    outline: none;
+    transition: border-color .15s;
+  }
+  input:focus, select:focus { border-color: var(--accent); }
+  input::placeholder { color: var(--muted); }
 
-        #qr-camera-btn {
-            background: var(--primary-color);
-            color: var(--light-text);
-        }
-        #qr-camera-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        #qr-camera-btn:active {
-            transform: translateY(0);
-        }
+  /* ── Content area ── */
+  .content { display: flex; flex-direction: column; overflow: hidden; }
 
-        .qr-action-btn[for="qr-file-input"] {
-            background: var(--medium-text);
-            color: var(--light-text);
-        }
-        .qr-action-btn[for="qr-file-input"]:hover {
-            background: var(--dark-text);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        #qr-file-input {
-            display: none;
-        }
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0 24px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 14px 18px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color .15s, border-color .15s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-        .error-text {
-            color: var(--danger-color);
-            text-align: center;
-            margin-top: 16px;
-            font-weight: 500;
-            padding: 12px;
-            background: rgba(239, 68, 68, 0.1);
-            border-radius: 8px;
-            border-left: 4px solid var(--danger-color);
-        }
+  /* ── Tab panels ── */
+  .panel { display: none; padding: 24px; flex: 1; overflow-y: auto; }
+  .panel.active { display: block; }
 
-        /* Details Section */
-        #student-info {
-            background: var(--light-bg);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 28px;
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 14px 24px;
-            font-size: 1rem;
-        }
+  /* ── Upload panel ── */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    padding: 40px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    margin-bottom: 20px;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 5%, transparent);
+  }
+  .upload-zone svg { color: var(--muted); margin-bottom: 12px; }
+  .upload-zone p { color: var(--muted); font-size: 13px; }
+  .upload-zone strong { color: var(--text); }
+  #fileInput { display: none; }
 
-        #student-info strong {
-            font-weight: 600;
-            color: var(--medium-text);
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.5px;
-        }
-        
-        #student-info span {
-            color: var(--dark-text);
-            font-weight: 500;
-        }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-full { margin-bottom: 12px; }
 
-        #student-house {
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        /* Dynamic House Colors */
-        .house-Ruby { color: var(--ruby); }
-        .house-Emerald { color: var(--emerald); }
-        .house-Sapphire { color: var(--sapphire); }
-        .house-Topaz { color: var(--topaz); }
+  /* ── Progress ── */
+  .progress-wrap {
+    display: none;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .progress-wrap.visible { display: block; }
+  .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
+  .progress-bar-track { background: var(--border); border-radius: 99px; height: 6px; overflow: hidden; }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px;
+    width: 0%;
+    transition: width .3s;
+  }
 
-        #winner-form h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 24px;
-            margin-bottom: 16px;
-            color: var(--dark-text);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-size: 0.9rem;
-        }
-        
-        .radio-list label {
-            display: block;
-            padding: 16px 20px 16px 56px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            position: relative;
-            background: var(--card-bg);
-            font-weight: 500;
-        }
-        
-        .radio-list label:hover {
-            border-color: var(--primary-light);
-            background: rgba(59, 130, 246, 0.05);
-            transform: translateX(4px);
-        }
-        
-        .radio-list label:before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--border-color);
-            border-radius: 50%;
-            background: var(--card-bg);
-            transition: all 0.2s ease;
-        }
-        
-        .radio-list label:after {
-            content: '';
-            position: absolute;
-            left: 26px;
-            top: 50%;
-            transform: translateY(-50%) scale(0);
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            transition: all 0.2s ease;
-        }
+  /* ── Buttons ── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 7px; border: none;
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: opacity .15s, transform .1s;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover:not(:disabled) { opacity: .88; }
+  .btn-ghost {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+  .btn-danger { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent); }
+  .btn-danger:hover { background: color-mix(in srgb, var(--danger) 25%, transparent); }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
 
-        .radio-list input[type="radio"] {
-            display: none;
-        }
+  .action-row { display: flex; gap: 8px; margin-top: 16px; }
 
-        .radio-list input[type="radio"]:checked + label {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: var(--primary-color);
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-        
-        .radio-list input[type="radio"]:checked + label:before {
-            border-color: var(--primary-color);
-        }
-        
-        .radio-list input[type="radio"]:checked + label:after {
-            transform: translateY(-50%) scale(1);
-        }
-        
-        .radio-list .game-details {
-            font-size: 0.85rem;
-            color: var(--medium-text);
-            margin-top: 4px;
-            font-weight: 400;
-        }
+  /* ── Files list ── */
+  .list-toolbar {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .list-toolbar input { flex: 1; min-width: 180px; }
+  .list-toolbar select { width: auto; }
 
-        /* Position Selector */
-        .position-selector {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-        }
-        
-        .position-selector label {
-            flex: 1;
-            text-align: center;
-            padding: 20px 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-        }
-        
-        .position-selector label:before,
-        .position-selector label:after {
-            display: none;
-        }
-        
-        .position-selector label i {
-            font-size: 1.8rem;
-        }
-        
-        .position-selector input[type="radio"]:checked + label {
-            font-weight: 700;
-            color: var(--light-text);
-            box-shadow: var(--shadow-lg);
-            transform: translateY(-4px);
-        }
-        
-        #pos-first:checked + label { 
-            background: #fbbf24; 
-            color: #78350f; 
-            border-color: #fbbf24;
-        }
-        #pos-second:checked + label { 
-            background: #94a3b8; 
-            color: #1e293b; 
-            border-color: #94a3b8;
-        }
-        #pos-third:checked + label { 
-            background: #fb923c; 
-            color: #7c2d12; 
-            border-color: #fb923c;
-        }
+  .file-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
 
-        .group-info {
-            background: rgba(245, 158, 11, 0.1);
-            border: 2px solid var(--warning-color);
-            color: #78350f;
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin-top: 20px;
-            line-height: 1.7;
-            border-left: 6px solid var(--warning-color);
-            font-weight: 500;
-        }
-        
-        .group-info.team-info {
-            background: rgba(14, 165, 233, 0.1);
-            border-color: var(--secondary-color);
-            color: #0c4a6e;
-            border-left-color: var(--secondary-color);
-        }
+  .file-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color .15s;
+    animation: fadeIn .25s ease;
+  }
+  .file-card:hover { border-color: var(--accent); }
 
-        .btn {
-            width: 100%;
-            padding: 16px 24px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 28px;
-            box-shadow: var(--shadow-sm);
-            letter-spacing: 0.3px;
-        }
-        
-        .btn i {
-            font-size: 1.2rem;
-        }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-        .submit-btn {
-            background: var(--success-color);
-            color: var(--light-text);
-        }
-        .submit-btn:hover:not(:disabled) {
-            background: var(--success-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .submit-btn:active:not(:disabled) {
-            transform: translateY(0);
-        }
-        .submit-btn:disabled {
-            background: #cbd5e1;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+  .file-card-header { display: flex; align-items: flex-start; gap: 10px; }
+  .file-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
+  .file-title { font-weight: 500; font-size: 13px; color: var(--text); word-break: break-word; }
+  .file-meta { font-size: 11px; color: var(--muted); font-family: var(--mono); }
+  .file-tags { display: flex; flex-wrap: wrap; gap: 4px; }
 
-        .cancel-btn {
-            background: var(--danger-color);
-            color: var(--light-text);
-            margin-top: 12px;
-        }
-        .cancel-btn:hover {
-            background: var(--danger-dark);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        .cancel-btn:active {
-            transform: translateY(0);
-        }
+  .tag {
+    display: inline-flex; align-items: center;
+    font-size: 10px; font-family: var(--mono);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px; padding: 2px 6px;
+    color: var(--muted);
+  }
 
-        /* Modal / Overlay */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .modal-overlay.show {
-            display: flex;
-            opacity: 1;
-        }
+  .file-actions { display: flex; gap: 6px; margin-top: 2px; }
 
-        .modal-content {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 16px;
-            text-align: center;
-            position: relative;
-            max-width: 450px;
-            width: 90%;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        }
-        
-        .modal-overlay.show .modal-content {
-            transform: scale(1);
-        }
+  /* ── Status dots ── */
+  .status-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .dot-pending { background: var(--warning); }
+  .dot-done    { background: var(--success); }
 
-        .modal-content.processing i {
-            font-size: 48px;
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 20px;
-        }
-        .modal-content.processing p {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--dark-text);
-        }
+  /* ── Pagination ── */
+  .pagination {
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    margin-top: 24px; font-size: 13px; color: var(--muted);
+  }
 
-        #confirmation-dialog .modal-content i.fa-award {
-            font-size: 4.5rem;
-            color: var(--success-color);
-            margin-bottom: 20px;
-        }
-        
-        #confirmation-dialog h3 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: var(--dark-text);
-        }
-        
-        #confirmation-message {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            margin-bottom: 28px;
-            color: var(--medium-text);
-        }
-        
-        #confirmation-message strong {
-            font-weight: 600;
-            color: var(--dark-text);
-        }
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    max-width: 320px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all .25s;
+    z-index: 999;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  #toast.toast-ok    { border-color: var(--success); color: var(--success); }
+  #toast.toast-err   { border-color: var(--danger);  color: var(--danger); }
+  #toast.toast-info  { border-color: var(--accent);  color: var(--accent); }
 
-        .modal-close-btn {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 28px;
-            cursor: pointer;
-            color: #94a3b8;
-            line-height: 1;
-            transition: all 0.2s ease;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-        }
-        .modal-close-btn:hover {
-            color: var(--dark-text);
-            background: var(--light-bg);
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            color: var(--medium-text);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
+  /* ── Empty state ── */
+  .empty {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+  }
+  .empty svg { opacity: .3; margin-bottom: 12px; }
 
-        /* Responsive */
-        @media (max-width: 640px) {
-            body {
-                padding: 12px;
-            }
-            header {
-                padding: 24px 16px;
-                margin-bottom: 24px;
-            }
-            header h1 {
-                font-size: 1.6rem;
-            }
-            header h1 i {
-                font-size: 1.8rem;
-            }
-            header h2 {
-                font-size: 0.9rem;
-            }
-            .card {
-                padding: 24px 20px;
-                margin-bottom: 16px;
-            }
-            .card h3 {
-                font-size: 1.2rem;
-            }
-            #student-info {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 20px;
-            }
-            #student-info strong {
-                grid-column: 1 / 2;
-            }
-            #student-info span {
-                grid-column: 2 / 3;
-                text-align: right;
-            }
-            #student-info br { 
-                display: none; 
-            }
-            #student-info > * {
-                display: inline-block;
-                width: auto;
-            }
-            #student-info {
-                display: block;
-                line-height: 2;
-            }
-            #student-info strong::after {
-                content: ':';
-                margin-right: 8px;
-            }
-            #student-info span {
-                float: right;
-            }
-            
-            .position-selector {
-                flex-direction: column;
-            }
-            .position-selector label {
-                padding: 16px;
-            }
-            .modal-content {
-                padding: 32px 24px;
-            }
-        }
-        
-    </style>
+  /* ── Config notice ── */
+  .config-notice {
+    background: color-mix(in srgb, var(--warning) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--warning);
+    margin-bottom: 20px;
+  }
+</style>
 </head>
 <body>
+<div class="app">
 
-    <canvas id="confetti-canvas"></canvas>
-
-    <header>
-        <h1><i class="fas fa-trophy"></i> Jamna Vidyapeeth</h1>
-        <h2>Annual Sports Meet 2025-26 - Winner Submission</h2>
-    </header>
-
-    <main class="container">
-
-        <section id="scan-section" class="card">
-            <h3><i class="fas fa-qrcode"></i> Scan Participant QR</h3>
-            
-            <div class="qr-section">
-                <div class="qr-scanner-container" id="qr-scanner-container" style="display: none;">
-                    <div id="qr-reader"></div>
-                    <button class="qr-close-btn" id="qr-close-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="qr-scanner-actions" id="qr-scanner-actions">
-                    <button class="qr-action-btn" id="qr-camera-btn">
-                        <i class="fas fa-camera"></i> Scan with Camera
-                    </button>
-                    <label for="qr-file-input" class="qr-action-btn">
-                        <i class="fas fa-image"></i> Upload QR Image
-                        <input type="file" id="qr-file-input" accept="image/*">
-                    </label>
-                </div>
-            </div>
-            
-            <p id="error-message" class="error-text"></p>
-
-        </section>
-
-        <section id="details-section" class="card" style="display: none;">
-            <h3><i class="fas fa-user-check"></i> Participant Details</h3>
-            
-            <div id="student-info">
-                <strong>Name:</strong> <span id="student-name"></span>
-                <strong>Class:</strong> <span id="student-class"></span>
-                <strong>House:</strong> <span id="student-house"></span>
-                <strong>Gender:</strong> <span id="student-gender"></span>
-            </div>
-
-            <form id="winner-form">
-                <h4>Select Game:</h4>
-                <div id="game-list" class="radio-list">
-                </div>
-                
-                <div id="group-info" class="group-info" style="display: none;">
-                </div>
-
-                <div id="position-selector-wrapper" style="display: none;">
-                    <h4>Select Position:</h4>
-                    <div id="position-selector" class="radio-list position-selector">
-                        <input type="radio" id="pos-first" name="position" value="First">
-                        <label for="pos-first"><i class="fas fa-award"></i> First</label>
-                        
-                        <input type="radio" id="pos-second" name="position" value="Second">
-                        <label for="pos-second"><i class="fas fa-medal"></i> Second</label>
-                        
-                        <input type="radio" id="pos-third" name="position" value="Third">
-                        <label for="pos-third"><i class="fas fa-medal"></i> Third</label>
-                    </div>
-                </div>
-
-                <button type="submit" id="submit-btn" class="btn submit-btn" disabled>
-                    <i class="fas fa-check-circle"></i> Submit Winner
-                </button>
-                <button type="button" id="cancel-btn" class="btn cancel-btn">
-                    <i class="fas fa-times-circle"></i> Cancel
-                </button>
-            </form>
-
-        </section>
-        
-    </main>
-    
-    <footer>
-        &copy; 2025 Jamna Vidyapeeth. All rights reserved.
-    </footer>
-
-    <div id="processing-dialog" class="modal-overlay">
-        <div class="modal-content processing">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Processing...</p>
-        </div>
+  <!-- ── Header ── -->
+  <header>
+    <div class="logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      School File Manager
     </div>
+    <span class="badge">TEACHER PORTAL</span>
+  </header>
 
-    <div id="confirmation-dialog" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close-btn" id="modal-close-btn">&times;</span>
-            <i class="fas fa-award"></i>
-            <h3>Success!</h3>
-            <p id="confirmation-message"></p>
-            <button id="record-another-btn" class="btn submit-btn">
-                <i class="fas fa-qrcode"></i> Record Another Winner
+  <div class="main">
+
+    <!-- ── Sidebar: Config ── -->
+    <aside>
+      <div>
+        <div class="section-label">Connection</div>
+        <div class="config-group">
+          <div>
+            <label>Edge Function URL</label>
+            <input id="cfgUrl" type="url" placeholder="https://xxx.supabase.co/functions/v1/file-manager" />
+          </div>
+          <div>
+            <label>Teacher JWT (Bearer token)</label>
+            <input id="cfgToken" type="password" placeholder="eyJhbGciOiJIUzI1NiIs…" />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-label">File Scope</div>
+        <div class="config-group">
+          <div>
+            <label>Scope</label>
+            <select id="cfgScope" onchange="handleScopeChange()">
+              <option value="private">🔒 Private</option>
+              <option value="common">📚 Class Common</option>
+              <option value="section" selected>📂 Section</option>
+            </select>
+          </div>
+          <div id="gradeWrap">
+            <label>Grade</label>
+            <input id="cfgGrade" type="text" placeholder="e.g. 6" />
+          </div>
+          <div id="sectionWrap">
+            <label>Section</label>
+            <input id="cfgSection" type="text" placeholder="e.g. A1" />
+          </div>
+          <div id="subjectWrap">
+            <label>Subject</label>
+            <input id="cfgSubject" type="text" placeholder="e.g. English" />
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── Content ── -->
+    <div class="content">
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('upload', this)">↑ Upload</button>
+        <button class="tab" onclick="switchTab('files', this)">≡ Files</button>
+      </div>
+
+      <!-- Upload panel -->
+      <div id="panel-upload" class="panel active">
+        <div class="config-notice">
+          ⚠ Configure the Edge Function URL and your JWT token in the sidebar before uploading.
+        </div>
+
+        <!-- Drop zone -->
+        <div class="upload-zone" id="dropZone"
+             onclick="document.getElementById('fileInput').click()"
+             ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p><strong>Drop a file here</strong> or click to browse</p>
+          <p style="margin-top:4px;font-size:11px">PDFs, images, audio, video — any format</p>
+        </div>
+        <input type="file" id="fileInput" onchange="onFileChosen(this.files[0])" />
+
+        <!-- Metadata form -->
+        <div id="uploadForm" style="display:none">
+          <div class="form-row">
+            <div>
+              <label>Display Title *</label>
+              <input id="fldTitle" type="text" placeholder="e.g. Chapter 3 Notes" />
+            </div>
+            <div>
+              <label>Chosen File</label>
+              <input id="fldFilename" type="text" readonly style="opacity:.6" />
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary" id="btnUpload" onclick="startUpload()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Upload File
             </button>
+            <button class="btn btn-ghost" onclick="clearUpload()">Cancel</button>
+          </div>
+
+          <!-- Progress -->
+          <div class="progress-wrap" id="progressWrap">
+            <div class="progress-info">
+              <span id="progressLabel">Uploading…</span>
+              <span id="progressPct">0%</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Files panel -->
+      <div id="panel-files" class="panel">
+        <div class="list-toolbar">
+          <input id="searchInput" type="text" placeholder="🔍  Search files…" oninput="debounceSearch()" />
+          <select id="filterStatus" onchange="loadFiles(1)">
+            <option value="">All statuses</option>
+            <option value="1" selected>Uploaded</option>
+            <option value="0">Pending</option>
+          </select>
+          <button class="btn btn-ghost" onclick="loadFiles(1)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+            Refresh
+          </button>
+        </div>
+
+        <div id="fileGrid" class="file-grid"></div>
+        <div class="pagination" id="paginationBar"></div>
+      </div>
     </div>
-    <script>
-        
-// ==================================================
-// 1. GLOBAL DATA & VARIABLES
-// ==================================================
+  </div>
+</div>
 
-/**
- * Global participants array.
- * This array is expanded to include various game types and scenarios
- * as requested for demonstration.
- */
-let participants = [];
+<!-- Toast notification -->
+<div id="toast"></div>
 
-// QR Code Scanner Variable
-let html5QrCode;
-// Global state
-let currentStudentParticipations = [];
-let selectedGame = null;
+<!-- Rename modal (lightweight) -->
+<div id="renameModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center">
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;width:360px;max-width:90vw">
+    <div style="font-weight:600;margin-bottom:12px">Rename File</div>
+    <input id="renameInput" type="text" placeholder="New display name" />
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary" onclick="confirmRename()">Save</button>
+      <button class="btn btn-ghost" onclick="closeRename()">Cancel</button>
+    </div>
+  </div>
+</div>
 
-// ==================================================
-// 2. DOM ELEMENT SELECTORS
-// ==================================================
-const scanSection = document.getElementById('scan-section');
-const detailsSection = document.getElementById('details-section');
-const qrScannerContainer = document.getElementById('qr-scanner-container');
-const qrScannerActions = document.getElementById('qr-scanner-actions');
-const qrReader = document.getElementById('qr-reader');
-const errorMessage = document.getElementById('error-message');
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+//  State
+// ─────────────────────────────────────────────────────────────────────────────
+let chosenFile = null;
+let currentPage = 1;
+let renameFileId = null;
+let searchDebounce = null;
 
-// Details Form
-const studentNameEl = document.getElementById('student-name');
-const studentClassEl = document.getElementById('student-class');
-const studentHouseEl = document.getElementById('student-house');
-const studentGenderEl = document.getElementById('student-gender');
-const winnerForm = document.getElementById('winner-form');
-const gameListEl = document.getElementById('game-list');
-const groupInfoEl = document.getElementById('group-info');
-const positionSelectorWrapper = document.getElementById('position-selector-wrapper');
-const positionSelectorEl = document.getElementById('position-selector');
-const submitBtn = document.getElementById('submit-btn');
+// ─────────────────────────────────────────────────────────────────────────────
+//  Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+function cfg() {
+  return {
+    url:     document.getElementById('cfgUrl').value.trim().replace(/\/$/, ''),
+    token:   document.getElementById('cfgToken').value.trim(),
+    scope:   document.getElementById('cfgScope').value,
+    grade:   document.getElementById('cfgGrade').value.trim() || null,
+    section: document.getElementById('cfgSection').value.trim() || null,
+    subject: document.getElementById('cfgSubject').value.trim() || null,
+  };
+}
 
-// Modals
-const processingDialog = document.getElementById('processing-dialog');
-const confirmationDialog = document.getElementById('confirmation-dialog');
-const confirmationMessageEl = document.getElementById('confirmation-message');
-
-// ==================================================
-// 3. QR SCANNER LOGIC (from snippet, integrated)
-// ==================================================
-
-/**
- * Starts the camera-based QR scanner.
- */
-function startQRScanner() {
-    qrScannerContainer.style.display = 'block';
-    qrScannerActions.style.display = 'none';
-    clearError();
-
-    // Use Html5QrcodeScannerState if available, otherwise fallback
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
-
-    html5QrCode = new Html5Qrcode("qr-reader");
-    const qrConfig = {
-      fps: 60,
-      qrbox: {
-           width: 250,
-           height: 250
-      },
-      aspectRatio: 1.0
-    };
-
-    html5QrCode.start({
-         facingMode: "environment"
-      },
-      qrConfig,
-      onQRScanSuccess,
-      onQRScanFailure
-    ).catch((err) => {
-      console.error("Error starting QR scanner:", err);
-      showError("Couldn't access camera. Please check permissions and try again.");
-      closeQRScanner();
+async function callEdge(body) {
+  const { url, token } = cfg();
+  if (!url)   { toast('Enter the Edge Function URL in sidebar', 'err'); return null; }
+  if (!token) { toast('Enter your JWT token in sidebar', 'err'); return null; }
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify(body),
     });
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Unknown error');
+    return data;
+  } catch (e) {
+    toast(e.message, 'err');
+    return null;
+  }
 }
 
-/**
- * Handles QR file selection from device storage.
- */
-function handleQRFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    qrScannerActions.style.display = 'none';
-    showProcessingDialog();
-    clearError();
-
-    if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("qr-reader");
-    }
-
-    html5QrCode.scanFile(file, true)
-      .then(decodedText => {
-          hideProcessingDialog();
-          processQRCode(decodedText);
-      })
-      .catch(err => {
-          hideProcessingDialog();
-          console.error("Error scanning QR file:", err);
-          showError("Could not read QR code. Please try another image or use camera.");
-          resetQRScannerActions();
-      });
-
-    // Reset file input
-    event.target.value = '';
+function toast(msg, type = 'info') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show toast-${type}`;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.className = ''; }, 3500);
 }
 
-/**
- * Callback for successful QR code scan (from camera).
- */
-function onQRScanSuccess(decodedText, decodedResult) {
-    if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-            console.log("QR Code scanning stopped");
-            processQRCode(decodedText);
-        }).catch((err) => {
-            console.error("Error stopping QR scanner:", err);
-            processQRCode(decodedText); // Process anyway
-        });
-    }
+function fileIcon(mimeType) {
+  if (!mimeType) return '📄';
+  if (mimeType.startsWith('video/')) return '🎬';
+  if (mimeType.startsWith('audio/')) return '🎵';
+  if (mimeType.startsWith('image/')) return '🖼️';
+  if (mimeType === 'application/pdf') return '📕';
+  if (mimeType.includes('word') || mimeType.includes('document')) return '📝';
+  if (mimeType.includes('sheet') || mimeType.includes('excel')) return '📊';
+  if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return '📊';
+  if (mimeType.startsWith('text/')) return '📃';
+  return '📦';
 }
 
-/**
- * Callback for QR scan failure (silent).
- */
-function onQRScanFailure(error) {
-    // This fires constantly when no QR code is detected.
-    // console.warn("QR Scan Failure:", error);
+function fmtBytes(bytes) {
+  if (!bytes) return '—';
+  const units = ['B', 'KB', 'MB', 'GB'];
+  let i = 0; let v = bytes;
+  while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
+  return `${v.toFixed(i > 0 ? 1 : 0)} ${units[i]}`;
 }
 
-/**
- * Closes the QR scanner and resets the UI.
- */
-function closeQRScanner() {
-    // Use Html5QrcodeScannerState if available, otherwise fallback
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2, NOT_STARTED: 0, PAUSED: 1 };
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
 
-    if (html5QrCode) {
-      try {
-        if (html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-            html5QrCode.stop().then(() => {
-                html5QrCode.clear();
-                html5QrCode = null;
-                resetQRScannerActions();
-            }).catch(err => {
-                console.error("Error stopping scanner:", err);
-                html5QrCode.clear(); // Force clear
-                html5QrCode = null;
-                resetQRScannerActions();
-            });
-        } else {
-            html5QrCode.clear();
-            html5QrCode = null;
-            resetQRScannerActions();
-        }
-      } catch (err) {
-           console.error("Error clearing scanner:", err);
-           html5QrCode = null;
-           resetQRScannerActions();
+// ─────────────────────────────────────────────────────────────────────────────
+//  Scope sidebar
+// ─────────────────────────────────────────────────────────────────────────────
+function handleScopeChange() {
+  const scope = document.getElementById('cfgScope').value;
+  document.getElementById('gradeWrap').style.display   = scope === 'private' ? 'none' : '';
+  document.getElementById('sectionWrap').style.display = scope === 'section' ? '' : 'none';
+  document.getElementById('subjectWrap').style.display = scope === 'private' ? 'none' : '';
+}
+handleScopeChange();
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Tabs
+// ─────────────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(`panel-${name}`).classList.add('active');
+  if (name === 'files') loadFiles(1);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Upload flow
+// ─────────────────────────────────────────────────────────────────────────────
+function onDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
+function onDragLeave()  { document.getElementById('dropZone').classList.remove('drag-over'); }
+function onDrop(e)      { e.preventDefault(); onDragLeave(); if (e.dataTransfer.files[0]) onFileChosen(e.dataTransfer.files[0]); }
+
+function onFileChosen(file) {
+  if (!file) return;
+  chosenFile = file;
+  document.getElementById('uploadForm').style.display = 'block';
+  document.getElementById('fldFilename').value = file.name;
+  document.getElementById('fldTitle').value = file.name.replace(/\.[^.]+$/, '');
+  document.getElementById('fldTitle').focus();
+}
+
+function clearUpload() {
+  chosenFile = null;
+  document.getElementById('uploadForm').style.display = 'none';
+  document.getElementById('fileInput').value = '';
+  document.getElementById('progressWrap').classList.remove('visible');
+}
+
+async function startUpload() {
+  if (!chosenFile) return;
+  const { scope, grade, section, subject } = cfg();
+  const title = document.getElementById('fldTitle').value.trim();
+  if (!title) { toast('Please enter a display title', 'err'); return; }
+
+  document.getElementById('btnUpload').disabled = true;
+  document.getElementById('progressWrap').classList.add('visible');
+  setProgress(0, 'Requesting upload URL…');
+
+  // Step 1: get presigned upload URL
+  const meta = await callEdge({
+    action:    'get_upload_url',
+    title,
+    filename:  chosenFile.name,
+    mime_type: chosenFile.type || null,
+    size_bytes: chosenFile.size,
+    scope,
+    grade,
+    section,
+    subject,
+  });
+  if (!meta) { resetUploadBtn(); return; }
+
+  setProgress(15, 'Uploading to cloud…');
+
+  // Step 2: PUT the file directly to R2 via the presigned URL
+  try {
+    await uploadWithProgress(meta.upload_url, chosenFile);
+  } catch (e) {
+    toast(`Upload failed: ${e.message}`, 'err');
+    resetUploadBtn(); return;
+  }
+
+  setProgress(95, 'Confirming…');
+
+  // Step 3: confirm
+  const confirmed = await callEdge({ action: 'confirm_upload', file_id: meta.file_id });
+  if (!confirmed) { resetUploadBtn(); return; }
+
+  setProgress(100, 'Upload complete ✓');
+  toast('File uploaded successfully', 'ok');
+  setTimeout(() => { clearUpload(); }, 1200);
+  resetUploadBtn();
+}
+
+function uploadWithProgress(url, file) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', url);
+    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        const pct = 15 + Math.round((e.loaded / e.total) * 80);
+        setProgress(pct, `Uploading… ${fmtBytes(e.loaded)} / ${fmtBytes(e.total)}`);
       }
-    } else {
-         resetQRScannerActions();
-    }
-}
-
-/**
- * Resets the QR scanner UI elements to their initial state.
- * (Renamed from snippet's `resetUI` to avoid conflicts).
- */
-function resetQRScannerActions() {
-    qrScannerContainer.style.display = 'none';
-    qrScannerActions.style.display = 'flex';
-    hideProcessingDialog();
-    qrReader.innerHTML = ''; // Clear the reader div
-}
-
-// Cleanup listeners from snippet
-window.addEventListener('beforeunload', function () {
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
-    if (html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-        html5QrCode.stop().catch(err => console.error("Error stopping scanner on unload:", err));
-    }
-});
-
-document.addEventListener('visibilitychange', function () {
-    const Html5QrcodeScannerState = window.Html5QrcodeScannerState || { SCANNING: 2 };
-    if (document.hidden && html5QrCode && html5QrCode.getState() === Html5QrcodeScannerState.SCANNING) {
-        html5QrCode.stop().catch(err => console.error("Error stopping scanner on visibility change:", err));
-    }
-});
-
-// ==================================================
-// 4. CORE APPLICATION LOGIC
-// ==================================================
-
-/**
- * Extracts the token from a URL or returns the original string.
- */
-function extractTokenOrReturn(input) {
-    try {
-      const url = new URL(input);
-      const token = url.searchParams.get("token");
-      return token !== null ? token : input;
-    } catch (error) {
-      // Not a valid URL, return the input as is
-      return input;
-    }
-}
-
-/**
- * Processes the decoded QR code text.
- * Finds the student and displays their details and games.
- */
-async function processQRCode(decodedText) {
-    console.log("QR Code detected:", decodedText);
-
-    const accessToken = extractTokenOrReturn(decodedText);
-    
-    showProcessingDialog();
-
-    participants = await invokeFunction('get_student_participations', {
-            p_access_token: accessToken
-         }, false);
-
-    // Find all valid participations for this student
-    const studentParticipations = participants.filter(p => 
-        p.access_token === accessToken && p.student_name !== null
-    );
-
-    closeQRScanner(); // This will also hide processing dialog via resetQRScannerActions
-    hideProcessingDialog(); // Call it again to be sure
-
-    if (studentParticipations.length === 0) {
-      showError(`No participant found with this QR code (Token: ${accessToken}). Please try again.`);
-      resetQRScannerActions();
-      return;
-    }
-    
-    // Store participations globally
-    currentStudentParticipations = studentParticipations;
-    
-    // Display student info (from the first record, it's all the same student)
-    displayStudentDetails(studentParticipations[0]);
-    
-    // Display game options
-    displayGameOptions(studentParticipations);
-
-    // Show the details section
-    scanSection.style.display = 'none';
-    detailsSection.style.display = 'block';
-}
-
-/**
- * Populates the student details card.
- */
-function displayStudentDetails(student) {
-    studentNameEl.textContent = student.student_name;
-    studentClassEl.textContent = 'Class ' + student.student_class;
-    studentHouseEl.textContent = student.student_house;
-    studentGenderEl.textContent = student.student_gender === 'M' ? 'Male' : 'Female';
-    
-    // Set dynamic house color
-    studentHouseEl.className = `house-${student.student_house}`;
-}
-
-/**
- * Populates the list of games for the student.
- */
-function displayGameOptions(participations) {
-    gameListEl.innerHTML = ''; // Clear previous list
-    participations.forEach(game => {
-        const inputId = `game-${game.event_id}`;
-        
-        const gameItem = document.createElement('div');
-        gameItem.innerHTML = `
-            <input type="radio" id="${inputId}" name="game" value="${game.event_id}">
-            <label for="${inputId}">
-                ${game.game_name}
-                <div class="game-details">${game.class_category} / ${game.game_type}</div>
-            </label>
-        `;
-        gameListEl.appendChild(gameItem);
-    });
-    
-    // Add event listener to the list
-    gameListEl.addEventListener('change', handleGameSelection);
-}
-
-/**
- * Handles the logic when a user selects a game.
- */
-function handleGameSelection(event) {
-    const eventId = parseInt(event.target.value);
-    selectedGame = currentStudentParticipations.find(p => p.event_id === eventId);
-    
-    // Reset position selection and group info
-    winnerForm.reset(); // This clears radio buttons
-    event.target.checked = true; // Re-check the game radio
-    submitBtn.disabled = true;
-    groupInfoEl.style.display = 'none';
-    groupInfoEl.innerHTML = '';
-    groupInfoEl.className = 'group-info'; // Reset class
-    
-    if (!selectedGame) return;
-
-    // Show position selector
-    positionSelectorWrapper.style.display = 'block';
-
-    // Handle Grouped games
-    if (selectedGame.game_type === 'Grouped') {
-        const groupMembers = participants.filter(p => 
-            p.event_id === selectedGame.event_id &&
-            p.participant_group_id === selectedGame.participant_group_id &&
-            p.student_name !== null
-        );
-        const memberNames = groupMembers.map(m => m.student_name).join(', ');
-        groupInfoEl.innerHTML = `
-            <strong><i class="fas fa-users"></i> Grouped Game:</strong>
-            <p>This entry is for a group. All members listed below will receive the same position.</p>
-            <p><strong>Members:</strong> ${memberNames}</p>
-        `;
-        groupInfoEl.style.display = 'block';
-    }
-    // Handle Team games
-    else if (selectedGame.game_type === 'Team') {
-        const house = selectedGame.student_house;
-        groupInfoEl.innerHTML = `
-            <strong><i class="fas fa-shield-alt"></i> Team Game:</strong>
-            <p>This entry is for a team. The position will be recorded for the entire <strong>House ${house}</strong> team for this game.</p>
-        `;
-        groupInfoEl.className = 'group-info team-info'; // Add team-specific class
-        groupInfoEl.style.display = 'block';
-    }
-    // Individual game: no info box needed.
-}
-
-/**
- * Main form submission handler.
- */
-async function handleSubmit(event) {
-    event.preventDefault();
-    
-    const selectedPositionEl = document.querySelector('input[name="position"]:checked');
-    
-    if (!selectedGame || !selectedPositionEl) {
-        showError("Please select a game and a position.");
-        return;
-    }
-    
-    const position = selectedPositionEl.value;
-    
-    // Build the data object to be "sent"
-    let submissionData = {
-        event_id: selectedGame.event_id,
-        game_name: selectedGame.game_name,
-        game_type: selectedGame.game_type,
-        position: position,
-        target: {}
     };
-
-    let confirmationMessage = '';
-
-    // --- Handle logic based on game type ---
-    
-    if (selectedGame.game_type === 'Individual') {
-        submissionData.target = {
-            type: 'student',
-            access_token: selectedGame.access_token,
-            student_name: selectedGame.student_name
-        };
-        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>${selectedGame.student_name}</strong> in <strong>${selectedGame.game_name}</strong>.`;
-    
-    } else if (selectedGame.game_type === 'Grouped') {
-        const groupMembers = participants.filter(p => 
-            p.event_id === selectedGame.event_id &&
-            p.participant_group_id === selectedGame.participant_group_id &&
-            p.student_name !== null
-        );
-        
-        submissionData.target = {
-            type: 'group',
-            participant_group_id: selectedGame.participant_group_id,
-            members: groupMembers.map(m => ({ access_token: m.access_token, name: m.student_name }))
-        };
-        const memberNames = groupMembers.map(m => m.student_name).join(' & ');
-        confirmationMessage = `Recorded <strong>${position}</strong> position for the group (<strong>${memberNames}</strong>) in <strong>${selectedGame.game_name}</strong>.`;
-
-    } else if (selectedGame.game_type === 'Team') {
-        submissionData.target = {
-            type: 'team',
-            house: selectedGame.student_house
-        };
-        confirmationMessage = `Recorded <strong>${position}</strong> position for <strong>House ${selectedGame.student_house}</strong> in <strong>${selectedGame.game_name}</strong>.`;
-    }
-    
-    // Show processing, simulate server call
-    showProcessingDialog();
-    await handleServerSubmission(submissionData); // Placeholder function
-    hideProcessingDialog();
-    
-    // Show success
-    showConfirmation(confirmationMessage);
-    launchConfetti();
+    xhr.onload  = () => (xhr.status < 300 ? resolve() : reject(new Error(`HTTP ${xhr.status}`)));
+    xhr.onerror = () => reject(new Error('Network error'));
+    xhr.send(file);
+  });
 }
 
-/**
- * Placeholder function to simulate server submission.
- * @param {object} data - The data to be sent.
- */
-function handleServerSubmission(data) {
-    console.log("Submitting to server (mock):", JSON.stringify(data, null, 2));
-    
-    // In a real application, this would be a fetch() POST request.
-    // e.g., fetch('/api/record-winner', { method: 'POST', body: JSON.stringify(data), ... })
-    
-    return new Promise(resolve => setTimeout(resolve, 750)); // Simulate network delay
+function setProgress(pct, label) {
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = label;
 }
 
-/**
- * Resets the entire application to the initial scanning state.
- */
-function resetApp() {
-    // Hide modals and details section
-    confirmationDialog.classList.remove('show');
-    detailsSection.style.display = 'none';
-    
-    // Show scan section
-    scanSection.style.display = 'block';
-    
-    // Reset form and state
-    winnerForm.reset();
-    gameListEl.innerHTML = '';
-    groupInfoEl.style.display = 'none';
-    positionSelectorWrapper.style.display = 'none';
-    submitBtn.disabled = true;
-    
-    currentStudentParticipations = [];
-    selectedGame = null;
-    
-    clearError();
-    resetQRScannerActions();
+function resetUploadBtn() {
+  document.getElementById('btnUpload').disabled = false;
 }
 
-// ==================================================
-// 5. UTILITY & HELPER FUNCTIONS
-// ==================================================
-
-// --- Modal Controls ---
-function showProcessingDialog() {
-    processingDialog.classList.add('show');
-}
-function hideProcessingDialog() {
-    processingDialog.classList.remove('show');
-}
-function showConfirmation(message) {
-    confirmationMessageEl.innerHTML = message;
-    detailsSection.style.display = 'none';
-    confirmationDialog.classList.add('show');
+// ─────────────────────────────────────────────────────────────────────────────
+//  File listing
+// ─────────────────────────────────────────────────────────────────────────────
+function debounceSearch() {
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => loadFiles(1), 400);
 }
 
-// --- Error Messaging ---
-function showError(message) {
-    errorMessage.textContent = message;
+async function loadFiles(page = 1) {
+  currentPage = page;
+  const { scope, grade, section, subject } = cfg();
+  const search       = document.getElementById('searchInput').value.trim() || undefined;
+  const statusFilter = document.getElementById('filterStatus').value;
+  const upload_status = statusFilter !== '' ? Number(statusFilter) : undefined;
+
+  const grid = document.getElementById('fileGrid');
+  grid.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0">Loading…</div>';
+
+  const data = await callEdge({
+    action: 'list',
+    scope:  scope || undefined,
+    grade:  grade || undefined,
+    section: section || undefined,
+    subject: subject || undefined,
+    upload_status,
+    search,
+    page,
+    per_page: 20,
+    sort_by: 'created_at',
+    sort_order: 'desc',
+  });
+
+  if (!data) { grid.innerHTML = ''; return; }
+
+  if (!data.files.length) {
+    grid.innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <p>No files found</p>
+      </div>`;
+    document.getElementById('paginationBar').innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = data.files.map(f => `
+    <div class="file-card">
+      <div class="file-card-header">
+        <div class="file-icon">${fileIcon(f.mime_type)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="file-title">${escHtml(f.title)}</div>
+          <div class="file-meta">${fmtBytes(f.size_bytes)} · ${fmtDate(f.created_at)}</div>
+        </div>
+      </div>
+      <div class="file-tags">
+        ${f.scope === 'private'  ? '<span class="tag">🔒 private</span>' : ''}
+        ${f.scope === 'common'   ? `<span class="tag">📚 grade ${f.grade} · common</span>` : ''}
+        ${f.scope === 'section'  ? `<span class="tag">📂 ${f.grade}-${f.section} · ${f.subject}</span>` : ''}
+        ${f.mime_type ? `<span class="tag">${f.mime_type.split('/')[1] || f.mime_type}</span>` : ''}
+        <span class="tag">
+          <span class="status-dot ${f.upload_status === 1 ? 'dot-done' : 'dot-pending'}"></span>
+          ${f.upload_status === 1 ? 'ready' : 'pending'}
+        </span>
+      </div>
+      <div class="file-meta">↑ ${escHtml(f.teacher_name)}</div>
+      <div class="file-actions">
+        ${f.upload_status === 1 ? `<button class="btn btn-ghost btn-sm" onclick="downloadFile('${f.id}')">↓ Download</button>` : ''}
+        <button class="btn btn-ghost btn-sm" onclick="openRename('${f.id}', '${escHtml(f.title).replace(/'/g,"\\'")}')">✎ Rename</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteFile('${f.id}')">✕</button>
+      </div>
+    </div>
+  `).join('');
+
+  // Pagination
+  const { page: pg, total_pages: total } = data.pagination;
+  const bar = document.getElementById('paginationBar');
+  if (total <= 1) { bar.innerHTML = ''; return; }
+  bar.innerHTML = `
+    <button class="btn btn-ghost btn-sm" onclick="loadFiles(${pg - 1})" ${pg <= 1 ? 'disabled' : ''}>← Prev</button>
+    <span>Page ${pg} of ${total}</span>
+    <button class="btn btn-ghost btn-sm" onclick="loadFiles(${pg + 1})" ${pg >= total ? 'disabled' : ''}>Next →</button>
+  `;
 }
-function clearError() {
-    errorMessage.textContent = '';
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  Download
+// ─────────────────────────────────────────────────────────────────────────────
+async function downloadFile(fileId) {
+  toast('Generating download link…', 'info');
+  const data = await callEdge({ action: 'get_download_url', file_id: fileId });
+  if (!data) return;
+  // Open in new tab (supports streaming/progressive load for video & audio)
+  window.open(data.download_url, '_blank');
+  toast('Download link opened in new tab', 'ok');
 }
 
-// --- Confetti (from snippet) ---
-function launchConfetti() {
-    const canvas = document.getElementById('confetti-canvas');
-    const myConfetti = confetti.create(canvas, {
-        resize: true,
-        useWorker: true
-    });
-    
-    const count = 200;
-    const defaults = {
-        origin: { y: 0.7 }
-    };
-
-    function fire(particleRatio, opts) {
-        myConfetti(Object.assign({}, defaults, opts, {
-            particleCount: Math.floor(count * particleRatio)
-        }));
-    }
-
-    fire(0.25, { spread: 26, startVelocity: 55 });
-    fire(0.2, { spread: 60 });
-    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-    fire(0.1, { spread: 120, startVelocity: 45 });
+// ─────────────────────────────────────────────────────────────────────────────
+//  Rename
+// ─────────────────────────────────────────────────────────────────────────────
+function openRename(fileId, currentTitle) {
+  renameFileId = fileId;
+  document.getElementById('renameInput').value = currentTitle;
+  const modal = document.getElementById('renameModal');
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('renameInput').focus(), 50);
 }
-
-
-// ==================================================
-// 6. EVENT LISTENERS
-// ==================================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    // QR Scanner Buttons
-    document.getElementById('qr-camera-btn').addEventListener('click', startQRScanner);
-    document.getElementById('qr-file-input').addEventListener('change', handleQRFileSelect);
-    document.getElementById('qr-close-btn').addEventListener('click', closeQRScanner);
-
-    // Form Listeners
-    winnerForm.addEventListener('submit', handleSubmit);
-    document.getElementById('cancel-btn').addEventListener('click', resetApp);
-    
-    // Enable submit button only when a position is selected
-    positionSelectorEl.addEventListener('change', () => {
-        if (document.querySelector('input[name="position"]:checked')) {
-            submitBtn.disabled = false;
-        }
-    });
-
-    // Modal Close Buttons
-    document.getElementById('modal-close-btn').addEventListener('click', resetApp);
-    document.getElementById('record-another-btn').addEventListener('click', resetApp);
+function closeRename() {
+  document.getElementById('renameModal').style.display = 'none';
+  renameFileId = null;
+}
+async function confirmRename() {
+  const newTitle = document.getElementById('renameInput').value.trim();
+  if (!newTitle) { toast('Title cannot be empty', 'err'); return; }
+  const data = await callEdge({ action: 'rename', file_id: renameFileId, new_title: newTitle });
+  if (!data) return;
+  toast('File renamed', 'ok');
+  closeRename();
+  loadFiles(currentPage);
+}
+// Close modal on backdrop click
+document.getElementById('renameModal').addEventListener('click', function(e) {
+  if (e.target === this) closeRename();
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+//  Delete
+// ─────────────────────────────────────────────────────────────────────────────
+async function deleteFile(fileId) {
+  if (!confirm('Delete this file? This cannot be undone.')) return;
+  const data = await callEdge({ action: 'delete', file_id: fileId });
+  if (!data) return;
+  toast('File deleted', 'ok');
+  loadFiles(currentPage);
+}
 
-    </script>
+// ─────────────────────────────────────────────────────────────────────────────
+//  Util
+// ─────────────────────────────────────────────────────────────────────────────
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
 </body>
 </html>
