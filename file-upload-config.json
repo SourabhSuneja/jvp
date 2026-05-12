@@ -1,0 +1,40 @@
+{
+  "_comment": "All sizes are in bytes. general_max_bytes is the hard ceiling for any single upload regardless of type.",
+  "general_max_bytes": 524288000,
+  "mime_limits": {
+    "application/pdf": 104857600,
+
+    "image/jpeg": 5242880,
+    "image/png":  5242880,
+    "image/gif":  5242880,
+    "image/webp": 5242880,
+    "image/heic": 5242880,
+
+    "video/mp4":  524288000,
+    "video/quicktime": 524288000,
+    "video/x-msvideo": 524288000,
+    "video/x-matroska": 524288000,
+    "video/webm": 524288000,
+    "video/x-m4v": 524288000,
+
+    "application/msword": 26214400,
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": 26214400,
+
+    "application/vnd.ms-excel": 26214400,
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": 26214400,
+
+    "application/vnd.ms-powerpoint": 26214400,
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": 26214400
+  },
+  "allowed_mime_types": [
+    "application/pdf",
+    "image/jpeg", "image/png", "image/gif", "image/webp", "image/heic",
+    "video/mp4", "video/quicktime", "video/x-msvideo", "video/x-matroska", "video/webm", "video/x-m4v",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  ]
+}
