@@ -27,6 +27,7 @@
     "application/vnd.openxmlformats-officedocument.presentationml.presentation": 26214400
   },
   "allowed_mime_types": [
+    "application/pdf",
     "image/jpeg", "image/png", "image/gif", "image/webp", "image/heic",
     "video/mp4", "video/quicktime", "video/x-msvideo", "video/x-matroska", "video/webm", "video/x-m4v",
     "application/msword",
