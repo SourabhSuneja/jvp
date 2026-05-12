@@ -1,6 +1,6 @@
 {
   "_comment": "All sizes are in bytes. general_max_bytes is the hard ceiling for any single upload regardless of type.",
-  "general_max_bytes": 524288000,
+  "general_max_bytes": 824288000,
   "mime_limits": {
     "application/pdf": 104857600,
 
@@ -10,7 +10,7 @@
     "image/webp": 5242880,
     "image/heic": 5242880,
 
-    "video/mp4":  524288000,
+    "video/mp4":  824288000,
     "video/quicktime": 524288000,
     "video/x-msvideo": 524288000,
     "video/x-matroska": 524288000,
