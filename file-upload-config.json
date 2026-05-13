@@ -1,6 +1,6 @@
 {
   "_comment": "All sizes are in bytes. general_max_bytes is the hard ceiling for any single upload regardless of type.",
-  "general_max_bytes": 824288000,
+  "general_max_bytes": 10000000,
   "mime_limits": {
     "application/pdf": 104857600,
 
