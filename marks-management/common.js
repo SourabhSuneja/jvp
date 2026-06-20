@@ -31,7 +31,8 @@ let subjects = [
   "B.St.",
   "Economics",
   "History",
-  "Pol. Sci."
+  "Pol. Sci.",
+  "Photos & Videos"
 ];
 
 let optionalSubjects = {
