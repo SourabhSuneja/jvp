@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JVP · File Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  :root {
+    --bg:       #080c10;
+    --surface:  #0e1419;
+    --panel:    #141c24;
+    --border:   #1e2d3d;
+    --border2:  #243344;
+    --text:     #e8f0f7;
+    --muted:    #5b7a94;
+    --accent:   #00d4aa;
+    --accent2:  #00b594;
+    --danger:   #ff4d6d;
+    --warn:     #fbbf24;
+    --info:     #3b82f6;
+    --pdf:      #ff5252;
+    --word:     #4285f4;
+    --radius:   10px;
+    --radius-lg:16px;
+    --font:     'Syne', sans-serif;
+    --mono:     'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+
+  /* ── LAYOUT ── */
+  #app { height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ── LOGIN SCREEN ── */
+  #login-screen {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px; background: var(--bg);
+    position: relative; overflow: hidden;
+  }
+
+  #login-screen::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 20%, rgba(0,212,170,.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(59,130,246,.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .login-card {
+    width: 100%; max-width: 400px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px 36px;
+    position: relative;
+    animation: slideUp .4s ease;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .login-logo {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, var(--accent), var(--info));
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(0,212,170,.25);
+  }
+  .login-logo svg { width: 26px; height: 26px; fill: #fff; }
+
+  .login-card h1 {
+    font-size: 22px; font-weight: 800; letter-spacing: -.3px;
+    color: var(--text); margin-bottom: 4px;
+  }
+  .login-card p {
+    font-size: 13px; color: var(--muted); margin-bottom: 32px; font-weight: 500;
+  }
+
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block; font-size: 11px; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 7px;
+  }
+
+  .input-wrap { position: relative; }
+  .input-wrap svg {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; stroke: var(--muted); pointer-events: none;
+  }
+
+  .field input {
+    width: 100%; height: 46px;
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 0 14px 0 40px;
+    font-family: var(--mono); font-size: 14px; color: var(--text);
+    outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  .field input::placeholder { color: var(--muted); }
+  .field input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,212,170,.12);
+  }
+
+  .domain-hint {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted); margin-top: 5px; padding-left: 2px;
+  }
+
+  #login-error {
+    background: rgba(255,77,109,.12); border: 1px solid rgba(255,77,109,.3);
+    border-radius: var(--radius); padding: 10px 14px;
+    font-size: 13px; color: var(--danger);
+    margin-bottom: 16px; display: none;
+  }
+
+  .btn {
+    width: 100%; height: 48px;
+    background: var(--accent); color: #051612;
+    font-family: var(--font); font-size: 15px; font-weight: 800;
+    border: none; border-radius: var(--radius);
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background .2s, transform .1s, box-shadow .2s;
+    box-shadow: 0 4px 16px rgba(0,212,170,.28);
+  }
+  .btn:hover:not(:disabled) { background: #00e8bb; box-shadow: 0 6px 22px rgba(0,212,170,.38); }
+  .btn:active:not(:disabled) { transform: scale(.98); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ── MAIN APP ── */
+  #main-app { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    display: flex; align-items: center; gap: 14px;
+    padding: 0 20px; height: 60px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .back-btn {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--panel); border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background .15s;
+    flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--border); }
+  .back-btn svg { width: 18px; height: 18px; stroke: var(--text); }
+
+  .topbar-info { flex: 1; min-width: 0; }
+  .topbar-title { font-size: 16px; font-weight: 800; color: var(--text); }
+  .topbar-sub {
+    font-size: 11px; font-weight: 600; color: var(--accent);
+    letter-spacing: .04em; font-family: var(--mono);
+  }
+
+  .topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 9px;
+    background: var(--panel); border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background .15s;
+  }
+  .icon-btn:hover { background: var(--border); }
+  .icon-btn svg { width: 17px; height: 17px; stroke: var(--muted); }
+
+  .signout-btn {
+    height: 32px; padding: 0 14px;
+    background: transparent; border: 1px solid var(--border2);
+    border-radius: 8px; cursor: pointer;
+    font-family: var(--font); font-size: 12px; font-weight: 700;
+    color: var(--muted); transition: all .15s;
+  }
+  .signout-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb {
+    display: flex; align-items: center; gap: 4px;
+    padding: 10px 20px; overflow-x: auto; flex-shrink: 0;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    scrollbar-width: none;
+  }
+  .breadcrumb::-webkit-scrollbar { display: none; }
+
+  .bc-seg {
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    white-space: nowrap; cursor: pointer;
+    transition: color .15s; padding: 2px 4px; border-radius: 5px;
+  }
+  .bc-seg:hover { color: var(--text); }
+  .bc-seg.active { color: var(--text); cursor: default; }
+  .bc-chevron { color: var(--border2); font-size: 12px; }
+
+  /* ── PATH BAR ── */
+  .path-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 20px; flex-shrink: 0;
+    background: rgba(0,212,170,.04);
+    border-bottom: 1px solid rgba(0,212,170,.1);
+  }
+  .path-bar svg { width: 14px; height: 14px; stroke: var(--accent); flex-shrink: 0; }
+  .path-bar-text {
+    flex: 1; font-size: 12px; font-weight: 700; color: var(--accent);
+    font-family: var(--mono); letter-spacing: .02em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .refresh-btn {
+    background: none; border: none; cursor: pointer;
+    padding: 4px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .refresh-btn:hover { background: rgba(0,212,170,.12); }
+  .refresh-btn svg { width: 14px; height: 14px; stroke: var(--muted); }
+
+  /* ── CONTENT ── */
+  .content { flex: 1; overflow-y: auto; padding: 16px; position: relative; }
+
+  /* ── FOLDER CARD ── */
+  .folder-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px; margin-bottom: 8px;
+    cursor: pointer; transition: border-color .2s, background .2s, transform .15s;
+  }
+  .folder-card:hover {
+    border-color: var(--border2);
+    background: var(--panel);
+    transform: translateX(2px);
+  }
+  .folder-card:active { transform: scale(.99); }
+
+  .folder-icon {
+    width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(99,102,241,.12);
+  }
+  .folder-icon.common { background: rgba(251,191,36,.1); }
+  .folder-icon svg { width: 22px; height: 22px; }
+  .folder-icon svg.regular { stroke: #818cf8; fill: none; }
+  .folder-icon svg.common-icon { stroke: var(--warn); fill: none; }
+
+  .folder-info { flex: 1; min-width: 0; }
+  .folder-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .folder-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .chevron svg { width: 16px; height: 16px; stroke: var(--border2); }
+
+  /* ── FILE CARD ── */
+  .file-card {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px; margin-bottom: 8px;
+    transition: border-color .2s;
+  }
+  .file-card:hover { border-color: var(--border2); }
+
+  .file-icon {
+    width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .file-icon svg { width: 20px; height: 20px; }
+
+  .file-info { flex: 1; min-width: 0; }
+  .file-name {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    margin-bottom: 5px; word-break: break-word; line-height: 1.3;
+    font-family: var(--mono);
+  }
+  .file-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .file-badge {
+    font-family: var(--mono); font-size: 10px; font-weight: 500;
+    padding: 2px 7px; border-radius: 5px; letter-spacing: .04em;
+  }
+  .file-size { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+  .file-date { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+  .more-btn {
+    width: 34px; height: 34px; border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: background .15s;
+  }
+  .more-btn:hover { background: var(--border2); }
+  .more-btn svg { width: 16px; height: 16px; stroke: var(--muted); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px 32px; text-align: center; gap: 12px;
+  }
+  .empty-icon {
+    width: 64px; height: 64px; border-radius: 18px;
+    background: var(--panel); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 4px;
+  }
+  .empty-icon svg { width: 28px; height: 28px; stroke: var(--border2); }
+  .empty-title { font-size: 17px; font-weight: 700; color: var(--text); }
+  .empty-sub { font-size: 13px; color: var(--muted); max-width: 260px; line-height: 1.5; }
+
+  /* ── FAB ── */
+  .fab {
+    position: fixed; bottom: 28px; right: 24px;
+    display: flex; align-items: center; gap: 9px;
+    background: var(--accent); color: #051612;
+    font-family: var(--font); font-size: 14px; font-weight: 800;
+    padding: 13px 22px; border-radius: 99px; border: none;
+    cursor: pointer; box-shadow: 0 8px 28px rgba(0,212,170,.35);
+    transition: all .2s; z-index: 10;
+  }
+  .fab:hover:not(:disabled) {
+    background: #00e8bb;
+    box-shadow: 0 10px 36px rgba(0,212,170,.45);
+    transform: translateY(-2px);
+  }
+  .fab:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+  .fab svg { width: 18px; height: 18px; stroke: #051612; }
+
+  /* ── SPINNER ── */
+  .spinner {
+    width: 18px; height: 18px; border: 2px solid rgba(0,0,0,.2);
+    border-top-color: #051612; border-radius: 50%;
+    animation: spin .6s linear infinite; flex-shrink: 0;
+  }
+  .spinner-lg {
+    width: 36px; height: 36px; border: 3px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .center-loader {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 16px;
+    color: var(--muted); font-size: 13px; font-weight: 500;
+  }
+
+  /* ── OVERLAY / MODAL ── */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6);
+    backdrop-filter: blur(4px); z-index: 100;
+    display: flex; align-items: flex-end; justify-content: center;
+    animation: fadeIn .2s ease;
+  }
+  .overlay.center { align-items: center; padding: 24px; }
+
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  /* ── ACTION SHEET ── */
+  .action-sheet {
+    width: 100%; max-width: 480px;
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    padding: 8px 0 env(safe-area-inset-bottom, 20px);
+    animation: slideUpSheet .25s ease;
+  }
+  @keyframes slideUpSheet {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .sheet-handle {
+    width: 36px; height: 4px; background: var(--border2);
+    border-radius: 99px; margin: 10px auto 14px;
+  }
+
+  .sheet-file-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 0 20px 14px;
+  }
+  .sheet-file-icon {
+    width: 50px; height: 50px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sheet-file-icon svg { width: 24px; height: 24px; }
+  .sheet-file-name {
+    font-size: 14px; font-weight: 700; color: var(--text);
+    font-family: var(--mono); word-break: break-all; line-height: 1.3;
+  }
+  .sheet-file-size { font-size: 12px; color: var(--muted); font-family: var(--mono); margin-top: 2px; }
+
+  .sheet-divider { height: 1px; background: var(--border); margin: 0 20px 8px; }
+
+  .sheet-option {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 20px; cursor: pointer;
+    transition: background .15s;
+  }
+  .sheet-option:hover { background: rgba(255,255,255,.03); }
+
+  .sheet-opt-icon {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sheet-opt-icon svg { width: 18px; height: 18px; }
+
+  .sheet-opt-label { flex: 1; font-size: 15px; font-weight: 600; color: var(--text); }
+  .sheet-opt-chevron svg { width: 15px; height: 15px; stroke: var(--muted); }
+
+  .sheet-cancel {
+    display: flex; align-items: center; justify-content: center;
+    margin: 8px 16px 0; padding: 13px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; cursor: pointer;
+    font-size: 15px; font-weight: 600; color: var(--muted);
+    transition: background .15s;
+  }
+  .sheet-cancel:hover { background: var(--border); color: var(--text); }
+
+  /* ── RENAME MODAL ── */
+  .modal {
+    width: 100%; max-width: 440px;
+    background: var(--panel);
+    border: 1px solid var(--border2);
+    border-radius: 20px; padding: 28px;
+    animation: popIn .2s ease;
+  }
+  @keyframes popIn {
+    from { transform: scale(.95); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+
+  .modal-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .modal-hint {
+    font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px;
+    font-family: var(--mono);
+  }
+
+  .modal-input {
+    width: 100%; height: 48px;
+    background: var(--bg);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 0 16px;
+    font-family: var(--mono); font-size: 14px; color: var(--text);
+    outline: none; margin-bottom: 20px;
+    box-shadow: 0 0 0 3px rgba(0,212,170,.08);
+  }
+  .modal-input::placeholder { color: var(--muted); }
+  .modal-input:focus { box-shadow: 0 0 0 3px rgba(0,212,170,.18); }
+
+  .modal-actions { display: flex; gap: 10px; }
+  .modal-cancel {
+    flex: 1; height: 46px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--border2);
+    font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--muted);
+    cursor: pointer; transition: all .15s;
+  }
+  .modal-cancel:hover { border-color: var(--border2); color: var(--text); }
+  .modal-submit {
+    flex: 2; height: 46px; border-radius: var(--radius);
+    background: var(--accent); border: none;
+    font-family: var(--font); font-size: 14px; font-weight: 800; color: #051612;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .modal-submit:hover:not(:disabled) { background: #00e8bb; }
+  .modal-submit:disabled { opacity: .5; cursor: not-allowed; }
+  .modal-submit .spinner { border-top-color: #051612; }
+
+  /* ── CONFIRM DIALOG ── */
+  .confirm-modal {
+    width: 100%; max-width: 380px;
+    background: var(--panel); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 28px;
+    animation: popIn .2s ease;
+  }
+  .confirm-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: rgba(255,77,109,.12);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .confirm-icon svg { width: 24px; height: 24px; stroke: var(--danger); }
+  .confirm-title { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .confirm-body { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 24px; font-family: var(--mono); }
+  .confirm-file { color: var(--text); font-weight: 600; }
+
+  .confirm-actions { display: flex; gap: 10px; }
+  .confirm-cancel {
+    flex: 1; height: 46px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--border2);
+    font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--muted);
+    cursor: pointer; transition: all .15s;
+  }
+  .confirm-cancel:hover { color: var(--text); }
+  .confirm-delete {
+    flex: 1; height: 46px; border-radius: var(--radius);
+    background: var(--danger); border: none;
+    font-family: var(--font); font-size: 14px; font-weight: 800; color: #fff;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    gap: 8px; transition: all .15s;
+  }
+  .confirm-delete:hover { background: #ff6b85; }
+  .confirm-delete:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%);
+    background: var(--panel); border: 1px solid var(--border2);
+    border-radius: 99px; padding: 10px 20px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 600; color: var(--text);
+    box-shadow: 0 8px 24px rgba(0,0,0,.4); z-index: 200;
+    animation: fadeIn .2s ease; white-space: nowrap;
+  }
+  .toast.success { border-color: rgba(0,212,170,.4); }
+  .toast.error { border-color: rgba(255,77,109,.4); color: var(--danger); }
+  .toast svg { width: 15px; height: 15px; }
+  .toast.success svg { stroke: var(--accent); }
+  .toast.error svg { stroke: var(--danger); }
+
+  /* ── REPLACE PROMPT ── */
+  .replace-modal {
+    width: 100%; max-width: 380px;
+    background: var(--panel); border: 1px solid var(--border2);
+    border-radius: 20px; padding: 28px;
+    animation: popIn .2s ease;
+  }
+  .replace-modal h3 { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .replace-modal p { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 24px; font-family: var(--mono); }
+  .replace-actions { display: flex; gap: 10px; }
+  .btn-cancel2 {
+    flex: 1; height: 46px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--border2);
+    font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--muted);
+    cursor: pointer;
+  }
+  .btn-replace {
+    flex: 1; height: 46px; border-radius: var(--radius);
+    background: var(--warn); border: none;
+    font-family: var(--font); font-size: 14px; font-weight: 800; color: #1a0c00;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .btn-replace:disabled { opacity: .5; }
+
+  /* util */
+  .hidden { display: none !important; }
+  .loading-dot { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ════ LOGIN SCREEN ════ -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h1>Sign in to FileHub</h1>
+      <p>JVP School · Teacher Portal</p>
+
+      <div class="field">
+        <label>Username</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <input type="text" id="username-input" placeholder="e.g. john.doe or john.doe@jvp.com" autocomplete="username" />
+        </div>
+        <div class="domain-hint" id="email-preview">→ will sign in as ...</div>
+      </div>
+
+      <div class="field">
+        <label>Password</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <input type="password" id="password-input" placeholder="••••••••" autocomplete="current-password" />
+        </div>
+      </div>
+
+      <div id="login-error"></div>
+
+      <button class="btn" id="login-btn" onclick="handleLogin()">
+        <span id="login-btn-text">Sign In</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ════ MAIN APP ════ -->
+  <div id="main-app" class="hidden">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <button class="back-btn" id="back-btn" onclick="handleBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 5l-7 7 7 7"/>
+        </svg>
+      </button>
+      <div class="topbar-info">
+        <div class="topbar-title">File Manager</div>
+        <div class="topbar-sub" id="topbar-sub">Loading...</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="signout-btn" onclick="handleSignOut()">Sign out</button>
+      </div>
+    </div>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb hidden" id="breadcrumb-bar"></div>
+
+    <!-- Path bar (only at file level) -->
+    <div class="path-bar hidden" id="path-bar">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+      </svg>
+      <span class="path-bar-text" id="path-bar-text"></span>
+      <button class="refresh-btn" onclick="loadItems()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="content-area">
+      <div class="center-loader">
+        <div class="spinner-lg"></div>
+        <span>Loading your workspace…</span>
+      </div>
+    </div>
+
+    <!-- FAB (upload) -->
+    <button class="fab hidden" id="upload-fab" onclick="handleUpload()">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+      </svg>
+      <span id="fab-text">Upload</span>
+    </button>
+
+  </div><!-- /main-app -->
+
+</div><!-- /app -->
+
+<!-- ════ MODALS ════ -->
+
+<!-- Action Sheet -->
+<div class="overlay hidden" id="action-overlay" onclick="closeActionSheet(event)">
+  <div class="action-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-file-header" id="sheet-file-header"></div>
+    <div class="sheet-divider"></div>
+    <div class="sheet-option" onclick="openRenameModal()">
+      <div class="sheet-opt-icon" style="background:rgba(99,102,241,.12)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </div>
+      <span class="sheet-opt-label">Rename</span>
+      <div class="sheet-opt-chevron">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+    <div class="sheet-option" onclick="openDeleteConfirm()">
+      <div class="sheet-opt-icon" style="background:rgba(255,77,109,.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ff4d6d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6"/><path d="M14 11v6"/>
+          <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+      </div>
+      <span class="sheet-opt-label" style="color:#ff4d6d">Delete</span>
+      <div class="sheet-opt-chevron">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+    <div class="sheet-cancel" onclick="closeActionSheet()">Cancel</div>
+  </div>
+</div>
+
+<!-- Rename Modal -->
+<div class="overlay center hidden" id="rename-overlay" onclick="closeRenameModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">Rename File</div>
+    <div class="modal-hint" id="rename-hint">Extension will be preserved automatically.</div>
+    <input class="modal-input" id="rename-input" type="text" placeholder="New file name"
+      onkeydown="if(event.key==='Enter') submitRename()" />
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeRenameModal()">Cancel</button>
+      <button class="modal-submit" id="rename-submit-btn" onclick="submitRename()">
+        <span id="rename-btn-text">Rename</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirm -->
+<div class="overlay center hidden" id="delete-overlay" onclick="closeDeleteConfirm(event)">
+  <div class="confirm-modal" onclick="event.stopPropagation()">
+    <div class="confirm-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        <path d="M10 11v6"/><path d="M14 11v6"/>
+        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+      </svg>
+    </div>
+    <div class="confirm-title">Delete File?</div>
+    <div class="confirm-body" id="confirm-body">This cannot be undone.</div>
+    <div class="confirm-actions">
+      <button class="confirm-cancel" onclick="closeDeleteConfirm()">Cancel</button>
+      <button class="confirm-delete" id="delete-confirm-btn" onclick="executeDelete()">
+        <span id="delete-btn-text">Delete</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Replace Prompt -->
+<div class="overlay center hidden" id="replace-overlay" onclick="event.stopPropagation()">
+  <div class="replace-modal" onclick="event.stopPropagation()">
+    <h3>File Already Exists</h3>
+    <p id="replace-body">A file with this name already exists. Do you want to replace it?</p>
+    <div class="replace-actions">
+      <button class="btn-cancel2" onclick="cancelReplace()">Cancel</button>
+      <button class="btn-replace" id="replace-btn" onclick="executeReplace()">
+        <span id="replace-btn-text">Replace</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast hidden" id="toast"></div>
+
+<!-- Hidden file input -->
+<input type="file" id="file-input" accept=".pdf,.doc,.docx" style="display:none" onchange="onFileSelected(event)" />
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────────────────────
+const SUPABASE_URL     = 'https://ckltcwampaagyzneaznt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrbHRjd2FtcGFhZ3l6bmVhem50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1MDI2NjgsImV4cCI6MjA0ODA3ODY2OH0.pUT2kngS0nkzFBjI-P6g8azU5E3tZzGDQGL68-AUWFc';
+const BUCKET           = 'school-files';
+const MAX_SIZE_MB      = 100;
+const MAX_SIZE_BYTES   = MAX_SIZE_MB * 1024 * 1024;
+const ALLOWED_EXT      = ['pdf', 'doc', 'docx'];
+const ALLOWED_MIME     = ['application/pdf','application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let session     = null;
+let isAdmin     = false;
+let assignments = [];   // [{classNum, subject}]
+let currentPath = [];   // ['8', 'Science'] etc.
+let selectedFile= null;
+let pendingUploadFile = null;   // for replace flow
+let fileItemsMap = {};          // idx -> file item, avoids JSON-in-onclick
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function formatBytes(b) {
+  if (!b || b === 0) return '—';
+  if (b < 1024) return `${b} B`;
+  if (b < 1024 ** 2) return `${(b / 1024).toFixed(1)} KB`;
+  return `${(b / 1024 ** 2).toFixed(1)} MB`;
+}
+
+function formatDate(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+function getFileInfo(name = '') {
+  const ext = name.split('.').pop().toLowerCase();
+  if (ext === 'pdf')         return { color:'#ff5252', label:'PDF',  stroke:'#ff5252', icon:'doc-text' };
+  if (['doc','docx'].includes(ext)) return { color:'#4285f4', label:'Word', stroke:'#4285f4', icon:'doc' };
+  return { color:'#5b7a94', label:'File', stroke:'#5b7a94', icon:'doc' };
+}
+
+function getClassNum(cls) { return cls.split('-')[0]; }
+
+function buildEmail(username) {
+  const u = username.trim();
+  return u.includes('@') ? u : `${u}@jvp.com`;
+}
+
+function showToast(msg, type = 'success', duration = 3000) {
+  const t = document.getElementById('toast');
+  const icon = type === 'success'
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+  t.className = `toast ${type}`;
+  t.innerHTML = icon + msg;
+  t.classList.remove('hidden');
+  setTimeout(() => t.classList.add('hidden'), duration);
+}
+
+function fileIconSVG(name) {
+  const { stroke } = getFileInfo(name);
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+    <polyline points="10 9 9 9 8 9"/>
+  </svg>`;
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+document.getElementById('username-input').addEventListener('input', function() {
+  const preview = document.getElementById('email-preview');
+  const val = this.value.trim();
+  if (!val) { preview.textContent = '→ will sign in as ...'; return; }
+  preview.textContent = '→ ' + buildEmail(val);
+});
+
+document.getElementById('password-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') handleLogin();
+});
+document.getElementById('username-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('password-input').focus();
+});
+
+async function handleLogin() {
+  const username = document.getElementById('username-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  const errEl    = document.getElementById('login-error');
+  const btn      = document.getElementById('login-btn');
+  const btnText  = document.getElementById('login-btn-text');
+
+  errEl.style.display = 'none';
+  if (!username || !password) {
+    errEl.textContent = 'Please enter your username and password.';
+    errEl.style.display = 'block'; return;
+  }
+
+  const email = buildEmail(username);
+  btn.disabled = true;
+  btnText.innerHTML = '<div class="spinner" style="border-top-color:#051612;width:16px;height:16px"></div>';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+  btn.disabled = false;
+  btnText.textContent = 'Sign In';
+
+  if (error) {
+    errEl.textContent = error.message === 'Invalid login credentials'
+      ? 'Incorrect username or password.' : error.message;
+    errEl.style.display = 'block';
+  } else {
+    session = data.session;
+    showMainApp();
+  }
+}
+
+async function handleSignOut() {
+  await sb.auth.signOut();
+  session = null; isAdmin = false; assignments = []; currentPath = [];
+  document.getElementById('main-app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('username-input').value = '';
+  document.getElementById('password-input').value = '';
+  document.getElementById('email-preview').textContent = '→ will sign in as ...';
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+async function init() {
+  const { data: { session: s } } = await sb.auth.getSession();
+  if (s) { session = s; showMainApp(); }
+  else {
+    document.getElementById('login-screen').classList.remove('hidden');
+  }
+}
+
+async function showMainApp() {
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('main-app').classList.remove('hidden');
+  await initUserData();
+  loadItems();
+}
+
+async function initUserData() {
+  const uid = session?.user?.id;
+  if (!uid) return;
+
+  const { data: adminRow } = await sb.from('admins').select('id').eq('id', uid).maybeSingle();
+  isAdmin = !!adminRow;
+
+  let q = sb.from('class_subject_assignments').select('class, subject');
+  if (!isAdmin) q = q.eq('teacher_id', uid);
+  const { data: rows } = await q;
+
+  if (rows) {
+    const seen = new Set();
+    assignments = rows
+      .map(r => ({ classNum: getClassNum(r.class), subject: r.subject }))
+      .filter(({ classNum, subject }) => {
+        const key = `${classNum}|${subject}`;
+        if (seen.has(key)) return false;
+        seen.add(key); return true;
+      })
+      .sort((a, b) => parseInt(a.classNum) - parseInt(b.classNum) || a.subject.localeCompare(b.subject));
+  }
+
+  document.getElementById('topbar-sub').textContent =
+    isAdmin ? 'Admin · File Manager' : 'Teacher · File Manager';
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
+function navigate(name) { currentPath = [...currentPath, name]; loadItems(); }
+function navigateUp()   { currentPath = currentPath.slice(0, -1); loadItems(); }
+function navigateTo(idx){
+  currentPath = idx < 0 ? [] : currentPath.slice(0, idx + 1);
+  loadItems();
+}
+
+function handleBack() {
+  if (currentPath.length > 0) navigateUp();
+}
+
+function renderBreadcrumb() {
+  const bar = document.getElementById('breadcrumb-bar');
+  if (currentPath.length === 0) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden');
+
+  let html = `<span class="bc-seg" onclick="navigateTo(-1)">Home</span>`;
+  currentPath.forEach((seg, i) => {
+    const label = i === 0 ? `Class ${seg}` : seg;
+    const isLast = i === currentPath.length - 1;
+    html += `<span class="bc-chevron">›</span>`;
+    html += isLast
+      ? `<span class="bc-seg active">${label}</span>`
+      : `<span class="bc-seg" onclick="navigateTo(${i})">${label}</span>`;
+  });
+  bar.innerHTML = html;
+}
+
+function renderPathBar() {
+  const bar  = document.getElementById('path-bar');
+  const text = document.getElementById('path-bar-text');
+  if (currentPath.length === 2) {
+    bar.classList.remove('hidden');
+    text.textContent = `Class ${currentPath[0]} · ${currentPath[1]}`;
+  } else {
+    bar.classList.add('hidden');
+  }
+}
+
+function renderFAB() {
+  const fab = document.getElementById('upload-fab');
+  if (currentPath.length === 2) fab.classList.remove('hidden');
+  else fab.classList.add('hidden');
+}
+
+// ─── LOAD ITEMS ──────────────────────────────────────────────────────────────
+async function loadItems() {
+  renderBreadcrumb();
+  renderPathBar();
+  renderFAB();
+
+  const content = document.getElementById('content-area');
+  content.innerHTML = `<div class="center-loader"><div class="spinner-lg"></div><span>Loading…</span></div>`;
+
+  const level = currentPath.length;
+  try {
+    let items = [];
+
+    if (level === 0) {
+      const classNums = [...new Set(assignments.map(a => a.classNum))]
+        .sort((a, b) => parseInt(a) - parseInt(b));
+      items = classNums.map(n => ({ type:'folder', name:n, displayName:`Class ${n}` }));
+      renderList(items, level);
+
+    } else if (level === 1) {
+      const classNum = currentPath[0];
+      const subjects = [...new Set(
+        assignments.filter(a => a.classNum === classNum).map(a => a.subject)
+      )].sort();
+      items = [
+        ...subjects.map(s => ({ type:'folder', name:s, displayName:s })),
+        { type:'folder', name:'Common', displayName:'Common', isSpecial:true },
+      ];
+      renderList(items, level);
+
+    } else {
+      const prefix = currentPath.join('/');
+      const { data, error } = await sb.storage.from(BUCKET).list(prefix, {
+        limit: 200, sortBy: { column:'name', order:'asc' },
+      });
+      if (error) throw error;
+      items = (data ?? []).filter(f => f.id && f.name !== '.emptyFolderPlaceholder')
+        .map(f => ({ type:'file', ...f }));
+      renderList(items, level);
+    }
+  } catch (e) {
+    content.innerHTML = `<div class="empty-state">
+      <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg></div>
+      <div class="empty-title">Could not load</div>
+      <div class="empty-sub">${e.message ?? 'Please check your connection and try again.'}</div>
+    </div>`;
+  }
+}
+
+function renderList(items, level) {
+  const content = document.getElementById('content-area');
+  if (items.length === 0) {
+    content.innerHTML = `<div class="empty-state">
+      <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        ${level === 2
+          ? '<path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/>'
+          : '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>'}
+      </svg></div>
+      <div class="empty-title">${level === 2 ? 'No files here yet' : 'Nothing to show'}</div>
+      <div class="empty-sub">${level === 2
+        ? 'Tap the Upload button below to add files.'
+        : 'You have no class or subject assignments.'}</div>
+    </div>`;
+    return;
+  }
+
+  fileItemsMap = {};
+  const html = items.map((item, idx) => item.type === 'folder'
+    ? renderFolderCard(item) : renderFileCard(item, idx)
+  ).join('');
+  content.innerHTML = `<div style="padding-bottom:100px">${html}</div>`;
+}
+
+function renderFolderCard(item) {
+  const isSpecial = !!item.isSpecial;
+  const iconBg    = isSpecial ? 'rgba(251,191,36,.1)' : 'rgba(99,102,241,.12)';
+  const iconColor = isSpecial ? '#fbbf24' : '#818cf8';
+  const iconPath  = isSpecial
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+      </svg>`;
+
+  return `<div class="folder-card" onclick="navigate('${item.name}')">
+    <div class="folder-icon" style="background:${iconBg}">${iconPath}</div>
+    <div class="folder-info">
+      <div class="folder-name">${item.displayName}</div>
+      ${isSpecial ? '<div class="folder-sub">Shared · All class teachers</div>' : ''}
+    </div>
+    <div class="chevron">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </div>
+  </div>`;
+}
+
+function renderFileCard(item, idx) {
+  fileItemsMap[idx] = item;
+  const { color, label } = getFileInfo(item.name);
+  return `<div class="file-card">
+    <div class="file-icon" style="background:${color}18">${fileIconSVG(item.name)}</div>
+    <div class="file-info">
+      <div class="file-name">${item.name}</div>
+      <div class="file-meta">
+        <span class="file-badge" style="background:${color}18;color:${color}">${label}</span>
+        <span class="file-size">${formatBytes(item.metadata?.size)}</span>
+        ${item.updated_at ? `<span class="file-date">${formatDate(item.updated_at)}</span>` : ''}
+      </div>
+    </div>
+    <button class="more-btn" onclick="openActionSheet(${idx})">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>
+      </svg>
+    </button>
+  </div>`;
+}
+
+// ─── ACTION SHEET ─────────────────────────────────────────────────────────────
+function openActionSheet(idx) {
+  selectedFile = fileItemsMap[idx];
+  const { color } = getFileInfo(selectedFile.name);
+
+  document.getElementById('sheet-file-header').innerHTML = `
+    <div class="sheet-file-icon" style="background:${color}18">${fileIconSVG(selectedFile.name)}</div>
+    <div>
+      <div class="sheet-file-name">${selectedFile.name}</div>
+      <div class="sheet-file-size">${formatBytes(selectedFile.metadata?.size)}</div>
+    </div>`;
+
+  document.getElementById('action-overlay').classList.remove('hidden');
+}
+
+function closeActionSheet(e) {
+  if (e && e.target !== document.getElementById('action-overlay')) return;
+  document.getElementById('action-overlay').classList.add('hidden');
+}
+
+// ─── RENAME ──────────────────────────────────────────────────────────────────
+function openRenameModal() {
+  if (!selectedFile) return;
+  document.getElementById('action-overlay').classList.add('hidden');
+  const parts = selectedFile.name.split('.');
+  const ext   = parts.pop();
+  document.getElementById('rename-input').value = parts.join('.');
+  document.getElementById('rename-hint').textContent =
+    `The extension (.${ext}) will be kept automatically.`;
+  document.getElementById('rename-overlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('rename-input').select(), 50);
+}
+
+function closeRenameModal(e) {
+  if (e && e.target !== document.getElementById('rename-overlay')) return;
+  document.getElementById('rename-overlay').classList.add('hidden');
+}
+
+async function submitRename() {
+  const val = document.getElementById('rename-input').value.trim();
+  if (!val || !selectedFile) return;
+
+  const ext     = selectedFile.name.split('.').pop();
+  const newName = `${val}.${ext}`;
+  if (newName === selectedFile.name) { closeRenameModal(); return; }
+
+  const btn     = document.getElementById('rename-submit-btn');
+  const btnText = document.getElementById('rename-btn-text');
+  btn.disabled  = true;
+  btnText.innerHTML = '<div class="spinner"></div>';
+
+  const oldPath = `${currentPath.join('/')}/${selectedFile.name}`;
+  const newPath = `${currentPath.join('/')}/${newName}`;
+
+  const { error } = await sb.storage.from(BUCKET).move(oldPath, newPath);
+
+  btn.disabled = false;
+  btnText.textContent = 'Rename';
+
+  if (error) {
+    showToast('Rename failed: ' + error.message, 'error');
+  } else {
+    document.getElementById('rename-overlay').classList.add('hidden');
+    selectedFile = null;
+    showToast('File renamed successfully');
+    loadItems();
+  }
+}
+
+// ─── DELETE ──────────────────────────────────────────────────────────────────
+function openDeleteConfirm() {
+  if (!selectedFile) return;
+  document.getElementById('action-overlay').classList.add('hidden');
+  document.getElementById('confirm-body').innerHTML =
+    `Delete <span class="confirm-file">"${selectedFile.name}"</span>? This cannot be undone.`;
+  document.getElementById('delete-overlay').classList.remove('hidden');
+}
+
+function closeDeleteConfirm(e) {
+  if (e && e.target !== document.getElementById('delete-overlay')) return;
+  document.getElementById('delete-overlay').classList.add('hidden');
+}
+
+async function executeDelete() {
+  if (!selectedFile) return;
+  const btn     = document.getElementById('delete-confirm-btn');
+  const btnText = document.getElementById('delete-btn-text');
+  btn.disabled  = true;
+  btnText.innerHTML = '<div class="spinner" style="border-top-color:#fff;width:16px;height:16px"></div>';
+
+  const path = `${currentPath.join('/')}/${selectedFile.name}`;
+  const { error } = await sb.storage.from(BUCKET).remove([path]);
+
+  btn.disabled = false;
+  btnText.textContent = 'Delete';
+
+  if (error) {
+    showToast('Delete failed: ' + error.message, 'error');
+  } else {
+    document.getElementById('delete-overlay').classList.add('hidden');
+    selectedFile = null;
+    showToast('File deleted');
+    loadItems();
+  }
+}
+
+// ─── UPLOAD ──────────────────────────────────────────────────────────────────
+function handleUpload() { document.getElementById('file-input').click(); }
+
+function onFileSelected(event) {
+  const file = event.target.files[0];
+  event.target.value = ''; // reset so same file can be re-selected
+  if (!file) return;
+
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!ALLOWED_EXT.includes(ext)) {
+    showToast('Only PDF and Word (.doc/.docx) files are allowed.', 'error', 4000); return;
+  }
+  if (file.size > MAX_SIZE_BYTES) {
+    showToast(`File too large. Max size is ${MAX_SIZE_MB} MB.`, 'error', 4000); return;
+  }
+
+  pendingUploadFile = file;
+  doUpload(false);
+}
+
+async function doUpload(upsert) {
+  if (!pendingUploadFile) return;
+  const file = pendingUploadFile;
+  const fab  = document.getElementById('upload-fab');
+  const fabText = document.getElementById('fab-text');
+
+  fab.disabled = true;
+  fabText.innerHTML = '<div class="spinner" style="margin-right:0"></div>';
+
+  const uploadPath = `${currentPath.join('/')}/${file.name}`;
+  const arrayBuffer = await file.arrayBuffer();
+
+  const { error } = await sb.storage.from(BUCKET).upload(uploadPath, arrayBuffer, {
+    contentType: file.type || 'application/octet-stream',
+    upsert,
+  });
+
+  fab.disabled = false;
+  fabText.textContent = 'Upload';
+
+  if (error) {
+    const alreadyExists =
+      error.message?.toLowerCase().includes('already exists') ||
+      String(error.statusCode) === '23505';
+
+    if (alreadyExists && !upsert) {
+      // Show replace dialog
+      document.getElementById('replace-body').innerHTML =
+        `<span style="color:var(--text);font-weight:700">"${file.name}"</span> already exists in this folder. Replace it?`;
+      document.getElementById('replace-overlay').classList.remove('hidden');
+    } else {
+      showToast('Upload failed: ' + error.message, 'error', 4000);
+    }
+  } else {
+    pendingUploadFile = null;
+    showToast('File uploaded successfully');
+    loadItems();
+  }
+}
+
+function cancelReplace() {
+  pendingUploadFile = null;
+  document.getElementById('replace-overlay').classList.add('hidden');
+}
+
+async function executeReplace() {
+  document.getElementById('replace-overlay').classList.add('hidden');
+  doUpload(true);
+}
+
+// ─── BOOT ────────────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
