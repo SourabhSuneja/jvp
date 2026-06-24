@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Share · My JVP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Tokens ──────────────────────────────────────────────────────────── */
+    :root {
+      --navy:          #141432;
+      --navy-mid:      #1e1e4a;
+      --accent:        #4361ee;
+      --accent-hover:  #3451de;
+      --accent-soft:   #eef0fd;
+      --teal:          #06d6a0;
+      --teal-hover:    #05c491;
+      --teal-soft:     #e6fdf7;
+      --error:         #e63946;
+      --error-soft:    #fff0f1;
+      --warn:          #f4a261;
+      --warn-soft:     #fff8f0;
+      --success:       #2dc653;
+      --success-soft:  #f0fdf4;
+
+      --bg:            #f0f2ff;
+      --surface:       #ffffff;
+      --border:        #e3e6f5;
+      --border-focus:  #4361ee;
+
+      --text:          #141432;
+      --text-2:        #4a4a72;
+      --text-3:        #8888a8;
+
+      --radius:        14px;
+      --radius-sm:     8px;
+      --shadow:        0 2px 8px rgba(20,20,50,.06), 0 8px 32px rgba(20,20,50,.07);
+      --shadow-lg:     0 8px 24px rgba(20,20,50,.10), 0 24px 64px rgba(20,20,50,.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────────── */
+    .site-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #2a2a6e 100%);
+      padding: 28px 24px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 50%, rgba(67,97,238,.25) 0%, transparent 60%),
+                  radial-gradient(ellipse at 20% 80%, rgba(6,214,160,.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .header-inner { position: relative; max-width: 900px; margin: 0 auto; }
+
+    .logo-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .logo-badge {
+      width: 48px; height: 48px;
+      background: linear-gradient(135deg, var(--accent), #6a8eff);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 16px rgba(67,97,238,.4);
+      font-size: 22px;
+    }
+    .logo-text { text-align: left; }
+    .logo-portal {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+    }
+    .logo-feature {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+      line-height: 1;
+    }
+    .header-tagline {
+      font-size: 14px;
+      color: rgba(255,255,255,.6);
+      max-width: 340px; margin: 0 auto;
+    }
+
+    /* ── Main ────────────────────────────────────────────────────────────── */
+    main {
+      flex: 1;
+      padding: 32px 16px 40px;
+      max-width: 920px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 660px) {
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Card ────────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .card-head-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-upload { background: var(--accent-soft); color: var(--accent); }
+    .icon-download { background: var(--teal-soft); color: #05a07a; }
+
+    .card-head-text h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--text);
+    }
+    .card-head-text p {
+      font-size: 12px; color: var(--text-3); margin-top: 1px;
+    }
+
+    .card-body {
+      padding: 20px 22px 24px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    /* ── Drop Zone ───────────────────────────────────────────────────────── */
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 30px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      background: #fafbff;
+      user-select: none;
+    }
+    .drop-zone:hover, .drop-zone.over {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+    .drop-zone-emoji { font-size: 30px; display: block; margin-bottom: 10px; }
+    .drop-zone-label {
+      font-size: 13px; color: var(--text-2); line-height: 1.5;
+    }
+    .drop-zone-label strong {
+      color: var(--accent); font-weight: 600; cursor: pointer;
+    }
+    .drop-zone-sub {
+      font-size: 11px; color: var(--text-3); margin-top: 4px;
+    }
+
+    .file-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--accent-soft);
+      border: 1px solid #d4dafc;
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+    }
+    .file-chip-icon { font-size: 22px; flex-shrink: 0; }
+    .file-chip-info { flex: 1; min-width: 0; }
+    .file-chip-name {
+      font-size: 13px; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .file-chip-size { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .file-chip-remove {
+      background: none; border: none; cursor: pointer;
+      font-size: 15px; color: var(--text-3); padding: 4px;
+      border-radius: 4px; line-height: 1; transition: color .15s, background .15s;
+      flex-shrink: 0;
+    }
+    .file-chip-remove:hover { color: var(--error); background: rgba(230,57,70,.08); }
+
+    /* ── Form Fields ─────────────────────────────────────────────────────── */
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; color: var(--text-3);
+      letter-spacing: .07em; text-transform: uppercase;
+    }
+
+    .input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .input-row .field { flex: 1; }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 10px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px; font-family: inherit;
+      color: var(--text); background: var(--surface);
+      outline: none; transition: border-color .2s, box-shadow .2s;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(67,97,238,.12);
+    }
+    input::placeholder { color: var(--text-3); }
+
+    select {
+      appearance: none; cursor: pointer; padding-right: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238888a8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 16px;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px 16px; border: none; border-radius: var(--radius-sm);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all .18s; white-space: nowrap;
+    }
+    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
+
+    .btn-accent {
+      background: var(--accent); color: #fff; width: 100%;
+    }
+    .btn-accent:not(:disabled):hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(67,97,238,.35);
+    }
+
+    .btn-teal {
+      background: var(--teal); color: #082e26; width: 100%;
+    }
+    .btn-teal:not(:disabled):hover {
+      background: var(--teal-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(6,214,160,.3);
+    }
+
+    .btn-ghost {
+      background: var(--accent-soft); color: var(--accent);
+      padding: 10px 12px; height: 40px; font-size: 12px;
+    }
+    .btn-ghost:not(:disabled):hover { background: #dde2fd; }
+
+    /* ── Progress ────────────────────────────────────────────────────────── */
+    .progress-block { display: flex; flex-direction: column; gap: 7px; }
+    .progress-meta {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .progress-label { font-size: 12px; font-weight: 600; color: var(--text-2); }
+    .progress-pct   { font-size: 12px; font-weight: 700; color: var(--accent); }
+
+    .progress-track {
+      height: 7px; background: var(--border);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--accent), #7c9fff);
+      border-radius: 99px;
+      transition: width .25s ease;
+    }
+
+    /* ── Alerts ──────────────────────────────────────────────────────────── */
+    .alert {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 14px; border-radius: var(--radius-sm);
+      font-size: 13px; line-height: 1.55;
+    }
+    .alert-icon { flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+    .alert-body { flex: 1; }
+    .alert-title {
+      font-weight: 700; font-size: 13px; display: block; margin-bottom: 2px;
+    }
+
+    .alert-success { background: var(--success-soft); color: #14532d; }
+    .alert-error   { background: var(--error-soft);   color: #7f1d1d; }
+    .alert-info    { background: var(--accent-soft);  color: #1e3a8a; }
+    .alert-warn    { background: var(--warn-soft);    color: #7c3e04; }
+
+    /* ── Boarding-pass PIN ───────────────────────────────────────────────── */
+    .ticket {
+      border: 2px dashed #c8cffd;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-soft) 0%, #f5f7ff 100%);
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .ticket-top {
+      padding: 10px 16px 8px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ticket-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+    .ticket-expiry { font-size: 10px; color: var(--text-3); }
+
+    .ticket-pin-row {
+      display: flex; align-items: center;
+      border-top: 1px dashed #c8cffd;
+      padding: 12px 16px;
+      gap: 12px;
+    }
+    .ticket-pin {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 26px; font-weight: 700;
+      color: var(--accent);
+      letter-spacing: .05em;
+      flex: 1;
+    }
+    .copy-btn {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer; transition: background .15s, transform .15s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: var(--accent-hover); transform: scale(1.04); }
+    .copy-btn.copied { background: var(--success); }
+
+    /* ── Download hint ───────────────────────────────────────────────────── */
+    .hint {
+      background: var(--teal-soft);
+      border: 1px solid #b2f0de;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 13px; color: #065f46; line-height: 1.5;
+    }
+    .hint a { color: #047857; font-weight: 600; }
+
+    /* ── Info box ────────────────────────────────────────────────────────── */
+    .info-box {
+      background: var(--accent-soft);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 12px; color: #2d3ab0; line-height: 1.6;
+    }
+    .info-box strong { font-weight: 700; }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    footer {
+      text-align: center; padding: 20px 16px;
+      font-size: 11px; color: var(--text-3);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Spinner ─────────────────────────────────────────────────────────── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+    .spinner-teal {
+      border-color: rgba(8,46,38,.25);
+      border-top-color: #082e26;
+    }
+
+    /* ── Misc ────────────────────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+    input[type="text"]#retrievePin {
+      text-align: center; font-size: 16px;
+      letter-spacing: .05em; font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ── Header ──────────────────────────────────────────────────────────────── -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo-row">
+      <div class="logo-badge">⚡</div>
+      <div class="logo-text">
+        <div class="logo-portal">My JVP</div>
+        <div class="logo-feature">Quick Share</div>
+      </div>
+    </div>
+    <p class="header-tagline">Share files instantly with a PIN — no login required.</p>
+  </div>
+</header>
+
+<!-- ── Main ────────────────────────────────────────────────────────────────── -->
+<main>
+  <div class="cards-grid">
+
+    <!-- ════════════════════════════════════════════
+         UPLOAD CARD
+    ═════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-icon icon-upload">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+        </div>
+        <div class="card-head-text">
+          <h2>Share a File</h2>
+          <p>Upload and get a shareable PIN</p>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <!-- File drop zone -->
+        <div id="dropZone" class="drop-zone" role="button" tabindex="0"
+             aria-label="Click or drag a file here to upload">
+          <span class="drop-zone-emoji">📂</span>
+          <p class="drop-zone-label">
+            Drag & drop your file here, or <strong id="browseLink">browse</strong>
+          </p>
+          <p class="drop-zone-sub">Any file type · Max 50 MB</p>
+        </div>
+
+        <div id="fileChip" class="file-chip hidden">
+          <span class="file-chip-icon">📄</span>
+          <div class="file-chip-info">
+            <div class="file-chip-name" id="chipName"></div>
+            <div class="file-chip-size" id="chipSize"></div>
+          </div>
+          <button class="file-chip-remove" id="removeFile" title="Remove file" aria-label="Remove file">✕</button>
+        </div>
+
+        <input type="file" id="fileInput" class="hidden" aria-hidden="true">
+
+        <!-- Master Upload Key -->
+        <div class="field">
+          <label class="field-label" for="uploadKey">🔑 Master Upload Key</label>
+          <input type="password" id="uploadKey"
+                 placeholder="Enter the system upload key"
+                 autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Download PIN -->
+        <div class="field">
+          <label class="field-label">📌 Download PIN</label>
+          <div class="input-row">
+            <div class="field">
+              <input type="text" id="downloadPin"
+                     placeholder="e.g. sunny491"
+                     autocomplete="off" spellcheck="false">
+            </div>
+            <button class="btn btn-ghost" id="genPinBtn" title="Generate a random PIN">
+              🎲 Generate
+            </button>
+          </div>
+        </div>
+
+        <!-- Expiry -->
+        <div class="field">
+          <label class="field-label" for="expiry">⏱ Expiry Duration</label>
+          <select id="expiry">
+            <option value="60">1 hour</option>
+            <option value="240">4 hours</option>
+            <option value="720" selected>12 hours</option>
+            <option value="1440">24 hours</option>
+          </select>
+        </div>
+
+        <!-- Progress bar (hidden until upload starts) -->
+        <div id="progressBlock" class="progress-block hidden">
+          <div class="progress-meta">
+            <span class="progress-label" id="progressLabel">Uploading…</span>
+            <span class="progress-pct"   id="progressPct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <!-- Status area -->
+        <div id="uploadStatus" class="hidden"></div>
+
+        <!-- Upload Button -->
+        <button class="btn btn-accent" id="uploadBtn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          Upload &amp; Share
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         DOWNLOAD CARD
+    ═════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-icon icon-download">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+        </div>
+        <div class="card-head-text">
+          <h2>Retrieve a File</h2>
+          <p>Enter the PIN to download</p>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <div style="height: 4px;"></div>
+
+        <div class="field">
+          <label class="field-label" for="retrievePin">📌 Enter Download PIN</label>
+          <input type="text" id="retrievePin"
+                 placeholder="e.g. sunny491"
+                 autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Status area -->
+        <div id="downloadStatus" class="hidden"></div>
+
+        <!-- Retrieve Button -->
+        <button class="btn btn-teal" id="downloadBtn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Retrieve File
+        </button>
+
+        <div class="info-box">
+          Enter the PIN shared by the uploader. The download link will be active for
+          <strong>5 minutes</strong> after you click Retrieve.
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /.cards-grid -->
+</main>
+
+<footer>
+  My JVP Quick Share &nbsp;·&nbsp; Files are automatically deleted after expiry &nbsp;·&nbsp; Internal school use only
+</footer>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONFIG — Replace YOUR_PROJECT_ID with your Supabase project reference ID
+   ═══════════════════════════════════════════════════════════════════════════ */
+const EDGE_BASE = 'https://ckltcwampaagyzneaznt.supabase.co/functions/v1/quick-share';
+
+const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB hard limit
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIN GENERATOR
+   Words are chosen to be easy to say, spell, and remember.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const WORDS = [
+  'sunny','river','brave','crisp','eagle','flame','globe','happy','island',
+  'karma','lunar','magic','noble','ocean','pearl','rapid','storm','tiger',
+  'ultra','vivid','extra','flare','grace','honor','jewel','light','maple',
+  'night','olive','pilot','quiet','radar','sugar','trace','unity','voice',
+  'wheat','yield','azure','beach','cloud','dream','blaze','cedar','elite',
+  'frost','giant','hedge','ivory','joker','knack','lemon','mango','nexus',
+  'orbit','plaza','ridge','silver','trend','valor','waltz','yacht','comet',
+  'drift','ember','haven','lunar','marsh','novel','ozone','prism','quest',
+];
+
+function generatePin() {
+  const word   = WORDS[Math.floor(Math.random() * WORDS.length)];
+  const digits = String(Math.floor(100 + Math.random() * 900)); // always 3 digits
+  return word + digits;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+function fmtBytes(b) {
+  if (b < 1024)        return b + ' B';
+  if (b < 1_048_576)   return (b / 1024).toFixed(1) + ' KB';
+  if (b < 1_073_741_824) return (b / 1_048_576).toFixed(1) + ' MB';
+  return (b / 1_073_741_824).toFixed(2) + ' GB';
+}
+
+function fmtDate(iso) {
+  return new Date(iso).toLocaleString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  });
+}
+
+function show(id)  { document.getElementById(id).classList.remove('hidden'); }
+function hide(id)  { document.getElementById(id).classList.add('hidden'); }
+
+function renderAlert(containerId, type, title, body) {
+  const icons = { success: '✅', error: '❌', info: 'ℹ️', warn: '⚠️' };
+  const el = document.getElementById(containerId);
+  el.innerHTML = `
+    <div class="alert alert-${type}">
+      <span class="alert-icon">${icons[type] || ''}</span>
+      <div class="alert-body">
+        ${title ? `<span class="alert-title">${title}</span>` : ''}
+        ${body}
+      </div>
+    </div>`;
+  el.classList.remove('hidden');
+}
+
+function clearStatus(id) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  el.classList.add('hidden');
+}
+
+const UPLOAD_BTN_INNER = `
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+  </svg>
+  Upload &amp; Share`;
+
+const DOWNLOAD_BTN_INNER = `
+  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+    <path stroke-linecap="round" stroke-linejoin="round"
+      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+  </svg>
+  Retrieve File`;
+
+function setBtnLoading(id, isLoading, innerHtml, spinnerClass = 'spinner') {
+  const btn = document.getElementById(id);
+  btn.disabled = isLoading;
+  btn.innerHTML = isLoading
+    ? `<div class="${spinnerClass}"></div> Please wait…`
+    : innerHtml;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILE SELECTION — drag & drop + click-to-browse
+   ═══════════════════════════════════════════════════════════════════════════ */
+let selectedFile = null;
+
+const dropZone  = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileChip  = document.getElementById('fileChip');
+
+// Click anywhere on drop zone to browse
+dropZone.addEventListener('click', () => fileInput.click());
+document.getElementById('browseLink').addEventListener('click', (e) => {
+  e.stopPropagation(); fileInput.click();
+});
+dropZone.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') fileInput.click();
+});
+
+// Drag events
+dropZone.addEventListener('dragenter', (e) => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragover',  (e) => { e.preventDefault(); });
+dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('over');
+  if (e.dataTransfer.files.length) applyFile(e.dataTransfer.files[0]);
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) applyFile(fileInput.files[0]);
+});
+
+function applyFile(f) {
+  if (f.size > MAX_FILE_BYTES) {
+    renderAlert('uploadStatus', 'error', 'File too large',
+      `Maximum allowed size is 50 MB. Your file is ${fmtBytes(f.size)}.`);
+    return;
+  }
+  selectedFile = f;
+  document.getElementById('chipName').textContent = f.name;
+  document.getElementById('chipSize').textContent = fmtBytes(f.size);
+  dropZone.classList.add('hidden');
+  fileChip.classList.remove('hidden');
+}
+
+document.getElementById('removeFile').addEventListener('click', () => {
+  selectedFile = null;
+  fileInput.value = '';
+  fileChip.classList.add('hidden');
+  dropZone.classList.remove('hidden');
+  clearStatus('uploadStatus');
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIN GENERATOR
+   ═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('genPinBtn').addEventListener('click', () => {
+  document.getElementById('downloadPin').value = generatePin();
+});
+// Pre-fill on load
+document.getElementById('downloadPin').value = generatePin();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UPLOAD FLOW
+   ═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('uploadBtn').addEventListener('click', handleUpload);
+
+async function handleUpload() {
+  clearStatus('uploadStatus');
+  hide('progressBlock');
+
+  const uploadKey = document.getElementById('uploadKey').value.trim();
+  const pin       = document.getElementById('downloadPin').value.trim().toLowerCase();
+  const expiry    = document.getElementById('expiry').value;
+
+  // Client-side validation (fast feedback before hitting the network)
+  if (!selectedFile) {
+    renderAlert('uploadStatus', 'error', '', 'Please select a file to upload.'); return;
+  }
+  if (!uploadKey) {
+    renderAlert('uploadStatus', 'error', '', 'Please enter the master upload key.'); return;
+  }
+  if (!pin || pin.length < 4) {
+    renderAlert('uploadStatus', 'error', '', 'Download PIN must be at least 4 characters.'); return;
+  }
+
+  setBtnLoading('uploadBtn', true, UPLOAD_BTN_INNER);
+  renderAlert('uploadStatus', 'info', '', 'Preparing upload…');
+
+  let recordId   = null;
+  const keySnapshot = uploadKey; // capture before async
+
+  try {
+    // ── Step 1: Get presigned PUT URL from Edge Function ───────────────────
+    const fd = new FormData();
+    fd.append('upload_key',      uploadKey);
+    fd.append('download_pin',    pin);
+    fd.append('expiry_duration', expiry);
+    fd.append('filename',        selectedFile.name);
+    fd.append('file_type',       selectedFile.type || 'application/octet-stream');
+
+    const initRes = await fetch(`${EDGE_BASE}/upload`, {
+      method: 'POST',
+      body:   fd,
+    });
+
+    const initData = await initRes.json();
+    if (!initRes.ok) throw new Error(initData.error || 'Upload initialisation failed.');
+
+    const { presigned_upload_url, content_type, record_id, expires_at } = initData;
+    recordId = record_id;
+
+    // ── Step 2: Upload file directly to R2 via XHR (shows real progress) ──
+    clearStatus('uploadStatus');
+    show('progressBlock');
+    setProgress(0, 'Uploading file…');
+
+    await putToR2(presigned_upload_url, selectedFile, content_type);
+
+    // ── Step 3: Success — show boarding-pass PIN ticket ────────────────────
+    hide('progressBlock');
+
+    document.getElementById('uploadStatus').innerHTML = `
+      <div class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <div class="alert-body">
+          <span class="alert-title">File shared successfully!</span>
+          Share the PIN below. Expires at ${fmtDate(expires_at)}.
+        </div>
+      </div>
+      <div class="ticket">
+        <div class="ticket-top">
+          <span class="ticket-label">📌 Download PIN</span>
+          <span class="ticket-expiry">Expires ${fmtDate(expires_at)}</span>
+        </div>
+        <div class="ticket-pin-row">
+          <span class="ticket-pin" id="ticketPin">${pin}</span>
+          <button class="copy-btn" id="copyPinBtn">Copy PIN</button>
+        </div>
+      </div>`;
+    document.getElementById('uploadStatus').classList.remove('hidden');
+
+    document.getElementById('copyPinBtn').addEventListener('click', function() {
+      navigator.clipboard.writeText(pin).then(() => {
+        this.textContent = '✓ Copied!';
+        this.classList.add('copied');
+        setTimeout(() => { this.textContent = 'Copy PIN'; this.classList.remove('copied'); }, 2000);
+      });
+    });
+
+  } catch (err) {
+    hide('progressBlock');
+
+    // Attempt to clean up the dangling DB record if R2 upload failed
+    if (recordId) {
+      fetch(`${EDGE_BASE}/cleanup`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ record_id: recordId, upload_key: keySnapshot }),
+      }).catch(() => {}); // fire-and-forget; don't block the error display
+    }
+
+    renderAlert('uploadStatus', 'error', 'Upload failed', escapeHtml(err.message));
+  } finally {
+    setBtnLoading('uploadBtn', false, UPLOAD_BTN_INNER);
+  }
+}
+
+function setProgress(pct, label) {
+  document.getElementById('progressLabel').textContent = label;
+  document.getElementById('progressPct').textContent   = pct + '%';
+  document.getElementById('progressFill').style.width  = pct + '%';
+}
+
+function putToR2(url, file, contentType) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', url);
+    xhr.setRequestHeader('Content-Type', contentType);
+    xhr.timeout = 180_000; // 3-minute timeout
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        setProgress(Math.round((e.loaded / e.total) * 100), 'Uploading file…');
+      }
+    };
+    xhr.onload    = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        setProgress(100, 'Upload complete ✓');
+        resolve();
+      } else {
+        reject(new Error(`Storage returned status ${xhr.status}. Please try again.`));
+      }
+    };
+    xhr.onerror   = () => reject(new Error('Network error during file upload. Check your connection and try again.'));
+    xhr.ontimeout = () => reject(new Error('Upload timed out. Please check your connection and try again.'));
+    xhr.send(file);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOWNLOAD FLOW
+   ═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('downloadBtn').addEventListener('click', handleDownload);
+document.getElementById('retrievePin').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleDownload();
+});
+// Strip spaces as user types
+document.getElementById('retrievePin').addEventListener('input', function() {
+  const pos = this.selectionStart;
+  this.value = this.value.replace(/\s/g, '');
+  this.setSelectionRange(pos, pos);
+});
+
+async function handleDownload() {
+  clearStatus('downloadStatus');
+
+  const pin = document.getElementById('retrievePin').value.trim().toLowerCase();
+  if (!pin) {
+    renderAlert('downloadStatus', 'error', '', 'Please enter a Download PIN.'); return;
+  }
+
+  setBtnLoading('downloadBtn', true, DOWNLOAD_BTN_INNER, 'spinner spinner-teal');
+
+  try {
+    const res  = await fetch(`${EDGE_BASE}/download`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ download_pin: pin }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to retrieve file.');
+
+    const { download_url, file_name } = data;
+
+    // Trigger the browser download
+    const a = Object.assign(document.createElement('a'), {
+      href:     download_url,
+      target:   '_blank',
+      rel:      'noopener noreferrer',
+      download: file_name || 'download',
+    });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    document.getElementById('downloadStatus').innerHTML = `
+      <div class="hint">
+        ✅ <strong>Download started!</strong> If it didn't begin automatically,
+        <a href="${escapeHtml(download_url)}" target="_blank" rel="noopener noreferrer">click here</a>.
+        <br><span style="font-size:11px;opacity:.75">This link expires in 5 minutes.</span>
+      </div>`;
+    document.getElementById('downloadStatus').classList.remove('hidden');
+
+  } catch (err) {
+    renderAlert('downloadStatus', 'error', 'Could not retrieve file', escapeHtml(err.message));
+  } finally {
+    setBtnLoading('downloadBtn', false, DOWNLOAD_BTN_INNER);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECURITY — sanitise any dynamic HTML
+   ═══════════════════════════════════════════════════════════════════════════ */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+
+</body>
+</html>
