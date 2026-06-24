@@ -1,1 +1,1654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <!-- Google tag (gtag.js) -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>SQL Editor | My JVP</title>
+<meta name="description" content="Practice SQL online with our interactive SQL Editor. Write, run, and test queries instantly to build database skills and improve SQL proficiency." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/alasql/4.6.6/alasql.min.js"></script>
+
+<style>
+/* ============================================================
+   1. DESIGN TOKENS — mimicked verbatim from the host app
+   ============================================================ */
+:root {
+  /* Colors - Dark Theme */
+  --bg-primary: #121212;
+  --bg-secondary: #1f1f1f;
+  --bg-tertiary: #333333;
+  --bg-gradient-dark: linear-gradient(145deg, #1e1e1e, #333333);
+  --bg-input: #2c2c2c;
+  /* Text Colors - Dark Theme */
+  --text-primary: #fff;
+  --text-secondary: #ddd;
+  --text-tertiary: #b0bec5;
+  --text-muted: rgb(230, 230, 230);
+  /* Accent Colors */
+  --accent-primary: #ffc107;
+  --accent-hover: #e0a800;
+  --accent-focus: #ffd54f;
+  --accent-button-text: black;
+  /* Shadow Colors */
+  --shadow-dark: rgba(0, 0, 0, 0.5);
+  --shadow-medium: rgba(0, 0, 0, 0.6);
+  --shadow-light: rgba(0, 0, 0, 0.4);
+  /* Spacing Values */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-xxl: 25px;
+  --spacing-xxxl: 30px;
+  /* Border Radius */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 12px;
+  --radius-full: 50%;
+  /* Font Sizes */
+  --font-sm: 0.9rem;
+  --font-base: 1rem;
+  --font-md: 1.1rem;
+  --font-lg: 1.2rem;
+  --font-xl: 1.6rem;
+  --font-xxl: 1.7rem;
+  --font-xxxl: 1.8rem;
+  --font-icon-sm: 1.2rem;
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.4s all;
+}
+/* Light theme overrides */
+body.light-theme {
+  --bg-primary: #ffffff;
+  --bg-secondary: rgb(253, 253, 253);
+  --bg-tertiary: rgb(240, 240, 240);
+  --bg-gradient-dark: linear-gradient(145deg, #ffffff, #f0f0f0);
+  --bg-input: #ffffff;
+  --text-primary: #333;
+  --text-secondary: rgb(50, 50, 50);
+  --text-tertiary: rgb(80, 80, 80);
+  --text-muted: #333;
+  --accent-button-text: rgb(30, 30, 30);
+  --shadow-dark: rgba(0, 0, 0, 0.1);
+  --shadow-medium: rgba(0, 0, 0, 0.1);
+  --shadow-light: rgba(0, 0, 0, 0.1);
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  max-height: 9999999px;
+  font-family: 'Roboto', sans-serif;
+  transition: var(--transition-base) all;
+}
+
+/* ── Editor: transitions must be instant for pixel-perfect caret sync ── */
+.editor-input,
+.editor-highlight,
+.editor-highlight *,
+#highlightLayer,
+#highlightCode {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ============================================================
+   2. EXTRA TOKENS — additive, namespaced, follow the same pattern
+   ============================================================ */
+:root {
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-strong: rgba(255, 255, 255, 0.16);
+  --color-success: #66bb6a;
+  --color-success-bg: rgba(102, 187, 106, 0.14);
+  --color-error: #ef5350;
+  --color-error-bg: rgba(239, 83, 80, 0.14);
+  --color-info: #4fc3f7;
+  --color-info-bg: rgba(79, 195, 247, 0.14);
+  --tok-keyword: #ffc107;
+  --tok-string: #a5d6a7;
+  --tok-number: #80cbc4;
+  --tok-function: #ce93d8;
+  --tok-comment: #8d8d8d;
+  --sidebar-width: 290px;
+}
+body.light-theme {
+  --border-color: rgba(0, 0, 0, 0.09);
+  --border-color-strong: rgba(0, 0, 0, 0.18);
+  --color-success: #2e7d32;
+  --color-success-bg: rgba(46, 125, 50, 0.09);
+  --color-error: #c62828;
+  --color-error-bg: rgba(198, 40, 40, 0.09);
+  --color-info: #0277bd;
+  --color-info-bg: rgba(2, 119, 189, 0.09);
+  --tok-keyword: #9a6700;
+  --tok-string: #1a7f37;
+  --tok-number: #005f87;
+  --tok-function: #6f2da8;
+  --tok-comment: #6e7781;
+}
+
+/* ============================================================
+   3. BASE / LAYOUT
+   ============================================================ */
+html, body { height: 100%; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+button { cursor: pointer; font: inherit; color: inherit; background: none; border: none; }
+input { font: inherit; color: inherit; }
+::selection { background: var(--accent-focus); color: black; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* thin scrollbars for the dense panels */
+.thin-scroll { scrollbar-width: thin; scrollbar-color: var(--bg-tertiary) transparent; }
+.thin-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
+.thin-scroll::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: var(--radius-full); }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  background: var(--bg-primary);
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  width: var(--sidebar-width);
+  flex: 0 0 var(--sidebar-width);
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  z-index: 30;
+}
+.sidebar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+  flex: 0 0 auto;
+}
+.brand { display: flex; align-items: center; gap: var(--spacing-sm); }
+.brand .icon { color: var(--accent-primary); width: 20px; height: 20px; }
+.brand-text { font-weight: 700; font-size: var(--font-md); letter-spacing: 0.2px; }
+.sidebar-close { display: none; }
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+  flex: 0 0 auto;
+}
+.tab-btn {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  border-bottom: 2px solid transparent;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.tab-btn:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+.tab-btn.active { color: var(--accent-primary); border-bottom-color: var(--accent-primary); }
+
+.tab-panel {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+.tab-panel.hidden { display: none; }
+
+.panel-actions { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-sm);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.btn .icon { width: 16px; height: 16px; }
+.btn-primary { background: var(--accent-primary); color: var(--accent-button-text); }
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-ghost { background: var(--bg-tertiary); color: var(--text-secondary); }
+.btn-ghost:hover { color: var(--text-primary); }
+.btn-danger { background: var(--color-error); color: #fff; }
+.btn-danger:hover { filter: brightness(1.1); }
+.btn-sm { padding: 7px var(--spacing-sm); font-size: 0.85rem; }
+.btn-block { width: 100%; }
+.btn-link { color: var(--text-tertiary); font-size: var(--font-sm); text-decoration: underline; text-underline-offset: 2px; }
+.btn-link:hover { color: var(--accent-primary); }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  flex: 0 0 auto;
+}
+.icon-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.icon-btn .icon { width: 17px; height: 17px; }
+.icon-btn-xs { width: 24px; height: 24px; opacity: 0; }
+.icon-btn-xs .icon { width: 14px; height: 14px; }
+.db-item-head:hover .icon-btn-xs,
+.table-item:hover .icon-btn-xs,
+.icon-btn-xs:focus-visible { opacity: 1; }
+.icon-btn-xs:hover { color: var(--color-error); }
+
+.icon { display: inline-block; vertical-align: middle; }
+
+/* ---------- DB explorer ---------- */
+.db-list { display: flex; flex-direction: column; gap: 2px; }
+.empty-note { color: var(--text-tertiary); font-size: var(--font-sm); padding: var(--spacing-sm) var(--spacing-xs); line-height: 1.4; }
+
+.db-item-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.db-item-head:hover { background: var(--bg-tertiary); }
+.db-item-head.active { background: var(--bg-tertiary); }
+.db-item-head.active .db-item-name { color: var(--accent-primary); font-weight: 700; }
+.db-item-head .icon { width: 15px; height: 15px; color: var(--text-tertiary); flex: 0 0 auto; }
+.db-item-head.active .icon.db-icon { color: var(--accent-primary); }
+.chev { width: 13px; height: 13px; color: var(--text-tertiary); transition: var(--transition-fast) transform; flex: 0 0 auto; }
+.chev.open { transform: rotate(90deg); }
+.db-item-name { flex: 1 1 auto; font-size: var(--font-sm); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.db-item-count {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  background: var(--bg-primary);
+  border-radius: var(--radius-full);
+  padding: 1px 7px;
+  flex: 0 0 auto;
+}
+
+.db-item-tables { padding-left: 21px; display: flex; flex-direction: column; gap: 1px; margin-top: 2px; }
+.db-item-tables.hidden { display: none; }
+.table-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-tertiary);
+}
+.table-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.table-item .icon { width: 13px; height: 13px; flex: 0 0 auto; }
+.table-item-name { flex: 1 1 auto; font-size: 0.85rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); }
+
+/* ---------- Reference tab ---------- */
+.ref-item {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.ref-item-head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  background: var(--bg-tertiary);
+}
+.ref-item-head:hover { color: var(--accent-primary); }
+.ref-item-title { font-weight: 700; font-size: var(--font-sm); flex: 1 1 auto; font-family: var(--font-mono); }
+.ref-item-chev { width: 14px; height: 14px; transition: var(--transition-fast) transform; flex: 0 0 auto; }
+.ref-item.open .ref-item-chev { transform: rotate(180deg); }
+.ref-item-body { padding: var(--spacing-md); display: none; flex-direction: column; gap: var(--spacing-sm); }
+.ref-item.open .ref-item-body { display: flex; }
+.ref-item-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45; }
+.ref-item-code {
+  display: block;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ---------- History tab ---------- */
+.history-head { display: flex; align-items: center; justify-content: space-between; padding: 0 var(--spacing-xs); }
+.history-head span { font-size: var(--font-sm); color: var(--text-tertiary); font-weight: 500; }
+.history-list { display: flex; flex-direction: column; gap: 6px; }
+.history-item {
+  text-align: left;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.history-item:hover { background: var(--bg-tertiary); border-color: var(--border-color-strong); }
+.history-item-sql {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.history-item-time { font-size: 0.68rem; color: var(--text-tertiary); }
+
+/* ---------- Main column ---------- */
+.main {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+.sidebar-open { display: none; }
+.db-indicator { display: flex; align-items: baseline; gap: 6px; min-width: 0; overflow: hidden; }
+.db-indicator-label { font-size: 0.78rem; color: var(--text-tertiary); flex: 0 0 auto; }
+.db-indicator-value {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.db-indicator-value.is-set { color: var(--accent-primary); }
+.toolbar-spacer { flex: 1 1 auto; }
+
+/* ---------- Editor ---------- */
+.editor-section {
+  flex: 1 1 38%;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border-color);
+}
+.editor-wrap {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: var(--bg-input);
+}
+/* ── Single contenteditable editor ── */
+.editor-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: none;
+  outline: none;
+  resize: none;
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  cursor: text;
+  transition: none !important;    /* no lag on caret */
+  -webkit-user-modify: read-write-plaintext-only;  /* Safari: plain text only */
+}
+.editor-input * { transition: none !important; }
+
+/* Placeholder — toggled by JS via .is-empty */
+.editor-input.is-empty::before {
+  content: attr(data-placeholder);
+  color: var(--text-tertiary);
+  pointer-events: none;
+  white-space: pre;
+  display: block;
+}
+
+/* Text selection */
+.editor-input::selection,
+.editor-input *::selection { background: rgba(255, 193, 7, 0.35); }
+
+.tok-keyword { color: var(--tok-keyword); font-weight: 600; }
+.tok-string { color: var(--tok-string); }
+.tok-number { color: var(--tok-number); }
+.tok-function { color: var(--tok-function); }
+.tok-comment { color: var(--tok-comment); font-style: italic; }
+
+.editor-hint {
+  flex: 0 0 auto;
+  padding: 6px var(--spacing-lg);
+  font-size: 0.74rem;
+  color: var(--text-tertiary);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+}
+.editor-hint kbd {
+  font-family: var(--font-mono);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color-strong);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.7rem;
+}
+.editor-hint code { font-family: var(--font-mono); background: var(--bg-tertiary); padding: 1px 5px; border-radius: 4px; }
+
+/* ---------- Results ---------- */
+.results {
+  flex: 1 1 62%;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  background: var(--bg-primary);
+}
+.results-empty { color: var(--text-tertiary); font-size: var(--font-sm); padding: var(--spacing-md) 0; text-align: center; }
+
+.result-block {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+.result-sql {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-tertiary);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.result-index { color: var(--text-tertiary); flex: 0 0 auto; }
+.result-sql code { color: var(--text-secondary); }
+.result-body { padding: var(--spacing-md); display: flex; flex-direction: column; gap: var(--spacing-sm); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+.badge .icon { width: 12px; height: 12px; }
+.badge-success { color: var(--color-success); background: var(--color-success-bg); }
+.badge-error { color: var(--color-error); background: var(--color-error-bg); }
+.badge-info { color: var(--color-info); background: var(--color-info-bg); }
+
+.result-message { font-size: 0.9rem; color: var(--text-secondary); }
+.result-message-error { font-family: var(--font-mono); font-size: 0.85rem; color: var(--color-error); word-break: break-word; }
+.result-note { font-size: 0.8rem; color: var(--text-tertiary); padding: 0 var(--spacing-xs); }
+
+.results-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+.results-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.82rem; }
+.results-table th, .results-table td {
+  padding: 7px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+.results-table th { background: var(--bg-tertiary); color: var(--text-tertiary); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.3px; position: sticky; top: 0; }
+.results-table tbody tr:hover { background: var(--bg-tertiary); }
+.cell-null { color: var(--text-tertiary); font-style: italic; }
+.results-caption { font-size: 0.76rem; color: var(--text-tertiary); }
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--spacing-lg);
+}
+.modal-overlay.hidden { display: none; }
+.modal {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color-strong);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 20px 50px var(--shadow-dark);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+.modal-title { font-size: var(--font-lg); font-weight: 700; }
+.modal-body { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.modal-label { font-size: 0.8rem; color: var(--text-tertiary); }
+.modal-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color-strong);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-base);
+  font-family: var(--font-mono);
+}
+.modal-input:focus-visible { border-color: var(--accent-primary); }
+.modal-actions { display: flex; justify-content: flex-end; gap: var(--spacing-sm); margin-top: var(--spacing-xs); }
+
+/* ---------- storage banner ---------- */
+.storage-banner {
+  flex: 0 0 auto;
+  display: none;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  font-size: 0.8rem;
+}
+.storage-banner.visible { display: flex; }
+.storage-banner .icon { width: 15px; height: 15px; flex: 0 0 auto; }
+.storage-banner-close { margin-left: auto; }
+
+/* ---------- Sidebar backdrop (mobile) ---------- */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 20;
+  display: none;
+}
+.sidebar-backdrop.visible { display: block; }
+
+/* ============================================================
+   4. RESPONSIVE — mobile drawer
+   ============================================================ */
+@media (max-width: 860px) {
+  .sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    transform: translateX(-100%);
+    box-shadow: 8px 0 24px var(--shadow-dark);
+  }
+  .editor-hint {
+    display: none;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-close { display: inline-flex; }
+  .sidebar-open { display: inline-flex; }
+  .editor-input { font-size: 0.88rem; padding: var(--spacing-sm) var(--spacing-md); }
+  .db-indicator-label { display: none; }
+  .toolbar { padding: var(--spacing-sm) var(--spacing-md); }
+  .modal { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <aside class="sidebar thin-scroll" id="sidebar">
+    <div class="sidebar-head">
+      <div class="brand">
+        <span class="icon" id="brandIcon" style="width:20px;height:20px;"></span>
+        <span class="brand-text">SQL Playground</span>
+      </div>
+      <button class="icon-btn sidebar-close" id="sidebarClose" aria-label="Close panel"></button>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" data-tab="explorer" role="tab" aria-selected="true">Explorer</button>
+      <button class="tab-btn" data-tab="reference" role="tab" aria-selected="false">Reference</button>
+      <button class="tab-btn" data-tab="history" role="tab" aria-selected="false">History</button>
+    </div>
+
+    <div class="tab-panel thin-scroll" id="tab-explorer">
+      <div class="panel-actions">
+        <button class="btn btn-primary btn-sm btn-block" id="newDbBtn"></button>
+        <button class="btn btn-ghost btn-sm btn-block" id="sampleBtn">Load sample data</button>
+      </div>
+      <div class="db-list" id="dbList"></div>
+    </div>
+
+    <div class="tab-panel hidden thin-scroll" id="tab-reference">
+      <div class="ref-list" id="refList"></div>
+    </div>
+
+    <div class="tab-panel hidden thin-scroll" id="tab-history">
+      <div class="history-head">
+        <span>Recent runs</span>
+        <button class="btn-link" id="clearHistoryBtn">Clear</button>
+      </div>
+      <div class="history-list" id="historyList"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="storage-banner" id="storageBanner">
+      <span class="icon" id="storageBannerIcon" style="width:15px;height:15px;"></span>
+      <span>Your browser is blocking local storage here, so your databases won't be saved after you reload.</span>
+      <button class="icon-btn storage-banner-close" id="storageBannerClose" aria-label="Dismiss"></button>
+    </div>
+
+    <div class="toolbar">
+      <button class="icon-btn sidebar-open" id="sidebarOpen" aria-label="Open database explorer"></button>
+      <div class="db-indicator">
+        <span class="db-indicator-label">Using</span>
+        <span class="db-indicator-value" id="currentDbLabel">no database selected</span>
+      </div>
+      <div class="toolbar-spacer"></div>
+      <button class="btn btn-ghost btn-sm" id="clearEditorBtn">Clear</button>
+      <button class="btn btn-primary" id="runBtn"></button>
+    </div>
+
+    <div class="editor-section">
+      <div class="editor-wrap">
+        <div
+  class="editor-input"
+  id="sqlInput"
+  contenteditable="true"
+  spellcheck="false"
+  autocapitalize="off"
+  autocomplete="off"
+  autocorrect="off"
+  role="textbox"
+  aria-multiline="true"
+  aria-label="SQL query editor"
+  data-placeholder="-- Type SQL here, for example:&#10;CREATE DATABASE school;&#10;USE school;&#10;CREATE TABLE students (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(50));"
+></div>
+      </div>
+      <div class="editor-hint">Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to run &middot; separate statements with <code>;</code></div>
+    </div>
+
+    <div class="results thin-scroll" id="resultsPanel">
+      <div class="results-empty" id="resultsEmpty">Run a query to see results here.</div>
+    </div>
+  </main>
+
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modalCancel">Cancel</button>
+        <button class="btn btn-primary" id="modalConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     ICONS — small inline SVGs (Feather/Lucide-style, MIT-licensed
+     shapes), styled entirely with currentColor so they follow
+     the active theme automatically.
+     ============================================================ */
+  var ICONS = {
+    database: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>',
+    table: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line><line x1="9" y1="4" x2="9" y2="20"></line></svg>',
+    play: '<svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M7 4l13 8-13 8V4z"></path></svg>',
+    trash: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"></path></svg>',
+    plus: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
+    chevronRight: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>',
+    chevronDown: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>',
+    x: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+    menu: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>',
+    check: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+    alert: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="13"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+    info: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>'
+  };
+
+  /* ============================================================
+     FALLBACK if the SQL engine failed to load (network blocked)
+     ============================================================ */
+  if (typeof alasql === 'undefined') {
+    document.getElementById('app').innerHTML =
+      '<div style="margin:auto;max-width:420px;padding:32px;text-align:center;color:var(--text-secondary);">' +
+      '<p style="font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--text-primary);">Couldn\'t load the SQL engine</p>' +
+      '<p>This page needs a script from a CDN that your network settings appear to be blocking. ' +
+      'Please allow cdnjs.cloudflare.com and reload the page.</p></div>';
+    return;
+  }
+
+  /* ============================================================
+     PURE HELPERS (unit-tested separately before integration)
+     ============================================================ */
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function escapeAttr(s) {
+    return escapeHtml(s).replace(/"/g, '&quot;');
+  }
+
+  function splitStatements(sql) {
+    var stmts = [];
+    var cur = '';
+    var i = 0;
+    var n = sql.length;
+    var inSingle = false, inDouble = false, inBacktick = false, inLine = false, inBlock = false;
+    while (i < n) {
+      var ch = sql[i];
+      var next = sql[i + 1];
+      if (inLine) { cur += ch; if (ch === '\n') inLine = false; i++; continue; }
+      if (inBlock) { cur += ch; if (ch === '*' && next === '/') { cur += next; i += 2; inBlock = false; continue; } i++; continue; }
+      if (inSingle) { cur += ch; if (ch === "'") { if (next === "'") { cur += next; i += 2; continue; } inSingle = false; } i++; continue; }
+      if (inDouble) { cur += ch; if (ch === '"') { if (next === '"') { cur += next; i += 2; continue; } inDouble = false; } i++; continue; }
+      if (inBacktick) { cur += ch; if (ch === '`') inBacktick = false; i++; continue; }
+      if (ch === "'") { inSingle = true; cur += ch; i++; continue; }
+      if (ch === '"') { inDouble = true; cur += ch; i++; continue; }
+      if (ch === '`') { inBacktick = true; cur += ch; i++; continue; }
+      if (ch === '-' && next === '-') { inLine = true; cur += ch; i++; continue; }
+      if (ch === '/' && next === '*') { inBlock = true; cur += ch; i++; continue; }
+      if (ch === ';') { if (cur.trim()) stmts.push(cur.trim()); cur = ''; i++; continue; }
+      cur += ch; i++;
+    }
+    if (cur.trim()) stmts.push(cur.trim());
+    return stmts;
+  }
+
+  function detectKind(sql) {
+    var s = sql.trim();
+    if (/^create\s+database/i.test(s)) return 'create_db';
+    if (/^drop\s+database/i.test(s)) return 'drop_db';
+    if (/^use\b/i.test(s)) return 'use';
+    if (/^show\s+databases/i.test(s)) return 'show_databases';
+    if (/^show\s+tables/i.test(s)) return 'show_tables';
+    if (/^show\b/i.test(s)) return 'show_other';
+    if (/^create\s+table/i.test(s)) return 'create_table';
+    if (/^drop\s+table/i.test(s)) return 'drop_table';
+    if (/^alter\s+table/i.test(s)) return 'alter_table';
+    if (/^insert\b/i.test(s)) return 'insert';
+    if (/^update\b/i.test(s)) return 'update';
+    if (/^delete\b/i.test(s)) return 'delete';
+    if (/^select\b/i.test(s)) return 'select';
+    return 'other';
+  }
+
+  function extractName(sql, re) {
+    var m = re.exec(sql);
+    if (!m) return null;
+    return m[1].replace(/^[`\[]|[`\]]$/g, '').trim();
+  }
+  var DB_NAME_RE = /database\s+(?:if\s+(?:not\s+)?exists\s+)?([`\[]?[\w .]+[`\]]?)/i;
+  var TABLE_NAME_RE = /table\s+(?:if\s+(?:not\s+)?exists\s+)?([`\[]?[\w .]+[`\]]?)/i;
+
+  function buildCreateTableSQL(tableName, cols, pkCols) {
+    var colDefs = cols.map(function (c) {
+      var def = '`' + c.columnid + '` ' + c.dbtypeid;
+      if (c.dbsize) def += '(' + c.dbsize + ')';
+      if (c.notnull) def += ' NOT NULL';
+      if (c.identity) def += ' AUTO_INCREMENT';
+      return def;
+    });
+    var sql = 'CREATE TABLE `' + tableName + '` (' + colDefs.join(', ');
+    if (pkCols && pkCols.length) sql += ', PRIMARY KEY (' + pkCols.map(function (c) { return '`' + c + '`'; }).join(', ') + ')';
+    sql += ')';
+    return sql;
+  }
+
+  var SQL_KEYWORDS = [
+    'SELECT', 'FROM', 'WHERE', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE',
+    'CREATE', 'DATABASE', 'DATABASES', 'TABLE', 'TABLES', 'SHOW', 'USE', 'DROP', 'ALTER',
+    'ADD', 'COLUMN', 'PRIMARY', 'KEY', 'FOREIGN', 'REFERENCES', 'NOT', 'NULL', 'DEFAULT',
+    'AUTO_INCREMENT', 'AUTOINCREMENT', 'UNIQUE', 'CHECK', 'ORDER', 'BY', 'GROUP', 'HAVING',
+    'LIMIT', 'OFFSET', 'ASC', 'DESC', 'AND', 'OR', 'IN', 'BETWEEN', 'LIKE', 'IS', 'DISTINCT',
+    'JOIN', 'INNER', 'LEFT', 'RIGHT', 'OUTER', 'ON', 'AS', 'UNION', 'ALL', 'EXISTS', 'CASE',
+    'WHEN', 'THEN', 'ELSE', 'END', 'IF', 'INT', 'INTEGER', 'VARCHAR', 'CHAR', 'TEXT',
+    'STRING', 'NUMBER', 'FLOAT', 'DOUBLE', 'DECIMAL', 'BOOLEAN', 'BOOL', 'DATE', 'DATETIME',
+    'TIMESTAMP', 'JSON', 'TRUE', 'FALSE'
+  ];
+  var SQL_FUNCTIONS = ['COUNT', 'SUM', 'AVG', 'MIN', 'MAX', 'NOW', 'LENGTH', 'ROUND', 'UPPER', 'LOWER', 'CONCAT'];
+  var TOKEN_RE = new RegExp(
+    '(--[^\\n]*)' +
+    '|(/\\*[\\s\\S]*?\\*/)' +
+    "|('(?:[^'\\\\]|\\\\.)*')" +
+    '|("(?:[^"\\\\]|\\\\.)*")' +
+    '|(`(?:[^`\\\\]|\\\\.)*`)' +
+    '|(\\b\\d+\\.?\\d*\\b)' +
+    '|(\\b(?:' + SQL_FUNCTIONS.join('|') + ')\\b\\s*(?=\\())' +
+    '|(\\b(?:' + SQL_KEYWORDS.join('|') + ')\\b)',
+    'gi'
+  );
+  function highlightSQL(code) {
+    var esc = escapeHtml(code);
+    return esc.replace(TOKEN_RE, function (m, c1, c2, c3, c4, c5, c6, c7, c8) {
+      if (c1 || c2) return '<span class="tok-comment">' + m + '</span>';
+      if (c3 || c4 || c5) return '<span class="tok-string">' + m + '</span>';
+      if (c6) return '<span class="tok-number">' + m + '</span>';
+      if (c7) return '<span class="tok-function">' + m + '</span>';
+      if (c8) return '<span class="tok-keyword">' + m + '</span>';
+      return m;
+    });
+  }
+
+  /* ============================================================
+     STORAGE — guarded localStorage access
+     ============================================================ */
+  var STORAGE_KEY = 'sqlplay_state_v1';
+  var DRAFT_KEY = 'sqlplay_draft_v1';
+  var HISTORY_KEY = 'sqlplay_history_v1';
+  var THEME_KEY = 'sqlplay_theme_v1';
+
+  var STORAGE_OK = (function () {
+    try {
+      var k = '__sqlplay_test__';
+      window.localStorage.setItem(k, '1');
+      window.localStorage.removeItem(k);
+      return true;
+    } catch (e) { return false; }
+  })();
+
+  function storageGet(key) {
+    if (!STORAGE_OK) return null;
+    try { return window.localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function storageSet(key, val) {
+    if (!STORAGE_OK) return;
+    try { window.localStorage.setItem(key, val); } catch (e) { /* ignore */ }
+  }
+  function storageRemove(key) {
+    if (!STORAGE_OK) return;
+    try { window.localStorage.removeItem(key); } catch (e) { /* ignore */ }
+  }
+
+  /* ============================================================
+     DOM REFS
+     ============================================================ */
+  var $ = function (id) { return document.getElementById(id); };
+  var sidebar = $('sidebar');
+  var sidebarBackdrop = $('sidebarBackdrop');
+  var sqlInput = $('sqlInput');
+  var runBtn = $('runBtn');
+  var clearEditorBtn = $('clearEditorBtn');
+  var dbList = $('dbList');
+  var refList = $('refList');
+  var historyList = $('historyList');
+  var currentDbLabel = $('currentDbLabel');
+  var resultsPanel = $('resultsPanel');
+  var newDbBtn = $('newDbBtn');
+  var sampleBtn = $('sampleBtn');
+  var clearHistoryBtn = $('clearHistoryBtn');
+  var modalOverlay = $('modalOverlay');
+  var modalTitle = $('modalTitle');
+  var modalBody = $('modalBody');
+  var modalConfirm = $('modalConfirm');
+  var modalCancel = $('modalCancel');
+  var storageBanner = $('storageBanner');
+  var storageBannerClose = $('storageBannerClose');
+
+  $('brandIcon').innerHTML = ICONS.database;
+  $('sidebarClose').innerHTML = ICONS.x;
+  $('sidebarOpen').innerHTML = ICONS.menu;
+  $('storageBannerIcon').innerHTML = ICONS.info;
+  $('storageBannerClose').innerHTML = ICONS.x;
+  newDbBtn.innerHTML = ICONS.plus + ' New database';
+  runBtn.innerHTML = ICONS.play + ' Run';
+
+  if (!STORAGE_OK) storageBanner.classList.add('visible');
+  storageBannerClose.addEventListener('click', function () { storageBanner.classList.remove('visible'); });
+
+  /* ============================================================
+     ENGINE STATE
+     ============================================================ */
+  var BUILTIN_DBS = new Set(Object.keys(alasql.databases));
+  var expandedDbs = new Set();
+  var history = [];
+
+  /* ---------- persistence: save ---------- */
+  function serializeColumns(cols) {
+    return cols.map(function (c) {
+      return {
+        columnid: c.columnid,
+        dbtypeid: c.dbtypeid,
+        dbsize: c.dbsize,
+        notnull: c.notnull,
+        identity: c.identity ? { value: c.identity.value, step: c.identity.step } : undefined
+      };
+    });
+  }
+
+  function getUserDatabases() {
+    return Object.keys(alasql.databases).filter(function (d) { return !BUILTIN_DBS.has(d); });
+  }
+
+  function saveState() {
+    if (!STORAGE_OK) return;
+    var state = { v: 1, currentDb: alasql.useid, databases: {} };
+    getUserDatabases().forEach(function (dbName) {
+      var db = alasql.databases[dbName];
+      var tables = {};
+      Object.keys(db.tables).forEach(function (tName) {
+        var t = db.tables[tName];
+        var rows = alasql('SELECT * FROM `' + dbName + '`.`' + tName + '`');
+        tables[tName] = {
+          columns: serializeColumns(t.columns),
+          pk: (t.pk && t.pk.columns) ? t.pk.columns : [],
+          rows: rows
+        };
+      });
+      state.databases[dbName] = { tables: tables };
+    });
+    try {
+      storageSet(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* quota or serialization issue: silently skip persistence this round */ }
+  }
+
+  function restoreState() {
+    var raw = storageGet(STORAGE_KEY);
+    if (!raw) return;
+    var state;
+    try { state = JSON.parse(raw); } catch (e) { storageRemove(STORAGE_KEY); return; }
+    if (!state || !state.databases) return;
+    try {
+      Object.keys(state.databases).forEach(function (dbName) {
+        alasql('CREATE DATABASE `' + dbName + '`');
+        alasql('USE `' + dbName + '`');
+        var tables = state.databases[dbName].tables;
+        Object.keys(tables).forEach(function (tName) {
+          var tdef = tables[tName];
+          var createSQL = buildCreateTableSQL(tName, tdef.columns, tdef.pk);
+          alasql(createSQL);
+          if (tdef.rows && tdef.rows.length) {
+            alasql('SELECT * INTO `' + tName + '` FROM ?', [tdef.rows]);
+            var tbl = alasql.databases[dbName].tables[tName];
+            Object.keys(tbl.identities || {}).forEach(function (colId) {
+              var maxVal = 0;
+              tdef.rows.forEach(function (r) { if (typeof r[colId] === 'number' && r[colId] > maxVal) maxVal = r[colId]; });
+              tbl.identities[colId].value = maxVal + (tbl.identities[colId].step || 1);
+            });
+          }
+        });
+      });
+      if (state.currentDb && alasql.databases[state.currentDb]) {
+        alasql('USE `' + state.currentDb + '`');
+      }
+    } catch (e) {
+      console.error('Could not fully restore saved databases:', e);
+    }
+  }
+
+  /* ============================================================
+     RESULT RENDERING
+     ============================================================ */
+  function formatCell(v) {
+    if (v === null || v === undefined) return '<span class="cell-null">NULL</span>';
+    if (typeof v === 'boolean') return v ? 'TRUE' : 'FALSE';
+    if (v instanceof Date) return escapeHtml(v.toISOString().slice(0, 19).replace('T', ' '));
+    if (typeof v === 'object') return escapeHtml(JSON.stringify(v));
+    return escapeHtml(String(v));
+  }
+
+  function buildTableHTML(rows) {
+    var cols = [];
+    rows.forEach(function (row) {
+      Object.keys(row).forEach(function (k) { if (cols.indexOf(k) === -1) cols.push(k); });
+    });
+    var thead = '<tr>' + cols.map(function (c) { return '<th>' + escapeHtml(c) + '</th>'; }).join('') + '</tr>';
+    var tbody = rows.map(function (row) {
+      return '<tr>' + cols.map(function (c) { return '<td>' + formatCell(row[c]) + '</td>'; }).join('') + '</tr>';
+    }).join('');
+    var caption = rows.length + (rows.length === 1 ? ' row returned.' : ' rows returned.');
+    return '<div class="results-table-wrap"><table class="results-table"><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table></div>' +
+      '<div class="results-caption">' + caption + '</div>';
+  }
+
+  function buildMessage(stmt, kind, data) {
+    if (kind === 'use') return 'Now using database <code>' + escapeHtml(alasql.useid) + '</code>.';
+    if (kind === 'create_db') { var n1 = extractName(stmt, DB_NAME_RE); return n1 ? 'Database <code>' + escapeHtml(n1) + '</code> created.' : 'Database created.'; }
+    if (kind === 'drop_db') { var n2 = extractName(stmt, DB_NAME_RE); return n2 ? 'Database <code>' + escapeHtml(n2) + '</code> dropped.' : 'Database dropped.'; }
+    if (kind === 'create_table') { var n3 = extractName(stmt, TABLE_NAME_RE); return n3 ? 'Table <code>' + escapeHtml(n3) + '</code> created.' : 'Table created.'; }
+    if (kind === 'drop_table') { var n4 = extractName(stmt, TABLE_NAME_RE); return n4 ? 'Table <code>' + escapeHtml(n4) + '</code> dropped.' : 'Table dropped.'; }
+    if (kind === 'alter_table') return 'Table altered.';
+    if (kind === 'insert') return (typeof data === 'number' ? data : 0) + (data === 1 ? ' row inserted.' : ' row(s) inserted.');
+    if (kind === 'update') return (typeof data === 'number' ? data : 0) + (data === 1 ? ' row updated.' : ' row(s) updated.');
+    if (kind === 'delete') return (typeof data === 'number' ? data : 0) + (data === 1 ? ' row deleted.' : ' row(s) deleted.');
+    if (typeof data === 'number') return 'Query OK. ' + data + ' row(s) affected.';
+    return 'Query OK.';
+  }
+
+  function renderResults(results, totalCount) {
+    resultsPanel.innerHTML = '';
+    results.forEach(function (r, idx) {
+      var block = document.createElement('div');
+      block.className = 'result-block' + (r.error ? ' is-error' : ' is-ok');
+      var bodyHTML;
+      if (r.error) {
+        bodyHTML = '<div class="badge badge-error">' + ICONS.alert + ' Error</div>' +
+          '<p class="result-message-error">' + escapeHtml(r.error.message || String(r.error)) + '</p>';
+      } else if (Array.isArray(r.data)) {
+        if (r.data.length === 0) {
+          bodyHTML = '<div class="badge badge-info">' + ICONS.info + ' Result</div><p class="result-message">Empty set (0 rows).</p>';
+        } else {
+          bodyHTML = buildTableHTML(r.data);
+        }
+      } else {
+        bodyHTML = '<div class="badge badge-success">' + ICONS.check + ' OK</div>' +
+          '<p class="result-message">' + buildMessage(r.sql, r.kind, r.data) + '</p>';
+      }
+      block.innerHTML =
+        '<div class="result-sql"><span class="result-index">#' + (idx + 1) + '</span><code>' + highlightSQL(r.sql) + '</code></div>' +
+        '<div class="result-body">' + bodyHTML + '</div>';
+      resultsPanel.appendChild(block);
+    });
+    if (results.length < totalCount) {
+      var note = document.createElement('p');
+      note.className = 'result-note';
+      note.textContent = 'Stopped after statement ' + results.length + ' of ' + totalCount + ' — fix the error above, then run again.';
+      resultsPanel.appendChild(note);
+    }
+    resultsPanel.scrollTop = 0;
+  }
+
+  function showResultsNotice(msg) {
+    resultsPanel.innerHTML = '<div class="results-empty">' + escapeHtml(msg) + '</div>';
+  }
+
+  /* ============================================================
+     RUN PIPELINE
+     ============================================================ */
+  function runBatch(sqlText) {
+    var stmts = splitStatements(sqlText);
+    if (!stmts.length) { showResultsNotice('Nothing to run — type a SQL statement first.'); return; }
+    var results = [];
+    for (var i = 0; i < stmts.length; i++) {
+      var stmt = stmts[i];
+      var kind = detectKind(stmt);
+      try {
+        var data = alasql(stmt);
+        results.push({ sql: stmt, kind: kind, data: data, error: null });
+      } catch (err) {
+        results.push({ sql: stmt, kind: kind, data: null, error: err });
+        break;
+      }
+    }
+    renderResults(results, stmts.length);
+    saveState();
+    renderSidebar();
+    pushHistory(sqlText);
+  }
+
+  /* ============================================================
+     SIDEBAR — explorer
+     ============================================================ */
+  function renderSidebar() {
+    var dbs = getUserDatabases();
+    if (alasql.useid && !BUILTIN_DBS.has(alasql.useid)) {
+      currentDbLabel.textContent = alasql.useid;
+      currentDbLabel.classList.add('is-set');
+    } else {
+      currentDbLabel.textContent = 'no database selected';
+      currentDbLabel.classList.remove('is-set');
+    }
+
+    if (!dbs.length) {
+      dbList.innerHTML = '<div class="empty-note">No databases yet. Create one above, or load the sample data to start exploring.</div>';
+      return;
+    }
+
+    dbList.innerHTML = dbs.map(function (name) {
+      var tables = Object.keys(alasql.databases[name].tables);
+      var isActive = name === alasql.useid;
+      var isExpanded = expandedDbs.has(name) || isActive;
+      var tablesHTML = tables.length
+        ? tables.map(function (t) {
+            return '<div class="table-item" data-db="' + escapeAttr(name) + '" data-table="' + escapeAttr(t) + '">' +
+              ICONS.table +
+              '<span class="table-item-name">' + escapeHtml(t) + '</span>' +
+              '<button class="icon-btn icon-btn-xs" data-action="drop-table" data-db="' + escapeAttr(name) + '" data-table="' + escapeAttr(t) + '" aria-label="Drop table ' + escapeAttr(t) + '" title="Drop table">' + ICONS.trash + '</button>' +
+              '</div>';
+          }).join('')
+        : '<div class="empty-note">No tables yet.</div>';
+      return (
+        '<div class="db-item">' +
+          '<div class="db-item-head' + (isActive ? ' active' : '') + '" data-db="' + escapeAttr(name) + '">' +
+            '<span class="chev' + (isExpanded ? ' open' : '') + '">' + ICONS.chevronRight + '</span>' +
+            '<span class="db-icon" style="display:flex">' + ICONS.database + '</span>' +
+            '<span class="db-item-name">' + escapeHtml(name) + '</span>' +
+            '<span class="db-item-count">' + tables.length + '</span>' +
+            '<button class="icon-btn icon-btn-xs" data-action="drop-db" data-db="' + escapeAttr(name) + '" aria-label="Drop database ' + escapeAttr(name) + '" title="Drop database">' + ICONS.trash + '</button>' +
+          '</div>' +
+          '<div class="db-item-tables' + (isExpanded ? '' : ' hidden') + '">' + tablesHTML + '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function useDatabase(name) {
+    expandedDbs.add(name);
+    runBatch('USE `' + name + '`;');
+  }
+
+  function previewTable(dbName, tableName) {
+    expandedDbs.add(dbName);
+    runBatch('USE `' + dbName + '`;\nSELECT * FROM `' + tableName + '` LIMIT 200;');
+    closeSidebarOnMobile();
+  }
+
+  dbList.addEventListener('click', function (e) {
+    var dropDbBtn = e.target.closest('[data-action="drop-db"]');
+    if (dropDbBtn) { confirmDropDb(dropDbBtn.getAttribute('data-db')); return; }
+    var dropTableBtn = e.target.closest('[data-action="drop-table"]');
+    if (dropTableBtn) { confirmDropTable(dropTableBtn.getAttribute('data-db'), dropTableBtn.getAttribute('data-table')); return; }
+    var tableItem = e.target.closest('.table-item');
+    if (tableItem) { previewTable(tableItem.getAttribute('data-db'), tableItem.getAttribute('data-table')); return; }
+    var dbHead = e.target.closest('.db-item-head');
+    if (dbHead) {
+      var name = dbHead.getAttribute('data-db');
+      if (expandedDbs.has(name) && name === alasql.useid) { expandedDbs.delete(name); renderSidebar(); return; }
+      useDatabase(name);
+    }
+  });
+
+  /* ============================================================
+     MODAL helper
+     ============================================================ */
+  var modalEscHandler = null;
+  function hideModal() {
+    modalOverlay.classList.add('hidden');
+    modalConfirm.onclick = null;
+    modalCancel.onclick = null;
+    if (modalEscHandler) { document.removeEventListener('keydown', modalEscHandler); modalEscHandler = null; }
+  }
+  function showModal(opts) {
+    modalTitle.textContent = opts.title;
+    modalBody.innerHTML = opts.bodyHTML;
+    modalConfirm.textContent = opts.confirmLabel || 'Confirm';
+    modalConfirm.classList.toggle('btn-danger', !!opts.danger);
+    modalConfirm.classList.toggle('btn-primary', !opts.danger);
+    modalOverlay.classList.remove('hidden');
+    modalConfirm.onclick = function () { hideModal(); if (opts.onConfirm) opts.onConfirm(modalBody); };
+    modalCancel.onclick = function () { hideModal(); };
+    modalEscHandler = function (e) {
+      if (e.key === 'Escape') hideModal();
+      if (e.key === 'Enter' && document.activeElement && document.activeElement.tagName !== 'TEXTAREA') modalConfirm.click();
+    };
+    document.addEventListener('keydown', modalEscHandler);
+    var focusEl = opts.focusSelector ? modalBody.querySelector(opts.focusSelector) : modalConfirm;
+    if (focusEl) setTimeout(function () { focusEl.focus(); }, 0);
+  }
+
+  function confirmDropDb(name) {
+    showModal({
+      title: 'Drop database?',
+      bodyHTML: '<p>This permanently deletes <strong>' + escapeHtml(name) + '</strong> and every table inside it. This can\'t be undone.</p>',
+      confirmLabel: 'Drop database',
+      danger: true,
+      onConfirm: function () { runBatch('DROP DATABASE `' + name + '`;'); }
+    });
+  }
+  function confirmDropTable(dbName, tableName) {
+    showModal({
+      title: 'Drop table?',
+      bodyHTML: '<p>This permanently deletes <strong>' + escapeHtml(tableName) + '</strong> and all its rows. This can\'t be undone.</p>',
+      confirmLabel: 'Drop table',
+      danger: true,
+      onConfirm: function () { runBatch('USE `' + dbName + '`;\nDROP TABLE `' + tableName + '`;'); }
+    });
+  }
+
+  newDbBtn.addEventListener('click', function () {
+    showModal({
+      title: 'New database',
+      bodyHTML: '<label class="modal-label" for="newDbNameInput">Database name</label>' +
+        '<input class="modal-input" id="newDbNameInput" type="text" placeholder="school" autocomplete="off">',
+      confirmLabel: 'Create',
+      focusSelector: '#newDbNameInput',
+      onConfirm: function (body) {
+        var input = body.querySelector('#newDbNameInput');
+        var val = (input.value || '').trim().replace(/`/g, '');
+        if (!val) return;
+        runBatch('CREATE DATABASE `' + val + '`;\nUSE `' + val + '`;');
+      }
+    });
+  });
+
+  /* ============================================================
+     SAMPLE DATA
+     ============================================================ */
+  var SAMPLE_SQL =
+"CREATE DATABASE IF NOT EXISTS school;\n" +
+"USE school;\n\n" +
+"CREATE TABLE IF NOT EXISTS students (\n" +
+"  id INT AUTO_INCREMENT PRIMARY KEY,\n" +
+"  name VARCHAR(50),\n" +
+"  grade INT,\n" +
+"  percentage NUMBER\n" +
+");\n\n" +
+"CREATE TABLE IF NOT EXISTS courses (\n" +
+"  id INT AUTO_INCREMENT PRIMARY KEY,\n" +
+"  student_id INT,\n" +
+"  title VARCHAR(80),\n" +
+"  credits INT\n" +
+");\n\n" +
+"INSERT INTO students (name, grade, percentage) VALUES\n" +
+"  ('Asha Patel', 10, 93.8),\n" +
+"  ('Liam Chen', 11, 36.2),\n" +
+"  ('Mateo Garcia', 10, 72.9),\n" +
+"  ('Noor Hassan', 12, 83.95),\n" +
+"  ('Priya Singh', 11, 63.5);\n\n" +
+"INSERT INTO courses (student_id, title, credits) VALUES\n" +
+"  (1, 'Algebra II', 4),\n" +
+"  (2, 'World History', 3),\n" +
+"  (1, 'Biology', 4),\n" +
+"  (3, 'Art Studio', 2),\n" +
+"  (4, 'Biology', 4);\n\n" +
+"SELECT * FROM students;";
+
+  /* REPLACE WITH */
+sampleBtn.addEventListener('click', function () {
+  var sql = getUserDatabases().indexOf('school') !== -1
+    ? 'USE `school`;\nSELECT * FROM students;'
+    : SAMPLE_SQL;
+  setEditorValue(sql);
+  runBatch(sql);
+  closeSidebarOnMobile();
+});
+
+  /* ============================================================
+     REFERENCE / CHEAT SHEET
+     ============================================================ */
+  var CHEATSHEET = [
+    { title: 'CREATE DATABASE', desc: 'Creates a new, empty database to hold your tables.', code: 'CREATE DATABASE school;' },
+    { title: 'SHOW DATABASES', desc: 'Lists every database you have created.', code: 'SHOW DATABASES;' },
+    { title: 'USE', desc: 'Switches the active database, so the next statements apply to it.', code: 'USE school;' },
+    { title: 'SHOW TABLES', desc: 'Lists the tables inside the database you are currently using.', code: 'SHOW TABLES;' },
+    { title: 'CREATE TABLE', desc: 'Defines a new table and its columns. AUTO_INCREMENT makes a column generate its own ID.', code: 'CREATE TABLE students (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  name VARCHAR(50),\n  grade INT,\n  percentage NUMBER\n);' },
+    { title: 'INSERT INTO', desc: 'Adds one or more new rows to a table.', code: "INSERT INTO students (name, grade, percentage)\nVALUES ('Asha Patel', 10, 93.8), ('Liam Chen', 11, 83.2);" },
+    { title: 'SELECT', desc: 'Reads rows from a table. Use * for every column, or name the ones you want.', code: 'SELECT name, grade FROM students;' },
+    { title: 'WHERE', desc: 'Filters rows so only the ones matching a condition come back.', code: 'SELECT * FROM students WHERE grade >= 11;' },
+    { title: 'ORDER BY', desc: 'Sorts the result. Add DESC for highest-to-lowest.', code: 'SELECT * FROM students ORDER BY percentage DESC;' },
+    { title: 'GROUP BY', desc: 'Collapses rows that share a value so you can summarize each group, often with COUNT, SUM or AVG.', code: 'SELECT grade, COUNT(*) AS students\nFROM students\nGROUP BY grade;' },
+    { title: 'HAVING', desc: 'Filters groups after GROUP BY — like WHERE, but for the summarized groups.', code: 'SELECT grade, COUNT(*) AS students\nFROM students\nGROUP BY grade\nHAVING COUNT(*) > 1;' },
+    { title: 'UPDATE', desc: 'Changes existing rows. Always pair it with WHERE, or every row gets updated.', code: "UPDATE students SET percentage = 53.9 WHERE name = 'Asha Patel';" },
+    { title: 'DELETE', desc: 'Removes rows from a table. Always pair it with WHERE, or every row gets deleted.', code: "DELETE FROM students WHERE name = 'Mateo Garcia';" },
+    { title: 'JOIN', desc: 'Combines rows from two tables that share a matching value.', code: 'SELECT students.name, courses.title\nFROM students\nJOIN courses ON students.id = courses.student_id;' },
+    { title: 'DISTINCT', desc: 'Removes duplicate values from the result.', code: 'SELECT DISTINCT grade FROM students;' },
+    { title: 'LIMIT', desc: 'Caps how many rows come back — handy for previewing big tables.', code: 'SELECT * FROM students ORDER BY percentage DESC LIMIT 3;' },
+    { title: 'ALTER TABLE', desc: 'Changes a table\u2019s structure, such as adding a new column.', code: 'ALTER TABLE students ADD COLUMN email VARCHAR(100);' },
+    { title: 'DROP', desc: 'Permanently deletes a table or an entire database. There is no undo.', code: 'DROP TABLE students;\nDROP DATABASE school;' }
+  ];
+
+  function renderReference() {
+    refList.innerHTML = CHEATSHEET.map(function (item, idx) {
+      return (
+        '<div class="ref-item" data-idx="' + idx + '">' +
+          '<button class="ref-item-head" data-action="toggle-ref">' +
+            '<span class="ref-item-title">' + escapeHtml(item.title) + '</span>' +
+            '<span class="ref-item-chev">' + ICONS.chevronDown + '</span>' +
+          '</button>' +
+          '<div class="ref-item-body">' +
+            '<p class="ref-item-desc">' + escapeHtml(item.desc) + '</p>' +
+            '<code class="ref-item-code">' + highlightSQL(item.code) + '</code>' +
+            '<button class="btn btn-ghost btn-sm" data-action="insert-ref">' + ICONS.plus + ' Insert into editor</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  refList.addEventListener('click', function (e) {
+    var insertBtn = e.target.closest('[data-action="insert-ref"]');
+    if (insertBtn) {
+      var idx = parseInt(insertBtn.closest('.ref-item').getAttribute('data-idx'), 10);
+      insertIntoEditor(CHEATSHEET[idx].code);
+      return;
+    }
+    var toggleBtn = e.target.closest('[data-action="toggle-ref"]');
+    if (toggleBtn) {
+      toggleBtn.closest('.ref-item').classList.toggle('open');
+    }
+  });
+
+  /* FIND the entire insertIntoEditor function and REPLACE WITH */
+function insertIntoEditor(text) {
+  sqlInput.focus();
+  var caret  = getCaretOffset();
+  var cur    = getEditorValue();
+  var before = cur.slice(0, caret);
+  var after  = cur.slice(caret);
+  var insert = text;
+  if (before && !/\n\s*$/.test(before)) insert = '\n' + insert;
+  if (after  && !/^\s*\n/.test(after))  insert = insert + '\n';
+  var newText  = before + insert + after;
+  var newCaret = before.length + insert.length;
+  sqlInput.innerHTML = highlightSQL(newText) + '\n';
+  sqlInput.classList.toggle('is-empty', !newText.trim());
+  setCaretOffset(newCaret);
+  if (draftTimer) clearTimeout(draftTimer);
+  storageSet(DRAFT_KEY, newText);
+  switchTab('explorer');
+  closeSidebarOnMobile();
+}
+
+  /* ============================================================
+     HISTORY
+     ============================================================ */
+  function loadHistory() {
+    var raw = storageGet(HISTORY_KEY);
+    if (!raw) return;
+    try { history = JSON.parse(raw) || []; } catch (e) { history = []; }
+  }
+  function persistHistory() { storageSet(HISTORY_KEY, JSON.stringify(history)); }
+  function pushHistory(sql) {
+    var trimmed = sql.trim();
+    if (!trimmed) return;
+    if (history.length && history[0].sql === trimmed) return;
+    history.unshift({ sql: trimmed, time: Date.now() });
+    if (history.length > 20) history.length = 20;
+    persistHistory();
+    renderHistory();
+  }
+  function renderHistory() {
+    if (!history.length) {
+      historyList.innerHTML = '<div class="empty-note">Queries you run will show up here so you can revisit them.</div>';
+      return;
+    }
+    historyList.innerHTML = history.map(function (item, idx) {
+      var firstLine = item.sql.split('\n')[0];
+      var d = new Date(item.time);
+      var timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      return '<button class="history-item" data-idx="' + idx + '">' +
+        '<span class="history-item-sql">' + escapeHtml(firstLine) + '</span>' +
+        '<span class="history-item-time">' + timeStr + '</span>' +
+        '</button>';
+    }).join('');
+  }
+  historyList.addEventListener('click', function (e) {
+    var item = e.target.closest('.history-item');
+    if (!item) return;
+    var idx = parseInt(item.getAttribute('data-idx'), 10);
+    /* REPLACE WITH */
+setEditorValue(history[idx].sql);
+switchTab('explorer');
+closeSidebarOnMobile();
+sqlInput.focus();
+  });
+  clearHistoryBtn.addEventListener('click', function () {
+    if (!history.length) return;
+    showModal({
+      title: 'Clear history?',
+      bodyHTML: '<p>This removes your saved query history. It won\'t touch your databases.</p>',
+      confirmLabel: 'Clear history',
+      danger: true,
+      onConfirm: function () { history = []; persistHistory(); renderHistory(); }
+    });
+  });
+
+/* ============================================================
+   EDITOR CURSOR UTILITIES
+   Work on character offsets through text nodes only, so they
+   are invariant to the <span> tags the highlighter injects.
+   ============================================================ */
+function getCaretOffset() {
+  var sel = window.getSelection();
+  if (!sel || !sel.rangeCount) return 0;
+  var range = sel.getRangeAt(0);
+  if (!sqlInput.contains(range.endContainer)) return 0;
+  var pre = range.cloneRange();
+  pre.selectNodeContents(sqlInput);
+  pre.setEnd(range.endContainer, range.endOffset);
+  return pre.toString().length;
+}
+
+function setCaretOffset(offset) {
+  var sel = window.getSelection();
+  if (!sel) return;
+  var range = document.createRange();
+  var rem = offset;
+  var found = false;
+  (function walk(node) {
+    if (found) return;
+    if (node.nodeType === 3) {
+      if (rem <= node.length) {
+        range.setStart(node, rem);
+        range.collapse(true);
+        found = true;
+        return;
+      }
+      rem -= node.length;
+    } else {
+      for (var i = 0; i < node.childNodes.length; i++) {
+        walk(node.childNodes[i]);
+        if (found) return;
+      }
+    }
+  }(sqlInput));
+  if (!found) { range.selectNodeContents(sqlInput); range.collapse(false); }
+  sel.removeAllRanges();
+  sel.addRange(range);
+}
+
+/* Gets plain text by walking DOM text nodes directly — consistent
+   across browsers, unaffected by innerHTML changes.
+   Strips the one trailing \\n we always append for cursor stability. */
+function getEditorValue() {
+  var text = '';
+  (function walk(node) {
+    if (node.nodeType === 3) { text += node.textContent; }
+    else { for (var i = 0; i < node.childNodes.length; i++) walk(node.childNodes[i]); }
+  }(sqlInput));
+  if (text.charAt(text.length - 1) === '\n') text = text.slice(0, -1);
+  return text;
+}
+
+/* Sets editor content with highlighting; moves caret to end. */
+function setEditorValue(text) {
+  sqlInput.innerHTML = highlightSQL(text) + '\n';
+  sqlInput.classList.toggle('is-empty', !text.trim());
+  var range = document.createRange();
+  range.selectNodeContents(sqlInput);
+  range.collapse(false);
+  var sel = window.getSelection();
+  if (sel) { sel.removeAllRanges(); sel.addRange(range); }
+  if (draftTimer) clearTimeout(draftTimer);
+  storageSet(DRAFT_KEY, text);
+}
+
+/* ============================================================
+   EDITOR — contenteditable input + live highlighting
+   ============================================================ */
+var draftTimer = null;
+var isComposing = false;
+
+function onEditorInput() {
+  if (isComposing) return;               // never interrupt IME composition
+  var caret = getCaretOffset();
+  var text  = getEditorValue();
+  sqlInput.innerHTML = highlightSQL(text) + '\n';
+  sqlInput.classList.toggle('is-empty', !text.trim());
+  setCaretOffset(caret);                 // restore cursor to exact same character
+  if (draftTimer) clearTimeout(draftTimer);
+  draftTimer = setTimeout(function () { storageSet(DRAFT_KEY, text); }, 400);
+}
+
+sqlInput.addEventListener('compositionstart', function () { isComposing = true; });
+sqlInput.addEventListener('compositionend',   function () { isComposing = false; onEditorInput(); });
+sqlInput.addEventListener('input', onEditorInput);
+
+sqlInput.addEventListener('keydown', function (e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runBtn.click(); return; }
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    document.execCommand('insertText', false, '  '); // fires 'input' → onEditorInput
+  }
+});
+
+/* Always paste as plain text — prevents browser injecting HTML */
+sqlInput.addEventListener('paste', function (e) {
+  e.preventDefault();
+  var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+  document.execCommand('insertText', false, text);
+});
+
+runBtn.addEventListener('click', function () {
+  var sql = getEditorValue();
+  if (!sql.trim()) { showResultsNotice('Nothing to run — type a SQL statement first.'); return; }
+  runBatch(sql);
+});
+clearEditorBtn.addEventListener('click', function () {
+  sqlInput.innerHTML = '';
+  sqlInput.classList.add('is-empty');
+  sqlInput.focus();
+  storageSet(DRAFT_KEY, '');
+});
+
+  /* ============================================================
+     TABS
+     ============================================================ */
+  var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+  function switchTab(name) {
+    tabButtons.forEach(function (b) {
+      var active = b.getAttribute('data-tab') === name;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    ['explorer', 'reference', 'history'].forEach(function (t) {
+      $('tab-' + t).classList.toggle('hidden', t !== name);
+    });
+  }
+  tabButtons.forEach(function (b) {
+    b.addEventListener('click', function () { switchTab(b.getAttribute('data-tab')); });
+  });
+
+  /* ============================================================
+     MOBILE SIDEBAR DRAWER
+     ============================================================ */
+  function openSidebarOnMobile() { sidebar.classList.add('open'); sidebarBackdrop.classList.add('visible'); }
+  function closeSidebarOnMobile() { sidebar.classList.remove('open'); sidebarBackdrop.classList.remove('visible'); }
+  $('sidebarOpen').addEventListener('click', openSidebarOnMobile);
+  $('sidebarClose').addEventListener('click', closeSidebarOnMobile);
+  sidebarBackdrop.addEventListener('click', closeSidebarOnMobile);
+
+  /* ============================================================
+     THEME — dark by default; "light-theme" class on <body>
+     Exposed globally so a parent page can call it directly on
+     this iframe's contentWindow if same-origin, or post a message.
+     ============================================================ */
+  function applyTheme(mode) {
+    document.body.classList.toggle('light-theme', mode === 'light');
+  }
+  function toggleTheme() {
+    var isLight = document.body.classList.toggle('light-theme');
+    storageSet(THEME_KEY, isLight ? 'light' : 'dark');
+  }
+  window.toggleTheme = toggleTheme;
+
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d) return;
+    var mode = null;
+    if (typeof d === 'string') {
+      if (d === 'light-theme' || d === 'light') mode = 'light';
+      else if (d === 'dark-theme' || d === 'dark') mode = 'dark';
+    } else if (typeof d === 'object') {
+      if (d.theme) mode = d.theme;
+      else if (d.type === 'theme' && d.value) mode = d.value;
+    }
+    if (mode === 'light' || mode === 'dark') { applyTheme(mode); storageSet(THEME_KEY, mode); }
+  });
+
+  (function initTheme() {
+    var mode = 'dark';
+    try {
+      var urlTheme = new URLSearchParams(location.search).get('theme');
+      var saved = storageGet(THEME_KEY);
+      if (urlTheme === 'light' || urlTheme === 'dark') mode = urlTheme;
+      else if (saved === 'light' || saved === 'dark') mode = saved;
+    } catch (e) { /* ignore */ }
+    applyTheme(mode);
+  })();
+
+  /* ============================================================
+     BOOT
+     ============================================================ */
+  restoreState();
+  renderSidebar();
+  renderReference();
+  loadHistory();
+  renderHistory();
+
+  /* REPLACE WITH */
+var draft = storageGet(DRAFT_KEY);
+if (draft) {
+  sqlInput.innerHTML = highlightSQL(draft) + '\n';
+  sqlInput.classList.toggle('is-empty', !draft.trim());
+} else {
+  sqlInput.classList.add('is-empty');
+}
+
+})();
+</script>
+</body>
+</html>
  
