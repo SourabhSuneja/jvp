@@ -79,6 +79,35 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* Quick Share Button */
+        .quick-share-btn {
+            margin-left: auto; /* Pushes the button to the far right */
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .quick-share-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .quick-share-btn .material-icons {
+            font-size: 1.2rem;
+        }
+
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -331,6 +360,11 @@
                 flex-direction: column;
                 text-align: center;
                 gap: 0.5rem;
+            }
+
+            .quick-share-btn {
+                margin-left: 0; /* Removes the right-push on mobile */
+                margin-top: 0.5rem;
             }
             
             .logo {
@@ -839,6 +873,10 @@
         <div class="header-content">
             <img src="https://myjvp.in/commons/school-logo.jpg" alt="School Logo" class="logo">
             <h1 class="school-name">My JVP</h1>
+            <a href="https://myjvp.in/quick-share/" class="quick-share-btn">
+                <span class="material-icons">ios_share</span>
+                Quick Share
+            </a>
         </div>
     </header>
 
