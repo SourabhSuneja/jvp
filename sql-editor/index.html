@@ -683,9 +683,12 @@ input { font: inherit; color: inherit; }
 
     <div class="tab-panel hidden thin-scroll" id="tab-history">
       <div class="history-head">
-        <span>Recent runs</span>
-        <button class="btn-link" id="clearHistoryBtn">Clear</button>
+          <span>Recent runs</span>
+          <div style="display:flex; gap:10px;">
+          <button class="btn-link" id="downloadHistoryBtn">Download</button>
+          <button class="btn-link" id="clearHistoryBtn">Clear</button>
       </div>
+</div>
       <div class="history-list" id="historyList"></div>
     </div>
   </aside>
@@ -939,6 +942,7 @@ input { font: inherit; color: inherit; }
   var newDbBtn = $('newDbBtn');
   var sampleBtn = $('sampleBtn');
   var clearHistoryBtn = $('clearHistoryBtn');
+  var downloadHistoryBtn = $('downloadHistoryBtn');
   var modalOverlay = $('modalOverlay');
   var modalTitle = $('modalTitle');
   var modalBody = $('modalBody');
@@ -1409,6 +1413,30 @@ function insertIntoEditor(text) {
     persistHistory();
     renderHistory();
   }
+  function formatHistoryTimestamp(ts) {
+  var d = new Date(ts);
+  function pad(n) { return n < 10 ? '0' + n : n; }
+  return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) +
+    ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+}
+
+function downloadHistoryAsText() {
+  if (!history.length) return;
+  var ordered = history.slice().reverse(); // oldest -> newest
+  var lines = ordered.map(function (item, idx) {
+    return '[' + (idx + 1) + '] ' + formatHistoryTimestamp(item.time) + '\n' + item.sql + '\n';
+  });
+  var content = lines.join('\n');
+  var blob = new Blob([content], { type: 'text/plain' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'sql_history_' + Date.now() + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
   function renderHistory() {
     if (!history.length) {
       historyList.innerHTML = '<div class="empty-note">Queries you run will show up here so you can revisit them.</div>';
@@ -1434,6 +1462,7 @@ switchTab('explorer');
 closeSidebarOnMobile();
 sqlInput.focus();
   });
+  downloadHistoryBtn.addEventListener('click', downloadHistoryAsText);
   clearHistoryBtn.addEventListener('click', function () {
     if (!history.length) return;
     showModal({
