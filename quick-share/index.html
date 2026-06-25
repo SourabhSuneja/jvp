@@ -4,470 +4,597 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quick Share · My JVP</title>
+
+  <!-- Google Fonts — matched to index.html (Inter + Poppins) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Material Icons — matched to index.html -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <style>
-    /* ── Tokens ──────────────────────────────────────────────────────────── */
+    /* ── Tokens — mirrored from index.html's palette ───────────────────────── */
     :root {
-      --navy:          #141432;
-      --navy-mid:      #1e1e4a;
-      --accent:        #4361ee;
-      --accent-hover:  #3451de;
-      --accent-soft:   #eef0fd;
-      --teal:          #06d6a0;
-      --teal-hover:    #05c491;
-      --teal-soft:     #e6fdf7;
-      --error:         #e63946;
-      --error-soft:    #fff0f1;
-      --warn:          #f4a261;
-      --warn-soft:     #fff8f0;
-      --success:       #2dc653;
-      --success-soft:  #f0fdf4;
+      --navy:          #1e3a8a;
+      --purple-1:      #667eea;
+      --purple-2:      #764ba2;
+      --green-1:       #48bb78;
+      --green-2:       #38a169;
+      --orange-1:      #ed8936;
+      --orange-2:      #dd6b20;
 
-      --bg:            #f0f2ff;
-      --surface:       #ffffff;
-      --border:        #e3e6f5;
-      --border-focus:  #4361ee;
+      --text:          #2d3748;
+      --text-2:        #718096;
+      --text-3:        #a0aec0;
 
-      --text:          #141432;
-      --text-2:        #4a4a72;
-      --text-3:        #8888a8;
+      --border:        #e2e8f0;
+      --border-focus:  #667eea;
 
-      --radius:        14px;
-      --radius-sm:     8px;
-      --shadow:        0 2px 8px rgba(20,20,50,.06), 0 8px 32px rgba(20,20,50,.07);
-      --shadow-lg:     0 8px 24px rgba(20,20,50,.10), 0 24px 64px rgba(20,20,50,.12);
+      --error:         #e53e3e;
+      --error-soft:    #fff5f5;
+      --warn-soft:     #fffaf0;
+      --success-soft:  #f0fff4;
+      --info-soft:     #ebf0ff;
+
+      --radius-lg:  24px;
+      --radius-md:  16px;
+      --radius-sm:  12px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
-    /* ── Header ──────────────────────────────────────────────────────────── */
-    .site-header {
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #2a2a6e 100%);
-      padding: 28px 24px 32px;
-      text-align: center;
+    /* ── Header — mirrored from index.html .header ──────────────────────────── */
+    .header {
+      background: var(--navy);
+      padding: 1.5rem 2rem;
       position: relative;
-      overflow: hidden;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .site-header::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 70% 50%, rgba(67,97,238,.25) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(6,214,160,.12) 0%, transparent 50%);
-      pointer-events: none;
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
-    .header-inner { position: relative; max-width: 900px; margin: 0 auto; }
-
-    .logo-row {
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+    .header-titles { display: flex; flex-direction: column; }
+    .header-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .school-name {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+      line-height: 1.15;
+    }
+    .portal-btn {
+      margin-left: auto;
       display: inline-flex;
       align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
     }
-    .logo-badge {
-      width: 48px; height: 48px;
-      background: linear-gradient(135deg, var(--accent), #6a8eff);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 16px rgba(67,97,238,.4);
-      font-size: 22px;
-      display: none;
+    .portal-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
-    .logo-text { text-align: left; }
-    .logo-portal {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 12px; font-weight: 600;
-      letter-spacing: .12em; text-transform: uppercase;
-      color: rgba(255,255,255,.55);
-      text-align: center;
-    }
-    .logo-feature {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 24px; font-weight: 800;
-      color: #fff;
-      letter-spacing: -.02em;
-      line-height: 1;
-    }
-    .header-tagline {
-      font-size: 14px;
-      color: rgba(255,255,255,.6);
-      max-width: 340px; margin: 0 auto;
-    }
+    .portal-btn .material-icons { font-size: 1.2rem; }
 
-    /* ── Main ────────────────────────────────────────────────────────────── */
-    main {
+    /* ── Main content — mirrored from index.html .main-content / .container ─── */
+    .main-content {
       flex: 1;
-      padding: 32px 16px 40px;
-      max-width: 920px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      max-width: 560px;
       width: 100%;
-      margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-    @media (max-width: 660px) {
-      .cards-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ── Card ────────────────────────────────────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .card-head {
-      padding: 18px 22px 14px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .card-head-icon {
-      width: 40px; height: 40px;
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .icon-upload { background: var(--accent-soft); color: var(--accent); }
-    .icon-download { background: var(--teal-soft); color: #05a07a; }
-
-    .card-head-text h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 16px; font-weight: 700;
-      color: var(--text);
-    }
-    .card-head-text p {
-      font-size: 12px; color: var(--text-3); margin-top: 1px;
-    }
-
-    .card-body {
-      padding: 20px 22px 24px;
-      display: flex; flex-direction: column; gap: 16px;
-    }
-
-    /* ── Drop Zone ───────────────────────────────────────────────────────── */
-    .drop-zone {
-      border: 2px dashed var(--border);
-      border-radius: var(--radius-sm);
-      padding: 30px 16px;
+    .welcome-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
       text-align: center;
-      cursor: pointer;
-      transition: border-color .2s, background .2s;
-      background: #fafbff;
-      user-select: none;
-    }
-    .drop-zone:hover, .drop-zone.over {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-    }
-    .drop-zone-emoji { font-size: 30px; display: block; margin-bottom: 10px; }
-    .drop-zone-label {
-      font-size: 13px; color: var(--text-2); line-height: 1.5;
-    }
-    .drop-zone-label strong {
-      color: var(--accent); font-weight: 600; cursor: pointer;
-    }
-    .drop-zone-sub {
-      font-size: 11px; color: var(--text-3); margin-top: 4px;
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .file-chip {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--accent-soft);
-      border: 1px solid #d4dafc;
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-2);
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+      text-align: center;
     }
-    .file-chip-icon { font-size: 22px; flex-shrink: 0; }
-    .file-chip-info { flex: 1; min-width: 0; }
-    .file-chip-name {
-      font-size: 13px; font-weight: 600; color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      text-align: center;
     }
-    .file-chip-size { font-size: 11px; color: var(--text-3); margin-top: 2px; }
-    .file-chip-remove {
-      background: none; border: none; cursor: pointer;
-      font-size: 15px; color: var(--text-3); padding: 4px;
-      border-radius: 4px; line-height: 1; transition: color .15s, background .15s;
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-2);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* ── Buttons — mirrored from index.html .btn family ─────────────────────── */
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.05rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn:hover::before { left: 100%; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    .btn-primary:not(:disabled):hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--green-1), var(--green-2));
+      color: white;
+      box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+    }
+    .btn-secondary:not(:disabled):hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+    }
+
+    .back-btn {
+      background: rgba(113, 128, 150, 0.1);
+      color: var(--text-2);
+      border: 2px solid rgba(113, 128, 150, 0.2);
+      margin-bottom: 1.25rem;
+      width: auto;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.9rem;
+    }
+    .back-btn:hover {
+      background: rgba(113, 128, 150, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: #eef0fd;
+      color: var(--purple-1);
+      box-shadow: none;
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      width: auto;
       flex-shrink: 0;
     }
-    .file-chip-remove:hover { color: var(--error); background: rgba(230,57,70,.08); }
-
-    /* ── Form Fields ─────────────────────────────────────────────────────── */
-    .field { display: flex; flex-direction: column; gap: 5px; }
-    .field-label {
-      font-size: 11px; font-weight: 600; color: var(--text-3);
-      letter-spacing: .07em; text-transform: uppercase;
+    .btn-ghost:hover {
+      background: #dde2fd;
+      transform: translateY(-2px);
     }
 
-    .input-row { display: flex; gap: 8px; align-items: flex-end; }
-    .input-row .field { flex: 1; }
+    /* ── Sections — mirrored from index.html's step/active toggle pattern ──── */
+    .form-section {
+      display: none;
+      animation: fadeInUp 0.5s ease;
+    }
+    .form-section.active { display: block; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fadeInUp 0.6s ease; }
+
+    /* ── Fields ──────────────────────────────────────────────────────────── */
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.1rem; }
+    .field-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .field-label .material-icons { font-size: 1rem; color: var(--purple-1); }
+
+    .input-row { display: flex; gap: 8px; align-items: flex-start; }
+    .input-row .field { flex: 1; margin-bottom: 0; }
 
     input[type="text"],
     input[type="password"],
     select {
       width: 100%;
-      padding: 10px 13px;
+      padding: 0.8rem 0.9rem;
       border: 1.5px solid var(--border);
       border-radius: var(--radius-sm);
-      font-size: 14px; font-family: inherit;
-      color: var(--text); background: var(--surface);
-      outline: none; transition: border-color .2s, box-shadow .2s;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     input[type="text"]:focus,
     input[type="password"]:focus,
     select:focus {
       border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(67,97,238,.12);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
     }
     input::placeholder { color: var(--text-3); }
 
     select {
-      appearance: none; cursor: pointer; padding-right: 36px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238888a8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      appearance: none;
+      cursor: pointer;
+      padding-right: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0aec0' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
-      background-position: right 10px center;
+      background-position: right 12px center;
       background-size: 16px;
     }
 
-    /* ── Buttons ─────────────────────────────────────────────────────────── */
-    .btn {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 11px 16px; border: none; border-radius: var(--radius-sm);
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 14px; font-weight: 700;
-      cursor: pointer; transition: all .18s; white-space: nowrap;
-    }
-    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
-
-    .btn-accent {
-      background: var(--accent); color: #fff; width: 100%;
-    }
-    .btn-accent:not(:disabled):hover {
-      background: var(--accent-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(67,97,238,.35);
+    input[type="text"]#retrievePin {
+      text-align: center;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
     }
 
-    .btn-teal {
-      background: var(--teal); color: #082e26; width: 100%;
+    /* ── Drop zone ───────────────────────────────────────────────────────── */
+    .drop-zone {
+      border: 2px dashed #cbd3f7;
+      border-radius: var(--radius-sm);
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #f8f9ff;
+      user-select: none;
+      margin-bottom: 1.1rem;
     }
-    .btn-teal:not(:disabled):hover {
-      background: var(--teal-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(6,214,160,.3);
+    .drop-zone:hover, .drop-zone.over {
+      border-color: var(--purple-1);
+      background: #eef0fd;
     }
+    .drop-zone .material-icons {
+      font-size: 2rem;
+      color: var(--purple-1);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .drop-zone-label { font-size: 0.9rem; color: var(--text-2); line-height: 1.5; }
+    .drop-zone-label strong { color: var(--purple-1); font-weight: 600; cursor: pointer; }
+    .drop-zone-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 4px; }
 
-    .btn-ghost {
-      background: var(--accent-soft); color: var(--accent);
-      padding: 10px 12px; height: 40px; font-size: 12px;
+    .file-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: #eef0fd;
+      border: 1px solid #d4dafc;
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.1rem;
     }
-    .btn-ghost:not(:disabled):hover { background: #dde2fd; }
+    .file-chip .material-icons.file-chip-icon { font-size: 1.5rem; color: var(--purple-1); flex-shrink: 0; }
+    .file-chip-info { flex: 1; min-width: 0; }
+    .file-chip-name {
+      font-size: 0.9rem; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .file-chip-size { font-size: 0.78rem; color: var(--text-3); margin-top: 2px; }
+    .file-chip-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-3); padding: 4px;
+      border-radius: 50%; line-height: 1; transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .file-chip-remove:hover { color: var(--error); background: rgba(229, 62, 62, 0.08); }
+    .file-chip-remove .material-icons { font-size: 1.1rem; }
 
     /* ── Progress ────────────────────────────────────────────────────────── */
-    .progress-block { display: flex; flex-direction: column; gap: 7px; }
-    .progress-meta {
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .progress-label { font-size: 12px; font-weight: 600; color: var(--text-2); }
-    .progress-pct   { font-size: 12px; font-weight: 700; color: var(--accent); }
-
-    .progress-track {
-      height: 7px; background: var(--border);
-      border-radius: 99px; overflow: hidden;
-    }
+    .progress-block { display: flex; flex-direction: column; gap: 7px; margin-bottom: 1.1rem; }
+    .progress-meta { display: flex; justify-content: space-between; align-items: center; }
+    .progress-label { font-size: 0.85rem; font-weight: 600; color: var(--text-2); }
+    .progress-pct   { font-size: 0.85rem; font-weight: 700; color: var(--purple-1); }
+    .progress-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
     .progress-fill {
       height: 100%; width: 0;
-      background: linear-gradient(90deg, var(--accent), #7c9fff);
+      background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
       border-radius: 99px;
-      transition: width .25s ease;
+      transition: width 0.25s ease;
     }
 
     /* ── Alerts ──────────────────────────────────────────────────────────── */
     .alert {
       display: flex; align-items: flex-start; gap: 10px;
-      padding: 12px 14px; border-radius: var(--radius-sm);
-      font-size: 13px; line-height: 1.55;
+      padding: 0.9rem 1rem; border-radius: var(--radius-sm);
+      font-size: 0.88rem; line-height: 1.55;
+      margin-bottom: 1.1rem;
     }
-    .alert-icon { flex-shrink: 0; font-size: 15px; margin-top: 1px; }
+    .alert-icon { flex-shrink: 0; font-size: 1.15rem; margin-top: 1px; }
     .alert-body { flex: 1; }
-    .alert-title {
-      font-weight: 700; font-size: 13px; display: block; margin-bottom: 2px;
-    }
+    .alert-title { font-weight: 700; font-size: 0.88rem; display: block; margin-bottom: 2px; }
 
-    .alert-success { background: var(--success-soft); color: #14532d; }
-    .alert-error   { background: var(--error-soft);   color: #7f1d1d; }
-    .alert-info    { background: var(--accent-soft);  color: #1e3a8a; }
-    .alert-warn    { background: var(--warn-soft);    color: #7c3e04; }
+    .alert-success { background: var(--success-soft); color: #22543d; }
+    .alert-success .alert-icon { color: var(--green-1); }
+    .alert-error   { background: var(--error-soft);   color: #822727; }
+    .alert-error .alert-icon { color: var(--error); }
+    .alert-info    { background: var(--info-soft);    color: #2c3a8c; }
+    .alert-info .alert-icon { color: var(--purple-1); }
+    .alert-warn    { background: var(--warn-soft);    color: #7b341e; }
+    .alert-warn .alert-icon { color: var(--orange-1); }
 
-    /* ── Boarding-pass PIN ───────────────────────────────────────────────── */
+    /* ── Boarding-pass PIN ticket ────────────────────────────────────────── */
     .ticket {
-      border: 2px dashed #c8cffd;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent-soft) 0%, #f5f7ff 100%);
+      border: 2px dashed #c7d2fe;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #f5f3ff 0%, #eef0ff 100%);
       overflow: hidden;
-      margin-top: 4px;
+      margin-bottom: 0.5rem;
     }
     .ticket-top {
-      padding: 10px 16px 8px;
+      padding: 0.7rem 1rem 0.5rem;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .ticket-label { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
-    .ticket-expiry { font-size: 10px; color: var(--text-3); }
-
+    .ticket-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+    .ticket-expiry { font-size: 0.7rem; color: var(--text-3); }
     .ticket-pin-row {
       display: flex; align-items: center;
-      border-top: 1px dashed #c8cffd;
-      padding: 12px 16px;
+      border-top: 1px dashed #c7d2fe;
+      padding: 0.9rem 1rem;
       gap: 12px;
     }
     .ticket-pin {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 26px; font-weight: 700;
-      color: var(--accent);
-      letter-spacing: .05em;
+      font-size: 1.55rem; font-weight: 700;
+      color: var(--purple-2);
+      letter-spacing: 0.04em;
       flex: 1;
     }
     .copy-btn {
-      background: var(--accent); color: #fff;
-      border: none; border-radius: 6px;
-      padding: 6px 12px; font-size: 12px; font-weight: 700;
-      font-family: 'Space Grotesk', sans-serif;
-      cursor: pointer; transition: background .15s, transform .15s;
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      color: #fff;
+      border: none; border-radius: 10px;
+      padding: 0.5rem 0.9rem; font-size: 0.78rem; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
       white-space: nowrap;
     }
-    .copy-btn:hover { background: var(--accent-hover); transform: scale(1.04); }
-    .copy-btn.copied { background: var(--success); }
+    .copy-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35); }
+    .copy-btn.copied { background: linear-gradient(135deg, var(--green-1), var(--green-2)); }
 
-    /* ── Download hint ───────────────────────────────────────────────────── */
+    /* ── Download hint / info box ───────────────────────────────────────── */
     .hint {
-      background: var(--teal-soft);
-      border: 1px solid #b2f0de;
+      background: var(--success-soft);
+      border: 1px solid #bcf0d6;
       border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      font-size: 13px; color: #065f46; line-height: 1.5;
+      padding: 0.9rem 1rem;
+      font-size: 0.88rem; color: #22543d; line-height: 1.5;
     }
-    .hint a { color: #047857; font-weight: 600; }
+    .hint a { color: #2f855a; font-weight: 600; }
 
-    /* ── Info box ────────────────────────────────────────────────────────── */
     .info-box {
-      background: var(--accent-soft);
+      background: var(--info-soft);
       border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      font-size: 12px; color: #2d3ab0; line-height: 1.6;
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem; color: #3a47a3; line-height: 1.6;
+      margin-top: 0.5rem;
     }
     .info-box strong { font-weight: 700; }
-
-    /* ── Footer ──────────────────────────────────────────────────────────── */
-    footer {
-      text-align: center; padding: 20px 16px;
-      font-size: 11px; color: var(--text-3);
-      border-top: 1px solid var(--border);
-    }
 
     /* ── Spinner ─────────────────────────────────────────────────────────── */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner {
-      width: 15px; height: 15px;
-      border: 2px solid rgba(255,255,255,.4);
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
       border-top-color: #fff;
       border-radius: 50%;
-      animation: spin .7s linear infinite;
+      animation: spin 0.7s linear infinite;
       flex-shrink: 0;
     }
-    .spinner-teal {
-      border-color: rgba(8,46,38,.25);
-      border-top-color: #082e26;
+
+    /* ── Footer — mirrored from index.html .footer ──────────────────────── */
+    .footer {
+      background: var(--navy);
+      padding: 1.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+    .footer-text {
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 400;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
     }
 
     /* ── Misc ────────────────────────────────────────────────────────────── */
     .hidden { display: none !important; }
-    input[type="text"]#retrievePin {
-      text-align: center; font-size: 16px;
-      letter-spacing: .05em; font-weight: 600;
+
+    /* ── Responsive — mirrored from index.html breakpoints ─────────────────── */
+    @media (max-width: 768px) {
+      .header { padding: 1rem; }
+      .school-name { font-size: 1.4rem; }
+      .container { margin: 1rem; padding: 2rem; }
+      .welcome-text { font-size: 1.9rem; }
+      .btn { padding: 0.875rem 1.5rem; font-size: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .header-content { flex-wrap: wrap; }
+      .portal-btn { margin-left: 0; margin-top: 0.5rem; flex-basis: 100%; justify-content: center; }
+      .logo { width: 52px; height: 52px; }
+      .school-name { font-size: 1.25rem; }
+      .welcome-text { font-size: 1.6rem; }
+      .container { padding: 1.5rem; }
+      .input-row { flex-direction: column; align-items: stretch; }
+      .btn-ghost { width: 100%; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- ── Header ──────────────────────────────────────────────────────────────── -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="logo-row">
-      <div class="logo-badge">⚡</div>
-      <div class="logo-text">
-        <div class="logo-portal">My JVP</div>
-        <div class="logo-feature">Quick Share</div>
+  <!-- ── Header — mirrored from index.html ─────────────────────────────────── -->
+  <header class="header">
+    <div class="header-content">
+      <img src="https://myjvp.in/commons/school-logo.jpg" alt="School Logo" class="logo">
+      <div class="header-titles">
+        <span class="header-eyebrow">My JVP</span>
+        <h1 class="school-name">Quick Share</h1>
       </div>
+      <a href="https://myjvp.in/" class="portal-btn">
+        <span class="material-icons">home</span>
+        Portal
+      </a>
     </div>
-    <p class="header-tagline">Share files instantly with a PIN — no login required.</p>
-  </div>
-</header>
+  </header>
 
-<!-- ── Main ────────────────────────────────────────────────────────────────── -->
-<main>
-  <div class="cards-grid">
+  <!-- ── Main ───────────────────────────────────────────────────────────────── -->
+  <main class="main-content">
+    <div class="container fade-in-up">
+      <h2 class="welcome-text">Quick Share</h2>
+      <p class="subtitle">Share files instantly with a PIN — no login required.</p>
 
-    <!-- ════════════════════════════════════════════
-         UPLOAD CARD
-    ═════════════════════════════════════════════ -->
-    <div class="card">
-      <div class="card-head">
-        <div class="card-head-icon icon-upload">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-          </svg>
-        </div>
-        <div class="card-head-text">
-          <h2>Share a File</h2>
-          <p>Upload and get a shareable PIN</p>
+      <!-- Action selection (mirrors index.html's role-selection step) -->
+      <div class="action-section" id="actionSection">
+        <h3 class="section-title">What would you like to do?</h3>
+        <div class="button-group">
+          <button class="btn btn-primary" id="goUploadBtn">
+            <span class="material-icons">cloud_upload</span>
+            Upload a File
+          </button>
+          <button class="btn btn-secondary" id="goDownloadBtn">
+            <span class="material-icons">file_download</span>
+            Download a File
+          </button>
         </div>
       </div>
 
-      <div class="card-body">
+      <!-- ════════════════════════════════════════════
+           UPLOAD SECTION
+      ═════════════════════════════════════════════ -->
+      <div class="form-section" id="uploadSection">
+        <button class="btn back-btn" id="backFromUpload">
+          <span class="material-icons">arrow_back</span>
+          Back
+        </button>
+        <h3 class="section-title">Share a File</h3>
+        <p class="section-subtitle">Upload and get a shareable PIN</p>
 
         <!-- File drop zone -->
         <div id="dropZone" class="drop-zone" role="button" tabindex="0"
              aria-label="Click or drag a file here to upload">
-          <span class="drop-zone-emoji">📂</span>
+          <span class="material-icons">cloud_upload</span>
           <p class="drop-zone-label">
-            Drag & drop your file here, or <strong id="browseLink">browse</strong>
+            Drag &amp; drop your file here, or <strong id="browseLink">browse</strong>
           </p>
           <p class="drop-zone-sub">Any file type · Max 50 MB</p>
         </div>
 
         <div id="fileChip" class="file-chip hidden">
-          <span class="file-chip-icon">📄</span>
+          <span class="material-icons file-chip-icon">description</span>
           <div class="file-chip-info">
             <div class="file-chip-name" id="chipName"></div>
             <div class="file-chip-size" id="chipSize"></div>
           </div>
-          <button class="file-chip-remove" id="removeFile" title="Remove file" aria-label="Remove file">✕</button>
+          <button class="file-chip-remove" id="removeFile" title="Remove file" aria-label="Remove file">
+            <span class="material-icons">close</span>
+          </button>
         </div>
 
         <input type="file" id="fileInput" class="hidden" aria-hidden="true">
 
         <!-- Master Upload Key -->
         <div class="field">
-          <label class="field-label" for="uploadKey">🔑 Master Upload Key</label>
+          <label class="field-label" for="uploadKey"><span class="material-icons">vpn_key</span> Master Upload Key</label>
           <input type="password" id="uploadKey"
                  placeholder="Enter the system upload key"
                  autocomplete="off" spellcheck="false">
@@ -475,7 +602,7 @@
 
         <!-- Download PIN -->
         <div class="field">
-          <label class="field-label">📌 Download PIN</label>
+          <label class="field-label"><span class="material-icons">sell</span> Download PIN</label>
           <div class="input-row">
             <div class="field">
               <input type="text" id="downloadPin"
@@ -483,26 +610,27 @@
                      autocomplete="off" spellcheck="false">
             </div>
             <button class="btn btn-ghost" id="genPinBtn" title="Generate a random PIN">
-              🎲 Generate
+              <span class="material-icons" style="font-size:1rem;">casino</span>
+              Generate
             </button>
           </div>
         </div>
 
         <!-- Expiry -->
         <div class="field">
-          <label class="field-label" for="expiry">⏱ Expiry Duration</label>
+          <label class="field-label" for="expiry"><span class="material-icons">schedule</span> Expiry Duration</label>
           <select id="expiry">
             <option value="5">5 minutes</option>
             <option value="10">10 minutes</option>
             <option value="30">30 minutes</option>
-            
+
             <option value="60">1 hour</option>
             <option value="240">4 hours</option>
             <option value="720" selected>12 hours</option>
             <option value="1440">24 hours</option>
             <option value="2880">48 hours</option>
             <option value="4320">72 hours</option>
-            
+
             <option value="10080">1 week</option>
             <option value="20160">2 weeks</option>
             <option value="43200">1 month</option>
@@ -527,40 +655,25 @@
         <div id="uploadStatus" class="hidden"></div>
 
         <!-- Upload Button -->
-        <button class="btn btn-accent" id="uploadBtn">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-          </svg>
+        <button class="btn btn-primary" id="uploadBtn">
+          <span class="material-icons">cloud_upload</span>
           Upload &amp; Share
         </button>
-
-      </div>
-    </div>
-
-    <!-- ════════════════════════════════════════════
-         DOWNLOAD CARD
-    ═════════════════════════════════════════════ -->
-    <div class="card">
-      <div class="card-head">
-        <div class="card-head-icon icon-download">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-          </svg>
-        </div>
-        <div class="card-head-text">
-          <h2>Retrieve a File</h2>
-          <p>Enter the PIN to download</p>
-        </div>
       </div>
 
-      <div class="card-body">
-
-        <div style="height: 4px;"></div>
+      <!-- ════════════════════════════════════════════
+           DOWNLOAD SECTION
+      ═════════════════════════════════════════════ -->
+      <div class="form-section" id="downloadSection">
+        <button class="btn back-btn" id="backFromDownload">
+          <span class="material-icons">arrow_back</span>
+          Back
+        </button>
+        <h3 class="section-title">Retrieve a File</h3>
+        <p class="section-subtitle">Enter the PIN to download</p>
 
         <div class="field">
-          <label class="field-label" for="retrievePin">📌 Enter Download PIN</label>
+          <label class="field-label" for="retrievePin"><span class="material-icons">sell</span> Enter Download PIN</label>
           <input type="text" id="retrievePin"
                  placeholder="e.g. sunny491"
                  autocomplete="off" spellcheck="false">
@@ -570,11 +683,8 @@
         <div id="downloadStatus" class="hidden"></div>
 
         <!-- Retrieve Button -->
-        <button class="btn btn-teal" id="downloadBtn">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-          </svg>
+        <button class="btn btn-secondary" id="downloadBtn">
+          <span class="material-icons">file_download</span>
           Retrieve File
         </button>
 
@@ -582,16 +692,15 @@
           Enter the PIN shared by the uploader. The download link will be active for
           <strong>5 minutes</strong> after you click Retrieve.
         </div>
-
       </div>
+
     </div>
+  </main>
 
-  </div><!-- /.cards-grid -->
-</main>
-
-<footer>
-  My JVP Quick Share &nbsp;·&nbsp; Files are automatically deleted after expiry &nbsp;·&nbsp; Internal school use only
-</footer>
+  <!-- ── Footer — mirrored from index.html ─────────────────────────────────── -->
+  <footer class="footer">
+    <p class="footer-text">My JVP Quick Share &nbsp;·&nbsp; Files are automatically deleted after expiry &nbsp;·&nbsp; Internal school use only</p>
+  </footer>
 
 
 <script>
@@ -601,6 +710,30 @@
 const EDGE_BASE = 'https://ckltcwampaagyzneaznt.supabase.co/functions/v1/quick-share';
 
 const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB hard limit
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION NAVIGATION — upload vs. download (mirrors index.html's role flow)
+   ═══════════════════════════════════════════════════════════════════════════ */
+function showActionSection() {
+  document.getElementById('uploadSection').classList.remove('active');
+  document.getElementById('downloadSection').classList.remove('active');
+  document.getElementById('actionSection').style.display = 'block';
+}
+function showUploadSection() {
+  document.getElementById('actionSection').style.display = 'none';
+  document.getElementById('downloadSection').classList.remove('active');
+  document.getElementById('uploadSection').classList.add('active');
+}
+function showDownloadSection() {
+  document.getElementById('actionSection').style.display = 'none';
+  document.getElementById('uploadSection').classList.remove('active');
+  document.getElementById('downloadSection').classList.add('active');
+}
+
+document.getElementById('goUploadBtn').addEventListener('click', showUploadSection);
+document.getElementById('goDownloadBtn').addEventListener('click', showDownloadSection);
+document.getElementById('backFromUpload').addEventListener('click', showActionSection);
+document.getElementById('backFromDownload').addEventListener('click', showActionSection);
 
 /* ═══════════════════════════════════════════════════════════════════════════
    PIN GENERATOR
@@ -644,11 +777,11 @@ function show(id)  { document.getElementById(id).classList.remove('hidden'); }
 function hide(id)  { document.getElementById(id).classList.add('hidden'); }
 
 function renderAlert(containerId, type, title, body) {
-  const icons = { success: '✅', error: '❌', info: 'ℹ️', warn: '⚠️' };
+  const icons = { success: 'check_circle', error: 'error', info: 'info', warn: 'warning' };
   const el = document.getElementById(containerId);
   el.innerHTML = `
     <div class="alert alert-${type}">
-      <span class="alert-icon">${icons[type] || ''}</span>
+      <span class="material-icons alert-icon">${icons[type] || 'info'}</span>
       <div class="alert-body">
         ${title ? `<span class="alert-title">${title}</span>` : ''}
         ${body}
@@ -664,24 +797,18 @@ function clearStatus(id) {
 }
 
 const UPLOAD_BTN_INNER = `
-  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-    <path stroke-linecap="round" stroke-linejoin="round"
-      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-  </svg>
+  <span class="material-icons">cloud_upload</span>
   Upload &amp; Share`;
 
 const DOWNLOAD_BTN_INNER = `
-  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-    <path stroke-linecap="round" stroke-linejoin="round"
-      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-  </svg>
+  <span class="material-icons">file_download</span>
   Retrieve File`;
 
-function setBtnLoading(id, isLoading, innerHtml, spinnerClass = 'spinner') {
+function setBtnLoading(id, isLoading, innerHtml) {
   const btn = document.getElementById(id);
   btn.disabled = isLoading;
   btn.innerHTML = isLoading
-    ? `<div class="${spinnerClass}"></div> Please wait…`
+    ? `<div class="spinner"></div> Please wait…`
     : innerHtml;
 }
 
@@ -809,7 +936,7 @@ async function handleUpload() {
 
     document.getElementById('uploadStatus').innerHTML = `
       <div class="alert alert-success">
-        <span class="alert-icon">✅</span>
+        <span class="material-icons alert-icon">check_circle</span>
         <div class="alert-body">
           <span class="alert-title">File shared successfully!</span>
           Share the PIN below. Expires at ${fmtDate(expires_at)}.
@@ -817,7 +944,7 @@ async function handleUpload() {
       </div>
       <div class="ticket">
         <div class="ticket-top">
-          <span class="ticket-label">📌 Download PIN</span>
+          <span class="ticket-label">Download PIN</span>
           <span class="ticket-expiry">Expires ${fmtDate(expires_at)}</span>
         </div>
         <div class="ticket-pin-row">
@@ -907,7 +1034,7 @@ async function handleDownload() {
     renderAlert('downloadStatus', 'error', '', 'Please enter a Download PIN.'); return;
   }
 
-  setBtnLoading('downloadBtn', true, DOWNLOAD_BTN_INNER, 'spinner spinner-teal');
+  setBtnLoading('downloadBtn', true, DOWNLOAD_BTN_INNER);
 
   try {
     const res  = await fetch(`${EDGE_BASE}/download`, {
