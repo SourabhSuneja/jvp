@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Share · My JVP</title>
+
+  <!-- Google Fonts — matched to index.html (Inter + Poppins) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Material Icons — matched to index.html -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style>
+    /* ── Tokens — mirrored from index.html's palette ───────────────────────── */
+    :root {
+      --navy:          #1e3a8a;
+      --purple-1:      #667eea;
+      --purple-2:      #764ba2;
+      --green-1:       #48bb78;
+      --green-2:       #38a169;
+      --orange-1:      #ed8936;
+      --orange-2:      #dd6b20;
+
+      --text:          #2d3748;
+      --text-2:        #718096;
+      --text-3:        #a0aec0;
+
+      --border:        #e2e8f0;
+      --border-focus:  #667eea;
+
+      --error:         #e53e3e;
+      --error-soft:    #fff5f5;
+      --warn-soft:     #fffaf0;
+      --success-soft:  #f0fff4;
+      --info-soft:     #ebf0ff;
+
+      --radius-lg:  24px;
+      --radius-md:  16px;
+      --radius-sm:  12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ── Header — mirrored from index.html .header ──────────────────────────── */
+    .header {
+      background: var(--navy);
+      padding: 1.5rem 2rem;
+      position: relative;
+      z-index: 10;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+    .header-titles { display: flex; flex-direction: column; }
+    .header-eyebrow {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    .school-name {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+      line-height: 1.15;
+    }
+    .portal-btn {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    .portal-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .portal-btn .material-icons { font-size: 1.2rem; }
+
+    /* ── Main content — mirrored from index.html .main-content / .container ─── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      max-width: 560px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .welcome-text {
+      font-family: 'Poppins', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-2);
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      text-align: center;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-2);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* ── Buttons — mirrored from index.html .btn family ─────────────────────── */
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.05rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn:hover::before { left: 100%; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      color: white;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    .btn-primary:not(:disabled):hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--green-1), var(--green-2));
+      color: white;
+      box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+    }
+    .btn-secondary:not(:disabled):hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(72, 187, 120, 0.4);
+    }
+
+    .back-btn {
+      background: rgba(113, 128, 150, 0.1);
+      color: var(--text-2);
+      border: 2px solid rgba(113, 128, 150, 0.2);
+      margin-bottom: 1.25rem;
+      width: auto;
+      padding: 0.6rem 1.1rem;
+      font-size: 0.9rem;
+    }
+    .back-btn:hover {
+      background: rgba(113, 128, 150, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: #eef0fd;
+      color: var(--purple-1);
+      box-shadow: none;
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      width: auto;
+      flex-shrink: 0;
+    }
+    .btn-ghost:hover {
+      background: #dde2fd;
+      transform: translateY(-2px);
+    }
+
+    /* ── Sections — mirrored from index.html's step/active toggle pattern ──── */
+    .form-section {
+      display: none;
+      animation: fadeInUp 0.5s ease;
+    }
+    .form-section.active { display: block; }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in-up { animation: fadeInUp 0.6s ease; }
+
+    /* ── Fields ──────────────────────────────────────────────────────────── */
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1.1rem; }
+    .field-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .field-label .material-icons { font-size: 1rem; color: var(--purple-1); }
+
+    .input-row { display: flex; gap: 8px; align-items: flex-start; }
+    .input-row .field { flex: 1; margin-bottom: 0; }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 0.8rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+    }
+    input::placeholder { color: var(--text-3); }
+
+    select {
+      appearance: none;
+      cursor: pointer;
+      padding-right: 36px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0aec0' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+    }
+
+    input[type="text"]#retrievePin {
+      text-align: center;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    /* ── Drop zone ───────────────────────────────────────────────────────── */
+    .drop-zone {
+      border: 2px dashed #cbd3f7;
+      border-radius: var(--radius-sm);
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #f8f9ff;
+      user-select: none;
+      margin-bottom: 1.1rem;
+    }
+    .drop-zone:hover, .drop-zone.over {
+      border-color: var(--purple-1);
+      background: #eef0fd;
+    }
+    .drop-zone .material-icons {
+      font-size: 2rem;
+      color: var(--purple-1);
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+    .drop-zone-label { font-size: 0.9rem; color: var(--text-2); line-height: 1.5; }
+    .drop-zone-label strong { color: var(--purple-1); font-weight: 600; cursor: pointer; }
+    .drop-zone-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 4px; }
+
+    .file-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: #eef0fd;
+      border: 1px solid #d4dafc;
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      margin-bottom: 1.1rem;
+    }
+    .file-chip .material-icons.file-chip-icon { font-size: 1.5rem; color: var(--purple-1); flex-shrink: 0; }
+    .file-chip-info { flex: 1; min-width: 0; }
+    .file-chip-name {
+      font-size: 0.9rem; font-weight: 600; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .file-chip-size { font-size: 0.78rem; color: var(--text-3); margin-top: 2px; }
+    .file-chip-remove {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-3); padding: 4px;
+      border-radius: 50%; line-height: 1; transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .file-chip-remove:hover { color: var(--error); background: rgba(229, 62, 62, 0.08); }
+    .file-chip-remove .material-icons { font-size: 1.1rem; }
+
+    /* ── Progress ────────────────────────────────────────────────────────── */
+    .progress-block { display: flex; flex-direction: column; gap: 7px; margin-bottom: 1.1rem; }
+    .progress-meta { display: flex; justify-content: space-between; align-items: center; }
+    .progress-label { font-size: 0.85rem; font-weight: 600; color: var(--text-2); }
+    .progress-pct   { font-size: 0.85rem; font-weight: 700; color: var(--purple-1); }
+    .progress-track { height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill {
+      height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+      border-radius: 99px;
+      transition: width 0.25s ease;
+    }
+
+    /* ── Alerts ──────────────────────────────────────────────────────────── */
+    .alert {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 0.9rem 1rem; border-radius: var(--radius-sm);
+      font-size: 0.88rem; line-height: 1.55;
+      margin-bottom: 1.1rem;
+    }
+    .alert-icon { flex-shrink: 0; font-size: 1.15rem; margin-top: 1px; }
+    .alert-body { flex: 1; }
+    .alert-title { font-weight: 700; font-size: 0.88rem; display: block; margin-bottom: 2px; }
+
+    .alert-success { background: var(--success-soft); color: #22543d; }
+    .alert-success .alert-icon { color: var(--green-1); }
+    .alert-error   { background: var(--error-soft);   color: #822727; }
+    .alert-error .alert-icon { color: var(--error); }
+    .alert-info    { background: var(--info-soft);    color: #2c3a8c; }
+    .alert-info .alert-icon { color: var(--purple-1); }
+    .alert-warn    { background: var(--warn-soft);    color: #7b341e; }
+    .alert-warn .alert-icon { color: var(--orange-1); }
+
+    /* ── Boarding-pass PIN ticket ────────────────────────────────────────── */
+    .ticket {
+      border: 2px dashed #c7d2fe;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #f5f3ff 0%, #eef0ff 100%);
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    .ticket-top {
+      padding: 0.7rem 1rem 0.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ticket-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
+    .ticket-expiry { font-size: 0.7rem; color: var(--text-3); }
+    .ticket-pin-row {
+      display: flex; align-items: center;
+      border-top: 1px dashed #c7d2fe;
+      padding: 0.9rem 1rem;
+      gap: 12px;
+    }
+    .ticket-pin {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.55rem; font-weight: 700;
+      color: var(--purple-2);
+      letter-spacing: 0.04em;
+      flex: 1;
+    }
+    .copy-btn {
+      background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+      color: #fff;
+      border: none; border-radius: 10px;
+      padding: 0.5rem 0.9rem; font-size: 0.78rem; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(102, 126, 234, 0.35); }
+    .copy-btn.copied { background: linear-gradient(135deg, var(--green-1), var(--green-2)); }
+
+    /* ── Download hint / info box ───────────────────────────────────────── */
+    .hint {
+      background: var(--success-soft);
+      border: 1px solid #bcf0d6;
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+      font-size: 0.88rem; color: #22543d; line-height: 1.5;
+    }
+    .hint a { color: #2f855a; font-weight: 600; }
+
+    .info-box {
+      background: var(--info-soft);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem; color: #3a47a3; line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+    .info-box strong { font-weight: 700; }
+
+    /* ── Spinner ─────────────────────────────────────────────────────────── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    /* ── Footer — mirrored from index.html .footer ──────────────────────── */
+    .footer {
+      background: var(--navy);
+      padding: 1.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 10;
+    }
+    .footer-text {
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 400;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ── Misc ────────────────────────────────────────────────────────────── */
+    .hidden { display: none !important; }
+
+    /* ── Responsive — mirrored from index.html breakpoints ─────────────────── */
+    @media (max-width: 768px) {
+      .header { padding: 1rem; }
+      .school-name { font-size: 1.4rem; }
+      .container { margin: 1rem; padding: 2rem; }
+      .welcome-text { font-size: 1.9rem; }
+      .btn { padding: 0.875rem 1.5rem; font-size: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .header-content { flex-wrap: wrap; }
+      .portal-btn { margin-left: 0; margin-top: 0.5rem; flex-basis: 100%; justify-content: center; }
+      .logo { width: 52px; height: 52px; }
+      .school-name { font-size: 1.25rem; }
+      .welcome-text { font-size: 1.6rem; }
+      .container { padding: 1.5rem; }
+      .input-row { flex-direction: column; align-items: stretch; }
+      .btn-ghost { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Header — mirrored from index.html ─────────────────────────────────── -->
+  <header class="header">
+    <div class="header-content">
+      <img src="https://myjvp.in/commons/school-logo.jpg" alt="School Logo" class="logo">
+      <div class="header-titles">
+        <span class="header-eyebrow">My JVP</span>
+        <h1 class="school-name">Quick Share</h1>
+      </div>
+      <a href="https://myjvp.in/commons/" class="portal-btn">
+        <span class="material-icons">home</span>
+        Portal
+      </a>
+    </div>
+  </header>
+
+  <!-- ── Main ───────────────────────────────────────────────────────────────── -->
+  <main class="main-content">
+    <div class="container fade-in-up">
+      <h2 class="welcome-text">Quick Share</h2>
+      <p class="subtitle">Share files instantly with a PIN — no login required.</p>
+
+      <!-- Action selection (mirrors index.html's role-selection step) -->
+      <div class="action-section" id="actionSection">
+        <h3 class="section-title">What would you like to do?</h3>
+        <div class="button-group">
+          <button class="btn btn-primary" id="goUploadBtn">
+            <span class="material-icons">cloud_upload</span>
+            Upload a File
+          </button>
+          <button class="btn btn-secondary" id="goDownloadBtn">
+            <span class="material-icons">file_download</span>
+            Download a File
+          </button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           UPLOAD SECTION
+      ═════════════════════════════════════════════ -->
+      <div class="form-section" id="uploadSection">
+        <button class="btn back-btn" id="backFromUpload">
+          <span class="material-icons">arrow_back</span>
+          Back
+        </button>
+        <h3 class="section-title">Share a File</h3>
+        <p class="section-subtitle">Upload and get a shareable PIN</p>
+
+        <!-- File drop zone -->
+        <div id="dropZone" class="drop-zone" role="button" tabindex="0"
+             aria-label="Click or drag a file here to upload">
+          <span class="material-icons">cloud_upload</span>
+          <p class="drop-zone-label">
+            Drag &amp; drop your file here, or <strong id="browseLink">browse</strong>
+          </p>
+          <p class="drop-zone-sub">Any file type · Max 50 MB</p>
+        </div>
+
+        <div id="fileChip" class="file-chip hidden">
+          <span class="material-icons file-chip-icon">description</span>
+          <div class="file-chip-info">
+            <div class="file-chip-name" id="chipName"></div>
+            <div class="file-chip-size" id="chipSize"></div>
+          </div>
+          <button class="file-chip-remove" id="removeFile" title="Remove file" aria-label="Remove file">
+            <span class="material-icons">close</span>
+          </button>
+        </div>
+
+        <input type="file" id="fileInput" class="hidden" aria-hidden="true">
+
+        <!-- Master Upload Key -->
+        <div class="field">
+          <label class="field-label" for="uploadKey"><span class="material-icons">vpn_key</span> Master Upload Key</label>
+          <input type="password" id="uploadKey"
+                 placeholder="Enter the system upload key"
+                 autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Download PIN -->
+        <div class="field">
+          <label class="field-label"><span class="material-icons">sell</span> Download PIN</label>
+          <div class="input-row">
+            <div class="field">
+              <input type="text" id="downloadPin"
+                     placeholder="e.g. sunny491"
+                     autocomplete="off" spellcheck="false">
+            </div>
+            <button class="btn btn-ghost" id="genPinBtn" title="Generate a random PIN">
+              <span class="material-icons" style="font-size:1rem;">casino</span>
+              Generate
+            </button>
+          </div>
+        </div>
+
+        <!-- Expiry -->
+        <div class="field">
+          <label class="field-label" for="expiry"><span class="material-icons">schedule</span> Expiry Duration</label>
+          <select id="expiry">
+            <option value="5">5 minutes</option>
+            <option value="10">10 minutes</option>
+            <option value="30">30 minutes</option>
+
+            <option value="60">1 hour</option>
+            <option value="240">4 hours</option>
+            <option value="720" selected>12 hours</option>
+            <option value="1440">24 hours</option>
+            <option value="2880">48 hours</option>
+            <option value="4320">72 hours</option>
+
+            <option value="10080">1 week</option>
+            <option value="20160">2 weeks</option>
+            <option value="43200">1 month</option>
+            <option value="86400">2 months</option>
+            <option value="259200">6 months</option>
+            <option value="525600">1 year</option>
+          </select>
+        </div>
+
+        <!-- Progress bar (hidden until upload starts) -->
+        <div id="progressBlock" class="progress-block hidden">
+          <div class="progress-meta">
+            <span class="progress-label" id="progressLabel">Uploading…</span>
+            <span class="progress-pct"   id="progressPct">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <!-- Status area -->
+        <div id="uploadStatus" class="hidden"></div>
+
+        <!-- Upload Button -->
+        <button class="btn btn-primary" id="uploadBtn">
+          <span class="material-icons">cloud_upload</span>
+          Upload &amp; Share
+        </button>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           DOWNLOAD SECTION
+      ═════════════════════════════════════════════ -->
+      <div class="form-section" id="downloadSection">
+        <button class="btn back-btn" id="backFromDownload">
+          <span class="material-icons">arrow_back</span>
+          Back
+        </button>
+        <h3 class="section-title">Retrieve a File</h3>
+        <p class="section-subtitle">Enter the PIN to download</p>
+
+        <div class="field">
+          <label class="field-label" for="retrievePin"><span class="material-icons">sell</span> Enter Download PIN</label>
+          <input type="text" id="retrievePin"
+                 placeholder="e.g. sunny491"
+                 autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Status area -->
+        <div id="downloadStatus" class="hidden"></div>
+
+        <!-- Retrieve Button -->
+        <button class="btn btn-secondary" id="downloadBtn">
+          <span class="material-icons">file_download</span>
+          Retrieve File
+        </button>
+
+        <div class="info-box">
+          Enter the PIN shared by the uploader. The download link will be active for
+          <strong>5 minutes</strong> after you click Retrieve.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ── Footer — mirrored from index.html ─────────────────────────────────── -->
+  <footer class="footer">
+    <p class="footer-text">My JVP Quick Share &nbsp;·&nbsp; Files are automatically deleted after expiry &nbsp;·&nbsp; Internal school use only</p>
+  </footer>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONFIG — Replace YOUR_PROJECT_ID with your Supabase project reference ID
+   ═══════════════════════════════════════════════════════════════════════════ */
+const EDGE_BASE = 'https://ckltcwampaagyzneaznt.supabase.co/functions/v1/quick-share';
+
+const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB hard limit
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECTION NAVIGATION — upload vs. download (mirrors index.html's role flow)
+   ═══════════════════════════════════════════════════════════════════════════ */
+function showActionSection() {
+  document.getElementById('uploadSection').classList.remove('active');
+  document.getElementById('downloadSection').classList.remove('active');
+  document.getElementById('actionSection').style.display = 'block';
+}
+function showUploadSection() {
+  document.getElementById('actionSection').style.display = 'none';
+  document.getElementById('downloadSection').classList.remove('active');
+  document.getElementById('uploadSection').classList.add('active');
+}
+function showDownloadSection() {
+  document.getElementById('actionSection').style.display = 'none';
+  document.getElementById('uploadSection').classList.remove('active');
+  document.getElementById('downloadSection').classList.add('active');
+}
+
+document.getElementById('goUploadBtn').addEventListener('click', showUploadSection);
+document.getElementById('goDownloadBtn').addEventListener('click', showDownloadSection);
+document.getElementById('backFromUpload').addEventListener('click', showActionSection);
+document.getElementById('backFromDownload').addEventListener('click', showActionSection);
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIN GENERATOR
+   Words are chosen to be easy to say, spell, and remember.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const WORDS = [
+  'sunny','river','brave','crisp','eagle','flame','globe','happy','island',
+  'karma','lunar','magic','noble','ocean','pearl','rapid','storm','tiger',
+  'ultra','vivid','extra','flare','grace','honor','jewel','light','maple',
+  'night','olive','pilot','quiet','radar','sugar','trace','unity','voice',
+  'wheat','yield','azure','beach','cloud','dream','blaze','cedar','elite',
+  'frost','giant','hedge','ivory','joker','knack','lemon','mango','nexus',
+  'orbit','plaza','ridge','silver','trend','valor','waltz','yacht','comet',
+  'drift','ember','haven','lunar','marsh','novel','ozone','prism','quest',
+];
+
+function generatePin() {
+  const word   = WORDS[Math.floor(Math.random() * WORDS.length)];
+  const digits = String(Math.floor(100 + Math.random() * 900)); // always 3 digits
+  return word + digits;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+function fmtBytes(b) {
+  if (b < 1024)        return b + ' B';
+  if (b < 1_048_576)   return (b / 1024).toFixed(1) + ' KB';
+  if (b < 1_073_741_824) return (b / 1_048_576).toFixed(1) + ' MB';
+  return (b / 1_073_741_824).toFixed(2) + ' GB';
+}
+
+function fmtDate(iso) {
+  return new Date(iso).toLocaleString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  });
+}
+
+function show(id)  { document.getElementById(id).classList.remove('hidden'); }
+function hide(id)  { document.getElementById(id).classList.add('hidden'); }
+
+function renderAlert(containerId, type, title, body) {
+  const icons = { success: 'check_circle', error: 'error', info: 'info', warn: 'warning' };
+  const el = document.getElementById(containerId);
+  el.innerHTML = `
+    <div class="alert alert-${type}">
+      <span class="material-icons alert-icon">${icons[type] || 'info'}</span>
+      <div class="alert-body">
+        ${title ? `<span class="alert-title">${title}</span>` : ''}
+        ${body}
+      </div>
+    </div>`;
+  el.classList.remove('hidden');
+}
+
+function clearStatus(id) {
+  const el = document.getElementById(id);
+  el.innerHTML = '';
+  el.classList.add('hidden');
+}
+
+const UPLOAD_BTN_INNER = `
+  <span class="material-icons">cloud_upload</span>
+  Upload &amp; Share`;
+
+const DOWNLOAD_BTN_INNER = `
+  <span class="material-icons">file_download</span>
+  Retrieve File`;
+
+function setBtnLoading(id, isLoading, innerHtml) {
+  const btn = document.getElementById(id);
+  btn.disabled = isLoading;
+  btn.innerHTML = isLoading
+    ? `<div class="spinner"></div> Please wait…`
+    : innerHtml;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FILE SELECTION — drag & drop + click-to-browse
+   ═══════════════════════════════════════════════════════════════════════════ */
+let selectedFile = null;
+
+const dropZone  = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileChip  = document.getElementById('fileChip');
+
+// Click anywhere on drop zone to browse
+dropZone.addEventListener('click', () => fileInput.click());
+document.getElementById('browseLink').addEventListener('click', (e) => {
+  e.stopPropagation(); fileInput.click();
+});
+dropZone.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') fileInput.click();
+});
+
+// Drag events
+dropZone.addEventListener('dragenter', (e) => { e.preventDefault(); dropZone.classList.add('over'); });
+dropZone.addEventListener('dragover',  (e) => { e.preventDefault(); });
+dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('over');
+  if (e.dataTransfer.files.length) applyFile(e.dataTransfer.files[0]);
+});
+
+fileInput.addEventListener('change', () => {
+  if (fileInput.files.length) applyFile(fileInput.files[0]);
+});
+
+function applyFile(f) {
+  if (f.size > MAX_FILE_BYTES) {
+    renderAlert('uploadStatus', 'error', 'File too large',
+      `Maximum allowed size is 50 MB. Your file is ${fmtBytes(f.size)}.`);
+    return;
+  }
+  selectedFile = f;
+  document.getElementById('chipName').textContent = f.name;
+  document.getElementById('chipSize').textContent = fmtBytes(f.size);
+  dropZone.classList.add('hidden');
+  fileChip.classList.remove('hidden');
+}
+
+document.getElementById('removeFile').addEventListener('click', () => {
+  selectedFile = null;
+  fileInput.value = '';
+  fileChip.classList.add('hidden');
+  dropZone.classList.remove('hidden');
+  clearStatus('uploadStatus');
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PIN GENERATOR
+   ═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('genPinBtn').addEventListener('click', () => {
+  document.getElementById('downloadPin').value = generatePin();
+});
+// Pre-fill on load
+document.getElementById('downloadPin').value = generatePin();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UPLOAD FLOW
+   ═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('uploadBtn').addEventListener('click', handleUpload);
+
+async function handleUpload() {
+  clearStatus('uploadStatus');
+  hide('progressBlock');
+
+  const uploadKey = document.getElementById('uploadKey').value.trim();
+  const pin       = document.getElementById('downloadPin').value.trim().toLowerCase();
+  const expiry    = document.getElementById('expiry').value;
+
+  // Client-side validation (fast feedback before hitting the network)
+  if (!selectedFile) {
+    renderAlert('uploadStatus', 'error', '', 'Please select a file to upload.'); return;
+  }
+  if (!uploadKey) {
+    renderAlert('uploadStatus', 'error', '', 'Please enter the master upload key.'); return;
+  }
+  if (!pin || pin.length < 4) {
+    renderAlert('uploadStatus', 'error', '', 'Download PIN must be at least 4 characters.'); return;
+  }
+
+  setBtnLoading('uploadBtn', true, UPLOAD_BTN_INNER);
+  renderAlert('uploadStatus', 'info', '', 'Preparing upload…');
+
+  let recordId   = null;
+  const keySnapshot = uploadKey; // capture before async
+
+  try {
+    // ── Step 1: Get presigned PUT URL from Edge Function ───────────────────
+    const fd = new FormData();
+    fd.append('upload_key',      uploadKey);
+    fd.append('download_pin',    pin);
+    fd.append('expiry_duration', expiry);
+    fd.append('filename',        selectedFile.name);
+    fd.append('file_type',       selectedFile.type || 'application/octet-stream');
+
+    const initRes = await fetch(`${EDGE_BASE}/upload`, {
+      method: 'POST',
+      body:   fd,
+    });
+
+    const initData = await initRes.json();
+    if (!initRes.ok) throw new Error(initData.error || 'Upload initialisation failed.');
+
+    const { presigned_upload_url, content_type, record_id, expires_at } = initData;
+    recordId = record_id;
+
+    // ── Step 2: Upload file directly to R2 via XHR (shows real progress) ──
+    clearStatus('uploadStatus');
+    show('progressBlock');
+    setProgress(0, 'Uploading file…');
+
+    await putToR2(presigned_upload_url, selectedFile, content_type);
+
+    // ── Step 3: Success — show boarding-pass PIN ticket ────────────────────
+    hide('progressBlock');
+
+    document.getElementById('uploadStatus').innerHTML = `
+      <div class="alert alert-success">
+        <span class="material-icons alert-icon">check_circle</span>
+        <div class="alert-body">
+          <span class="alert-title">File shared successfully!</span>
+          Share the PIN below. Expires at ${fmtDate(expires_at)}.
+        </div>
+      </div>
+      <div class="ticket">
+        <div class="ticket-top">
+          <span class="ticket-label">Download PIN</span>
+          <span class="ticket-expiry">Expires ${fmtDate(expires_at)}</span>
+        </div>
+        <div class="ticket-pin-row">
+          <span class="ticket-pin" id="ticketPin">${pin}</span>
+          <button class="copy-btn" id="copyPinBtn">Copy PIN</button>
+        </div>
+      </div>`;
+    document.getElementById('uploadStatus').classList.remove('hidden');
+
+    document.getElementById('copyPinBtn').addEventListener('click', function() {
+      navigator.clipboard.writeText(pin).then(() => {
+        this.textContent = '✓ Copied!';
+        this.classList.add('copied');
+        setTimeout(() => { this.textContent = 'Copy PIN'; this.classList.remove('copied'); }, 2000);
+      });
+    });
+
+  } catch (err) {
+    hide('progressBlock');
+
+    // Attempt to clean up the dangling DB record if R2 upload failed
+    if (recordId) {
+      fetch(`${EDGE_BASE}/cleanup`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ record_id: recordId, upload_key: keySnapshot }),
+      }).catch(() => {}); // fire-and-forget; don't block the error display
+    }
+
+    renderAlert('uploadStatus', 'error', 'Upload failed', escapeHtml(err.message));
+  } finally {
+    setBtnLoading('uploadBtn', false, UPLOAD_BTN_INNER);
+  }
+}
+
+function setProgress(pct, label) {
+  document.getElementById('progressLabel').textContent = label;
+  document.getElementById('progressPct').textContent   = pct + '%';
+  document.getElementById('progressFill').style.width  = pct + '%';
+}
+
+function putToR2(url, file, contentType) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT', url);
+    xhr.setRequestHeader('Content-Type', contentType);
+    xhr.timeout = 180_000; // 3-minute timeout
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        setProgress(Math.round((e.loaded / e.total) * 100), 'Uploading file…');
+      }
+    };
+    xhr.onload    = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        setProgress(100, 'Upload complete ✓');
+        resolve();
+      } else {
+        reject(new Error(`Storage returned status ${xhr.status}. Please try again.`));
+      }
+    };
+    xhr.onerror   = () => reject(new Error('Network error during file upload. Check your connection and try again.'));
+    xhr.ontimeout = () => reject(new Error('Upload timed out. Please check your connection and try again.'));
+    xhr.send(file);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOWNLOAD FLOW
+   ═══════════════════════════════════════════════════════════════════════════ */
+document.getElementById('downloadBtn').addEventListener('click', handleDownload);
+document.getElementById('retrievePin').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleDownload();
+});
+// Strip spaces as user types
+document.getElementById('retrievePin').addEventListener('input', function() {
+  const pos = this.selectionStart;
+  this.value = this.value.replace(/\s/g, '');
+  this.setSelectionRange(pos, pos);
+});
+
+async function handleDownload() {
+  clearStatus('downloadStatus');
+
+  const pin = document.getElementById('retrievePin').value.trim().toLowerCase();
+  if (!pin) {
+    renderAlert('downloadStatus', 'error', '', 'Please enter a Download PIN.'); return;
+  }
+
+  setBtnLoading('downloadBtn', true, DOWNLOAD_BTN_INNER);
+
+  try {
+    const res  = await fetch(`${EDGE_BASE}/download`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ download_pin: pin }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to retrieve file.');
+
+    const { download_url, file_name } = data;
+
+    // Trigger the browser download
+    const a = Object.assign(document.createElement('a'), {
+      href:     download_url,
+      target:   '_blank',
+      rel:      'noopener noreferrer',
+      download: file_name || 'download',
+    });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    document.getElementById('downloadStatus').innerHTML = `
+      <div class="hint">
+        ✅ <strong>Download started!</strong> If it didn't begin automatically,
+        <a href="${escapeHtml(download_url)}" target="_blank" rel="noopener noreferrer">click here</a>.
+        <br><span style="font-size:11px;opacity:.75">This link expires in 5 minutes.</span>
+      </div>`;
+    document.getElementById('downloadStatus').classList.remove('hidden');
+
+  } catch (err) {
+    renderAlert('downloadStatus', 'error', 'Could not retrieve file', escapeHtml(err.message));
+  } finally {
+    setBtnLoading('downloadBtn', false, DOWNLOAD_BTN_INNER);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SECURITY — sanitise any dynamic HTML
+   ═══════════════════════════════════════════════════════════════════════════ */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+
+</body>
+</html>
