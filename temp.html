@@ -1,865 +1,760 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>School File Manager</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seating Arrangement — Jamna Vidyapeeth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>
+    /* ── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --bg:       #0f1117;
-    --surface:  #181c27;
-    --panel:    #1e2333;
-    --border:   #2a3047;
-    --accent:   #4f72ff;
-    --accent2:  #7c3aed;
-    --success:  #22c55e;
-    --warning:  #f59e0b;
-    --danger:   #ef4444;
-    --text:     #e2e8f0;
-    --muted:    #64748b;
-    --mono:     'DM Mono', monospace;
-    --sans:     'DM Sans', sans-serif;
-  }
+    /* ── Design Tokens ──────────────────────────────── */
+    :root {
+      --navy:       #1A2B5A;
+      --navy-mid:   #243872;
+      --saffron:    #E07B0A;
+      --saffron-lt: #FFF3DC;
+      --white:      #FFFFFF;
+      --gray-50:    #F6F8FC;
+      --gray-100:   #EEF1F8;
+      --gray-200:   #DDE3F0;
+      --gray-400:   #9aaac4;
+      --charcoal:   #2D3748;
+      --text:       #374151;
+      --green:      #0F6E3E;
+      --green-lt:   #E7F5EE;
+      --purple:     #5B2D8E;
+      --purple-lt:  #F0E8FA;
+    }
 
-  html, body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 14px;
-    min-height: 100vh;
-    line-height: 1.6;
-  }
+    /* ── Screen wrapper ─────────────────────────────── */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #e8edf5;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
 
-  .app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+    /* ── A4 Page Container ──────────────────────────── */
+    .page {
+      width: 794px;
+      min-height: 1123px;
+      margin: 28px auto;
+      background: var(--white);
+      box-shadow: 0 6px 32px rgba(26,43,90,.18), 0 1px 4px rgba(26,43,90,.1);
+      padding: 36px 42px 42px;
+      position: relative;
+    }
 
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    height: 56px;
-  }
+    /* ── Accent bar (top) ───────────────────────────── */
+    .page::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--navy) 0%, var(--saffron) 60%, #F5C242 100%);
+    }
 
-  .logo {
-    display: flex; align-items: center; gap: 10px;
-    font-weight: 600; font-size: 16px; letter-spacing: -0.02em;
-  }
-  .logo svg { color: var(--accent); }
+    /* ── Header ─────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding-bottom: 22px;
+      border-bottom: 2px solid var(--navy);
+    }
 
-  .badge {
-    display: inline-flex; align-items: center;
-    background: color-mix(in srgb, var(--accent) 15%, transparent);
-    color: var(--accent);
-    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-    border-radius: 4px; padding: 1px 8px;
-    font-family: var(--mono); font-size: 11px;
-  }
+    .logo-wrap {
+      flex-shrink: 0;
+      width: 82px;
+      height: 82px;
+      border: 2.5px solid var(--gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+    }
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
 
-  /* Session badge shown in header */
-  #sessionBadge {
-    margin-left: auto;
-    font-size: 12px;
-    color: var(--muted);
-    font-family: var(--mono);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  #sessionBadge .dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--muted);
-    flex-shrink: 0;
-  }
-  #sessionBadge.authed .dot { background: var(--success); }
-  #sessionBadge.authed { color: var(--success); }
+    .header-text { flex: 1; }
 
-  .main { display: grid; grid-template-columns: 280px 1fr; }
+    .school-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
 
-  aside {
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 20px 16px;
-    display: flex; flex-direction: column; gap: 24px;
-  }
+    .school-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--saffron);
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
 
-  .section-label {
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
+    .header-badge {
+      flex-shrink: 0;
+      text-align: center;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 10px 16px;
+    }
+    .header-badge .total-rooms { 
+      font-family: 'Playfair Display', serif;
+      font-size: 30px; 
+      font-weight: 900; 
+      color: var(--saffron);
+      line-height: 1;
+    }
+    .header-badge .badge-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.7);
+      margin-top: 3px;
+    }
 
-  .config-group { display: flex; flex-direction: column; gap: 8px; }
+    /* ── Document Title Banner ──────────────────────── */
+    .doc-title-wrap {
+      margin: 18px 0 22px;
+      position: relative;
+    }
+    .doc-title {
+      background: var(--gray-100);
+      border-left: 4px solid var(--saffron);
+      padding: 9px 16px 9px 14px;
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .doc-title .session-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-400);
+      letter-spacing: 0.5px;
+    }
 
-  label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 3px; }
+    /* ── Floor Section ──────────────────────────────── */
+    .floor-section {
+      margin-bottom: 16px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-  input, select {
-    width: 100%;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 13px;
-    padding: 8px 10px;
-    outline: none;
-    transition: border-color .15s;
-  }
-  input:focus, select:focus { border-color: var(--accent); }
-  input::placeholder { color: var(--muted); }
+    .floor-header {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--navy);
+      color: var(--white);
+      padding: 0;
+    }
 
-  .content { display: flex; flex-direction: column; overflow: hidden; }
+    .floor-num-block {
+      background: var(--navy-mid);
+      padding: 8px 16px 8px 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+      border-right: 1px solid rgba(255,255,255,.1);
+      min-width: 64px;
+    }
+    .floor-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--saffron);
+      line-height: 1;
+    }
+    .floor-ord {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--saffron);
+      opacity: .8;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
 
-  .tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    padding: 0 24px;
-    gap: 2px;
-  }
-  .tab {
-    padding: 14px 18px;
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;
-    transition: color .15s, border-color .15s;
-  }
-  .tab:hover { color: var(--text); }
-  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .floor-label-block {
+      padding: 0 14px;
+      flex: 1;
+    }
+    .floor-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
 
-  .panel { display: none; padding: 24px; flex: 1; overflow-y: auto; }
-  .panel.active { display: block; }
+    .floor-count {
+      padding: 0 14px;
+      font-size: 10.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,.45);
+      letter-spacing: 0.3px;
+    }
 
-  .upload-zone {
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    padding: 40px 24px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color .2s, background .2s;
-    margin-bottom: 20px;
-  }
-  .upload-zone:hover, .upload-zone.drag-over {
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 5%, transparent);
-  }
-  .upload-zone svg { color: var(--muted); margin-bottom: 12px; }
-  .upload-zone p { color: var(--muted); font-size: 13px; }
-  .upload-zone strong { color: var(--text); }
-  #fileInput { display: none; }
+    /* ── Room Grid ──────────────────────────────────── */
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      background: var(--white);
+    }
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .form-full { margin-bottom: 12px; }
+    .room-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-right: 1px solid var(--gray-100);
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--white);
+    }
+    .room-card:nth-child(4n) { border-right: none; }
 
-  .progress-wrap {
-    display: none;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-    margin-top: 16px;
-  }
-  .progress-wrap.visible { display: block; }
-  .progress-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
-  .progress-bar-track { background: var(--border); border-radius: 99px; height: 6px; overflow: hidden; }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    border-radius: 99px;
-    width: 0%;
-    transition: width .3s;
-  }
+    /* Senior class highlight */
+    .room-card.senior-sci {
+      background: var(--green-lt);
+      border-left: 3px solid var(--green);
+    }
+    .room-card.senior-com {
+      background: #EAF0FC;
+      border-left: 3px solid #2858C9;
+    }
+    .room-card.senior-hum {
+      background: var(--purple-lt);
+      border-left: 3px solid var(--purple);
+    }
+    .room-card.special-lab {
+      background: var(--saffron-lt);
+      border-left: 3px solid var(--saffron);
+    }
 
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; border-radius: 7px; border: none;
-    font-family: var(--sans); font-size: 13px; font-weight: 500;
-    cursor: pointer; transition: opacity .15s, transform .1s;
-  }
-  .btn:active { transform: scale(.98); }
-  .btn:disabled { opacity: .4; cursor: not-allowed; }
-  .btn-primary { background: var(--accent); color: #fff; }
-  .btn-primary:hover:not(:disabled) { opacity: .88; }
-  .btn-ghost {
-    background: transparent; color: var(--muted);
-    border: 1px solid var(--border);
-  }
-  .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
-  .btn-danger { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent); }
-  .btn-danger:hover { background: color-mix(in srgb, var(--danger) 25%, transparent); }
-  .btn-sm { padding: 5px 10px; font-size: 12px; }
+    /* Room number pill */
+    .room-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      background: var(--navy);
+      border-radius: 5px;
+      min-width: 30px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 0.2px;
+    }
 
-  .action-row { display: flex; gap: 8px; margin-top: 16px; }
+    .room-card.senior-sci   .room-num { background: var(--green); }
+    .room-card.senior-com   .room-num { background: #2858C9; }
+    .room-card.senior-hum   .room-num { background: var(--purple); }
+    .room-card.special-lab  .room-num { background: var(--saffron); }
 
-  .list-toolbar {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 16px; flex-wrap: wrap;
-  }
-  .list-toolbar input { flex: 1; min-width: 180px; }
-  .list-toolbar select { width: auto; }
+    /* Room label text (e.g. "Lab" for Physics Lab) */
+    .room-label-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+    .class-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--charcoal);
+      white-space: nowrap;
+    }
+    .class-tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      border-radius: 3px;
+      padding: 1px 5px;
+      display: inline-block;
+      line-height: 1.4;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+    .tag-sci  { color: var(--green);  background: #D0EDE0; }
+    .tag-com  { color: #2858C9;       background: #D7E2FA; }
+    .tag-hum  { color: var(--purple); background: #E3D4F5; }
+    .tag-lab  { color: var(--saffron); background: #FDE8C0; }
 
-  .file-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-  }
+    /* ── Legend ──────────────────────────────────────── */
+    .legend {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      padding: 10px 14px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+    }
+    .legend-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--gray-400);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-right: 4px;
+      align-self: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--charcoal);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .dot-sci  { background: var(--green); }
+    .dot-com  { background: #2858C9; }
+    .dot-hum  { background: var(--purple); }
+    .dot-lab  { background: var(--saffron); }
+    .dot-std  { background: var(--navy); }
 
-  .file-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    display: flex; flex-direction: column; gap: 10px;
-    transition: border-color .15s;
-    animation: fadeIn .25s ease;
-  }
-  .file-card:hover { border-color: var(--accent); }
+    /* ── Footer ──────────────────────────────────────── */
+    .footer {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1.5px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--gray-400);
+    }
+    .footer .left { line-height: 1.6; }
+    .footer strong { color: var(--navy); font-weight: 700; }
+    .footer .right {
+      font-size: 9.5px;
+      text-align: right;
+      line-height: 1.6;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    /* ── Print Styles ────────────────────────────────── */
+    @media print {
+      body {
+        background: white;
+        font-size: 11.5px;
+      }
+      .page {
+        width: 100%;
+        min-height: unset;
+        margin: 0;
+        padding: 12mm 14mm 14mm;
+        box-shadow: none;
+      }
+      .page::before { height: 4px; }
+      .floor-section { page-break-inside: avoid; }
+      .room-grid { grid-template-columns: repeat(4, 1fr); }
+      .school-name { font-size: 24px; }
+    }
 
-  .file-card-header { display: flex; align-items: flex-start; gap: 10px; }
-  .file-icon { font-size: 26px; line-height: 1; flex-shrink: 0; }
-  .file-title { font-weight: 500; font-size: 13px; color: var(--text); word-break: break-word; }
-  .file-meta { font-size: 11px; color: var(--muted); font-family: var(--mono); }
-  .file-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-
-  .tag {
-    display: inline-flex; align-items: center;
-    font-size: 10px; font-family: var(--mono);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px; padding: 2px 6px;
-    color: var(--muted);
-  }
-
-  .file-actions { display: flex; gap: 6px; margin-top: 2px; }
-
-  .status-dot {
-    display: inline-block;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    margin-right: 5px;
-    vertical-align: middle;
-  }
-  .dot-pending { background: var(--warning); }
-  .dot-done    { background: var(--success); }
-
-  .pagination {
-    display: flex; justify-content: center; align-items: center; gap: 8px;
-    margin-top: 24px; font-size: 13px; color: var(--muted);
-  }
-
-  #toast {
-    position: fixed; bottom: 24px; right: 24px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 13px;
-    max-width: 320px;
-    box-shadow: 0 8px 32px rgba(0,0,0,.4);
-    transform: translateY(20px);
-    opacity: 0;
-    pointer-events: none;
-    transition: all .25s;
-    z-index: 999;
-  }
-  #toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  #toast.toast-ok    { border-color: var(--success); color: var(--success); }
-  #toast.toast-err   { border-color: var(--danger);  color: var(--danger); }
-  #toast.toast-info  { border-color: var(--accent);  color: var(--accent); }
-
-  .empty {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--muted);
-  }
-  .empty svg { opacity: .3; margin-bottom: 12px; }
-
-  /* Auth error banner */
-  .auth-error {
-    background: color-mix(in srgb, var(--danger) 10%, transparent);
-    border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 12px;
-    color: var(--danger);
-    margin-bottom: 20px;
-    display: none;
-  }
-  .auth-error.visible { display: block; }
-</style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+  </style>
 </head>
 <body>
-<div class="app">
+<div class="page">
 
-  <!-- Header -->
-  <header>
-    <div class="logo">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-      School File Manager
+  <!-- ── Header ─────────────────────────────────── -->
+  <header class="header">
+    <div class="logo-wrap">
+      <img src="https://myjvp.in/commons/school-logo.jpg" alt="Jamna Vidyapeeth Logo" onerror="this.style.display='none'">
     </div>
-    <span class="badge">TEACHER PORTAL</span>
-    <div id="sessionBadge">
-      <span class="dot"></span>
-      <span id="sessionLabel">Checking session…</span>
+    <div class="header-text">
+      <div class="school-name">Jamna Vidyapeeth</div>
+      <div class="school-subtitle">Nurturing Minds · Shaping Futures</div>
+    </div>
+    <div class="header-badge">
+      <div class="total-rooms">44</div>
+      <div class="badge-label">Total Rooms</div>
     </div>
   </header>
 
-  <div class="main">
+  <!-- ── Document Title ─────────────────────────── -->
+  <div class="doc-title-wrap">
+    <div class="doc-title">
+      <span>Class-wise Room &amp; Seating Arrangement</span>
+      <span class="session-label">Session 2024–25</span>
+    </div>
+  </div>
 
-    <!-- Sidebar: File Scope only (no connection config needed) -->
-    <aside>
-      <div>
-        <div class="section-label">File Scope</div>
-        <div class="config-group">
-          <div>
-            <label>Scope</label>
-            <select id="cfgScope" onchange="handleScopeChange()">
-              <option value="private">🔒 Private</option>
-              <option value="common">📚 Class Common</option>
-              <option value="section" selected>📂 Section</option>
-            </select>
-          </div>
-          <div id="gradeWrap">
-            <label>Grade</label>
-            <input id="cfgGrade" type="text" placeholder="e.g. 6" />
-          </div>
-          <div id="sectionWrap">
-            <label>Section</label>
-            <input id="cfgSection" type="text" placeholder="e.g. A1" />
-          </div>
-          <div id="subjectWrap">
-            <label>Subject</label>
-            <input id="cfgSubject" type="text" placeholder="e.g. English" />
-          </div>
-        </div>
+  <!-- ── Legend ─────────────────────────────────── -->
+  <div class="legend">
+    <span class="legend-title">Key</span>
+    <div class="legend-item"><span class="legend-dot dot-std"></span> Standard Classroom</div>
+    <div class="legend-item"><span class="legend-dot dot-sci"></span> Science Stream (11th / 12th)</div>
+    <div class="legend-item"><span class="legend-dot dot-com"></span> Commerce Stream (11th / 12th)</div>
+    <div class="legend-item"><span class="legend-dot dot-hum"></span> Humanities Stream (11th / 12th)</div>
+    <div class="legend-item"><span class="legend-dot dot-lab"></span> Laboratory / Special Room</div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- GROUND FLOOR                                 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="floor-section">
+    <div class="floor-header">
+      <div class="floor-num-block">
+        <span class="floor-num">G</span>
       </div>
-    </aside>
-
-    <!-- Content -->
-    <div class="content">
-
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" onclick="switchTab('upload', this)">↑ Upload</button>
-        <button class="tab" onclick="switchTab('files', this)">≡ Files</button>
+      <div class="floor-label-block">
+        <div class="floor-label">Ground Floor</div>
       </div>
-
-      <!-- Upload panel -->
-      <div id="panel-upload" class="panel active">
-
-        <!-- Auth error (shown only if session is missing) -->
-        <div class="auth-error" id="authError">
-          ⚠ No active session found. Please log in through the main portal before using this page.
-        </div>
-
-        <!-- Drop zone -->
-        <div class="upload-zone" id="dropZone"
-             onclick="document.getElementById('fileInput').click()"
-             ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p><strong>Drop a file here</strong> or click to browse</p>
-          <p style="margin-top:4px;font-size:11px">PDFs, images, audio, video — any format</p>
-        </div>
-        <input type="file" id="fileInput" onchange="onFileChosen(this.files[0])" />
-
-        <!-- Metadata form -->
-        <div id="uploadForm" style="display:none">
-          <div class="form-row">
-            <div>
-              <label>Display Title *</label>
-              <input id="fldTitle" type="text" placeholder="e.g. Chapter 3 Notes" />
-            </div>
-            <div>
-              <label>Chosen File</label>
-              <input id="fldFilename" type="text" readonly style="opacity:.6" />
-            </div>
-          </div>
-
-          <div class="action-row">
-            <button class="btn btn-primary" id="btnUpload" onclick="startUpload()">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-              Upload File
-            </button>
-            <button class="btn btn-ghost" onclick="clearUpload()">Cancel</button>
-          </div>
-
-          <!-- Progress -->
-          <div class="progress-wrap" id="progressWrap">
-            <div class="progress-info">
-              <span id="progressLabel">Uploading…</span>
-              <span id="progressPct">0%</span>
-            </div>
-            <div class="progress-bar-track">
-              <div class="progress-bar-fill" id="progressBar"></div>
-            </div>
-          </div>
-        </div>
+      <div class="floor-count">7 Rooms</div>
+    </div>
+    <div class="room-grid">
+      <div class="room-card">
+        <span class="room-num">1</span>
+        <div class="room-label-wrap"><span class="class-name">1-A1</span></div>
       </div>
-
-      <!-- Files panel -->
-      <div id="panel-files" class="panel">
-        <div class="list-toolbar">
-          <input id="searchInput" type="text" placeholder="🔍  Search files…" oninput="debounceSearch()" />
-          <select id="filterStatus" onchange="loadFiles(1)">
-            <option value="">All statuses</option>
-            <option value="1" selected>Uploaded</option>
-            <option value="0">Pending</option>
-          </select>
-          <button class="btn btn-ghost" onclick="loadFiles(1)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-            Refresh
-          </button>
-        </div>
-
-        <div id="fileGrid" class="file-grid"></div>
-        <div class="pagination" id="paginationBar"></div>
+      <div class="room-card">
+        <span class="room-num">2</span>
+        <div class="room-label-wrap"><span class="class-name">1-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">3</span>
+        <div class="room-label-wrap"><span class="class-name">1-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">4</span>
+        <div class="room-label-wrap"><span class="class-name">2-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">5</span>
+        <div class="room-label-wrap"><span class="class-name">2-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">6</span>
+        <div class="room-label-wrap"><span class="class-name">2-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">7</span>
+        <div class="room-label-wrap"><span class="class-name">2-A4</span></div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Toast -->
-<div id="toast"></div>
-
-<!-- Rename modal -->
-<div id="renameModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center">
-  <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;width:360px;max-width:90vw">
-    <div style="font-weight:600;margin-bottom:12px">Rename File</div>
-    <input id="renameInput" type="text" placeholder="New display name" />
-    <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="btn btn-primary" onclick="confirmRename()">Save</button>
-      <button class="btn btn-ghost" onclick="closeRename()">Cancel</button>
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FIRST FLOOR                                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="floor-section">
+    <div class="floor-header">
+      <div class="floor-num-block">
+        <span class="floor-num">1</span>
+        <span class="floor-ord">st</span>
+      </div>
+      <div class="floor-label-block">
+        <div class="floor-label">First Floor</div>
+      </div>
+      <div class="floor-count">9 Rooms</div>
+    </div>
+    <div class="room-grid">
+      <div class="room-card">
+        <span class="room-num">8</span>
+        <div class="room-label-wrap"><span class="class-name">4-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">9</span>
+        <div class="room-label-wrap"><span class="class-name">10-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">10</span>
+        <div class="room-label-wrap"><span class="class-name">10-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">11</span>
+        <div class="room-label-wrap"><span class="class-name">10-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">12</span>
+        <div class="room-label-wrap"><span class="class-name">3-A1</span></div>
+      </div>
+      <div class="room-card senior-sci">
+        <span class="room-num">13</span>
+        <div class="room-label-wrap">
+          <span class="class-name">12-Science</span>
+          <span class="class-tag tag-sci">Science</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">14</span>
+        <div class="room-label-wrap"><span class="class-name">3-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">15</span>
+        <div class="room-label-wrap"><span class="class-name">3-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">16</span>
+        <div class="room-label-wrap"><span class="class-name">4-A2</span></div>
+      </div>
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- SECOND FLOOR                                 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="floor-section">
+    <div class="floor-header">
+      <div class="floor-num-block">
+        <span class="floor-num">2</span>
+        <span class="floor-ord">nd</span>
+      </div>
+      <div class="floor-label-block">
+        <div class="floor-label">Second Floor</div>
+      </div>
+      <div class="floor-count">11 Rooms</div>
+    </div>
+    <div class="room-grid">
+      <div class="room-card senior-com">
+        <span class="room-num">17</span>
+        <div class="room-label-wrap">
+          <span class="class-name">12-Commerce</span>
+          <span class="class-tag tag-com">Commerce</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">18</span>
+        <div class="room-label-wrap"><span class="class-name">4-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">19</span>
+        <div class="room-label-wrap"><span class="class-name">4-A4</span></div>
+      </div>
+      <div class="room-card senior-hum">
+        <span class="room-num">20</span>
+        <div class="room-label-wrap">
+          <span class="class-name">12-Humanities</span>
+          <span class="class-tag tag-hum">Humanities</span>
+        </div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">21</span>
+        <div class="room-label-wrap"><span class="class-name">5-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">22</span>
+        <div class="room-label-wrap"><span class="class-name">5-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">23</span>
+        <div class="room-label-wrap"><span class="class-name">5-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">24</span>
+        <div class="room-label-wrap"><span class="class-name">6-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">25</span>
+        <div class="room-label-wrap"><span class="class-name">5-A4</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">26</span>
+        <div class="room-label-wrap"><span class="class-name">6-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">27</span>
+        <div class="room-label-wrap"><span class="class-name">6-A3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- THIRD FLOOR                                  -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="floor-section">
+    <div class="floor-header">
+      <div class="floor-num-block">
+        <span class="floor-num">3</span>
+        <span class="floor-ord">rd</span>
+      </div>
+      <div class="floor-label-block">
+        <div class="floor-label">Third Floor</div>
+      </div>
+      <div class="floor-count">13 Rooms</div>
+    </div>
+    <div class="room-grid">
+      <div class="room-card">
+        <span class="room-num">28</span>
+        <div class="room-label-wrap"><span class="class-name">6-A4</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">29</span>
+        <div class="room-label-wrap"><span class="class-name">8-A4</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">30</span>
+        <div class="room-label-wrap"><span class="class-name">8-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">32</span>
+        <div class="room-label-wrap"><span class="class-name">8-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">33</span>
+        <div class="room-label-wrap"><span class="class-name">8-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">34</span>
+        <div class="room-label-wrap"><span class="class-name">7-A1</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">35</span>
+        <div class="room-label-wrap"><span class="class-name">7-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">36</span>
+        <div class="room-label-wrap"><span class="class-name">7-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">37</span>
+        <div class="room-label-wrap"><span class="class-name">7-A4</span></div>
+      </div>
+      <div class="room-card senior-com">
+        <span class="room-num">38</span>
+        <div class="room-label-wrap">
+          <span class="class-name">11-Commerce</span>
+          <span class="class-tag tag-com">Commerce</span>
+        </div>
+      </div>
+      <div class="room-card senior-hum">
+        <span class="room-num">39</span>
+        <div class="room-label-wrap">
+          <span class="class-name">11-Humanities</span>
+          <span class="class-tag tag-hum">Humanities</span>
+        </div>
+      </div>
+      <div class="room-card senior-sci">
+        <span class="room-num">40</span>
+        <div class="room-label-wrap">
+          <span class="class-name">11-Science</span>
+          <span class="class-tag tag-sci">Science</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- FOURTH FLOOR                                 -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="floor-section">
+    <div class="floor-header">
+      <div class="floor-num-block">
+        <span class="floor-num">4</span>
+        <span class="floor-ord">th</span>
+      </div>
+      <div class="floor-label-block">
+        <div class="floor-label">Fourth Floor</div>
+      </div>
+      <div class="floor-count">4 Rooms</div>
+    </div>
+    <div class="room-grid">
+      <div class="room-card">
+        <span class="room-num">41</span>
+        <div class="room-label-wrap"><span class="class-name">9-A3</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">42</span>
+        <div class="room-label-wrap"><span class="class-name">9-A2</span></div>
+      </div>
+      <div class="room-card">
+        <span class="room-num">43</span>
+        <div class="room-label-wrap"><span class="class-name">9-A1</span></div>
+      </div>
+      <div class="room-card special-lab">
+        <span class="room-num">—</span>
+        <div class="room-label-wrap">
+          <span class="class-name">9-A4</span>
+          <span class="class-tag tag-lab">Physics Lab</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ─────────────────────────────────── -->
+  <footer class="footer">
+    <div class="left">
+      <strong>Jamna Vidyapeeth</strong><br>
+      Official Seating Arrangement Chart
+    </div>
+    <div class="right">
+      Printed on: <strong id="print-date"></strong><br>
+      Room numbers are as per building layout
+    </div>
+  </footer>
+
+</div><!-- .page -->
+
+<!-- Print button (screen only) -->
+<style>
+  .print-btn-wrap {
+    text-align: center;
+    padding: 16px 0 28px;
+  }
+  .print-btn {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    background: var(--navy);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    transition: background .2s, transform .1s;
+  }
+  .print-btn:hover { background: var(--navy-mid); transform: translateY(-1px); }
+  .print-btn:active { transform: translateY(0); }
+  @media print { .print-btn-wrap { display: none; } }
+</style>
+<div class="print-btn-wrap">
+  <button class="print-btn" onclick="window.print()">🖨️ &nbsp;Print / Save as PDF</button>
 </div>
 
 <script>
-// ─────────────────────────────────────────────────────────────────────────────
-//  Constants
-// ─────────────────────────────────────────────────────────────────────────────
-const EDGE_URL = 'https://ckltcwampaagyzneaznt.supabase.co/functions/v1/file-manager';
-const SUPABASE_PROJECT_REF = 'ckltcwampaagyzneaznt';
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Session: retrieve JWT from Supabase's localStorage entry
-//  Supabase stores the session under the key:
-//    sb-<project-ref>-auth-token
-// ─────────────────────────────────────────────────────────────────────────────
-function getSessionToken() {
-  try {
-    // Primary key used by Supabase JS v2
-    const key = `sb-${SUPABASE_PROJECT_REF}-auth-token`;
-    const raw = localStorage.getItem(key);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      return parsed?.access_token || null;
-    }
-
-    // Fallback: some integrations store it under a legacy key format
-    const legacyKey = `supabase.auth.token`;
-    const legacy = localStorage.getItem(legacyKey);
-    if (legacy) {
-      const parsed = JSON.parse(legacy);
-      return parsed?.currentSession?.access_token || null;
-    }
-
-    // Fallback: search all localStorage keys for a Supabase-like session
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && k.startsWith('sb-') && k.endsWith('-auth-token')) {
-        const val = JSON.parse(localStorage.getItem(k));
-        if (val?.access_token) return val.access_token;
-      }
-    }
-  } catch (e) {
-    console.warn('Could not read session from localStorage:', e);
-  }
-  return null;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Session status UI
-// ─────────────────────────────────────────────────────────────────────────────
-function updateSessionUI() {
-  const token = getSessionToken();
-  const badge = document.getElementById('sessionBadge');
-  const label = document.getElementById('sessionLabel');
-  const authErr = document.getElementById('authError');
-
-  if (token) {
-    badge.classList.add('authed');
-    // Decode just the payload to show the user's email if present
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const email = payload.email || payload.sub || 'teacher';
-      label.textContent = `Signed in as ${email}`;
-    } catch {
-      label.textContent = 'Session active';
-    }
-    authErr.classList.remove('visible');
-  } else {
-    badge.classList.remove('authed');
-    label.textContent = 'No session';
-    authErr.classList.add('visible');
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  State
-// ─────────────────────────────────────────────────────────────────────────────
-let chosenFile = null;
-let currentPage = 1;
-let renameFileId = null;
-let searchDebounce = null;
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Scope helpers
-// ─────────────────────────────────────────────────────────────────────────────
-function scopeCfg() {
-  return {
-    scope:   document.getElementById('cfgScope').value,
-    grade:   document.getElementById('cfgGrade').value.trim() || null,
-    section: document.getElementById('cfgSection').value.trim() || null,
-    subject: document.getElementById('cfgSubject').value.trim() || null,
-  };
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Edge function caller — token is auto-retrieved from session
-// ─────────────────────────────────────────────────────────────────────────────
-async function callEdge(body) {
-  const token = getSessionToken();
-  if (!token) {
-    toast('No active session. Please log in through the main portal.', 'err');
-    return null;
-  }
-  try {
-    const res = await fetch(EDGE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    if (!data.ok) throw new Error(data.error || 'Unknown error');
-    return data;
-  } catch (e) {
-    toast(e.message, 'err');
-    return null;
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Utilities
-// ─────────────────────────────────────────────────────────────────────────────
-function toast(msg, type = 'info') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `show toast-${type}`;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => { el.className = ''; }, 3500);
-}
-
-function fileIcon(mimeType) {
-  if (!mimeType) return '📄';
-  if (mimeType.startsWith('video/')) return '🎬';
-  if (mimeType.startsWith('audio/')) return '🎵';
-  if (mimeType.startsWith('image/')) return '🖼️';
-  if (mimeType === 'application/pdf') return '📕';
-  if (mimeType.includes('word') || mimeType.includes('document')) return '📝';
-  if (mimeType.includes('sheet') || mimeType.includes('excel')) return '📊';
-  if (mimeType.includes('presentation') || mimeType.includes('powerpoint')) return '📊';
-  if (mimeType.startsWith('text/')) return '📃';
-  return '📦';
-}
-
-function fmtBytes(bytes) {
-  if (!bytes) return '—';
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let i = 0; let v = bytes;
-  while (v >= 1024 && i < units.length - 1) { v /= 1024; i++; }
-  return `${v.toFixed(i > 0 ? 1 : 0)} ${units[i]}`;
-}
-
-function fmtDate(iso) {
-  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Scope sidebar
-// ─────────────────────────────────────────────────────────────────────────────
-function handleScopeChange() {
-  const scope = document.getElementById('cfgScope').value;
-  document.getElementById('gradeWrap').style.display   = scope === 'private' ? 'none' : '';
-  document.getElementById('sectionWrap').style.display = scope === 'section' ? '' : 'none';
-  document.getElementById('subjectWrap').style.display = scope === 'private' ? 'none' : '';
-}
-handleScopeChange();
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Tabs
-// ─────────────────────────────────────────────────────────────────────────────
-function switchTab(name, btn) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById(`panel-${name}`).classList.add('active');
-  if (name === 'files') loadFiles(1);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Upload flow
-// ─────────────────────────────────────────────────────────────────────────────
-function onDragOver(e) { e.preventDefault(); document.getElementById('dropZone').classList.add('drag-over'); }
-function onDragLeave()  { document.getElementById('dropZone').classList.remove('drag-over'); }
-function onDrop(e)      { e.preventDefault(); onDragLeave(); if (e.dataTransfer.files[0]) onFileChosen(e.dataTransfer.files[0]); }
-
-function onFileChosen(file) {
-  if (!file) return;
-  chosenFile = file;
-  document.getElementById('uploadForm').style.display = 'block';
-  document.getElementById('fldFilename').value = file.name;
-  document.getElementById('fldTitle').value = file.name.replace(/\.[^.]+$/, '');
-  document.getElementById('fldTitle').focus();
-}
-
-function clearUpload() {
-  chosenFile = null;
-  document.getElementById('uploadForm').style.display = 'none';
-  document.getElementById('fileInput').value = '';
-  document.getElementById('progressWrap').classList.remove('visible');
-}
-
-async function startUpload() {
-  if (!chosenFile) return;
-  const { scope, grade, section, subject } = scopeCfg();
-  const title = document.getElementById('fldTitle').value.trim();
-  if (!title) { toast('Please enter a display title', 'err'); return; }
-
-  document.getElementById('btnUpload').disabled = true;
-  document.getElementById('progressWrap').classList.add('visible');
-  setProgress(0, 'Requesting upload URL…');
-
-  const meta = await callEdge({
-    action:    'get_upload_url',
-    title,
-    filename:  chosenFile.name,
-    mime_type: chosenFile.type || null,
-    size_bytes: chosenFile.size,
-    scope,
-    grade,
-    section,
-    subject,
-  });
-  if (!meta) { resetUploadBtn(); return; }
-
-  setProgress(15, 'Uploading to cloud…');
-
-  try {
-    await uploadWithProgress(meta.upload_url, chosenFile);
-  } catch (e) {
-    toast(`Upload failed: ${e.message}`, 'err');
-    resetUploadBtn(); return;
-  }
-
-  setProgress(95, 'Confirming…');
-
-  const confirmed = await callEdge({ action: 'confirm_upload', file_id: meta.file_id });
-  if (!confirmed) { resetUploadBtn(); return; }
-
-  setProgress(100, 'Upload complete ✓');
-  toast('File uploaded successfully', 'ok');
-  setTimeout(() => { clearUpload(); }, 1200);
-  resetUploadBtn();
-}
-
-function uploadWithProgress(url, file) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open('PUT', url);
-    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        const pct = 15 + Math.round((e.loaded / e.total) * 80);
-        setProgress(pct, `Uploading… ${fmtBytes(e.loaded)} / ${fmtBytes(e.total)}`);
-      }
-    };
-    xhr.onload  = () => (xhr.status < 300 ? resolve() : reject(new Error(`HTTP ${xhr.status}`)));
-    xhr.onerror = () => reject(new Error('Network error'));
-    xhr.send(file);
-  });
-}
-
-function setProgress(pct, label) {
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
-  document.getElementById('progressLabel').textContent = label;
-}
-
-function resetUploadBtn() {
-  document.getElementById('btnUpload').disabled = false;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  File listing
-// ─────────────────────────────────────────────────────────────────────────────
-function debounceSearch() {
-  clearTimeout(searchDebounce);
-  searchDebounce = setTimeout(() => loadFiles(1), 400);
-}
-
-async function loadFiles(page = 1) {
-  currentPage = page;
-  const { scope, grade, section, subject } = scopeCfg();
-  const search        = document.getElementById('searchInput').value.trim() || undefined;
-  const statusFilter  = document.getElementById('filterStatus').value;
-  const upload_status = statusFilter !== '' ? Number(statusFilter) : undefined;
-
-  const grid = document.getElementById('fileGrid');
-  grid.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px 0">Loading…</div>';
-
-  const data = await callEdge({
-    action: 'list',
-    scope:  scope || undefined,
-    grade:  grade || undefined,
-    section: section || undefined,
-    subject: subject || undefined,
-    upload_status,
-    search,
-    page,
-    per_page: 20,
-    sort_by: 'created_at',
-    sort_order: 'desc',
-  });
-
-  if (!data) { grid.innerHTML = ''; return; }
-
-  if (!data.files.length) {
-    grid.innerHTML = `
-      <div class="empty" style="grid-column:1/-1">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-        <p>No files found</p>
-      </div>`;
-    document.getElementById('paginationBar').innerHTML = '';
-    return;
-  }
-
-  grid.innerHTML = data.files.map(f => `
-    <div class="file-card">
-      <div class="file-card-header">
-        <div class="file-icon">${fileIcon(f.mime_type)}</div>
-        <div style="flex:1;min-width:0">
-          <div class="file-title">${escHtml(f.title)}</div>
-          <div class="file-meta">${fmtBytes(f.size_bytes)} · ${fmtDate(f.created_at)}</div>
-        </div>
-      </div>
-      <div class="file-tags">
-        ${f.scope === 'private'  ? '<span class="tag">🔒 private</span>' : ''}
-        ${f.scope === 'common'   ? `<span class="tag">📚 grade ${f.grade} · common</span>` : ''}
-        ${f.scope === 'section'  ? `<span class="tag">📂 ${f.grade}-${f.section} · ${f.subject}</span>` : ''}
-        ${f.mime_type ? `<span class="tag">${f.mime_type.split('/')[1] || f.mime_type}</span>` : ''}
-        <span class="tag">
-          <span class="status-dot ${f.upload_status === 1 ? 'dot-done' : 'dot-pending'}"></span>
-          ${f.upload_status === 1 ? 'ready' : 'pending'}
-        </span>
-      </div>
-      <div class="file-meta">↑ ${escHtml(f.teacher_name)}</div>
-      <div class="file-actions">
-        ${f.upload_status === 1 ? `<button class="btn btn-ghost btn-sm" onclick="downloadFile('${f.id}')">↓ Download</button>` : ''}
-        <button class="btn btn-ghost btn-sm" onclick="openRename('${f.id}', '${escHtml(f.title).replace(/'/g,"\\'")}')">✎ Rename</button>
-        <button class="btn btn-danger btn-sm" onclick="deleteFile('${f.id}')">✕</button>
-      </div>
-    </div>
-  `).join('');
-
-  const { page: pg, total_pages: total } = data.pagination;
-  const bar = document.getElementById('paginationBar');
-  if (total <= 1) { bar.innerHTML = ''; return; }
-  bar.innerHTML = `
-    <button class="btn btn-ghost btn-sm" onclick="loadFiles(${pg - 1})" ${pg <= 1 ? 'disabled' : ''}>← Prev</button>
-    <span>Page ${pg} of ${total}</span>
-    <button class="btn btn-ghost btn-sm" onclick="loadFiles(${pg + 1})" ${pg >= total ? 'disabled' : ''}>Next →</button>
-  `;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Download
-// ─────────────────────────────────────────────────────────────────────────────
-async function downloadFile(fileId) {
-  toast('Generating download link…', 'info');
-  const data = await callEdge({ action: 'get_download_url', file_id: fileId });
-  if (!data) return;
-  window.open(data.download_url, '_blank');
-  toast('Download link opened in new tab', 'ok');
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Rename
-// ─────────────────────────────────────────────────────────────────────────────
-function openRename(fileId, currentTitle) {
-  renameFileId = fileId;
-  document.getElementById('renameInput').value = currentTitle;
-  const modal = document.getElementById('renameModal');
-  modal.style.display = 'flex';
-  setTimeout(() => document.getElementById('renameInput').focus(), 50);
-}
-function closeRename() {
-  document.getElementById('renameModal').style.display = 'none';
-  renameFileId = null;
-}
-async function confirmRename() {
-  const newTitle = document.getElementById('renameInput').value.trim();
-  if (!newTitle) { toast('Title cannot be empty', 'err'); return; }
-  const data = await callEdge({ action: 'rename', file_id: renameFileId, new_title: newTitle });
-  if (!data) return;
-  toast('File renamed', 'ok');
-  closeRename();
-  loadFiles(currentPage);
-}
-document.getElementById('renameModal').addEventListener('click', function(e) {
-  if (e.target === this) closeRename();
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Delete
-// ─────────────────────────────────────────────────────────────────────────────
-async function deleteFile(fileId) {
-  if (!confirm('Delete this file? This cannot be undone.')) return;
-  const data = await callEdge({ action: 'delete', file_id: fileId });
-  if (!data) return;
-  toast('File deleted', 'ok');
-  loadFiles(currentPage);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  Init
-// ─────────────────────────────────────────────────────────────────────────────
-updateSessionUI();
+  // Inject today's date for the footer
+  const d = new Date();
+  const opts = { day: '2-digit', month: 'long', year: 'numeric' };
+  document.getElementById('print-date').textContent = d.toLocaleDateString('en-IN', opts);
 </script>
 </body>
 </html>
