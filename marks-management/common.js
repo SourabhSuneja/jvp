@@ -236,7 +236,7 @@ function logActivity(visitor, action, extra = null) {
                 action,
                 extra: extra ? extra : null
             };
-            await insertData("activity_logs", data);
+            await insertDataWithoutSelect("activity_logs", data);
         } catch (error) {
             console.error("Error logging activity:", error.message);
         }
