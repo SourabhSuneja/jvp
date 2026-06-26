@@ -9,752 +9,377 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* ── Reset ─────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Design Tokens ──────────────────────────────── */
-    :root {
-      --navy:       #1A2B5A;
-      --navy-mid:   #243872;
-      --saffron:    #E07B0A;
-      --saffron-lt: #FFF3DC;
-      --white:      #FFFFFF;
-      --gray-50:    #F6F8FC;
-      --gray-100:   #EEF1F8;
-      --gray-200:   #DDE3F0;
-      --gray-400:   #9aaac4;
-      --charcoal:   #2D3748;
-      --text:       #374151;
-      --green:      #0F6E3E;
-      --green-lt:   #E7F5EE;
-      --purple:     #5B2D8E;
-      --purple-lt:  #F0E8FA;
-    }
-
-    /* ── Screen wrapper ─────────────────────────────── */
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: #e8edf5;
-      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #d8dce6;
+      color: #111;
       font-size: 13px;
-      line-height: 1.5;
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
 
-    /* ── A4 Page Container ──────────────────────────── */
+    /* ── A4 Page ─────────────────────────────── */
     .page {
       width: 794px;
       min-height: 1123px;
       margin: 28px auto;
-      background: var(--white);
-      box-shadow: 0 6px 32px rgba(26,43,90,.18), 0 1px 4px rgba(26,43,90,.1);
-      padding: 36px 42px 42px;
+      background: #fff;
+      padding: 34px 44px 40px;
+      box-shadow: 0 6px 32px rgba(0,0,0,.18);
       position: relative;
     }
-
-    /* ── Accent bar (top) ───────────────────────────── */
     .page::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, var(--navy) 0%, var(--saffron) 60%, #F5C242 100%);
+      height: 4px;
+      background: #1A2B5A;
     }
 
-    /* ── Header ─────────────────────────────────────── */
+    /* ── Header ──────────────────────────────── */
     .header {
       display: flex;
       align-items: center;
-      gap: 22px;
-      padding-bottom: 22px;
-      border-bottom: 2px solid var(--navy);
+      gap: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2.5px solid #1A2B5A;
+      margin-bottom: 18px;
     }
-
     .logo-wrap {
       flex-shrink: 0;
-      width: 82px;
-      height: 82px;
-      border: 2.5px solid var(--gray-200);
-      border-radius: 8px;
+      width: 76px;
+      height: 76px;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
     }
-    .logo-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    .header-text { flex: 1; }
-
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .header-center { flex: 1; text-align: center; }
     .school-name {
       font-family: 'Playfair Display', Georgia, serif;
-      font-size: 28px;
+      font-size: 27px;
       font-weight: 900;
-      color: var(--navy);
-      letter-spacing: -0.5px;
+      color: #1A2B5A;
+      letter-spacing: -0.3px;
       line-height: 1.1;
     }
-
-    .school-subtitle {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--saffron);
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      margin-top: 5px;
-    }
-
-    .header-badge {
-      flex-shrink: 0;
-      text-align: center;
-      background: var(--navy);
-      color: var(--white);
-      border-radius: 8px;
-      padding: 10px 16px;
-    }
-    .header-badge .total-rooms { 
-      font-family: 'Playfair Display', serif;
-      font-size: 30px; 
-      font-weight: 900; 
-      color: var(--saffron);
-      line-height: 1;
-    }
-    .header-badge .badge-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.7);
-      margin-top: 3px;
-    }
-
-    /* ── Document Title Banner ──────────────────────── */
-    .doc-title-wrap {
-      margin: 18px 0 22px;
-      position: relative;
-    }
     .doc-title {
-      background: var(--gray-100);
-      border-left: 4px solid var(--saffron);
-      padding: 9px 16px 9px 14px;
-      font-family: 'Playfair Display', serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--navy);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .doc-title .session-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
-      color: var(--gray-400);
-      letter-spacing: 0.5px;
-    }
-
-    /* ── Floor Section ──────────────────────────────── */
-    .floor-section {
-      margin-bottom: 16px;
-      border: 1.5px solid var(--gray-200);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .floor-header {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      background: var(--navy);
-      color: var(--white);
-      padding: 0;
-    }
-
-    .floor-num-block {
-      background: var(--navy-mid);
-      padding: 8px 16px 8px 14px;
-      display: flex;
-      align-items: baseline;
-      gap: 3px;
-      border-right: 1px solid rgba(255,255,255,.1);
-      min-width: 64px;
-    }
-    .floor-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      font-weight: 900;
-      color: var(--saffron);
-      line-height: 1;
-    }
-    .floor-ord {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--saffron);
-      opacity: .8;
-      align-self: flex-start;
-      margin-top: 2px;
-    }
-
-    .floor-label-block {
-      padding: 0 14px;
-      flex: 1;
-    }
-    .floor-label {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--white);
-    }
-
-    .floor-count {
-      padding: 0 14px;
-      font-size: 10.5px;
-      font-weight: 500;
-      color: rgba(255,255,255,.45);
-      letter-spacing: 0.3px;
-    }
-
-    /* ── Room Grid ──────────────────────────────────── */
-    .room-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      background: var(--white);
-    }
-
-    .room-card {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-right: 1px solid var(--gray-100);
-      border-bottom: 1px solid var(--gray-100);
-      background: var(--white);
-    }
-    .room-card:nth-child(4n) { border-right: none; }
-
-    /* Senior class highlight */
-    .room-card.senior-sci {
-      background: var(--green-lt);
-      border-left: 3px solid var(--green);
-    }
-    .room-card.senior-com {
-      background: #EAF0FC;
-      border-left: 3px solid #2858C9;
-    }
-    .room-card.senior-hum {
-      background: var(--purple-lt);
-      border-left: 3px solid var(--purple);
-    }
-    .room-card.special-lab {
-      background: var(--saffron-lt);
-      border-left: 3px solid var(--saffron);
-    }
-
-    /* Room number pill */
-    .room-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--white);
-      background: var(--navy);
-      border-radius: 5px;
-      min-width: 30px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      color: #333;
+      margin-top: 6px;
       letter-spacing: 0.2px;
     }
-
-    .room-card.senior-sci   .room-num { background: var(--green); }
-    .room-card.senior-com   .room-num { background: #2858C9; }
-    .room-card.senior-hum   .room-num { background: var(--purple); }
-    .room-card.special-lab  .room-num { background: var(--saffron); }
-
-    /* Room label text (e.g. "Lab" for Physics Lab) */
-    .room-label-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
+    .doc-session {
+      font-size: 11.5px;
+      color: #555;
+      margin-top: 3px;
     }
-    .class-name {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--charcoal);
-      white-space: nowrap;
-    }
-    .class-tag {
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      border-radius: 3px;
-      padding: 1px 5px;
-      display: inline-block;
-      line-height: 1.4;
-      text-transform: uppercase;
-      width: fit-content;
-    }
-    .tag-sci  { color: var(--green);  background: #D0EDE0; }
-    .tag-com  { color: #2858C9;       background: #D7E2FA; }
-    .tag-hum  { color: var(--purple); background: #E3D4F5; }
-    .tag-lab  { color: var(--saffron); background: #FDE8C0; }
-
-    /* ── Legend ──────────────────────────────────────── */
-    .legend {
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-      padding: 10px 14px;
-      background: var(--gray-50);
-      border: 1px solid var(--gray-200);
-      border-radius: 6px;
-    }
-    .legend-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--gray-400);
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      margin-right: 4px;
-      align-self: center;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--charcoal);
-    }
-    .legend-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
+    .header-right {
       flex-shrink: 0;
+      text-align: right;
+      font-size: 11px;
+      color: #444;
+      line-height: 1.8;
     }
-    .dot-sci  { background: var(--green); }
-    .dot-com  { background: #2858C9; }
-    .dot-hum  { background: var(--purple); }
-    .dot-lab  { background: var(--saffron); }
-    .dot-std  { background: var(--navy); }
+    .header-right strong { display: block; font-size: 13px; color: #1A2B5A; font-weight: 700; }
 
-    /* ── Footer ──────────────────────────────────────── */
+    /* ── Table ───────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    /* Column headers */
+    thead tr th {
+      background: #f0f2f7;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: #333;
+      padding: 7px 12px;
+      border: 1px solid #aaa;
+      text-align: left;
+    }
+    thead tr th.num-col { text-align: center; width: 82px; }
+
+    /* Floor section header rows */
+    tr.floor-row td {
+      background: #1A2B5A;
+      color: #fff;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border: 1px solid #1A2B5A;
+    }
+
+    /* Data rows */
+    tbody tr:not(.floor-row) td {
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      vertical-align: middle;
+    }
+    tbody tr:not(.floor-row):nth-child(even) td:not(.empty-td) {
+      background: #f9f9fb;
+    }
+
+    /* Room number cell */
+    td.num { text-align: center; font-weight: 700; color: #1A2B5A; font-size: 12.5px; }
+
+    /* Divider between two room–class pairs in a row */
+    td.divider { border-left: 2px solid #999 !important; }
+
+    /* Standard class cell */
+    td.cls { font-weight: 500; color: #111; }
+
+    /* Senior stream classes */
+    td.cls.senior { font-weight: 700; }
+
+    /* Empty half-row cells */
+    td.empty-td { background: #f5f5f5 !important; border-color: #ddd !important; }
+
+    /* Special lab room number */
+    td.lab-room { font-size: 10px; font-style: italic; font-weight: 600; color: #444; text-align: center; }
+
+    /* ── Notes row ───────────────────────────── */
+    .notes {
+      margin-top: 16px;
+      font-size: 10.5px;
+      color: #555;
+      line-height: 1.7;
+      border-top: 1px solid #ccc;
+      padding-top: 10px;
+      display: none;
+    }
+    .notes strong { color: #111; }
+
+    /* ── Footer ──────────────────────────────── */
     .footer {
-      margin-top: 22px;
-      padding-top: 14px;
-      border-top: 1.5px solid var(--gray-200);
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1.5px solid #1A2B5A;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       font-size: 10px;
-      color: var(--gray-400);
+      color: #666;
+      display: none;
     }
-    .footer .left { line-height: 1.6; }
-    .footer strong { color: var(--navy); font-weight: 700; }
-    .footer .right {
-      font-size: 9.5px;
-      text-align: right;
-      line-height: 1.6;
-    }
+    .footer strong { color: #1A2B5A; }
+    .footer .right { text-align: right; line-height: 1.7; }
 
-    /* ── Print Styles ────────────────────────────────── */
+    /* ── Print button (screen only) ──────────── */
+    .print-wrap {
+      text-align: center;
+      padding: 18px 0 30px;
+    }
+    .print-btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+      background: #1A2B5A;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 26px;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+    }
+    .print-btn:hover { background: #243872; }
+
+    /* ── Print Styles ────────────────────────── */
     @media print {
-      body {
-        background: white;
-        font-size: 11.5px;
-      }
-      .page {
-        width: 100%;
-        min-height: unset;
-        margin: 0;
-        padding: 12mm 14mm 14mm;
-        box-shadow: none;
-      }
-      .page::before { height: 4px; }
-      .floor-section { page-break-inside: avoid; }
-      .room-grid { grid-template-columns: repeat(4, 1fr); }
-      .school-name { font-size: 24px; }
+      body { background: #fff; }
+      .page { width: 100%; min-height: unset; margin: 0; padding: 12mm 14mm 14mm; box-shadow: none; }
+      .print-wrap { display: none; }
+      .page::before { height: 3px; }
+      table { font-size: 11.5px; }
     }
-
-    @page {
-      size: A4 portrait;
-      margin: 8mm;
-    }
+    @page { size: A4 portrait; margin: 8mm; }
   </style>
 </head>
 <body>
+
 <div class="page">
 
-  <!-- ── Header ─────────────────────────────────── -->
+  <!-- ── Header ─────────────────────────────── -->
   <header class="header">
     <div class="logo-wrap">
-      <img src="https://myjvp.in/commons/school-logo.jpg" alt="Jamna Vidyapeeth Logo" onerror="this.style.display='none'">
+      <img src="https://myjvp.in/commons/school-logo.jpg" alt="Jamna Vidyapeeth Logo"
+           onerror="this.style.display='none'">
     </div>
-    <div class="header-text">
+    <div class="header-center">
       <div class="school-name">Jamna Vidyapeeth</div>
-      <div class="school-subtitle">Nurturing Minds · Shaping Futures</div>
+      <div class="doc-title">Class-wise Room &amp; Seating Arrangement</div>
+      <div class="doc-session">Session 2025–26</div>
     </div>
-    <div class="header-badge">
-      <div class="total-rooms">44</div>
-      <div class="badge-label">Total Rooms</div>
+    <div class="header-right">
+      <strong>Total Rooms: 44</strong>
+      Floors: Ground – Fourth<br>
+      Printed: <span id="pdate"></span>
     </div>
   </header>
 
-  <!-- ── Document Title ─────────────────────────── -->
-  <div class="doc-title-wrap">
-    <div class="doc-title">
-      <span>Class-wise Room &amp; Seating Arrangement</span>
-      <span class="session-label">Session 2025–26</span>
-    </div>
+  <!-- ── Seating Table ──────────────────────── -->
+  <table>
+    <thead>
+      <tr>
+        <th class="num-col">Room No.</th>
+        <th>Class / Section</th>
+        <th class="num-col divider">Room No.</th>
+        <th>Class / Section</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- ══ GROUND FLOOR ══════════════════════ -->
+      <tr class="floor-row"><td colspan="4">Ground Floor &nbsp;·&nbsp; Rooms 1 – 7</td></tr>
+      <tr>
+        <td class="num">1</td><td class="cls">1-A1</td>
+        <td class="num divider">2</td><td class="cls">1-A2</td>
+      </tr>
+      <tr>
+        <td class="num">3</td><td class="cls">1-A3</td>
+        <td class="num divider">4</td><td class="cls">2-A1</td>
+      </tr>
+      <tr>
+        <td class="num">5</td><td class="cls">2-A2</td>
+        <td class="num divider">6</td><td class="cls">2-A3</td>
+      </tr>
+      <tr>
+        <td class="num">7</td><td class="cls">2-A4</td>
+        <td class="empty-td divider"></td><td class="empty-td"></td>
+      </tr>
+
+      <!-- ══ FIRST FLOOR ═══════════════════════ -->
+      <tr class="floor-row"><td colspan="4">First Floor &nbsp;·&nbsp; Rooms 8 – 16</td></tr>
+      <tr>
+        <td class="num">8</td><td class="cls">4-A1</td>
+        <td class="num divider">9</td><td class="cls">10-A1</td>
+      </tr>
+      <tr>
+        <td class="num">10</td><td class="cls">10-A2</td>
+        <td class="num divider">11</td><td class="cls">10-A3</td>
+      </tr>
+      <tr>
+        <td class="num">12</td><td class="cls">3-A1</td>
+        <td class="num divider">13</td><td class="cls senior">12 – Science</td>
+      </tr>
+      <tr>
+        <td class="num">14</td><td class="cls">3-A2</td>
+        <td class="num divider">15</td><td class="cls">3-A3</td>
+      </tr>
+      <tr>
+        <td class="num">16</td><td class="cls">4-A2</td>
+        <td class="empty-td divider"></td><td class="empty-td"></td>
+      </tr>
+
+      <!-- ══ SECOND FLOOR ══════════════════════ -->
+      <tr class="floor-row"><td colspan="4">Second Floor &nbsp;·&nbsp; Rooms 17 – 27</td></tr>
+      <tr>
+        <td class="num">17</td><td class="cls senior">12 – Commerce</td>
+        <td class="num divider">18</td><td class="cls">4-A3</td>
+      </tr>
+      <tr>
+        <td class="num">19</td><td class="cls">4-A4</td>
+        <td class="num divider">20</td><td class="cls senior">12 – Humanities</td>
+      </tr>
+      <tr>
+        <td class="num">21</td><td class="cls">5-A1</td>
+        <td class="num divider">22</td><td class="cls">5-A2</td>
+      </tr>
+      <tr>
+        <td class="num">23</td><td class="cls">5-A3</td>
+        <td class="num divider">24</td><td class="cls">6-A1</td>
+      </tr>
+      <tr>
+        <td class="num">25</td><td class="cls">5-A4</td>
+        <td class="num divider">26</td><td class="cls">6-A2</td>
+      </tr>
+      <tr>
+        <td class="num">27</td><td class="cls">6-A3</td>
+        <td class="empty-td divider"></td><td class="empty-td"></td>
+      </tr>
+
+      <!-- ══ THIRD FLOOR ═══════════════════════ -->
+      <tr class="floor-row"><td colspan="4">Third Floor &nbsp;·&nbsp; Rooms 28 – 40</td></tr>
+      <tr>
+        <td class="num">28</td><td class="cls">6-A4</td>
+        <td class="num divider">29</td><td class="cls">8-A4</td>
+      </tr>
+      <tr>
+        <td class="num">30</td><td class="cls">8-A2</td>
+        <td class="num divider">32</td><td class="cls">8-A3</td>
+      </tr>
+      <tr>
+        <td class="num">33</td><td class="cls">8-A1</td>
+        <td class="num divider">34</td><td class="cls">7-A1</td>
+      </tr>
+      <tr>
+        <td class="num">35</td><td class="cls">7-A2</td>
+        <td class="num divider">36</td><td class="cls">7-A3</td>
+      </tr>
+      <tr>
+        <td class="num">37</td><td class="cls">7-A4</td>
+        <td class="num divider">38</td><td class="cls senior">11 – Commerce</td>
+      </tr>
+      <tr>
+        <td class="num">39</td><td class="cls senior">11 – Humanities</td>
+        <td class="num divider">40</td><td class="cls senior">11 – Science</td>
+      </tr>
+
+      <!-- ══ FOURTH FLOOR ══════════════════════ -->
+      <tr class="floor-row"><td colspan="4">Fourth Floor &nbsp;·&nbsp; Rooms 41 – 43 &amp; Physics Lab</td></tr>
+      <tr>
+        <td class="num">41</td><td class="cls">9-A3</td>
+        <td class="num divider">42</td><td class="cls">9-A2</td>
+      </tr>
+      <tr>
+        <td class="num">43</td><td class="cls">9-A1</td>
+        <td class="lab-room divider">Physics Lab</td><td class="cls senior">9-A4</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- ── Notes ──────────────────────────────── -->
+  <div class="notes">
+    <strong>Notes:</strong>
+    &ensp;&#9654;&ensp;<strong>Bold entries</strong> indicate Class 11 &amp; 12 senior secondary sections (Science / Commerce / Humanities stream).
+    &ensp;&#9654;&ensp;Room 31 not listed in provided data.
+    &ensp;&#9654;&ensp;9-A4 is accommodated in the <strong>Physics Lab</strong> (Fourth Floor) and has no standard room number.
   </div>
 
-  <!-- ── Legend ─────────────────────────────────── -->
-  <div style="display: none" class="legend">
-    <span class="legend-title">Key</span>
-    <div class="legend-item"><span class="legend-dot dot-std"></span> Standard Classroom</div>
-    <div class="legend-item"><span class="legend-dot dot-sci"></span> Science Stream (11th / 12th)</div>
-    <div class="legend-item"><span class="legend-dot dot-com"></span> Commerce Stream (11th / 12th)</div>
-    <div class="legend-item"><span class="legend-dot dot-hum"></span> Humanities Stream (11th / 12th)</div>
-    <div class="legend-item"><span class="legend-dot dot-lab"></span> Laboratory / Special Room</div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- GROUND FLOOR                                 -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="floor-section">
-    <div class="floor-header">
-      <div class="floor-num-block">
-        <span class="floor-num">G</span>
-      </div>
-      <div class="floor-label-block">
-        <div class="floor-label">Ground Floor</div>
-      </div>
-      <div class="floor-count">7 Rooms</div>
-    </div>
-    <div class="room-grid">
-      <div class="room-card">
-        <span class="room-num">1</span>
-        <div class="room-label-wrap"><span class="class-name">1-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">2</span>
-        <div class="room-label-wrap"><span class="class-name">1-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">3</span>
-        <div class="room-label-wrap"><span class="class-name">1-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">4</span>
-        <div class="room-label-wrap"><span class="class-name">2-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">5</span>
-        <div class="room-label-wrap"><span class="class-name">2-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">6</span>
-        <div class="room-label-wrap"><span class="class-name">2-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">7</span>
-        <div class="room-label-wrap"><span class="class-name">2-A4</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- FIRST FLOOR                                  -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="floor-section">
-    <div class="floor-header">
-      <div class="floor-num-block">
-        <span class="floor-num">1</span>
-        <span class="floor-ord">st</span>
-      </div>
-      <div class="floor-label-block">
-        <div class="floor-label">First Floor</div>
-      </div>
-      <div class="floor-count">9 Rooms</div>
-    </div>
-    <div class="room-grid">
-      <div class="room-card">
-        <span class="room-num">8</span>
-        <div class="room-label-wrap"><span class="class-name">4-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">9</span>
-        <div class="room-label-wrap"><span class="class-name">10-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">10</span>
-        <div class="room-label-wrap"><span class="class-name">10-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">11</span>
-        <div class="room-label-wrap"><span class="class-name">10-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">12</span>
-        <div class="room-label-wrap"><span class="class-name">3-A1</span></div>
-      </div>
-      <div class="room-card senior-sci">
-        <span class="room-num">13</span>
-        <div class="room-label-wrap">
-          <span class="class-name">12-Science</span>
-          <span class="class-tag tag-sci">Science</span>
-        </div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">14</span>
-        <div class="room-label-wrap"><span class="class-name">3-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">15</span>
-        <div class="room-label-wrap"><span class="class-name">3-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">16</span>
-        <div class="room-label-wrap"><span class="class-name">4-A2</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- SECOND FLOOR                                 -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="floor-section">
-    <div class="floor-header">
-      <div class="floor-num-block">
-        <span class="floor-num">2</span>
-        <span class="floor-ord">nd</span>
-      </div>
-      <div class="floor-label-block">
-        <div class="floor-label">Second Floor</div>
-      </div>
-      <div class="floor-count">11 Rooms</div>
-    </div>
-    <div class="room-grid">
-      <div class="room-card senior-com">
-        <span class="room-num">17</span>
-        <div class="room-label-wrap">
-          <span class="class-name">12-Commerce</span>
-          <span class="class-tag tag-com">Commerce</span>
-        </div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">18</span>
-        <div class="room-label-wrap"><span class="class-name">4-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">19</span>
-        <div class="room-label-wrap"><span class="class-name">4-A4</span></div>
-      </div>
-      <div class="room-card senior-hum">
-        <span class="room-num">20</span>
-        <div class="room-label-wrap">
-          <span class="class-name">12-Humanities</span>
-          <span class="class-tag tag-hum">Humanities</span>
-        </div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">21</span>
-        <div class="room-label-wrap"><span class="class-name">5-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">22</span>
-        <div class="room-label-wrap"><span class="class-name">5-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">23</span>
-        <div class="room-label-wrap"><span class="class-name">5-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">24</span>
-        <div class="room-label-wrap"><span class="class-name">6-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">25</span>
-        <div class="room-label-wrap"><span class="class-name">5-A4</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">26</span>
-        <div class="room-label-wrap"><span class="class-name">6-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">27</span>
-        <div class="room-label-wrap"><span class="class-name">6-A3</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- THIRD FLOOR                                  -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="floor-section">
-    <div class="floor-header">
-      <div class="floor-num-block">
-        <span class="floor-num">3</span>
-        <span class="floor-ord">rd</span>
-      </div>
-      <div class="floor-label-block">
-        <div class="floor-label">Third Floor</div>
-      </div>
-      <div class="floor-count">13 Rooms</div>
-    </div>
-    <div class="room-grid">
-      <div class="room-card">
-        <span class="room-num">28</span>
-        <div class="room-label-wrap"><span class="class-name">6-A4</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">29</span>
-        <div class="room-label-wrap"><span class="class-name">8-A4</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">30</span>
-        <div class="room-label-wrap"><span class="class-name">8-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">32</span>
-        <div class="room-label-wrap"><span class="class-name">8-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">33</span>
-        <div class="room-label-wrap"><span class="class-name">8-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">34</span>
-        <div class="room-label-wrap"><span class="class-name">7-A1</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">35</span>
-        <div class="room-label-wrap"><span class="class-name">7-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">36</span>
-        <div class="room-label-wrap"><span class="class-name">7-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">37</span>
-        <div class="room-label-wrap"><span class="class-name">7-A4</span></div>
-      </div>
-      <div class="room-card senior-com">
-        <span class="room-num">38</span>
-        <div class="room-label-wrap">
-          <span class="class-name">11-Commerce</span>
-          <span class="class-tag tag-com">Commerce</span>
-        </div>
-      </div>
-      <div class="room-card senior-hum">
-        <span class="room-num">39</span>
-        <div class="room-label-wrap">
-          <span class="class-name">11-Humanities</span>
-          <span class="class-tag tag-hum">Humanities</span>
-        </div>
-      </div>
-      <div class="room-card senior-sci">
-        <span class="room-num">40</span>
-        <div class="room-label-wrap">
-          <span class="class-name">11-Science</span>
-          <span class="class-tag tag-sci">Science</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════ -->
-  <!-- FOURTH FLOOR                                 -->
-  <!-- ═══════════════════════════════════════════ -->
-  <div class="floor-section">
-    <div class="floor-header">
-      <div class="floor-num-block">
-        <span class="floor-num">4</span>
-        <span class="floor-ord">th</span>
-      </div>
-      <div class="floor-label-block">
-        <div class="floor-label">Fourth Floor</div>
-      </div>
-      <div class="floor-count">4 Rooms</div>
-    </div>
-    <div class="room-grid">
-      <div class="room-card">
-        <span class="room-num">41</span>
-        <div class="room-label-wrap"><span class="class-name">9-A3</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">42</span>
-        <div class="room-label-wrap"><span class="class-name">9-A2</span></div>
-      </div>
-      <div class="room-card">
-        <span class="room-num">43</span>
-        <div class="room-label-wrap"><span class="class-name">9-A1</span></div>
-      </div>
-      <div class="room-card special-lab">
-        <span class="room-num">—</span>
-        <div class="room-label-wrap">
-          <span class="class-name">9-A4</span>
-          <span class="class-tag tag-lab">Physics Lab</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ── Footer ─────────────────────────────────── -->
+  <!-- ── Footer ─────────────────────────────── -->
   <footer class="footer">
-    <div class="left">
-      <strong>Jamna Vidyapeeth</strong><br>
-      Official Seating Arrangement Chart
-    </div>
+    <div><strong>Jamna Vidyapeeth</strong><br>Official Seating Arrangement — Session 2025–26</div>
     <div class="right">
-      Printed on: <strong id="print-date"></strong><br>
-      Room numbers are as per building layout
+      Room numbers are as per building layout<br>
+      Printed on: <span id="pdate2"></span>
     </div>
   </footer>
 
 </div><!-- .page -->
 
-<!-- Print button (screen only) -->
-<style>
-  .print-btn-wrap {
-    text-align: center;
-    padding: 16px 0 28px;
-  }
-  .print-btn {
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white);
-    background: var(--navy);
-    border: none;
-    border-radius: 6px;
-    padding: 10px 24px;
-    cursor: pointer;
-    letter-spacing: 0.4px;
-    transition: background .2s, transform .1s;
-  }
-  .print-btn:hover { background: var(--navy-mid); transform: translateY(-1px); }
-  .print-btn:active { transform: translateY(0); }
-  @media print { .print-btn-wrap { display: none; } }
-</style>
-<div class="print-btn-wrap">
+<!-- Print button -->
+<div class="print-wrap">
   <button class="print-btn" onclick="window.print()">🖨️ &nbsp;Print / Save as PDF</button>
 </div>
 
 <script>
-  // Inject today's date for the footer
   const d = new Date();
   const opts = { day: '2-digit', month: 'long', year: 'numeric' };
-  document.getElementById('print-date').textContent = d.toLocaleDateString('en-IN', opts);
+  const str = d.toLocaleDateString('en-IN', opts);
+  document.getElementById('pdate').textContent = str;
+  document.getElementById('pdate2').textContent = str;
 </script>
 </body>
 </html>
