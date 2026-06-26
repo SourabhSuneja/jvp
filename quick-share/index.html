@@ -917,6 +917,7 @@ async function handleUpload() {
     fd.append('expiry_duration', expiry);
     fd.append('filename',        selectedFile.name);
     fd.append('file_type',       selectedFile.type || 'application/octet-stream');
+    fd.append('file_size',  String(selectedFile.size));
 
     const initRes = await fetch(`${EDGE_BASE}/upload`, {
       method: 'POST',
