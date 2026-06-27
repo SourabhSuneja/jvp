@@ -551,6 +551,31 @@
       .input-row { flex-direction: column; align-items: stretch; }
       .btn-ghost { width: 100%; }
     }
+
+/* ── Share-link row (shown after successful upload) ─────────────────── */
+.share-link-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+.share-link-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.8rem;
+  border: 1.5px solid #c7d2fe;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--purple-2);
+  background: #f5f3ff;
+  outline: none;
+  cursor: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.share-link-input:focus { border-color: var(--border-focus); }
   </style>
 </head>
 
@@ -1094,33 +1119,68 @@ async function handleUpload() {
     // ── Step 3: Success — show boarding-pass PIN ticket ────────────────────
     hide('progressBlock');
 
-    document.getElementById('uploadStatus').innerHTML = `
-      <div class="alert alert-success">
-        <span class="material-icons alert-icon">check_circle</span>
-        <div class="alert-body">
-          <span class="alert-title">File shared successfully!</span>
-          Share the PIN below. Expires at ${fmtDate(expires_at)}.
-        </div>
-      </div>
-      <div class="ticket">
-        <div class="ticket-top">
-          <span class="ticket-label">Download PIN</span>
-          <span class="ticket-expiry">Expires ${fmtDate(expires_at)}</span>
-        </div>
-        <div class="ticket-pin-row">
-          <span class="ticket-pin" id="ticketPin">${pin}</span>
-          <button class="copy-btn" id="copyPinBtn">Copy PIN</button>
-        </div>
-      </div>`;
-    document.getElementById('uploadStatus').classList.remove('hidden');
+    // Build share URL from current page — no hardcoded domain
+const shareUrl = new URL(window.location.pathname, window.location.origin);
+shareUrl.searchParams.set('pin', pin);
+const shareUrlStr = shareUrl.toString();
 
-    document.getElementById('copyPinBtn').addEventListener('click', function() {
-      navigator.clipboard.writeText(pin).then(() => {
-        this.textContent = '✓ Copied!';
-        this.classList.add('copied');
-        setTimeout(() => { this.textContent = 'Copy PIN'; this.classList.remove('copied'); }, 2000);
-      });
-    });
+document.getElementById('uploadStatus').innerHTML = `
+  <div class="alert alert-success">
+    <span class="material-icons alert-icon">check_circle</span>
+    <div class="alert-body">
+      <span class="alert-title">File shared successfully!</span>
+      Share the PIN or link below. Expires at ${fmtDate(expires_at)}.
+    </div>
+  </div>
+
+  <div class="ticket">
+    <div class="ticket-top">
+      <span class="ticket-label">Download PIN</span>
+      <span class="ticket-expiry">Expires ${fmtDate(expires_at)}</span>
+    </div>
+    <div class="ticket-pin-row">
+      <span class="ticket-pin" id="ticketPin">${escapeHtml(pin)}</span>
+      <button class="copy-btn" id="copyPinBtn">Copy PIN</button>
+    </div>
+  </div>
+
+  <div class="ticket" style="margin-top:0.6rem;">
+    <div class="ticket-top">
+      <span class="ticket-label">Share Link</span>
+      <a href="${escapeHtml(shareUrlStr)}" target="_blank" rel="noopener noreferrer"
+         style="font-size:0.7rem;color:var(--purple-1);text-decoration:none;">
+        Open ↗
+      </a>
+    </div>
+    <div class="ticket-pin-row" style="flex-direction:column;align-items:stretch;gap:8px;">
+      <div class="share-link-row">
+        <input class="share-link-input" id="shareLinkInput" type="text"
+               value="${escapeHtml(shareUrlStr)}" readonly
+               onclick="this.select()">
+        <button class="copy-btn" id="copyLinkBtn">Copy Link</button>
+      </div>
+    </div>
+  </div>`;
+
+document.getElementById('uploadStatus').classList.remove('hidden');
+
+// Copy PIN button
+document.getElementById('copyPinBtn').addEventListener('click', function () {
+  navigator.clipboard.writeText(pin).then(() => {
+    this.textContent = '✓ Copied!';
+    this.classList.add('copied');
+    setTimeout(() => { this.textContent = 'Copy PIN'; this.classList.remove('copied'); }, 2000);
+  });
+});
+
+// Copy Link button
+document.getElementById('copyLinkBtn').addEventListener('click', function () {
+  navigator.clipboard.writeText(shareUrlStr).then(() => {
+    this.textContent = '✓ Copied!';
+    this.classList.add('copied');
+    setTimeout(() => { this.textContent = 'Copy Link'; this.classList.remove('copied'); }, 2000);
+  });
+});
 
   } catch (err) {
     hide('progressBlock');
@@ -1207,16 +1267,7 @@ async function handleDownload() {
 
     const { download_url, file_name } = data;
 
-    // Trigger the browser download
-    const a = Object.assign(document.createElement('a'), {
-      href:     download_url,
-      target:   '_blank',
-      rel:      'noopener noreferrer',
-      download: file_name || 'download',
-    });
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    window.location.href = download_url;
 
     document.getElementById('downloadStatus').innerHTML = `
       <div class="hint">
@@ -1243,6 +1294,22 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;');
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   AUTO-DOWNLOAD — triggered when URL contains ?pin=<value>
+   e.g. https://myjvp.in/quick-share/?pin=sunny490
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function autoDownloadFromUrl() {
+  const pinFromUrl = new URLSearchParams(window.location.search).get('pin');
+  if (!pinFromUrl) return;
+
+  // Jump straight to download section with the PIN pre-filled
+  document.getElementById('retrievePin').value = pinFromUrl.trim().toLowerCase();
+  showDownloadSection();
+
+  // Kick off the download automatically
+  handleDownload();
+})();
 </script>
 
 </body>
