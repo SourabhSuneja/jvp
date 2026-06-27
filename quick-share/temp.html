@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QF1MCK0B9Y"></script>
+    <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag(){dataLayer.push(arguments);}
+         gtag('js', new Date());
+
+         gtag('config', 'G-QF1MCK0B9Y');
+    </script>
+    <!-- Google tag (gtag.js) -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quick Share · My JVP</title>
+  <title>Quick Share | My JVP</title>
 
   <!-- Google Fonts — matched to index.html (Inter + Poppins) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -351,6 +361,30 @@
     .drop-zone-label { font-size: 0.9rem; color: var(--text-2); line-height: 1.5; }
     .drop-zone-label strong { color: var(--purple-1); font-weight: 600; cursor: pointer; }
     .drop-zone-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 4px; }
+    .text-toggle-row { text-align: center; margin: -0.4rem 0 1.1rem; }
+.text-toggle-link {
+  font-size: 0.82rem; color: var(--purple-1);
+  text-decoration: none; font-weight: 500; cursor: pointer;
+}
+.text-toggle-link:hover { text-decoration: underline; }
+
+.text-panel { margin-bottom: 1.1rem; }
+.text-input {
+  width: 100%; min-height: 120px;
+  padding: 0.8rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem; color: var(--text);
+  resize: vertical; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.text-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+.text-panel-actions { display: flex; gap: 8px; margin-top: 8px; }
+.text-panel-actions .btn-ghost { flex: 1; }
 
     .file-chip {
       display: flex; align-items: center; gap: 10px;
@@ -530,7 +564,7 @@
         <span class="header-eyebrow">My JVP</span>
         <h1 class="school-name">Quick Share</h1>
       </div>
-      <a href="https://myjvp.in/commons/" class="portal-btn">
+      <a href="https://myjvp.in/" class="portal-btn">
         <span class="material-icons">home</span>
         Portal
       </a>
@@ -576,8 +610,23 @@
           <p class="drop-zone-label">
             Drag &amp; drop your file here, or <strong id="browseLink">browse</strong>
           </p>
-          <p class="drop-zone-sub">Any file type · Max 50 MB</p>
+          <p class="drop-zone-sub">Any file type · Max 200 MB</p>
         </div>
+
+        <p class="text-toggle-row">
+  <span class="text-toggle-link" id="toggleTextMode">Or paste text / a link instead</span>
+</p>
+
+<div id="textPanel" class="text-panel hidden">
+  <textarea id="textInput" class="text-input"
+            placeholder="Type or paste multi-line text, a URL, or text with link(s)…"></textarea>
+  <div class="text-panel-actions">
+    <button class="btn btn-ghost" id="useTextBtn" type="button">
+      <span class="material-icons" style="font-size:1rem;">check</span> Use this text
+    </button>
+    <button class="btn btn-ghost" id="cancelTextBtn" type="button">Cancel</button>
+  </div>
+</div>
 
         <div id="fileChip" class="file-chip hidden">
           <span class="material-icons file-chip-icon">description</span>
@@ -625,18 +674,13 @@
             <option value="30">30 minutes</option>
 
             <option value="60">1 hour</option>
-            <option value="240">4 hours</option>
-            <option value="720" selected>12 hours</option>
+            <option value="240" selected>4 hours</option>
+            <option value="720">12 hours</option>
             <option value="1440">24 hours</option>
             <option value="2880">48 hours</option>
             <option value="4320">72 hours</option>
 
             <option value="10080">1 week</option>
-            <option value="20160">2 weeks</option>
-            <option value="43200">1 month</option>
-            <option value="86400">2 months</option>
-            <option value="259200">6 months</option>
-            <option value="525600">1 year</option>
           </select>
         </div>
 
@@ -704,12 +748,9 @@
 
 
 <script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   CONFIG — Replace YOUR_PROJECT_ID with your Supabase project reference ID
-   ═══════════════════════════════════════════════════════════════════════════ */
 const EDGE_BASE = 'https://ckltcwampaagyzneaznt.supabase.co/functions/v1/quick-share';
 
-const MAX_FILE_BYTES = 50 * 1024 * 1024; // 50 MB hard limit
+const MAX_FILE_BYTES = 200 * 1024 * 1024; // 200 MB hard limit
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SECTION NAVIGATION — upload vs. download (mirrors index.html's role flow)
@@ -740,15 +781,62 @@ document.getElementById('backFromDownload').addEventListener('click', showAction
    Words are chosen to be easy to say, spell, and remember.
    ═══════════════════════════════════════════════════════════════════════════ */
 const WORDS = [
-  'sunny','river','brave','crisp','eagle','flame','globe','happy','island',
-  'karma','lunar','magic','noble','ocean','pearl','rapid','storm','tiger',
-  'ultra','vivid','extra','flare','grace','honor','jewel','light','maple',
-  'night','olive','pilot','quiet','radar','sugar','trace','unity','voice',
-  'wheat','yield','azure','beach','cloud','dream','blaze','cedar','elite',
-  'frost','giant','hedge','ivory','joker','knack','lemon','mango','nexus',
-  'orbit','plaza','ridge','silver','trend','valor','waltz','yacht','comet',
-  'drift','ember','haven','lunar','marsh','novel','ozone','prism','quest',
+  // Original words
+  'azure', 'beach', 'blaze', 'brave', 'cedar', 'cloud', 'comet', 'crisp', 'dream', 'drift',
+  'eagle', 'elite', 'ember', 'extra', 'flame', 'flare', 'frost', 'giant', 'globe', 'grace',
+  'happy', 'haven', 'hedge', 'honor', 'island', 'ivory', 'jewel', 'joker', 'karma', 'knack',
+  'lemon', 'light', 'lunar', 'magic', 'mango', 'maple', 'marsh', 'nexus', 'night', 'noble',
+  'novel', 'ocean', 'olive', 'orbit', 'ozone', 'pearl', 'pilot', 'plaza', 'prism', 'quest',
+  'quiet', 'radar', 'rapid', 'ridge', 'river', 'silver', 'storm', 'sugar', 'sunny', 'tiger',
+  'trace', 'trend', 'ultra', 'unity', 'valor', 'vivid', 'voice', 'waltz', 'wheat', 'yacht',
+  'yield',
+  
+  // New additions
+  'acorn', 'actor', 'adapt', 'admit', 'adopt', 'adult', 'after', 'again', 'agent', 'agree',
+  'ahead', 'alarm', 'album', 'alert', 'alien', 'alike', 'alive', 'allow', 'alone', 'along',
+  'alter', 'among', 'anger', 'angle', 'angry', 'ankle', 'apple', 'apply', 'arena', 'argue',
+  'arise', 'armor', 'array', 'arrow', 'aside', 'asset', 'audio', 'audit', 'avoid', 'awake',
+  'award', 'aware', 'awful', 'badly', 'baked', 'baker', 'bases', 'basic', 'basis', 'beans',
+  'beard', 'beast', 'begin', 'begun', 'being', 'belly', 'below', 'bench', 'berry', 'birth',
+  'black', 'blade', 'blame', 'blank', 'bleed', 'blend', 'bless', 'blind', 'blink', 'block',
+  'blood', 'bloom', 'blown', 'board', 'boast', 'bonus', 'boost', 'booth', 'boots', 'bound',
+  'brain', 'brake', 'brand', 'brass', 'bread', 'break', 'brick', 'bride', 'brief', 'bring',
+  'broad', 'broke', 'brown', 'brush', 'build', 'built', 'bunch', 'buyer', 'cabin', 'cable',
+  'camel', 'camp', 'candy', 'cargo', 'carry', 'catch', 'cause', 'chain', 'chair', 'chalk',
+  'chaos', 'charm', 'chart', 'chase', 'cheap', 'check', 'cheek', 'cheer', 'chess', 'chest',
+  'chick', 'chief', 'child', 'chill', 'choir', 'chunk', 'civil', 'claim', 'clash', 'class',
+  'clean', 'clear', 'clerk', 'click', 'cliff', 'climb', 'clock', 'close', 'cloth', 'coach',
+  'coast', 'color', 'comic', 'couch', 'could', 'count', 'court', 'cover', 'crack', 'craft',
+  'crash', 'crawl', 'crazy', 'cream', 'crime', 'cross', 'crowd', 'crown', 'crude', 'cruel',
+  'crush', 'crust', 'curve', 'cycle', 'daily', 'dairy', 'daisy', 'dance', 'datum', 'decay',
+  'delay', 'depth', 'devil', 'diary', 'dirty', 'disco', 'ditch', 'diver', 'doubt', 'dough',
+  'dozen', 'draft', 'drain', 'drama', 'drawn', 'dress', 'drill', 'drink', 'drive', 'drown',
+  'eager', 'early', 'earth', 'eaten', 'ebony', 'echo', 'eight', 'elbow', 'elder', 'elect',
+  'empty', 'enemy', 'enjoy', 'enter', 'entry', 'equal', 'error', 'essay', 'event', 'every',
+  'exact', 'exist', 'fable', 'fairy', 'faith', 'false', 'fancy', 'fatal', 'fault', 'favor',
+  'feast', 'fence', 'ferry', 'fetch', 'fever', 'fiber', 'field', 'fifth', 'fifty', 'fight',
+  'final', 'first', 'fixed', 'flash', 'flask', 'fleet', 'flesh', 'float', 'flock', 'flood',
+  'floor', 'flour', 'fluid', 'flush', 'focus', 'force', 'forge', 'forth', 'forty', 'found',
+  'frame', 'frank', 'fraud', 'fresh', 'front', 'fruit', 'fully', 'funny', 'gamma', 'given',
+  'glass', 'glory', 'glove', 'going', 'grand', 'grant', 'graph', 'grasp', 'grass', 'grave',
+  'great', 'greed', 'green', 'greet', 'grief', 'grill', 'group', 'grove', 'grown', 'guard',
+  'guess', 'guest', 'guide', 'guild', 'habit', 'hairy', 'halve', 'handy', 'harsh', 'hasty',
+  'hatch', 'heart', 'heavy', 'hello', 'hobby', 'honey', 'horse', 'hotel', 'house', 'human',
+  'humor', 'hurry', 'ideal', 'idiom', 'idiot', 'igloo', 'image', 'imply', 'index', 'inner',
+  'input', 'issue', 'joint', 'judge', 'juice', 'jumpy', 'koala', 'label', 'labor', 'large',
+  'laser', 'later', 'laugh', 'layer', 'learn', 'lease', 'least', 'leave', 'legal', 'level',
+  'limit', 'linen', 'liver', 'local', 'logic', 'loose', 'lover', 'lower', 'loyal', 'lucky',
+  'lunch', 'macro', 'major', 'maker', 'march', 'match', 'mayor', 'medal', 'media', 'melon',
+  'mercy', 'merge', 'merit', 'metal', 'meter', 'micro', 'minor', 'model', 'money', 'month',
+  'moral', 'motor', 'mount', 'mouse', 'mouth', 'movie', 'music', 'naked', 'newly', 'noise',
+  'north', 'nurse', 'occur', 'offer', 'often', 'onion', 'order', 'organ', 'other', 'outer',
+  'owner', 'paint', 'panel', 'panic', 'paper', 'party', 'pasta', 'paste', 'patch', 'pause',
+  'peace', 'peach', 'pedal', 'phase', 'phone', 'photo', 'piano', 'piece', 'pizza', 'place',
+  'plain', 'plane', 'plant', 'plate', 'point', 'porch', 'pound', 'power', 'press', 'price',
+  'pride', 'prime', 'print', 'prior', 'prize', 'proof', 'proud', 'prove', 'puppy', 'queen',
+  'query', 'quick', 'radio', 'raise', 'range', 'ratio', 'reach', 'react', 'ready'
 ];
+
 
 function generatePin() {
   const word   = WORDS[Math.floor(Math.random() * WORDS.length)];
@@ -854,14 +942,85 @@ function applyFile(f) {
   document.getElementById('chipName').textContent = f.name;
   document.getElementById('chipSize').textContent = fmtBytes(f.size);
   dropZone.classList.add('hidden');
+  document.querySelector('.text-toggle-row').classList.add('hidden');
   fileChip.classList.remove('hidden');
 }
+
+/* ── Plain-text → safe HTML file conversion ─────────────────────────── */
+function textToSafeHtml(text) {
+  // matches http(s)://… and bare www.… links, stopping at whitespace/quotes/brackets
+  const urlRegex = /((?:https?:\/\/|www\.)[^\s<>"']+)/gi;
+  let lastIndex = 0, html = '', match;
+
+  while ((match = urlRegex.exec(text)) !== null) {
+    html += escapeHtml(text.slice(lastIndex, match.index));
+    const raw  = match[0];
+    const href = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+    html += `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(raw)}</a>`;
+    lastIndex = match.index + raw.length;
+  }
+  html += escapeHtml(text.slice(lastIndex));
+  return html;
+}
+
+function buildHtmlFromText(text) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shared Text</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:2rem auto;
+       padding:0 1rem;line-height:1.6;color:#222;white-space:pre-wrap;word-wrap:break-word;}
+  a{color:#3366cc;word-break:break-all;}
+</style>
+</head>
+<body>${textToSafeHtml(text)}</body>
+</html>`;
+}
+
+function textToFile(text) {
+  const blob = new Blob([buildHtmlFromText(text)], { type: 'text/html' });
+  return new File([blob], `shared-text-${Date.now()}.html`, { type: 'text/html' });
+}
+
+/* ── Toggle between drop-zone and text panel ─────────────────────────── */
+const toggleTextMode = document.getElementById('toggleTextMode');
+const textPanel       = document.getElementById('textPanel');
+const textInput       = document.getElementById('textInput');
+const textToggleRow   = document.querySelector('.text-toggle-row');
+
+toggleTextMode.addEventListener('click', () => {
+  dropZone.classList.add('hidden');
+  textToggleRow.classList.add('hidden');
+  textPanel.classList.remove('hidden');
+  textInput.focus();
+});
+
+document.getElementById('cancelTextBtn').addEventListener('click', () => {
+  textInput.value = '';
+  textPanel.classList.add('hidden');
+  dropZone.classList.remove('hidden');
+  textToggleRow.classList.remove('hidden');
+});
+
+document.getElementById('useTextBtn').addEventListener('click', () => {
+  const text = textInput.value;
+  if (!text.trim()) {
+    renderAlert('uploadStatus', 'error', '', 'Please enter some text first.');
+    return;
+  }
+  applyFile(textToFile(text));   // feeds straight into the existing upload pipeline
+  textPanel.classList.add('hidden');
+});
 
 document.getElementById('removeFile').addEventListener('click', () => {
   selectedFile = null;
   fileInput.value = '';
   fileChip.classList.add('hidden');
   dropZone.classList.remove('hidden');
+  document.querySelector('.text-toggle-row').classList.remove('hidden');
   clearStatus('uploadStatus');
 });
 
@@ -912,6 +1071,7 @@ async function handleUpload() {
     fd.append('expiry_duration', expiry);
     fd.append('filename',        selectedFile.name);
     fd.append('file_type',       selectedFile.type || 'application/octet-stream');
+    fd.append('file_size',  String(selectedFile.size));
 
     const initRes = await fetch(`${EDGE_BASE}/upload`, {
       method: 'POST',
