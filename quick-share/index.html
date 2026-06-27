@@ -361,6 +361,30 @@
     .drop-zone-label { font-size: 0.9rem; color: var(--text-2); line-height: 1.5; }
     .drop-zone-label strong { color: var(--purple-1); font-weight: 600; cursor: pointer; }
     .drop-zone-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 4px; }
+    .text-toggle-row { text-align: center; margin: -0.4rem 0 1.1rem; }
+.text-toggle-link {
+  font-size: 0.82rem; color: var(--purple-1);
+  text-decoration: none; font-weight: 500; cursor: pointer;
+}
+.text-toggle-link:hover { text-decoration: underline; }
+
+.text-panel { margin-bottom: 1.1rem; }
+.text-input {
+  width: 100%; min-height: 120px;
+  padding: 0.8rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem; color: var(--text);
+  resize: vertical; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.text-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+.text-panel-actions { display: flex; gap: 8px; margin-top: 8px; }
+.text-panel-actions .btn-ghost { flex: 1; }
 
     .file-chip {
       display: flex; align-items: center; gap: 10px;
@@ -588,6 +612,21 @@
           </p>
           <p class="drop-zone-sub">Any file type · Max 200 MB</p>
         </div>
+
+        <p class="text-toggle-row">
+  <span class="text-toggle-link" id="toggleTextMode">Or paste text / a link instead</span>
+</p>
+
+<div id="textPanel" class="text-panel hidden">
+  <textarea id="textInput" class="text-input"
+            placeholder="Type or paste multi-line text, a URL, or text with link(s)…"></textarea>
+  <div class="text-panel-actions">
+    <button class="btn btn-ghost" id="useTextBtn" type="button">
+      <span class="material-icons" style="font-size:1rem;">check</span> Use this text
+    </button>
+    <button class="btn btn-ghost" id="cancelTextBtn" type="button">Cancel</button>
+  </div>
+</div>
 
         <div id="fileChip" class="file-chip hidden">
           <span class="material-icons file-chip-icon">description</span>
@@ -903,14 +942,85 @@ function applyFile(f) {
   document.getElementById('chipName').textContent = f.name;
   document.getElementById('chipSize').textContent = fmtBytes(f.size);
   dropZone.classList.add('hidden');
+  document.querySelector('.text-toggle-row').classList.add('hidden');
   fileChip.classList.remove('hidden');
 }
+
+/* ── Plain-text → safe HTML file conversion ─────────────────────────── */
+function textToSafeHtml(text) {
+  // matches http(s)://… and bare www.… links, stopping at whitespace/quotes/brackets
+  const urlRegex = /((?:https?:\/\/|www\.)[^\s<>"']+)/gi;
+  let lastIndex = 0, html = '', match;
+
+  while ((match = urlRegex.exec(text)) !== null) {
+    html += escapeHtml(text.slice(lastIndex, match.index));
+    const raw  = match[0];
+    const href = /^https?:\/\//i.test(raw) ? raw : 'https://' + raw;
+    html += `<a href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(raw)}</a>`;
+    lastIndex = match.index + raw.length;
+  }
+  html += escapeHtml(text.slice(lastIndex));
+  return html;
+}
+
+function buildHtmlFromText(text) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shared Text</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;max-width:700px;margin:2rem auto;
+       padding:0 1rem;line-height:1.6;color:#222;white-space:pre-wrap;word-wrap:break-word;}
+  a{color:#3366cc;word-break:break-all;}
+</style>
+</head>
+<body>${textToSafeHtml(text)}</body>
+</html>`;
+}
+
+function textToFile(text) {
+  const blob = new Blob([buildHtmlFromText(text)], { type: 'text/html' });
+  return new File([blob], `shared-text-${Date.now()}.html`, { type: 'text/html' });
+}
+
+/* ── Toggle between drop-zone and text panel ─────────────────────────── */
+const toggleTextMode = document.getElementById('toggleTextMode');
+const textPanel       = document.getElementById('textPanel');
+const textInput       = document.getElementById('textInput');
+const textToggleRow   = document.querySelector('.text-toggle-row');
+
+toggleTextMode.addEventListener('click', () => {
+  dropZone.classList.add('hidden');
+  textToggleRow.classList.add('hidden');
+  textPanel.classList.remove('hidden');
+  textInput.focus();
+});
+
+document.getElementById('cancelTextBtn').addEventListener('click', () => {
+  textInput.value = '';
+  textPanel.classList.add('hidden');
+  dropZone.classList.remove('hidden');
+  textToggleRow.classList.remove('hidden');
+});
+
+document.getElementById('useTextBtn').addEventListener('click', () => {
+  const text = textInput.value;
+  if (!text.trim()) {
+    renderAlert('uploadStatus', 'error', '', 'Please enter some text first.');
+    return;
+  }
+  applyFile(textToFile(text));   // feeds straight into the existing upload pipeline
+  textPanel.classList.add('hidden');
+});
 
 document.getElementById('removeFile').addEventListener('click', () => {
   selectedFile = null;
   fileInput.value = '';
   fileChip.classList.add('hidden');
   dropZone.classList.remove('hidden');
+  document.querySelector('.text-toggle-row').classList.remove('hidden');
   clearStatus('uploadStatus');
 });
 
