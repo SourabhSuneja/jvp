@@ -1267,16 +1267,7 @@ async function handleDownload() {
 
     const { download_url, file_name } = data;
 
-    // Trigger the browser download
-    const a = Object.assign(document.createElement('a'), {
-      href:     download_url,
-      target:   '_blank',
-      rel:      'noopener noreferrer',
-      download: file_name || 'download',
-    });
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    window.location.href = download_url;
 
     document.getElementById('downloadStatus').innerHTML = `
       <div class="hint">
