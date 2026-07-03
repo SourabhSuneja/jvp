@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jamna Vidyapeeth — House Allotment Ceremony</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+<style>
+  :root{
+    --ink:#171b34;
+    --ink-2:#20254a;
+    --ink-3:#2b3164;
+    --ink-4:#363c78;
+    --parchment:#f8f4e8;
+    --parchment-dim:#efe8d4;
+    --brass:#c9a227;
+    --brass-light:#eccf6b;
+    --text-light:#f5f2e9;
+    --text-muted:#a9adcf;
+    --text-faint:#7a7fae;
+
+    --ruby:#c23652;
+    --ruby-dark:#7e2038;
+    --ruby-glow:rgba(194,54,82,.45);
+
+    --emerald:#1f8f5f;
+    --emerald-dark:#125e3d;
+    --emerald-glow:rgba(31,143,95,.45);
+
+    --sapphire:#2864d1;
+    --sapphire-dark:#173a80;
+    --sapphire-glow:rgba(40,100,209,.45);
+
+    --topaz:#d9a61a;
+    --topaz-dark:#8f6b0d;
+    --topaz-glow:rgba(217,166,26,.45);
+
+    --radius-lg:26px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 700px at 15% -10%, #2a3070 0%, transparent 60%),
+      radial-gradient(1000px 600px at 110% 10%, #2c1f4a 0%, transparent 55%),
+      linear-gradient(180deg, var(--ink) 0%, #12142a 100%);
+    color:var(--text-light);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'Space Mono', monospace;}
+  h1,h2,h3,.display{font-family:'Fraunces', serif;}
+
+  a{color:inherit;}
+  button{font-family:inherit;}
+
+  /* subtle ambient texture */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{position:relative; z-index:1; max-width:1080px; margin:0 auto; padding:0 20px 80px;}
+
+  /* ---------- HEADER ---------- */
+  .site-header{
+    text-align:center; padding:56px 20px 20px;
+  }
+  .crest{
+    width:56px;height:56px; margin:0 auto 18px; opacity:.9;
+  }
+  .eyebrow{
+    letter-spacing:.22em; text-transform:uppercase; font-size:12px;
+    color:var(--brass-light); font-weight:700; margin-bottom:10px;
+  }
+  .site-header h1{
+    font-size:clamp(28px,5vw,44px); font-weight:700; margin:0 0 8px;
+    background:linear-gradient(135deg, var(--text-light), var(--brass-light));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .site-header p{color:var(--text-muted); font-size:15px; max-width:520px; margin:0 auto;}
+
+  /* ---------- STAGE CARD ---------- */
+  .stage{
+    position:relative;
+    background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.09);
+    border-radius:var(--radius-lg);
+    padding:44px clamp(20px,5vw,56px);
+    margin-top:28px;
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    box-shadow:0 30px 60px -30px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.06);
+    overflow:hidden;
+  }
+  .stage::before{
+    content:''; position:absolute; top:-40%; left:50%; transform:translateX(-50%);
+    width:160%; height:220px; background:radial-gradient(ellipse at center, rgba(201,162,39,.18), transparent 70%);
+    pointer-events:none;
+  }
+
+  .panel{display:none; animation:fadeUp .5s var(--ease);}
+  .panel.active{display:block;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---------- NAME PANEL ---------- */
+  .panel-title{font-size:clamp(20px,3.4vw,28px); font-weight:600; margin:0 0 6px; text-align:center;}
+  .panel-sub{color:var(--text-muted); text-align:center; font-size:14px; margin:0 0 32px;}
+
+  .autocomplete{position:relative; max-width:480px; margin:0 auto;}
+  .name-input{
+    width:100%; padding:18px 20px; font-size:17px; border-radius:var(--radius-md);
+    border:1.5px solid rgba(255,255,255,.14); background:rgba(10,12,28,.5);
+    color:var(--text-light); outline:none; transition:border-color .25s, box-shadow .25s;
+    font-family:'Inter',sans-serif;
+  }
+  .name-input::placeholder{color:var(--text-faint);}
+  .name-input:focus{border-color:var(--brass); box-shadow:0 0 0 4px rgba(201,162,39,.15);}
+
+  .suggestions{
+    position:absolute; top:calc(100% + 8px); left:0; right:0;
+    background:#1b1f3f; border:1px solid rgba(255,255,255,.12);
+    border-radius:var(--radius-md); overflow:hidden; z-index:20;
+    box-shadow:0 24px 48px -12px rgba(0,0,0,.6);
+    max-height:260px; overflow-y:auto;
+    display:none;
+  }
+  .suggestions.open{display:block;}
+  .suggestion{
+    padding:13px 18px; font-size:15px; cursor:pointer; color:var(--text-light);
+    border-bottom:1px solid rgba(255,255,255,.05); transition:background .15s;
+  }
+  .suggestion:last-child{border-bottom:none;}
+  .suggestion mark{background:none; color:var(--brass-light); font-weight:700;}
+  .suggestion.highlighted, .suggestion:hover{background:rgba(201,162,39,.15);}
+  .suggestion.custom-hint{color:var(--text-muted); font-style:italic;}
+
+  .cta-row{display:flex; justify-content:center; margin-top:26px;}
+  .btn{
+    appearance:none; border:none; cursor:pointer; font-weight:600; letter-spacing:.01em;
+    transition:transform .18s var(--ease), box-shadow .18s var(--ease), background .2s;
+  }
+  .btn:disabled{opacity:.45; cursor:not-allowed;}
+  .btn-primary{
+    padding:15px 34px; border-radius:100px; font-size:15.5px;
+    background:linear-gradient(135deg, var(--brass-light), var(--brass));
+    color:#241a02; box-shadow:0 12px 30px -8px rgba(201,162,39,.55);
+  }
+  .btn-primary:not(:disabled):hover{transform:translateY(-2px); box-shadow:0 16px 34px -8px rgba(201,162,39,.7);}
+  .btn-primary:not(:disabled):active{transform:translateY(0px) scale(.98);}
+
+  .btn-ghost{
+    background:transparent; color:var(--text-muted); border:1px solid rgba(255,255,255,.14);
+    padding:10px 20px; border-radius:100px; font-size:13.5px;
+  }
+  .btn-ghost:hover{color:var(--text-light); border-color:rgba(255,255,255,.3);}
+
+  /* ---------- PICKER PANEL ---------- */
+  .picker-name{text-align:center; color:var(--text-muted); font-size:14px; margin-bottom:4px;}
+  .picker-name b{color:var(--text-light);}
+  .change-name{display:block; text-align:center; font-size:12.5px; color:var(--text-faint); margin-bottom:26px; cursor:pointer; text-decoration:underline; text-underline-offset:3px;}
+  .change-name:hover{color:var(--brass-light);}
+
+  .medallion-stage{
+    display:flex; justify-content:center; align-items:center; padding:20px 0 10px; perspective:1200px;
+  }
+  .medallion{
+    width:180px; height:180px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+    position:relative;
+    background:radial-gradient(circle at 32% 28%, #3a406f, #1a1e3e 72%);
+    border:5px solid rgba(255,255,255,.12);
+    box-shadow:0 0 0 8px rgba(255,255,255,.04), 0 30px 60px -20px rgba(0,0,0,.7);
+    transform-style:preserve-3d;
+    transition:transform .12s ease-out, box-shadow .4s;
+  }
+  .medallion.spinning{animation:none;}
+  .medallion .gem-icon{width:64px; height:64px; margin-bottom:6px; transition:fill .1s, color .1s;}
+  .medallion .gem-label{
+    font-size:11px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--text-muted);
+  }
+  .medallion.settled{
+    animation:settle .55s var(--ease);
+  }
+  @keyframes settle{
+    0%{transform:scale(1) rotateY(0);}
+    35%{transform:scale(1.14) rotateY(20deg);}
+    60%{transform:scale(.96) rotateY(-8deg);}
+    100%{transform:scale(1) rotateY(0);}
+  }
+  .medallion.house-ruby{box-shadow:0 0 0 8px var(--ruby-glow), 0 30px 70px -18px var(--ruby-glow);}
+  .medallion.house-emerald{box-shadow:0 0 0 8px var(--emerald-glow), 0 30px 70px -18px var(--emerald-glow);}
+  .medallion.house-sapphire{box-shadow:0 0 0 8px var(--sapphire-glow), 0 30px 70px -18px var(--sapphire-glow);}
+  .medallion.house-topaz{box-shadow:0 0 0 8px var(--topaz-glow), 0 30px 70px -18px var(--topaz-glow);}
+
+  .house-ruby .gem-icon, .house-ruby .gem-label{color:var(--ruby-glow);}
+  .house-emerald .gem-icon, .house-emerald .gem-label{color:var(--emerald-glow);}
+  .house-sapphire .gem-icon, .house-sapphire .gem-label{color:var(--sapphire-glow);}
+  .house-topaz .gem-icon, .house-topaz .gem-label{color:var(--topaz-glow);}
+
+  .pick-btn-row{display:flex; justify-content:center; margin-top:32px;}
+  .pick-btn{
+    position:relative; overflow:hidden;
+    width:190px; height:190px; border-radius:50%;
+    background:linear-gradient(155deg, var(--brass-light), var(--brass) 60%, var(--brass-light));
+    color:#241a02; font-size:17px; font-weight:800; letter-spacing:.02em;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    box-shadow:0 0 0 10px rgba(201,162,39,.08), 0 24px 50px -16px rgba(201,162,39,.6), inset 0 3px 8px rgba(255,255,255,.5), inset 0 -6px 14px rgba(0,0,0,.25);
+    cursor:pointer; border:none;
+    transition:transform .15s var(--ease), box-shadow .2s;
+  }
+  .pick-btn:hover:not(:disabled){transform:translateY(-4px) scale(1.02);}
+  .pick-btn:active:not(:disabled){transform:translateY(1px) scale(.96);}
+  .pick-btn:disabled{cursor:progress; filter:saturate(.7);}
+  .pick-btn .ripple{
+    position:absolute; border-radius:50%; background:rgba(255,255,255,.55);
+    transform:scale(0); animation:rip .6s ease-out forwards; pointer-events:none;
+  }
+  @keyframes rip{to{transform:scale(3.4); opacity:0;}}
+
+  .suspense-caption{
+    text-align:center; margin-top:18px; font-size:13.5px; color:var(--text-muted);
+    min-height:20px; letter-spacing:.03em;
+  }
+
+  /* ---------- REVEAL PANEL ---------- */
+  .reveal-wrap{text-align:center;}
+  .reveal-badge{
+    width:150px; height:150px; margin:0 auto 22px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    animation:pop .7s var(--ease);
+  }
+  @keyframes pop{0%{transform:scale(.3); opacity:0;} 60%{transform:scale(1.12); opacity:1;} 100%{transform:scale(1);}}
+  .reveal-badge svg{width:78px; height:78px;}
+  .reveal-eyebrow{color:var(--text-muted); font-size:13px; letter-spacing:.15em; text-transform:uppercase; margin-bottom:10px;}
+  .reveal-wrap h2{font-size:clamp(24px,4.4vw,36px); margin:0 0 6px;}
+  .reveal-house-name{font-size:clamp(30px,6vw,48px); font-weight:900; margin:6px 0 18px;}
+  .reveal-sub{color:var(--text-muted); font-size:15px; max-width:440px; margin:0 auto 30px;}
+  .reveal-actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap;}
+
+  .house-ruby-text{color:var(--ruby);} .house-ruby-bg{background:linear-gradient(135deg,var(--ruby),var(--ruby-dark));}
+  .house-emerald-text{color:var(--emerald);} .house-emerald-bg{background:linear-gradient(135deg,var(--emerald),var(--emerald-dark));}
+  .house-sapphire-text{color:var(--sapphire);} .house-sapphire-bg{background:linear-gradient(135deg,var(--sapphire),var(--sapphire-dark));}
+  .house-topaz-text{color:var(--topaz);} .house-topaz-bg{background:linear-gradient(135deg,var(--topaz),var(--topaz-dark));}
+
+  /* ---------- RECORDS SECTION ---------- */
+  .records{margin-top:56px;}
+  .records-head{display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between; margin-bottom:22px;}
+  .records-head h2{font-size:22px; margin:0;}
+  .records-head p{color:var(--text-muted); font-size:13px; margin:4px 0 0;}
+
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin-bottom:26px;
+  }
+  @media (max-width:760px){.stat-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:420px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    border-radius:var(--radius-sm); padding:14px 10px; text-align:center;
+  }
+  .stat-card .num{font-family:'Space Mono',monospace; font-size:22px; font-weight:700;}
+  .stat-card .lbl{font-size:10.5px; color:var(--text-muted); letter-spacing:.08em; text-transform:uppercase; margin-top:4px;}
+
+  .toolbar{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px;}
+  .search-box{
+    flex:1; min-width:200px; padding:12px 16px; border-radius:var(--radius-sm);
+    background:rgba(10,12,28,.5); border:1.5px solid rgba(255,255,255,.12); color:var(--text-light);
+    outline:none; font-size:14px;
+  }
+  .search-box:focus{border-color:var(--brass);}
+
+  .table-shell{
+    border-radius:var(--radius-md); overflow:hidden; border:1px solid rgba(255,255,255,.09);
+    background:rgba(255,255,255,.03);
+  }
+  table{width:100%; border-collapse:collapse; font-size:14px;}
+  thead th{
+    text-align:left; padding:14px 16px; background:rgba(255,255,255,.05);
+    font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--text-muted);
+    cursor:pointer; user-select:none; white-space:nowrap;
+  }
+  thead th:hover{color:var(--brass-light);}
+  tbody td{padding:13px 16px; border-top:1px solid rgba(255,255,255,.06);}
+  tbody tr:hover{background:rgba(255,255,255,.03);}
+  .house-pill{
+    display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:100px;
+    font-size:12.5px; font-weight:700; color:#fff;
+  }
+  .empty-row td{text-align:center; padding:40px 20px; color:var(--text-faint);}
+
+  /* ---------- RESET / EXPORT BAR ---------- */
+  .actions-bar{display:flex; gap:12px; justify-content:flex-end; margin-top:20px; flex-wrap:wrap;}
+  .btn-danger{
+    background:rgba(194,54,82,.12); color:#ff8ba0; border:1px solid rgba(194,54,82,.4);
+    padding:11px 22px; border-radius:100px; font-size:13.5px; font-weight:600;
+  }
+  .btn-danger:hover{background:rgba(194,54,82,.22);}
+  .btn-export{
+    background:rgba(201,162,39,.14); color:var(--brass-light); border:1px solid rgba(201,162,39,.4);
+    padding:11px 22px; border-radius:100px; font-size:13.5px; font-weight:600;
+  }
+  .btn-export:hover{background:rgba(201,162,39,.24);}
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(6,7,18,.72); backdrop-filter:blur(4px);
+    display:none; align-items:center; justify-content:center; z-index:100; padding:20px;
+  }
+  .modal-overlay.open{display:flex; animation:fadeUp .25s var(--ease);}
+  .modal-box{
+    background:linear-gradient(180deg, #23264a, #191b38); border:1px solid rgba(255,255,255,.1);
+    border-radius:var(--radius-lg); padding:34px; max-width:400px; width:100%;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.7); text-align:center;
+  }
+  .modal-icon{width:52px; height:52px; margin:0 auto 16px; color:#ff8ba0;}
+  .modal-box h3{margin:0 0 10px; font-size:19px;}
+  .modal-box p{color:var(--text-muted); font-size:14px; line-height:1.6; margin:0 0 24px;}
+  .modal-actions{display:flex; gap:10px; justify-content:center;}
+
+  footer{text-align:center; padding:30px 20px 10px; color:var(--text-faint); font-size:12px;}
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+  }
+
+  :focus-visible{outline:2px solid var(--brass-light); outline-offset:2px;}
+
+  /* ---------- PRINT ---------- */
+  #printArea{display:none;}
+  @media print{
+    body *{visibility:hidden;}
+    #printArea, #printArea *{visibility:visible;}
+    #printArea{
+      display:block; position:absolute; top:0; left:0; width:100%;
+      color:#111; background:#fff; padding:24px 30px; font-family:'Inter',sans-serif;
+    }
+    #printArea h1{font-family:'Fraunces',serif; font-size:24px; margin:0 0 2px;}
+    #printArea .p-meta{font-size:12px; color:#555; margin-bottom:18px;}
+    #printArea table{width:100%; border-collapse:collapse; font-size:12px; margin-bottom:22px;}
+    #printArea th, #printArea td{border:1px solid #ccc; padding:6px 10px; text-align:left;}
+    #printArea th{background:#f2f2f2;}
+    #printArea .p-stats{display:flex; gap:18px; font-size:12px; margin-bottom:6px; flex-wrap:wrap;}
+    #printArea .p-stats div{border:1px solid #ddd; padding:6px 12px; border-radius:6px;}
+    @page{size:A4 portrait; margin:16mm;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<!-- gem icon defs -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <symbol id="gem" viewBox="0 0 100 100">
+      <polygon points="50,6 88,36 74,94 26,94 12,36" fill="currentColor" opacity="0.9"/>
+      <polygon points="12,36 88,36 50,6" fill="currentColor" opacity="0.55"/>
+      <polygon points="26,94 74,94 50,60" fill="currentColor" opacity="0.75"/>
+      <polyline points="12,36 50,60 88,36" fill="none" stroke="#0b0d1c" stroke-opacity="0.25" stroke-width="2"/>
+      <polyline points="50,6 50,60" fill="none" stroke="#0b0d1c" stroke-opacity="0.25" stroke-width="2"/>
+    </symbol>
+    <symbol id="crest" viewBox="0 0 60 60">
+      <path d="M30 4 L54 14 L54 30 C54 44 44 54 30 58 C16 54 6 44 6 30 L6 14 Z" fill="none" stroke="#c9a227" stroke-width="2.5"/>
+      <path d="M30 16 L38 26 L30 44 L22 26 Z" fill="#c9a227" opacity=".85"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+
+  <header class="site-header">
+    <svg class="crest"><use href="#crest"/></svg>
+    <div class="eyebrow">Jamna Vidyapeeth</div>
+    <h1>The House Allotment Ceremony</h1>
+    <p>Every teacher draws their house once — sealed the moment it's chosen, kept safe for the whole year.</p>
+  </header>
+
+  <section class="stage">
+
+    <!-- PANEL 1: NAME ENTRY -->
+    <div class="panel active" id="panel-name">
+      <div class="panel-title">Who is drawing today?</div>
+      <p class="panel-sub">Start typing your name, or select it from the staff register.</p>
+      <div class="autocomplete">
+        <input type="text" class="name-input" id="nameInput" placeholder="e.g. Anita Pareek" autocomplete="off" aria-label="Teacher name" role="combobox" aria-expanded="false" aria-autocomplete="list">
+        <div class="suggestions" id="suggestions" role="listbox"></div>
+      </div>
+      <div class="cta-row">
+        <button class="btn btn-primary" id="continueBtn" disabled>Begin Ceremony →</button>
+      </div>
+    </div>
+
+    <!-- PANEL 2: PICKER -->
+    <div class="panel" id="panel-picker">
+      <p class="picker-name">Drawing for <b id="pickerName">—</b></p>
+      <span class="change-name" id="changeNameLink">not you? change name</span>
+
+      <div class="medallion-stage">
+        <div class="medallion" id="medallion">
+          <svg class="gem-icon"><use href="#gem"/></svg>
+          <div class="gem-label" id="medallionLabel">Sealed</div>
+        </div>
+      </div>
+
+      <div class="pick-btn-row">
+        <button class="pick-btn" id="pickBtn">Pick My<br>House</button>
+      </div>
+      <p class="suspense-caption" id="suspenseCaption">&nbsp;</p>
+    </div>
+
+    <!-- PANEL 3: REVEAL -->
+    <div class="panel" id="panel-reveal">
+      <div class="reveal-wrap">
+        <div class="reveal-eyebrow">House Allotted</div>
+        <div class="reveal-badge" id="revealBadge">
+          <svg><use href="#gem"/></svg>
+        </div>
+        <h2>Congratulations, <span id="revealName">—</span>!</h2>
+        <div class="reveal-house-name" id="revealHouseName">— House</div>
+        <p class="reveal-sub" id="revealSub">Your house has been sealed and recorded for the year.</p>
+        <div class="reveal-actions">
+          <button class="btn btn-ghost" id="reveal-newDraw">Draw for another teacher</button>
+          <a href="#records" class="btn btn-ghost">View all assignments ↓</a>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- RECORDS -->
+  <section class="records" id="records">
+    <div class="records-head">
+      <div>
+        <h2>Assignment Records</h2>
+        <p>Autosaved locally on this device — no save button needed.</p>
+      </div>
+    </div>
+
+    <div class="stat-grid" id="statGrid"></div>
+
+    <div class="toolbar">
+      <input type="text" class="search-box" id="searchBox" placeholder="Search by name or house…">
+    </div>
+
+    <div class="table-shell">
+      <table>
+        <thead>
+          <tr>
+            <th data-key="name">Teacher <span class="arrow"></span></th>
+            <th data-key="house">House <span class="arrow"></span></th>
+            <th data-key="timestamp">Assigned On <span class="arrow"></span></th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn btn-export" id="exportBtn">Export to PDF</button>
+      <button class="btn btn-danger" id="resetBtn">Start Fresh</button>
+    </div>
+  </section>
+
+  <footer>Jamna Vidyapeeth · House Allotment Ceremony · Data is stored only on this device</footer>
+</div>
+
+<!-- RESET MODAL -->
+<div class="modal-overlay" id="resetModal">
+  <div class="modal-box">
+    <svg class="modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4m0 4h.01M10.3 3.8 1.9 18a2 2 0 0 0 1.7 3h16.8a2 2 0 0 0 1.7-3L13.7 3.8a2 2 0 0 0-3.4 0Z"/></svg>
+    <h3>Delete all assignments?</h3>
+    <p>This will permanently erase every teacher's house allotment stored on this device. <b>This action cannot be undone.</b></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="cancelReset">Cancel</button>
+      <button class="btn btn-danger" id="confirmReset" style="background:var(--ruby); color:#fff; border:none;">Yes, delete everything</button>
+    </div>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- DATA ---------------- */
+  const TEACHERS = [
+  "Aaditi Mehrotra",
+  "Abhilasha Joshi",
+  "Ajad Singh Chauhan",
+  "Aman Pareek",
+  "Anita Pareek",
+  "Anju Kumari",
+  "Anju Saini",
+  "Anshu Sharma",
+  "Arti Ahuja",
+  "Ashish Yadav",
+  "Ashok Kumawat",
+  "Ashutosh Sharma",
+  "Babulal Jat",
+  "Chandni Kumawat",
+  "CP Sharma",
+  "C.S. Sharma",
+  "Dikshita Jain",
+  "Goverdhan Sharma",
+  "Indresh Kapupara",
+  "Jhabar Singh",
+  "Jyoti Lalwani",
+  "Jyoti Sharma",
+  "Kajal Jha",
+  "Kanak Pareek",
+  "Konika Choudhary",
+  "Krishan Singh",
+  "Kriteshwar Pathak",
+  "Kriti Gaur",
+  "Manju Jopat",
+  "Manju Saini",
+  "Monu Sharma",
+  "Neha Verma",
+  "Nishant Bhuwanika",
+  "Nita Agarwal",
+  "Niyati Choudhary",
+  "Pooja Gupta",
+  "Pooja Sharma",
+  "Prince Sharma",
+  "Purvi Saini",
+  "Pushpendra Singh",
+  "Rekha Pareek",
+  "Rinkal Agarwal",
+  "Ritu Das",
+  "Ritu Sharma",
+  "Sanju Saini",
+  "Saroj Jangid",
+  "Savita Devi",
+  "Shailesh Choudhary",
+  "Shalini Sharma",
+  "Shanu Sharma",
+  "Shraddha Verma",
+  "Shubham",
+  "Sita",
+  "Snigdha Das",
+  "Sourabh Suneja",
+  "Subhash Sharma",
+  "Subhita Kumari",
+  "Sumitra Devi",
+  "Suniti Khandelwal",
+  "Suresh Kumawat",
+  "Tanu Soni",
+  "Vikas Jain",
+  "Vikram Singh",
+  "Yogeshwari Sharma"
+];
+
+  const HOUSES = [
+    {key:"ruby",     name:"Ruby",     emoji:"❤️", color:"#c23652"},
+    {key:"emerald",  name:"Emerald",  emoji:"💚", color:"#1f8f5f"},
+    {key:"sapphire", name:"Sapphire", emoji:"💙", color:"#2864d1"},
+    {key:"topaz",    name:"Topaz",    emoji:"💛", color:"#d9a61a"}
+  ];
+
+  const STORAGE_KEY = "jv_house_draw_v1";
+
+  function loadData(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){ return []; }
+  }
+  function saveData(arr){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  }
+  function findAssignment(name){
+    const n = name.trim().toLowerCase();
+    return loadData().find(a => a.name.trim().toLowerCase() === n);
+  }
+  function addAssignment(name, houseKey){
+    const arr = loadData();
+    arr.push({name: name.trim(), house: houseKey, timestamp: new Date().toISOString()});
+    saveData(arr);
+  }
+  function houseByKey(key){ return HOUSES.find(h => h.key === key); }
+
+  /* ---------------- ELEMENTS ---------------- */
+  const panelName = document.getElementById("panel-name");
+  const panelPicker = document.getElementById("panel-picker");
+  const panelReveal = document.getElementById("panel-reveal");
+
+  const nameInput = document.getElementById("nameInput");
+  const suggestionsEl = document.getElementById("suggestions");
+  const continueBtn = document.getElementById("continueBtn");
+
+  const pickerName = document.getElementById("pickerName");
+  const changeNameLink = document.getElementById("changeNameLink");
+  const medallion = document.getElementById("medallion");
+  const medallionLabel = document.getElementById("medallionLabel");
+  const pickBtn = document.getElementById("pickBtn");
+  const suspenseCaption = document.getElementById("suspenseCaption");
+
+  const revealBadge = document.getElementById("revealBadge");
+  const revealName = document.getElementById("revealName");
+  const revealHouseName = document.getElementById("revealHouseName");
+  const revealSub = document.getElementById("revealSub");
+  document.getElementById("reveal-newDraw").addEventListener("click", () => goToPanel("name"));
+
+  let currentName = "";
+  let highlightedIndex = -1;
+  let currentSuggestions = [];
+
+  /* ---------------- PANEL SWITCH ---------------- */
+  function goToPanel(which){
+    [panelName, panelPicker, panelReveal].forEach(p => p.classList.remove("active"));
+    if(which === "name"){
+      panelName.classList.add("active");
+      nameInput.value = "";
+      currentName = "";
+      continueBtn.disabled = true;
+      closeSuggestions();
+      nameInput.focus();
+    } else if(which === "picker"){
+      panelPicker.classList.add("active");
+      pickerName.textContent = currentName;
+      resetMedallion();
+    } else if(which === "reveal"){
+      panelReveal.classList.add("active");
+    }
+  }
+
+  /* ---------------- AUTOCOMPLETE ---------------- */
+  function renderSuggestions(query){
+    const q = query.trim().toLowerCase();
+    if(!q){ closeSuggestions(); return; }
+    const matches = TEACHERS.filter(t => t.toLowerCase().includes(q));
+    currentSuggestions = matches;
+    highlightedIndex = -1;
+
+    if(matches.length === 0){
+      suggestionsEl.innerHTML = `<div class="suggestion custom-hint">No match — you can use "<b>${escapeHtml(query.trim())}</b>" as a custom name</div>`;
+      suggestionsEl.classList.add("open");
+      nameInput.setAttribute("aria-expanded","true");
+      return;
+    }
+
+    suggestionsEl.innerHTML = matches.map((t, i) => {
+      const idx = t.toLowerCase().indexOf(q);
+      const highlighted = idx >= 0
+        ? t.slice(0,idx) + "<mark>" + t.slice(idx, idx+q.length) + "</mark>" + t.slice(idx+q.length)
+        : t;
+      return `<div class="suggestion" role="option" data-index="${i}">${highlighted}</div>`;
+    }).join("");
+    suggestionsEl.classList.add("open");
+    nameInput.setAttribute("aria-expanded","true");
+  }
+
+  function closeSuggestions(){
+    suggestionsEl.classList.remove("open");
+    suggestionsEl.innerHTML = "";
+    nameInput.setAttribute("aria-expanded","false");
+    highlightedIndex = -1;
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+  }
+
+  nameInput.addEventListener("input", () => {
+    renderSuggestions(nameInput.value);
+    continueBtn.disabled = nameInput.value.trim().length === 0;
+  });
+
+  nameInput.addEventListener("keydown", (e) => {
+    const items = Array.from(suggestionsEl.querySelectorAll(".suggestion[data-index]"));
+    if(e.key === "ArrowDown"){
+      e.preventDefault();
+      if(items.length === 0) return;
+      highlightedIndex = (highlightedIndex + 1) % items.length;
+      updateHighlight(items);
+    } else if(e.key === "ArrowUp"){
+      e.preventDefault();
+      if(items.length === 0) return;
+      highlightedIndex = (highlightedIndex - 1 + items.length) % items.length;
+      updateHighlight(items);
+    } else if(e.key === "Enter"){
+      e.preventDefault();
+      if(highlightedIndex >= 0 && currentSuggestions[highlightedIndex]){
+        selectName(currentSuggestions[highlightedIndex]);
+      } else if(nameInput.value.trim()){
+        selectName(nameInput.value.trim());
+      }
+    } else if(e.key === "Escape"){
+      closeSuggestions();
+    }
+  });
+
+  function updateHighlight(items){
+    items.forEach(el => el.classList.remove("highlighted"));
+    if(items[highlightedIndex]){
+      items[highlightedIndex].classList.add("highlighted");
+      items[highlightedIndex].scrollIntoView({block:"nearest"});
+    }
+  }
+
+  suggestionsEl.addEventListener("click", (e) => {
+    const el = e.target.closest(".suggestion[data-index]");
+    if(!el) return;
+    const idx = parseInt(el.dataset.index, 10);
+    selectName(currentSuggestions[idx]);
+  });
+
+  document.addEventListener("click", (e) => {
+    if(!e.target.closest(".autocomplete")) closeSuggestions();
+  });
+
+  function selectName(name){
+    nameInput.value = name;
+    currentName = name;
+    continueBtn.disabled = false;
+    closeSuggestions();
+  }
+
+  continueBtn.addEventListener("click", () => {
+    const name = nameInput.value.trim();
+    if(!name) return;
+    currentName = name;
+    proceedWithName(name);
+  });
+
+  changeNameLink.addEventListener("click", () => goToPanel("name"));
+
+  function proceedWithName(name){
+    const existing = findAssignment(name);
+    if(existing){
+      showReveal(name, existing.house, false);
+    } else {
+      goToPanel("picker");
+    }
+  }
+
+  /* ---------------- MEDALLION / PICKER ---------------- */
+  function resetMedallion(){
+    medallion.className = "medallion";
+    medallionLabel.textContent = "Sealed";
+    pickBtn.disabled = false;
+    pickBtn.innerHTML = "Pick My<br>House";
+    suspenseCaption.textContent = "\u00A0";
+  }
+
+  pickBtn.addEventListener("click", function(e){
+    if(pickBtn.disabled) return;
+    pickBtn.disabled = true;
+
+    // ripple
+    const ripple = document.createElement("span");
+    ripple.className = "ripple";
+    const rect = pickBtn.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = (e.clientX - rect.left - size/2) + "px";
+    ripple.style.top = (e.clientY - rect.top - size/2) + "px";
+    pickBtn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 650);
+
+    if(navigator.vibrate) navigator.vibrate(30);
+    pickBtn.innerHTML = "Sealing…";
+
+    runSuspense();
+  });
+
+  function runSuspense(){
+    const delays = [70,70,80,90,100,115,130,150,175,205,240,280,330,390,460];
+    let step = 0;
+    let houseIdx = Math.floor(Math.random()*HOUSES.length);
+    const captions = ["Shuffling the slips…","Mixing the bowl…","Almost there…","Sealing your fate…"];
+
+    function tick(){
+      houseIdx = (houseIdx + 1) % HOUSES.length;
+      const h = HOUSES[houseIdx];
+      medallion.className = "medallion spinning house-" + h.key;
+      medallion.style.transform = (step % 2 === 0) ? "rotateY(12deg)" : "rotateY(-12deg)";
+      medallionLabel.textContent = h.name;
+      medallionLabel.style.color = h.color;
+      medallion.querySelector(".gem-icon").style.color = h.color;
+
+      if(step < captions.length * 3){
+        suspenseCaption.textContent = captions[Math.floor(step / 3) % captions.length];
+      }
+
+      step++;
+      if(step < delays.length){
+        setTimeout(tick, delays[step]);
+      } else {
+        finishSuspense();
+      }
+    }
+    setTimeout(tick, delays[0]);
+  }
+
+  function finishSuspense(){
+    const finalHouse = HOUSES[Math.floor(Math.random()*HOUSES.length)];
+    medallion.style.transform = "";
+    medallion.className = "medallion settled house-" + finalHouse.key;
+    medallionLabel.textContent = finalHouse.name;
+    medallionLabel.style.color = finalHouse.color;
+    medallion.querySelector(".gem-icon").style.color = finalHouse.color;
+    suspenseCaption.textContent = "Sealed!";
+
+    if(navigator.vibrate) navigator.vibrate([40,30,80]);
+
+    addAssignment(currentName, finalHouse.key);
+    renderRecords();
+
+    setTimeout(() => showReveal(currentName, finalHouse.key, true), 400);
+  }
+
+  /* ---------------- REVEAL ---------------- */
+  function showReveal(name, houseKey, isFresh){
+    const h = houseByKey(houseKey);
+    revealName.textContent = name;
+    revealHouseName.textContent = h.name + " House " + h.emoji;
+    revealHouseName.className = "reveal-house-name house-" + h.key + "-text";
+    revealBadge.className = "reveal-badge house-" + h.key + "-bg";
+    revealBadge.querySelector("use") && (revealBadge.querySelector("svg").style.color = "#fff");
+    revealSub.textContent = isFresh
+      ? "Your house has just been sealed and recorded for the year."
+      : "You were already sealed into this house earlier — records are permanent for the year.";
+    goToPanel("reveal");
+
+    if(isFresh && window.confetti){
+      confetti({
+        particleCount: 140,
+        spread: 80,
+        origin: {y: 0.55},
+        colors: [h.color, "#f5f2e9", "#c9a227"]
+      });
+    }
+  }
+
+  /* ---------------- RECORDS TABLE ---------------- */
+  const statGrid = document.getElementById("statGrid");
+  const tableBody = document.getElementById("tableBody");
+  const searchBox = document.getElementById("searchBox");
+  let sortState = {key:"timestamp", dir:"desc"};
+
+  function formatTimestamp(iso){
+    const d = new Date(iso);
+    return d.toLocaleString(undefined, {day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit"});
+  }
+
+  function renderStats(){
+    const data = loadData();
+    const counts = {ruby:0, emerald:0, sapphire:0, topaz:0};
+    data.forEach(a => { if(counts[a.house] !== undefined) counts[a.house]++; });
+    const assignedTeacherNames = new Set(data.map(a => a.name.trim().toLowerCase()));
+    const remaining = TEACHERS.filter(t => !assignedTeacherNames.has(t.toLowerCase())).length;
+
+    const cards = [
+      {label:"Total Assigned", value:data.length, color:"var(--brass-light)"},
+      {label:"Ruby", value:counts.ruby, color:"var(--ruby)"},
+      {label:"Emerald", value:counts.emerald, color:"var(--emerald)"},
+      {label:"Sapphire", value:counts.sapphire, color:"var(--sapphire)"},
+      {label:"Topaz", value:counts.topaz, color:"var(--topaz)"},
+      {label:"Remaining", value:remaining, color:"var(--text-muted)"}
+    ];
+    statGrid.innerHTML = cards.map(c =>
+      `<div class="stat-card"><div class="num" style="color:${c.color}">${c.value}</div><div class="lbl">${c.label}</div></div>`
+    ).join("");
+  }
+
+  function renderTable(){
+    let data = loadData();
+    const q = searchBox.value.trim().toLowerCase();
+    if(q){
+      data = data.filter(a => a.name.toLowerCase().includes(q) || a.house.includes(q) ||
+        (houseByKey(a.house) && houseByKey(a.house).name.toLowerCase().includes(q)));
+    }
+
+    data.sort((a,b) => {
+      let av, bv;
+      if(sortState.key === "name"){ av = a.name.toLowerCase(); bv = b.name.toLowerCase(); }
+      else if(sortState.key === "house"){ av = houseByKey(a.house).name; bv = houseByKey(b.house).name; }
+      else { av = a.timestamp; bv = b.timestamp; }
+      if(av < bv) return sortState.dir === "asc" ? -1 : 1;
+      if(av > bv) return sortState.dir === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    if(data.length === 0){
+      tableBody.innerHTML = `<tr class="empty-row"><td colspan="3">No assignments yet — draw a house to see it appear here.</td></tr>`;
+      return;
+    }
+
+    tableBody.innerHTML = data.map(a => {
+      const h = houseByKey(a.house);
+      return `<tr>
+        <td>${escapeHtml(a.name)}</td>
+        <td><span class="house-pill" style="background:${h.color}">${h.emoji} ${h.name}</span></td>
+        <td class="mono" style="font-size:12.5px">${formatTimestamp(a.timestamp)}</td>
+      </tr>`;
+    }).join("");
+  }
+
+  document.querySelectorAll("thead th[data-key]").forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.key;
+      if(sortState.key === key){
+        sortState.dir = sortState.dir === "asc" ? "desc" : "asc";
+      } else {
+        sortState.key = key;
+        sortState.dir = "asc";
+      }
+      document.querySelectorAll("thead th .arrow").forEach(a => a.textContent = "");
+      th.querySelector(".arrow").textContent = sortState.dir === "asc" ? " ▲" : " ▼";
+      renderTable();
+    });
+  });
+
+  searchBox.addEventListener("input", renderTable);
+
+  function renderRecords(){
+    renderStats();
+    renderTable();
+  }
+
+  /* ---------------- RESET ---------------- */
+  const resetModal = document.getElementById("resetModal");
+  document.getElementById("resetBtn").addEventListener("click", () => resetModal.classList.add("open"));
+  document.getElementById("cancelReset").addEventListener("click", () => resetModal.classList.remove("open"));
+  resetModal.addEventListener("click", (e) => { if(e.target === resetModal) resetModal.classList.remove("open"); });
+  document.getElementById("confirmReset").addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+    resetModal.classList.remove("open");
+    renderRecords();
+    goToPanel("name");
+  });
+
+  /* ---------------- EXPORT ---------------- */
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const data = loadData().slice().sort((a,b) => new Date(a.timestamp) - new Date(b.timestamp));
+    const counts = {ruby:0, emerald:0, sapphire:0, topaz:0};
+    data.forEach(a => { if(counts[a.house] !== undefined) counts[a.house]++; });
+
+    const now = new Date();
+    const rows = data.map(a => {
+      const h = houseByKey(a.house);
+      return `<tr><td>${escapeHtml(a.name)}</td><td>${h.name}</td><td>${formatTimestamp(a.timestamp)}</td></tr>`;
+    }).join("");
+
+    document.getElementById("printArea").innerHTML = `
+      <h1>Jamna Vidyapeeth</h1>
+      <div class="p-meta">Teacher House Assignment —  Report &nbsp;|&nbsp; Generated ${now.toLocaleString()}</div>
+      <div class="p-stats">
+        <div><b>${data.length}</b> Total</div>
+        <div><b>${counts.ruby}</b> Ruby</div>
+        <div><b>${counts.emerald}</b> Emerald</div>
+        <div><b>${counts.sapphire}</b> Sapphire</div>
+        <div><b>${counts.topaz}</b> Topaz</div>
+        <div><b>${TEACHERS.length - new Set(data.map(a=>a.name.trim().toLowerCase())).size + (TEACHERS.length - data.length < 0 ? 0 : 0)}</b></div>
+      </div>
+      <table>
+        <thead><tr><th>Teacher</th><th>House</th><th>Assigned On</th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="3">No assignments recorded.</td></tr>'}</tbody>
+      </table>
+    `;
+    window.print();
+  });
+
+  /* ---------------- INIT ---------------- */
+  renderRecords();
+  goToPanel("name");
+})();
+</script>
+</body>
+</html>
