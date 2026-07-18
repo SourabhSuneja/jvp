@@ -236,7 +236,7 @@
     table {
         border-collapse: collapse;
         width: 100%;
-        min-width: 640px;
+        min-width: 980px;
     }
 
     thead th {
@@ -267,6 +267,12 @@
 
     thead th.col-roll {
         min-width: 56px;
+    }
+
+    thead th.col-subject,
+    td.col-subject {
+        min-width: 128px;
+        width: 128px;
     }
 
     thead th .subject-head {
@@ -314,12 +320,35 @@
 
     td.col-roll { color: var(--gray-400); font-size: 0.82rem; }
 
+    td.col-subject {
+        text-align: left;
+        padding-left: 0.75rem;
+    }
+
+    .subject-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .subject-cell-label {
+        font-size: 0.78rem;
+        color: var(--gray-700);
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     .subject-check {
         width: 20px;
         height: 20px;
         border-radius: 6px;
         cursor: pointer;
         accent-color: var(--navy);
+        flex-shrink: 0;
     }
 
     .count-badge {
@@ -443,6 +472,12 @@
         main { padding: 1rem 0.75rem 6rem; }
         thead th, td { padding: 0.5rem 0.4rem; font-size: 0.8rem; }
         thead th.col-name, td.col-name { min-width: 130px; padding-left: 0.75rem; }
+        thead th.col-subject,
+        td.col-subject {
+            min-width: 104px;
+            width: 104px;
+        }
+        .subject-cell-label { font-size: 0.72rem; }
         .search-wrap { max-width: none; }
     }
 
@@ -689,6 +724,7 @@ function buildClassPicker() {
 function buildTableHead() {
     SUBJECTS.forEach((subj) => {
         const th = document.createElement('th');
+        th.className = 'col-subject';
         th.title = subj.key;
         const wrap = document.createElement('label');
         wrap.className = 'subject-head';
@@ -777,13 +813,25 @@ function renderRows() {
         const cellMap = {};
         SUBJECTS.forEach((subj) => {
             const td = document.createElement('td');
+            td.className = 'col-subject';
+
+            const wrap = document.createElement('label');
+            wrap.className = 'subject-cell';
+
             const cb = document.createElement('input');
             cb.type = 'checkbox';
             cb.className = 'subject-check';
             cb.checked = currentSet.has(key(s.id, subj.key));
             cb.setAttribute('aria-label', s.name + ' — ' + subj.key);
             cb.addEventListener('change', () => toggleCell(s.id, subj.key, cb.checked, tr));
-            td.appendChild(cb);
+
+            const span = document.createElement('span');
+            span.className = 'subject-cell-label';
+            span.textContent = subj.key;
+
+            wrap.appendChild(cb);
+            wrap.appendChild(span);
+            td.appendChild(wrap);
             tr.appendChild(td);
             cellMap[subj.key] = cb;
         });
