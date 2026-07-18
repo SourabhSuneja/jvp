@@ -241,7 +241,7 @@
 
     thead th {
         position: sticky;
-        top: var(--header-h, 72px);
+        top: 0;
         background: var(--navy);
         color: #fff;
         z-index: 5;
@@ -566,13 +566,6 @@ const changeCount = el('changeCount');
 const saveBtn = el('saveBtn');
 const discardBtn = el('discardBtn');
 const toastEl = el('toast');
-
-const pageHeaderEl = document.querySelector('.header');
-function syncHeaderHeight() {
-    document.documentElement.style.setProperty('--header-h', pageHeaderEl.offsetHeight + 'px');
-}
-syncHeaderHeight();
-window.addEventListener('resize', syncHeaderHeight);
 
 let currentUser = null;
 let isAdmin = false;
