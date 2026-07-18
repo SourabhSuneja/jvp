@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympiad Participation | JVP School</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --navy: #1e3a8a;
+        --navy-dark: #152a63;
+        --navy-light: #eef2fb;
+        --amber: #f59e0b;
+        --amber-dark: #b45309;
+        --green: #16a34a;
+        --red: #dc2626;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-700: #334155;
+        --gray-900: #0f172a;
+        --radius: 12px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        max-height: 99999999px;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--gray-50);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        color: var(--gray-900);
+    }
+
+    /* ---------- Header ---------- */
+    .header {
+        background: var(--navy);
+        padding: 1.25rem 1.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .header-title {
+        font-family: 'Poppins', sans-serif;
+        color: #fff;
+        font-size: 1.15rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .header-title .eyebrow {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.65);
+        margin-bottom: 0.15rem;
+    }
+
+    .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.85rem;
+    }
+
+    .role-badge {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .signout-btn {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: #fff;
+        padding: 0.4rem 0.85rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        font-family: 'Inter', sans-serif;
+    }
+    .signout-btn:hover { background: rgba(255, 255, 255, 0.12); }
+
+    /* ---------- Main layout ---------- */
+    main {
+        flex: 1;
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 1.5rem 1.25rem 6rem;
+    }
+
+    .state-panel {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 3rem 1.5rem;
+        text-align: center;
+        color: var(--gray-500);
+        margin-top: 2rem;
+    }
+    .state-panel h2 {
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray-900);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    .spinner {
+        width: 34px;
+        height: 34px;
+        border: 3px solid var(--gray-200);
+        border-top-color: var(--navy);
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- Toolbar ---------- */
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin: 1.25rem 0 1rem;
+    }
+
+    .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    select#classSelect {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--navy);
+        background: #fff;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+        cursor: pointer;
+    }
+    select#classSelect:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
+
+    .class-fixed {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: var(--navy);
+        background: var(--navy-light);
+        padding: 0.5rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+    }
+
+    .search-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 180px;
+        max-width: 280px;
+    }
+    .search-wrap input {
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.88rem;
+        padding: 0.5rem 0.75rem 0.5rem 2.1rem;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 8px;
+        background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="%2394a3b8" stroke-width="2"><circle cx="6.5" cy="6.5" r="5"/><line x1="10.5" y1="10.5" x2="15" y2="15"/></svg>') no-repeat 0.7rem center;
+    }
+    .search-wrap input:focus { outline: 2px solid var(--navy); outline-offset: 1px; }
+
+    .spacer { flex: 1; }
+
+    .summary-pill {
+        font-size: 0.8rem;
+        color: var(--gray-500);
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+    }
+
+    /* ---------- Table card ---------- */
+    .table-card {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .table-scroll {
+        overflow-x: auto;
+        max-width: 100%;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 640px;
+    }
+
+    thead th {
+        position: sticky;
+        top: 0;
+        background: var(--navy);
+        color: #fff;
+        z-index: 5;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 0.72rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.65rem 0.5rem;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    thead th.col-name {
+        text-align: left;
+        padding-left: 1rem;
+        position: sticky;
+        left: 0;
+        z-index: 6;
+        background: var(--navy);
+        min-width: 170px;
+    }
+
+    thead th.col-roll {
+        min-width: 56px;
+    }
+
+    thead th .subject-head {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+        cursor: pointer;
+    }
+
+    thead th .subject-head input {
+        width: 15px;
+        height: 15px;
+        accent-color: var(--amber);
+        cursor: pointer;
+    }
+
+    /* Subject header columns: show the full subject name next to the
+       select-all checkbox, wrapping onto a couple of lines if needed
+       instead of relying on the tooltip alone. */
+    thead th[data-subject] {
+        white-space: normal;
+        min-width: 82px;
+        max-width: 110px;
+        font-size: 0.66rem;
+        line-height: 1.15;
+    }
+
+    thead th .subject-head span {
+        text-align: center;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid var(--gray-100);
+        transition: background 0.12s ease;
+    }
+    tbody tr:hover { background: var(--gray-50); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr.row-dirty { background: #fffbeb; }
+    tbody tr.row-hidden { display: none; }
+
+    td {
+        padding: 0.55rem 0.5rem;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    td.col-name {
+        text-align: left;
+        padding-left: 1rem;
+        font-weight: 500;
+        color: var(--gray-900);
+        position: sticky;
+        left: 0;
+        background: #fff;
+        white-space: nowrap;
+    }
+    tbody tr:hover td.col-name { background: var(--gray-50); }
+    tbody tr.row-dirty td.col-name { background: #fffbeb; }
+
+    td.col-roll { color: var(--gray-400); font-size: 0.82rem; }
+
+    .subject-check {
+        width: 20px;
+        height: 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        accent-color: var(--navy);
+    }
+
+    .count-badge {
+        display: inline-block;
+        min-width: 20px;
+        padding: 0.1rem 0.4rem;
+        border-radius: 999px;
+        background: var(--navy-light);
+        color: var(--navy);
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+    .count-badge.zero { background: var(--gray-100); color: var(--gray-400); }
+
+    .empty-row td {
+        padding: 2.5rem 1rem;
+        color: var(--gray-500);
+        font-size: 0.9rem;
+    }
+
+    /* ---------- Legend ---------- */
+    .legend {
+        margin-top: 0.85rem;
+        font-size: 0.78rem;
+        color: var(--gray-500);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 1rem;
+    }
+    .legend b { color: var(--gray-700); }
+
+    /* ---------- Save bar ---------- */
+    .save-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 60;
+        display: flex;
+        justify-content: center;
+        pointer-events: none;
+    }
+
+    .save-bar-inner {
+        pointer-events: auto;
+        max-width: 640px;
+        width: calc(100% - 2rem);
+        margin-bottom: 1rem;
+        background: var(--navy-dark);
+        color: #fff;
+        border-radius: var(--radius);
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.35);
+        transform: translateY(120%);
+        opacity: 0;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .save-bar-inner.visible { transform: translateY(0); opacity: 1; }
+
+    .save-bar-text {
+        font-size: 0.85rem;
+        flex: 1;
+    }
+    .save-bar-text strong { color: #fde68a; }
+
+    .btn {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: none;
+        border-radius: 8px;
+        padding: 0.55rem 1.1rem;
+        cursor: pointer;
+        transition: filter 0.15s ease, transform 0.1s ease;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-save {
+        background: var(--amber);
+        color: var(--navy-dark);
+    }
+    .btn-save:hover:not(:disabled) { filter: brightness(1.06); }
+
+    .btn-discard {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .btn-discard:hover { background: rgba(255, 255, 255, 0.08); }
+
+    /* ---------- Toast ---------- */
+    .toast {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(-16px);
+        background: var(--gray-900);
+        color: #fff;
+        padding: 0.65rem 1.1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { background: var(--red); }
+    .toast.success { background: var(--green); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 640px) {
+        .header { padding: 1rem; }
+        main { padding: 1rem 0.75rem 6rem; }
+        thead th, td { padding: 0.5rem 0.4rem; font-size: 0.8rem; }
+        thead th.col-name, td.col-name { min-width: 130px; padding-left: 0.75rem; }
+        thead th[data-subject] { min-width: 68px; max-width: 90px; font-size: 0.6rem; }
+        .search-wrap { max-width: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; }
+    }
+
+    a { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+            <div>
+                <span class="eyebrow">JVP School</span>
+                Olympiad Participation
+            </div>
+        </div>
+        <div class="header-meta">
+            <span class="role-badge" id="roleBadge" hidden></span>
+            <button class="signout-btn" id="signOutBtn" hidden>Sign out</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- Loading / error / auth states -->
+    <div class="state-panel" id="statePanel">
+        <div class="spinner"></div>
+        <h2>Checking your sign-in&hellip;</h2>
+        <p>One moment while we confirm your access.</p>
+    </div>
+
+    <!-- App content (hidden until ready) -->
+    <div id="appContent" hidden>
+        <div class="toolbar">
+            <div class="toolbar-group" id="classPickerWrap"></div>
+            <div class="search-wrap">
+                <input type="text" id="searchInput" placeholder="Find a student by name&hellip;">
+            </div>
+            <div class="spacer"></div>
+            <span class="summary-pill" id="summaryPill">0 students</span>
+        </div>
+
+        <div class="table-card">
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr id="tableHeadRow">
+                            <th class="col-roll">Roll</th>
+                            <th class="col-name">Name</th>
+                            <!-- subject columns injected by JS -->
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr class="empty-row"><td colspan="10">Loading students&hellip;</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <p class="legend">
+            <span><b>Tip:</b> tick a subject to mark participation, untick to remove it.</span>
+            <span>Use a column's top checkbox to mark everyone visible at once.</span>
+        </p>
+    </div>
+</main>
+
+<div class="save-bar">
+    <div class="save-bar-inner" id="saveBar">
+        <span class="save-bar-text"><strong id="changeCount">0</strong> unsaved change(s)</span>
+        <button class="btn btn-discard" id="discardBtn">Discard</button>
+        <button class="btn btn-save" id="saveBtn">Save changes</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+/* =========================================================
+   CONFIGURE ME
+   ========================================================= */
+const SUPABASE_URL = 'https://ckltcwampaagyzneaznt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrbHRjd2FtcGFhZ3l6bmVhem50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1MDI2NjgsImV4cCI6MjA0ODA3ODY2OH0.pUT2kngS0nkzFBjI-P6g8azU5E3tZzGDQGL68-AUWFc';
+const SIGN_IN_URL = 'https://myjvp.in/teachers/';
+
+const ALL_CLASSES = ['1-A1','1-A2','1-A3','2-A1','2-A2','2-A3','2-A4','3-A1','3-A2','3-A3','3-A4',
+    '4-A1','4-A2','4-A3','4-A4','5-A1','5-A2','5-A3','5-A4','6-A1','6-A2','6-A3','6-A4',
+    '7-A1','7-A2','7-A3','7-A4','8-A1','8-A2','8-A3','8-A4','9-A1','9-A2','9-A3','9-A4',
+    '10-A1','10-A2','10-A3','11-SCI','11-COM','11-HUM','12-SCI','12-COM','12-HUM'];
+
+const SUBJECTS = [
+    { key: 'G.K.',            code: 'GK'   },
+    { key: 'English',         code: 'ENG'  },
+    { key: 'Science',         code: 'SCI'  },
+    { key: 'Mathematics',     code: 'MATH' },
+    { key: 'Computer',        code: 'CS'   },
+    { key: 'Social Science',  code: 'SST'  },
+    { key: 'Commerce',        code: 'COM'  },
+];
+/* ========================================================= */
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const el = (id) => document.getElementById(id);
+const statePanel = el('statePanel');
+const appContent = el('appContent');
+const roleBadge = el('roleBadge');
+const signOutBtn = el('signOutBtn');
+const classPickerWrap = el('classPickerWrap');
+const searchInput = el('searchInput');
+const summaryPill = el('summaryPill');
+const tableHeadRow = el('tableHeadRow');
+const tableBody = el('tableBody');
+const saveBar = el('saveBar');
+const changeCount = el('changeCount');
+const saveBtn = el('saveBtn');
+const discardBtn = el('discardBtn');
+const toastEl = el('toast');
+
+let currentUser = null;
+let isAdmin = false;
+let teacherClass = null;      // class assigned to a class-teacher user
+let activeClass = null;       // class currently displayed
+let students = [];            // [{id, roll_number, name}]
+let originalSet = new Set();  // "studentId::Subject" persisted in DB
+let currentSet = new Set();   // "studentId::Subject" reflecting the UI right now
+let studentSubjectRows = new Map(); // studentId -> row map for quick lookup
+
+function showState(html) {
+    statePanel.hidden = false;
+    appContent.hidden = true;
+    statePanel.innerHTML = html;
+}
+
+function showToast(message, type = '') {
+    toastEl.textContent = message;
+    toastEl.className = 'toast show' + (type ? ' ' + type : '');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => { toastEl.className = 'toast'; }, 2600);
+}
+
+/* ---------------- Auth ---------------- */
+async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        window.location.href = SIGN_IN_URL;
+        return;
+    }
+    currentUser = session.user;
+
+    supabase.auth.onAuthStateChange((event, s) => {
+        if (event === 'SIGNED_OUT' || !s) window.location.href = SIGN_IN_URL;
+    });
+
+    // Determine role: admin first, then class-teacher.
+    const { data: adminRow, error: adminErr } = await supabase
+        .from('admins')
+        .select('id')
+        .eq('id', currentUser.id)
+        .maybeSingle();
+
+    if (adminErr) {
+        showState(errorPanel('We could not verify your access.', adminErr.message));
+        return;
+    }
+
+    if (adminRow) {
+        isAdmin = true;
+    } else {
+        const { data: ctRow, error: ctErr } = await supabase
+            .from('class_teachers')
+            .select('class')
+            .eq('teacher_id', currentUser.id)
+            .maybeSingle();
+
+        if (ctErr) {
+            showState(errorPanel('We could not verify your access.', ctErr.message));
+            return;
+        }
+        if (!ctRow) {
+            showState(errorPanel('No class is assigned to your account yet.', 'Please contact the school admin.'));
+            return;
+        }
+        teacherClass = ctRow.class;
+    }
+
+    roleBadge.hidden = false;
+    roleBadge.textContent = isAdmin ? 'Admin' : 'Class Teacher';
+    signOutBtn.hidden = false;
+    signOutBtn.onclick = () => supabase.auth.signOut();
+
+    buildTableHead();
+    buildClassPicker();
+
+    activeClass = isAdmin ? ALL_CLASSES[0] : teacherClass;
+    if (isAdmin) el('classSelect').value = activeClass;
+    await loadClass(activeClass);
+
+    statePanel.hidden = true;
+    appContent.hidden = false;
+}
+
+function errorPanel(title, detail) {
+    return `<h2>${title}</h2><p>${detail}</p>`;
+}
+
+/* ---------------- Class picker ---------------- */
+function buildClassPicker() {
+    if (isAdmin) {
+        const select = document.createElement('select');
+        select.id = 'classSelect';
+        select.setAttribute('aria-label', 'Select class');
+        ALL_CLASSES.forEach((c) => {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            select.appendChild(opt);
+        });
+        select.addEventListener('change', async () => {
+            if (currentSet.size !== originalSet.size || [...currentSet].some(x => !originalSet.has(x))) {
+                if (!confirm('You have unsaved changes that will be lost. Switch class anyway?')) {
+                    select.value = activeClass;
+                    return;
+                }
+            }
+            activeClass = select.value;
+            await loadClass(activeClass);
+        });
+        classPickerWrap.appendChild(select);
+    } else {
+        const badge = document.createElement('div');
+        badge.className = 'class-fixed';
+        badge.textContent = 'Class ' + teacherClass;
+        classPickerWrap.appendChild(badge);
+    }
+}
+
+/* ---------------- Table head ---------------- */
+function buildTableHead() {
+    SUBJECTS.forEach((subj) => {
+        const th = document.createElement('th');
+        th.title = subj.key;
+        const wrap = document.createElement('label');
+        wrap.className = 'subject-head';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.setAttribute('aria-label', 'Mark all visible for ' + subj.key);
+        cb.addEventListener('change', () => toggleColumn(subj.key, cb.checked));
+        const span = document.createElement('span');
+        span.textContent = subj.key;
+        wrap.appendChild(cb);
+        wrap.appendChild(span);
+        th.appendChild(wrap);
+        th.dataset.subject = subj.key;
+        tableHeadRow.appendChild(th);
+    });
+}
+
+/* ---------------- Data loading ---------------- */
+async function loadClass(cls) {
+    tableBody.innerHTML = '<tr class="empty-row"><td colspan="10">Loading students&hellip;</td></tr>';
+    summaryPill.textContent = 'Loading&hellip;';
+    resetDirtyState();
+
+    const { data: studentRows, error: sErr } = await supabase
+        .from('students')
+        .select('id, roll_number, name')
+        .eq('class', cls)
+        .order('name', { ascending: true });
+
+    if (sErr) {
+        tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">Could not load students: ${sErr.message}</td></tr>`;
+        return;
+    }
+
+    students = studentRows || [];
+
+    if (students.length === 0) {
+        tableBody.innerHTML = '<tr class="empty-row"><td colspan="10">No students found in this class.</td></tr>';
+        summaryPill.textContent = '0 students';
+        originalSet = new Set();
+        currentSet = new Set();
+        return;
+    }
+
+    const ids = students.map((s) => s.id);
+    const { data: partRows, error: pErr } = await supabase
+        .from('olympiad_participation')
+        .select('student_id, subject')
+        .in('student_id', ids);
+
+    if (pErr) {
+        tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">Could not load participation data: ${pErr.message}</td></tr>`;
+        return;
+    }
+
+    originalSet = new Set((partRows || []).map((r) => key(r.student_id, r.subject)));
+    currentSet = new Set(originalSet);
+
+    renderRows();
+    applySearch();
+    summaryPill.textContent = `${students.length} student${students.length === 1 ? '' : 's'}`;
+}
+
+function key(studentId, subject) { return studentId + '::' + subject; }
+
+/* ---------------- Rendering ---------------- */
+function renderRows() {
+    tableBody.innerHTML = '';
+    studentSubjectRows.clear();
+
+    students.forEach((s) => {
+        const tr = document.createElement('tr');
+        tr.dataset.studentId = s.id;
+        tr.dataset.name = s.name.toLowerCase();
+
+        const tdRoll = document.createElement('td');
+        tdRoll.className = 'col-roll';
+        tdRoll.textContent = s.roll_number ?? '';
+        tr.appendChild(tdRoll);
+
+        const tdName = document.createElement('td');
+        tdName.className = 'col-name';
+        tdName.textContent = s.name;
+        tr.appendChild(tdName);
+
+        const cellMap = {};
+        SUBJECTS.forEach((subj) => {
+            const td = document.createElement('td');
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.className = 'subject-check';
+            cb.checked = currentSet.has(key(s.id, subj.key));
+            cb.setAttribute('aria-label', s.name + ' — ' + subj.key);
+            cb.addEventListener('change', () => toggleCell(s.id, subj.key, cb.checked, tr));
+            td.appendChild(cb);
+            tr.appendChild(td);
+            cellMap[subj.key] = cb;
+        });
+
+        tableBody.appendChild(tr);
+        studentSubjectRows.set(s.id, { tr, cellMap });
+    });
+}
+
+function toggleCell(studentId, subject, checked, tr) {
+    const k = key(studentId, subject);
+    if (checked) currentSet.add(k); else currentSet.delete(k);
+    tr.classList.toggle('row-dirty', rowIsDirty(studentId));
+    updateSaveBar();
+}
+
+function rowIsDirty(studentId) {
+    for (const subj of SUBJECTS) {
+        const k = key(studentId, subj.key);
+        if (originalSet.has(k) !== currentSet.has(k)) return true;
+    }
+    return false;
+}
+
+function toggleColumn(subject, checked) {
+    students.forEach((s) => {
+        const row = studentSubjectRows.get(s.id);
+        if (!row || row.tr.classList.contains('row-hidden')) return; // only affects visible rows
+        const cb = row.cellMap[subject];
+        if (cb.checked !== checked) {
+            cb.checked = checked;
+            toggleCell(s.id, subject, checked, row.tr);
+        }
+    });
+}
+
+/* ---------------- Search ---------------- */
+searchInput.addEventListener('input', applySearch);
+function applySearch() {
+    const q = searchInput.value.trim().toLowerCase();
+    let visible = 0;
+    studentSubjectRows.forEach(({ tr }) => {
+        const match = !q || tr.dataset.name.includes(q);
+        tr.classList.toggle('row-hidden', !match);
+        if (match) visible += 1;
+    });
+    summaryPill.textContent = q
+        ? `${visible} of ${students.length} students`
+        : `${students.length} student${students.length === 1 ? '' : 's'}`;
+}
+
+/* ---------------- Save bar ---------------- */
+function diffSets() {
+    const toAdd = [...currentSet].filter((k) => !originalSet.has(k));
+    const toRemove = [...originalSet].filter((k) => !currentSet.has(k));
+    return { toAdd, toRemove };
+}
+
+function updateSaveBar() {
+    const { toAdd, toRemove } = diffSets();
+    const total = toAdd.length + toRemove.length;
+    changeCount.textContent = total;
+    saveBar.classList.toggle('visible', total > 0);
+    saveBtn.disabled = total === 0;
+}
+
+function resetDirtyState() {
+    updateSaveBar();
+}
+
+window.addEventListener('beforeunload', (e) => {
+    const { toAdd, toRemove } = diffSets();
+    if (toAdd.length + toRemove.length > 0) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
+
+discardBtn.addEventListener('click', () => {
+    currentSet = new Set(originalSet);
+    renderRows();
+    applySearch();
+    updateSaveBar();
+    showToast('Changes discarded');
+});
+
+saveBtn.addEventListener('click', async () => {
+    const { toAdd, toRemove } = diffSets();
+    if (toAdd.length === 0 && toRemove.length === 0) return;
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving…';
+
+    try {
+        // One batched insert for everything newly checked.
+        if (toAdd.length > 0) {
+            const rows = toAdd.map((k) => {
+                const [student_id, subject] = k.split('::');
+                return { student_id, subject };
+            });
+            const { error } = await supabase
+                .from('olympiad_participation')
+                .upsert(rows, { onConflict: 'student_id,subject', ignoreDuplicates: true });
+            if (error) throw error;
+        }
+
+        // One batched delete for everything newly unchecked.
+        if (toRemove.length > 0) {
+            const orFilter = toRemove
+                .map((k) => {
+                    const [student_id, subject] = k.split('::');
+                    return `and(student_id.eq.${student_id},subject.eq."${subject}")`;
+                })
+                .join(',');
+            const { error } = await supabase
+                .from('olympiad_participation')
+                .delete()
+                .or(orFilter);
+            if (error) throw error;
+        }
+
+        originalSet = new Set(currentSet);
+        document.querySelectorAll('tr.row-dirty').forEach((tr) => tr.classList.remove('row-dirty'));
+        updateSaveBar();
+        showToast(`Saved (${toAdd.length} added, ${toRemove.length} removed)`, 'success');
+    } catch (err) {
+        showToast('Save failed: ' + err.message, 'error');
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save changes';
+    }
+});
+
+init();
+</script>
+</body>
+</html>
