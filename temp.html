@@ -1,386 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seating Arrangement — Jamna Vidyapeeth</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Sound Lab — Grade 4 Digitronics Unit Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#182B4A;
+    --paper:#FBF6EC;
+    --amber:#F2A93B;
+    --coral:#E85D4E;
+    --teal:#2F9C90;
+    --charcoal:#2B2B2E;
+    --line:#DDD3BE;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @page{ size:A4; margin:0; }
+  html,body{
+    background:#7c7c7c;
+    font-family:'Inter',sans-serif;
+    color:var(--charcoal);
+  }
+  .page{
+    width:210mm;
+    min-height:297mm;
+    margin:8mm auto;
+    background:var(--paper);
+    position:relative;
+    overflow:hidden;
+    padding:11mm 13mm 9mm 13mm;
+    box-shadow:0 4px 24px rgba(0,0,0,.25);
+  }
+  /* ---------- HEADER ---------- */
+  header{
+    background:var(--ink);
+    border-radius:10px;
+    padding:8mm 9mm;
+    color:var(--paper);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6mm;
+  }
+  .wave-bg{
+    position:absolute; inset:0; opacity:.16;
+    display:flex; align-items:center; gap:3px; padding:0 6mm;
+  }
+  .wave-bg span{
+    display:block; width:3px; background:var(--amber); border-radius:2px;
+  }
+  .head-left{ position:relative; z-index:2; }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:9.5px; letter-spacing:2.5px; color:var(--amber);
+    text-transform:uppercase; font-weight:700;
+  }
+  h1{
+    font-family:'Fredoka',sans-serif;
+    font-size:29px; font-weight:600; line-height:1.15; margin:2px 0 3px;
+  }
+  header p.sub{ font-size:12.5px; color:#CBD5E6; font-weight:500;}
+  .badge-col{ position:relative; z-index:2; text-align:right; }
+  .grade-badge{
+    background:var(--amber); color:var(--ink); font-family:'Fredoka',sans-serif;
+    font-weight:600; font-size:13px; padding:6px 14px; border-radius:30px;
+    display:inline-block; margin-bottom:6px;
+  }
+  .badge-col .meta{ font-size:10px; color:#AEBBD4; font-family:'JetBrains Mono',monospace;}
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ---------- GOALS ---------- */
+  .goals{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4mm; margin-bottom:6mm;
+  }
+  .goal-card{
+    background:#fff; border:1px solid var(--line); border-radius:8px;
+    padding:4mm 3.5mm; text-align:center;
+  }
+  .goal-card svg{ width:24px; height:24px; margin-bottom:3px; }
+  .goal-card .g-title{ font-family:'Fredoka',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:1px;}
+  .goal-card .g-desc{ font-size:9.7px; color:#5b5b5f; line-height:1.3;}
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: #d8dce6;
-      color: #111;
-      font-size: 13px;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
+  section.block{ margin-bottom:6mm; }
+  .section-tag{
+    display:flex; align-items:center; gap:2.5mm; margin-bottom:3mm;
+  }
+  .section-tag .dot{ width:9px; height:9px; border-radius:50%; background:var(--coral); }
+  .section-tag h2{
+    font-family:'Fredoka',sans-serif; font-size:15px; color:var(--ink); font-weight:600;
+    letter-spacing:.3px;
+  }
+  .section-tag .rule{ flex:1; height:1px; background:var(--line); }
 
-    /* ── A4 Page ─────────────────────────────── */
-    .page {
-      width: 794px;
-      min-height: 1123px;
-      margin: 28px auto;
-      background: #fff;
-      padding: 34px 44px 40px;
-      box-shadow: 0 6px 32px rgba(0,0,0,.18);
-      position: relative;
-    }
-    .page::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: #1A2B5A;
-    }
+  /* ---------- LESSON FLOW ---------- */
+  .flow{ display:flex; flex-direction:column; gap:2.3mm; }
+  .flow-row{
+    display:grid; grid-template-columns:9mm 1fr 22mm 9mm; align-items:center;
+    background:#fff; border:1px solid var(--line); border-radius:7px;
+    padding:2.8mm 4mm;
+  }
+  .flow-row.final{ background:#FFF3DE; border-color:var(--amber); }
+  .num{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:12px; color:var(--teal);
+  }
+  .flow-row.final .num{ color:var(--coral); }
+  .flow-text .t-title{ font-family:'Fredoka',sans-serif; font-size:12.5px; font-weight:600; color:var(--ink);}
+  .flow-text .t-desc{ font-size:9.5px; color:#5b5b5f; }
+  .flow-time{
+    font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--charcoal);
+    text-align:center; background:var(--paper); border-radius:20px; padding:2px 0;
+  }
+  .flow-icon{ display:flex; justify-content:center; }
+  .flow-icon svg{ width:16px; height:16px; }
 
-    /* ── Header ──────────────────────────────── */
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding-bottom: 16px;
-      border-bottom: 2.5px solid #1A2B5A;
-      margin-bottom: 18px;
-    }
-    .logo-wrap {
-      flex-shrink: 0;
-      width: 76px;
-      height: 76px;
-      border: 1.5px solid #ccc;
-      border-radius: 6px;
-      overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      background: #fff;
-    }
-    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .header-center { flex: 1; text-align: center; }
-    .school-name {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 27px;
-      font-weight: 900;
-      color: #1A2B5A;
-      letter-spacing: -0.3px;
-      line-height: 1.1;
-    }
-    .doc-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #333;
-      margin-top: 6px;
-      letter-spacing: 0.2px;
-    }
-    .doc-session {
-      font-size: 11.5px;
-      color: #555;
-      margin-top: 3px;
-      display: none;
-    }
-    .header-right {
-      flex-shrink: 0;
-      text-align: right;
-      font-size: 11px;
-      color: #444;
-      line-height: 1.8;
-    }
-    .header-right strong { display: block; font-size: 13px; color: #1A2B5A; font-weight: 700; }
+  /* ---------- FINAL TASK PANEL ---------- */
+  .task-panel{
+    background:var(--ink); border-radius:10px; padding:6mm 8mm; color:var(--paper);
+    display:flex; gap:7mm; align-items:center; margin-bottom:6mm; position:relative; overflow:hidden;
+  }
+  .onair{
+    width:26mm; height:26mm; border-radius:50%; border:2.5px solid var(--coral);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+    position:relative;
+  }
+  .onair::before{
+    content:""; position:absolute; inset:-6px; border-radius:50%; border:1px dashed rgba(232,93,78,.5);
+  }
+  .onair span{
+    font-family:'Fredoka',sans-serif; font-weight:700; font-size:12.5px; color:var(--coral);
+    letter-spacing:1px;
+  }
+  .task-copy{ flex:1; }
+  .task-copy .tt{ font-family:'Fredoka',sans-serif; font-size:16px; font-weight:600; margin-bottom:1.5mm;}
+  .task-copy p{ font-size:10.5px; color:#D7DEEC; line-height:1.5; margin-bottom:2.5mm; }
+  .options{ display:flex; gap:4mm; }
+  .opt{
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.25);
+    border-radius:6px; padding:2mm 3.5mm; font-size:9.7px; flex:1;
+  }
+  .opt b{ color:var(--amber); font-family:'Fredoka',sans-serif; font-size:10.5px; display:block; margin-bottom:1px;}
 
-    /* ── Table ───────────────────────────────── */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12.5px;
-    }
+  /* ---------- TWO COLUMN: CHECKLIST + MIC ---------- */
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:6mm; }
+  .checklist{ display:flex; flex-direction:column; gap:2mm; }
+  .check-item{ display:flex; align-items:flex-start; gap:2.5mm; font-size:10px; }
+  .check-item .box{
+    width:12px; height:12px; border:1.5px solid var(--teal); border-radius:3px; flex-shrink:0; margin-top:1px;
+  }
+  .mic-box{
+    background:#fff; border:1.5px solid var(--teal); border-radius:8px; padding:4mm 5mm;
+  }
+  .mic-box .mt{ font-family:'Fredoka',sans-serif; font-size:12px; color:var(--teal); font-weight:600; margin-bottom:2mm; display:flex; align-items:center; gap:2mm;}
+  .mic-specs{ list-style:none; display:flex; flex-direction:column; gap:1.6mm; }
+  .mic-specs li{ font-size:9.6px; display:flex; gap:2mm; align-items:flex-start; line-height:1.35;}
+  .mic-specs li::before{ content:"—"; color:var(--coral); font-weight:700; }
+  .mic-budget{
+    margin-top:2.5mm; background:var(--paper); border-radius:6px; padding:2mm 3mm;
+    font-family:'JetBrains Mono',monospace; font-size:10px; text-align:center; color:var(--ink); font-weight:700;
+  }
 
-    /* Column headers */
-    thead tr th {
-      background: #f0f2f7;
-      font-size: 10.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.9px;
-      color: #333;
-      padding: 7px 12px;
-      border: 1px solid #aaa;
-      text-align: left;
-    }
-    thead tr th.num-col { text-align: center; width: 82px; }
+  footer{
+    margin-top:auto; padding-top:4mm; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; font-size:9px; color:#8a8a8a;
+  }
 
-    /* Floor section header rows */
-    tr.floor-row td {
-      background: #1A2B5A;
-      color: #fff;
-      font-weight: 700;
-      font-size: 11px;
-      letter-spacing: 1.4px;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      border: 1px solid #1A2B5A;
-    }
-
-    /* Data rows */
-    tbody tr:not(.floor-row) td {
-      padding: 6px 12px;
-      border: 1px solid #ccc;
-      vertical-align: middle;
-    }
-    tbody tr:not(.floor-row):nth-child(even) td:not(.empty-td) {
-      background: #f9f9fb;
-    }
-
-    /* Room number cell */
-    td.num { text-align: center; font-weight: 700; color: #1A2B5A; font-size: 12.5px; }
-
-    /* Divider between two room–class pairs in a row */
-    td.divider { border-left: 2px solid #999 !important; }
-
-    /* Standard class cell */
-    td.cls { font-weight: 500; color: #111; }
-
-    /* Senior stream classes */
-    td.cls.senior { font-weight: 700; }
-
-    /* Empty half-row cells */
-    td.empty-td { background: #f5f5f5 !important; border-color: #ddd !important; }
-
-    /* Special lab room number */
-    td.lab-room { font-size: 10px; font-style: italic; font-weight: 600; color: #444; text-align: center; }
-
-    /* ── Notes row ───────────────────────────── */
-    .notes {
-      margin-top: 16px;
-      font-size: 10.5px;
-      color: #555;
-      line-height: 1.7;
-      border-top: 1px solid #ccc;
-      padding-top: 10px;
-      display: none;
-    }
-    .notes strong { color: #111; }
-
-    /* ── Footer ──────────────────────────────── */
-    .footer {
-      margin-top: 14px;
-      padding-top: 10px;
-      border-top: 1.5px solid #1A2B5A;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      font-size: 10px;
-      color: #666;
-      display: none;
-    }
-    .footer strong { color: #1A2B5A; }
-    .footer .right { text-align: right; line-height: 1.7; }
-
-    /* ── Print button (screen only) ──────────── */
-    .print-wrap {
-      text-align: center;
-      padding: 18px 0 30px;
-    }
-    .print-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: #fff;
-      background: #1A2B5A;
-      border: none;
-      border-radius: 6px;
-      padding: 10px 26px;
-      cursor: pointer;
-      letter-spacing: 0.4px;
-    }
-    .print-btn:hover { background: #243872; }
-
-    /* ── Print Styles ────────────────────────── */
-    @media print {
-      body { background: #fff; }
-      .page { width: 100%; min-height: unset; margin: 0; padding: 12mm 14mm 14mm; box-shadow: none; }
-      .print-wrap { display: none; }
-      .page::before { height: 3px; }
-      table { font-size: 11.5px; }
-    }
-    @page { size: A4 portrait; margin: 8mm; }
-  </style>
+  @media print{
+    body{ background:none; }
+    .page{ margin:0; box-shadow:none; }
+  }
+</style>
 </head>
 <body>
-
 <div class="page">
 
-  <!-- ── Header ─────────────────────────────── -->
-  <header class="header">
-    <div class="logo-wrap">
-      <img src="https://myjvp.in/commons/school-logo.jpg" alt="Jamna Vidyapeeth Logo"
-           onerror="this.style.display='none'">
+  <header>
+    <div class="wave-bg" id="waveBg"></div>
+    <div class="head-left">
+      <div class="eyebrow">Digitronics · Unit Plan</div>
+      <h1>Sound Lab</h1>
+      <p class="sub">Audio Basics &amp; Podcasting with TwistedWave</p>
     </div>
-    <div class="header-center">
-      <div class="school-name">Jamna Vidyapeeth</div>
-      <div class="doc-title">Class-wise Room &amp; Seating Arrangement</div>
-      <div class="doc-session">Session 2025–26</div>
-    </div>
-    <div class="header-right">
-      <strong>Total Rooms: 44</strong>
-      Floors: Ground – Fourth<br>
-      Printed: <span id="pdate"></span>
+    <div class="badge-col">
+      <div class="grade-badge">Grade 4</div>
+      <div class="meta">5 SESSIONS · 90 MINS TOTAL</div>
     </div>
   </header>
 
-  <!-- ── Seating Table ──────────────────────── -->
-  <table>
-    <thead>
-      <tr>
-        <th class="num-col">Room No.</th>
-        <th>Class / Section</th>
-        <th class="num-col divider">Room No.</th>
-        <th>Class / Section</th>
-      </tr>
-    </thead>
-    <tbody>
-
-      <!-- ══ GROUND FLOOR ══════════════════════ -->
-      <tr class="floor-row"><td colspan="4">Ground Floor &nbsp;·&nbsp; Rooms 1 – 7</td></tr>
-      <tr>
-        <td class="num">1</td><td class="cls">1-A1</td>
-        <td class="num divider">2</td><td class="cls">1-A2</td>
-      </tr>
-      <tr>
-        <td class="num">3</td><td class="cls">1-A3</td>
-        <td class="num divider">4</td><td class="cls">2-A1</td>
-      </tr>
-      <tr>
-        <td class="num">5</td><td class="cls">2-A2</td>
-        <td class="num divider">6</td><td class="cls">2-A3</td>
-      </tr>
-      <tr>
-        <td class="num">7</td><td class="cls">2-A4</td>
-        <td class="empty-td divider"></td><td class="empty-td"></td>
-      </tr>
-
-      <!-- ══ FIRST FLOOR ═══════════════════════ -->
-      <tr class="floor-row"><td colspan="4">First Floor &nbsp;·&nbsp; Rooms 8 – 16</td></tr>
-      <tr>
-        <td class="num">8</td><td class="cls">4-A1</td>
-        <td class="num divider">9</td><td class="cls">10-A1</td>
-      </tr>
-      <tr>
-        <td class="num">10</td><td class="cls">10-A2</td>
-        <td class="num divider">11</td><td class="cls">10-A3</td>
-      </tr>
-      <tr>
-        <td class="num">12</td><td class="cls">3-A1</td>
-        <td class="num divider">13</td><td class="cls senior">12 – Science</td>
-      </tr>
-      <tr>
-        <td class="num">14</td><td class="cls">3-A2</td>
-        <td class="num divider">15</td><td class="cls">3-A3</td>
-      </tr>
-      <tr>
-        <td class="num">16</td><td class="cls">4-A2</td>
-        <td class="empty-td divider"></td><td class="empty-td"></td>
-      </tr>
-
-      <!-- ══ SECOND FLOOR ══════════════════════ -->
-      <tr class="floor-row"><td colspan="4">Second Floor &nbsp;·&nbsp; Rooms 17 – 27</td></tr>
-      <tr>
-        <td class="num">17</td><td class="cls senior">12 – Commerce</td>
-        <td class="num divider">18</td><td class="cls">4-A3</td>
-      </tr>
-      <tr>
-        <td class="num">19</td><td class="cls">4-A4</td>
-        <td class="num divider">20</td><td class="cls senior">12 – Humanities</td>
-      </tr>
-      <tr>
-        <td class="num">21</td><td class="cls">5-A1</td>
-        <td class="num divider">22</td><td class="cls">5-A2</td>
-      </tr>
-      <tr>
-        <td class="num">23</td><td class="cls">5-A3</td>
-        <td class="num divider">24</td><td class="cls">6-A1</td>
-      </tr>
-      <tr>
-        <td class="num">25</td><td class="cls">5-A4</td>
-        <td class="num divider">26</td><td class="cls">6-A2</td>
-      </tr>
-      <tr>
-        <td class="num">27</td><td class="cls">6-A3</td>
-        <td class="empty-td divider"></td><td class="empty-td"></td>
-      </tr>
-
-      <!-- ══ THIRD FLOOR ═══════════════════════ -->
-      <tr class="floor-row"><td colspan="4">Third Floor &nbsp;·&nbsp; Rooms 28 – 40</td></tr>
-      <tr>
-        <td class="num">28</td><td class="cls">6-A4</td>
-        <td class="num divider">29</td><td class="cls">8-A4</td>
-      </tr>
-      <tr>
-        <td class="num">30</td><td class="cls">8-A2</td>
-        <td class="num divider">32</td><td class="cls">8-A3</td>
-      </tr>
-      <tr>
-        <td class="num">33</td><td class="cls">8-A1</td>
-        <td class="num divider">34</td><td class="cls">7-A1</td>
-      </tr>
-      <tr>
-        <td class="num">35</td><td class="cls">7-A2</td>
-        <td class="num divider">36</td><td class="cls">7-A3</td>
-      </tr>
-      <tr>
-        <td class="num">37</td><td class="cls">7-A4</td>
-        <td class="num divider">38</td><td class="cls senior">11 – Commerce</td>
-      </tr>
-      <tr>
-        <td class="num">39</td><td class="cls senior">11 – Humanities</td>
-        <td class="num divider">40</td><td class="cls senior">11 – Science</td>
-      </tr>
-
-      <!-- ══ FOURTH FLOOR ══════════════════════ -->
-      <tr class="floor-row"><td colspan="4">Fourth Floor &nbsp;·&nbsp; Rooms 41 – 43 &amp; Physics Lab</td></tr>
-      <tr>
-        <td class="num">41</td><td class="cls">9-A3</td>
-        <td class="num divider">42</td><td class="cls">9-A2</td>
-      </tr>
-      <tr>
-        <td class="num">43</td><td class="cls">9-A1</td>
-        <td class="lab-room divider">Physics Lab</td><td class="cls senior">9-A4</td>
-      </tr>
-
-    </tbody>
-  </table>
-
-  <!-- ── Notes ──────────────────────────────── -->
-  <div class="notes">
-    <strong>Notes:</strong>
-    &ensp;&#9654;&ensp;<strong>Bold entries</strong> indicate Class 11 &amp; 12 senior secondary sections (Science / Commerce / Humanities stream).
-    &ensp;&#9654;&ensp;Room 31 not listed in provided data.
-    &ensp;&#9654;&ensp;9-A4 is accommodated in the <strong>Physics Lab</strong> (Fourth Floor) and has no standard room number.
+  <div class="goals">
+    <div class="goal-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#2F9C90" stroke-width="2"><path d="M4 10v4M8 6v12M12 3v18M16 6v12M20 10v4" stroke-linecap="round"/></svg>
+      <div class="g-title">Hear It</div>
+      <div class="g-desc">Understand what sound &amp; audio actually are</div>
+    </div>
+    <div class="goal-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#E85D4E" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v1a7 7 0 0014 0v-1M12 18v4M9 22h6" stroke-linecap="round"/></svg>
+      <div class="g-title">Record It</div>
+      <div class="g-desc">Use a mic to capture clear voice audio</div>
+    </div>
+    <div class="goal-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#F2A93B" stroke-width="2"><path d="M3 12h4l3-8 4 16 3-8h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="g-title">Edit It</div>
+      <div class="g-desc">Trim, cut &amp; fade using TwistedWave</div>
+    </div>
+    <div class="goal-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#182B4A" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 15s1.2-2 3-2 3 2 3 2M9 9h.01M15 9h.01" stroke-linecap="round"/></svg>
+      <div class="g-title">Share It</div>
+      <div class="g-desc">Produce a real 30-second podcast clip</div>
+    </div>
   </div>
 
-  <!-- ── Footer ─────────────────────────────── -->
-  <footer class="footer">
-    <div><strong>Jamna Vidyapeeth</strong><br>Official Seating Arrangement — Session 2025–26</div>
-    <div class="right">
-      Room numbers are as per building layout<br>
-      Printed on: <span id="pdate2"></span>
+  <section class="block">
+    <div class="section-tag"><div class="dot"></div><h2>Lesson Flow</h2><div class="rule"></div></div>
+    <div class="flow">
+
+      <div class="flow-row">
+        <div class="num">01</div>
+        <div class="flow-text"><div class="t-title">What Is Audio?</div><div class="t-desc">Sound waves, volume &amp; pitch, mic vs. speaker — with fun listening examples</div></div>
+        <div class="flow-time">15 min</div>
+        <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#2F9C90" stroke-width="2"><path d="M4 10v4M8 6v12M12 3v18M16 6v12M20 10v4" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <div class="flow-row">
+        <div class="num">02</div>
+        <div class="flow-text"><div class="t-title">Meet TwistedWave</div><div class="t-desc">Tour the recording screen, record &amp; play back a first practice clip</div></div>
+        <div class="flow-time">20 min</div>
+        <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#182B4A" stroke-width="2"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <div class="flow-row">
+        <div class="num">03</div>
+        <div class="flow-text"><div class="t-title">Cut, Trim &amp; Fade</div><div class="t-desc">Hands-on editing skills: select, trim silence, fade in/out</div></div>
+        <div class="flow-time">20 min</div>
+        <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#F2A93B" stroke-width="2"><path d="M6 9l12 6M6 15l12-6" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <div class="flow-row">
+        <div class="num">04</div>
+        <div class="flow-text"><div class="t-title">Mic Technique &amp; Practice</div><div class="t-desc">Distance from mic, clear pace, avoiding pops — practice a script</div></div>
+        <div class="flow-time">15 min</div>
+        <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E85D4E" stroke-width="2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v1a7 7 0 0014 0v-1" stroke-linecap="round"/></svg></div>
+      </div>
+
+      <div class="flow-row final">
+        <div class="num">05</div>
+        <div class="flow-text"><div class="t-title">Studio Time — Record Your Podcast</div><div class="t-desc">Final skill task: record, edit &amp; export a finished 30-second clip</div></div>
+        <div class="flow-time">20 min</div>
+        <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#E85D4E" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="#E85D4E"/></svg></div>
+      </div>
+
     </div>
+  </section>
+
+  <section class="block">
+    <div class="section-tag"><div class="dot"></div><h2>Final Skill Task</h2><div class="rule"></div></div>
+    <div class="task-panel">
+      <div class="onair"><span>ON AIR</span></div>
+      <div class="task-copy">
+        <div class="tt">Record a 30-Second Podcast</div>
+        <p>Every student plans, records and edits one short audio clip in TwistedWave, then exports it as their finished piece — a true skill-based showcase of everything learned.</p>
+        <div class="options">
+          <div class="opt"><b>Option A · Meet Me</b>A friendly self-introduction — name, class &amp; one fun fact</div>
+          <div class="opt"><b>Option B · Ad Break</b>A cheerful radio advertisement for a made-up product</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="two-col">
+    <section class="block" style="margin-bottom:0;">
+      <div class="section-tag"><div class="dot"></div><h2>Skill Checklist</h2><div class="rule"></div></div>
+      <div class="checklist">
+        <div class="check-item"><div class="box"></div>Explains what audio &amp; sound waves are</div>
+        <div class="check-item"><div class="box"></div>Records clear voice audio using a mic</div>
+        <div class="check-item"><div class="box"></div>Trims and fades a clip in TwistedWave</div>
+        <div class="check-item"><div class="box"></div>Speaks clearly and confidently on mic</div>
+        <div class="check-item"><div class="box"></div>Exports a finished 30-second podcast</div>
+      </div>
+    </section>
+
+    <section class="block" style="margin-bottom:0;">
+      <div class="section-tag"><div class="dot"></div><h2>Equipment Needed</h2><div class="rule"></div></div>
+      <div class="mic-box">
+        <div class="mt">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#2F9C90" stroke-width="2" width="16" height="16"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 10v1a7 7 0 0014 0v-1M12 18v4M9 22h6" stroke-linecap="round"/></svg>
+          USB Microphone
+        </div>
+        <ul class="mic-specs">
+          <li>USB plug-and-play — no extra interface needed</li>
+          <li>Cardioid condenser mic for clear, focused voice pickup</li>
+          <li>Desktop stand + foam windscreen included</li>
+          <li>Works with Windows, macOS &amp; Chromebook</li>
+          <li>One unit per recording station (shared in small groups)</li>
+        </ul>
+        <div class="mic-budget">Medium budget unit required</div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <span>Digitronics Department · Grade 4 Unit Plan</span>
+    <span>Tool: TwistedWave (web-based) · Skill-Based Learning</span>
   </footer>
 
-</div><!-- .page -->
-
-<!-- Print button -->
-<div class="print-wrap">
-  <button class="print-btn" onclick="window.print()">🖨️ &nbsp;Print / Save as PDF</button>
 </div>
 
 <script>
-  const d = new Date();
-  const opts = { day: '2-digit', month: 'long', year: 'numeric' };
-  const str = d.toLocaleDateString('en-IN', opts);
-  document.getElementById('pdate').textContent = str;
-  document.getElementById('pdate2').textContent = str;
+  const bar = document.getElementById('waveBg');
+  const heights = [10,22,14,30,18,26,12,34,20,15,28,16,24,11,30,19,13,27,17,22,10,32,15,20,26,14,29,18,12,24];
+  heights.forEach(h=>{
+    const s = document.createElement('span');
+    s.style.height = h+'px';
+    bar.appendChild(s);
+  });
 </script>
 </body>
 </html>
