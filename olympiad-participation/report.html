@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olympiad Reports | My JVP</title>
+<meta name="description" content="Generate and download subject-wise or compiled Olympiad participation lists as CSV or PDF.">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --navy: #1e3a8a;
+        --navy-dark: #152a63;
+        --navy-light: #eef2fb;
+        --amber: #f59e0b;
+        --amber-dark: #b45309;
+        --green: #16a34a;
+        --red: #dc2626;
+        --gray-50: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-400: #94a3b8;
+        --gray-500: #64748b;
+        --gray-700: #334155;
+        --gray-900: #0f172a;
+        --radius: 12px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        max-height: 99999999px;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: var(--gray-50);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        color: var(--gray-900);
+    }
+
+    /* ---------- Header ---------- */
+    .header {
+        background: var(--navy);
+        padding: 1.25rem 1.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .header-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .header-title {
+        font-family: 'Poppins', sans-serif;
+        color: #fff;
+        font-size: 1.15rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+    }
+
+    .header-title .eyebrow {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.65);
+        margin-bottom: 0.15rem;
+    }
+
+    .header-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 0.85rem;
+    }
+
+    .role-badge {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+    }
+
+    .signout-btn {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        color: #fff;
+        padding: 0.4rem 0.85rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        font-family: 'Inter', sans-serif;
+    }
+    .signout-btn:hover { background: rgba(255, 255, 255, 0.12); }
+
+    /* ---------- Main layout ---------- */
+    main {
+        flex: 1;
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 1.5rem 1.25rem 6rem;
+    }
+
+    .state-panel {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 3rem 1.5rem;
+        text-align: center;
+        color: var(--gray-500);
+        margin-top: 2rem;
+    }
+    .state-panel h2 {
+        font-family: 'Poppins', sans-serif;
+        color: var(--gray-900);
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    .spinner {
+        width: 34px;
+        height: 34px;
+        border: 3px solid var(--gray-200);
+        border-top-color: var(--navy);
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- Section cards ---------- */
+    .card {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 1.25rem 1.25rem 1.4rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+    }
+
+    .card h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--gray-900);
+        margin-bottom: 0.2rem;
+    }
+
+    .card .card-sub {
+        font-size: 0.8rem;
+        color: var(--gray-500);
+        margin-bottom: 1rem;
+    }
+
+    /* ---------- Report type toggle ---------- */
+    .mode-toggle {
+        display: flex;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.1rem;
+    }
+
+    .mode-btn {
+        flex: 1;
+        min-width: 220px;
+        text-align: left;
+        background: var(--gray-50);
+        border: 1.5px solid var(--gray-200);
+        border-radius: 10px;
+        padding: 0.75rem 0.9rem;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .mode-btn:hover { border-color: var(--navy-light); background: var(--navy-light); }
+    .mode-btn.active {
+        border-color: var(--navy);
+        background: var(--navy-light);
+    }
+    .mode-btn .mode-title {
+        font-weight: 600;
+        font-size: 0.88rem;
+        color: var(--navy-dark);
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .mode-btn .mode-desc {
+        font-size: 0.76rem;
+        color: var(--gray-500);
+        margin-top: 0.2rem;
+        line-height: 1.35;
+    }
+    .mode-btn input { accent-color: var(--navy); }
+
+    /* ---------- Filter grid ---------- */
+    .filter-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+    }
+
+    .filter-block label.filter-label {
+        display: block;
+        font-size: 0.76rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--gray-500);
+        margin-bottom: 0.4rem;
+    }
+
+    details.multi-select {
+        border: 1.5px solid var(--gray-200);
+        border-radius: 8px;
+        background: #fff;
+    }
+    details.multi-select summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 0.55rem 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--navy);
+    }
+    details.multi-select summary::-webkit-details-marker { display: none; }
+    details.multi-select summary .chev { transition: transform 0.15s ease; color: var(--gray-400); }
+    details.multi-select[open] summary .chev { transform: rotate(180deg); }
+
+    .multi-select-panel {
+        border-top: 1px solid var(--gray-100);
+        max-height: 220px;
+        overflow-y: auto;
+        padding: 0.5rem 0.75rem;
+    }
+    .multi-select-actions {
+        display: flex;
+        gap: 0.6rem;
+        padding: 0.4rem 0.1rem 0.6rem;
+        border-bottom: 1px solid var(--gray-100);
+        margin-bottom: 0.4rem;
+    }
+    .link-btn {
+        background: none;
+        border: none;
+        color: var(--navy);
+        font-size: 0.76rem;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0;
+    }
+    .link-btn:hover { text-decoration: underline; }
+
+    .check-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.3rem 0.1rem;
+        font-size: 0.85rem;
+        color: var(--gray-700);
+        cursor: pointer;
+    }
+    .check-row input { accent-color: var(--navy); width: 15px; height: 15px; cursor: pointer; }
+
+    .search-wrap {
+        position: relative;
+    }
+    .search-wrap input[type="text"] {
+        width: 100%;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.88rem;
+        padding: 0.55rem 0.75rem 0.55rem 2.1rem;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 8px;
+        background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="%2394a3b8" stroke-width="2"><circle cx="6.5" cy="6.5" r="5"/><line x1="10.5" y1="10.5" x2="15" y2="15"/></svg>') no-repeat 0.7rem center;
+    }
+    .search-wrap input:focus,
+    details.multi-select:focus-within { outline: 2px solid var(--navy); outline-offset: 1px; }
+
+    /* ---------- Actions row ---------- */
+    .actions-row {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1.25rem;
+        padding-top: 1.1rem;
+        border-top: 1px solid var(--gray-100);
+    }
+
+    .btn {
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.1rem;
+        cursor: pointer;
+        transition: filter 0.15s ease, transform 0.1s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary { background: var(--navy); color: #fff; }
+    .btn-primary:hover:not(:disabled) { filter: brightness(1.1); }
+
+    .btn-amber { background: var(--amber); color: var(--navy-dark); }
+    .btn-amber:hover:not(:disabled) { filter: brightness(1.06); }
+
+    .btn-outline {
+        background: #fff;
+        color: var(--navy);
+        border: 1.5px solid var(--navy-light);
+    }
+    .btn-outline:hover:not(:disabled) { background: var(--navy-light); }
+
+    .spacer { flex: 1; }
+
+    .summary-pill {
+        font-size: 0.8rem;
+        color: var(--gray-500);
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+    }
+
+    /* ---------- Preview ---------- */
+    .preview-search {
+        margin-bottom: 0.9rem;
+        max-width: 320px;
+    }
+
+    .subject-group {
+        margin-bottom: 1.4rem;
+    }
+    .subject-group:last-child { margin-bottom: 0; }
+
+    .subject-group-head {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.5rem;
+    }
+    .subject-group-head h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--navy-dark);
+    }
+    .count-badge {
+        display: inline-block;
+        min-width: 20px;
+        padding: 0.1rem 0.5rem;
+        border-radius: 999px;
+        background: var(--navy-light);
+        color: var(--navy);
+        font-size: 0.72rem;
+        font-weight: 600;
+    }
+    .count-badge.zero { background: var(--gray-100); color: var(--gray-400); }
+
+    .table-scroll {
+        overflow-x: auto;
+        max-width: 100%;
+        border: 1px solid var(--gray-200);
+        border-radius: 10px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 560px;
+    }
+
+    thead th {
+        background: var(--navy);
+        color: #fff;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        padding: 0.6rem 0.5rem;
+        text-align: left;
+        white-space: nowrap;
+    }
+    thead th.center { text-align: center; }
+
+    tbody tr { border-bottom: 1px solid var(--gray-100); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-50); }
+
+    td {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.85rem;
+        color: var(--gray-900);
+        white-space: nowrap;
+    }
+    td.center { text-align: center; }
+    td.muted { color: var(--gray-400); font-size: 0.8rem; }
+
+    .tick-yes { color: var(--green); font-weight: 700; }
+    .tick-no { color: var(--gray-200); }
+
+    .empty-row td {
+        padding: 2.5rem 1rem;
+        color: var(--gray-500);
+        font-size: 0.9rem;
+        text-align: center;
+        white-space: normal;
+    }
+
+    /* ---------- Toast ---------- */
+    .toast {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(-16px);
+        background: var(--gray-900);
+        color: #fff;
+        padding: 0.65rem 1.1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        z-index: 100;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        max-width: 90vw;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.error { background: var(--red); }
+    .toast.success { background: var(--green); }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 640px) {
+        .header { padding: 1rem; }
+        main { padding: 1rem 0.75rem 6rem; }
+        .card { padding: 1rem; }
+        thead th, td { padding: 0.5rem 0.4rem; font-size: 0.78rem; }
+        .mode-btn { min-width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { animation: none !important; transition: none !important; }
+    }
+
+    a { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div class="header-title">
+            <div>
+                <span class="eyebrow">JVP School</span>
+                Olympiad Reports
+            </div>
+        </div>
+        <div class="header-meta">
+            <span class="role-badge" id="roleBadge" hidden></span>
+            <button class="signout-btn" id="signOutBtn" hidden>Sign out</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- Loading / error / auth states -->
+    <div class="state-panel" id="statePanel">
+        <div class="spinner"></div>
+        <h2>Checking your sign-in&hellip;</h2>
+        <p>One moment while we confirm your access.</p>
+    </div>
+
+    <!-- App content (hidden until ready) -->
+    <div id="appContent" hidden>
+
+        <!-- Report type -->
+        <div class="card">
+            <h2>Report type</h2>
+            <p class="card-sub">Choose how the participation data should be grouped.</p>
+            <div class="mode-toggle" id="modeToggle">
+                <label class="mode-btn active" data-mode="subject">
+                    <span class="mode-title"><input type="radio" name="mode" value="subject" checked> Subject-wise lists</span>
+                    <span class="mode-desc">One list per Olympiad subject — who is participating in G.K., English, Science, etc. Each list sorted alphabetically by name.</span>
+                </label>
+                <label class="mode-btn" data-mode="compiled">
+                    <span class="mode-title"><input type="radio" name="mode" value="compiled"> Compiled list (all subjects)</span>
+                    <span class="mode-desc">One row per student with every subject shown horizontally, so you can see all Olympiads a student has entered at a glance.</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+            <h2>Filters</h2>
+            <p class="card-sub">Narrow the report down. Leave everything selected to include the whole school.</p>
+            <div class="filter-grid">
+                <div class="filter-block">
+                    <label class="filter-label">Classes</label>
+                    <details class="multi-select" id="classFilter">
+                        <summary>All classes <span class="chev">▾</span></summary>
+                        <div class="multi-select-panel">
+                            <div class="multi-select-actions">
+                                <button type="button" class="link-btn" data-action="all">Select all</button>
+                                <button type="button" class="link-btn" data-action="none">Clear</button>
+                            </div>
+                            <div id="classOptions"></div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="filter-block" id="subjectFilterBlock">
+                    <label class="filter-label">Subjects</label>
+                    <details class="multi-select" id="subjectFilter">
+                        <summary>All subjects <span class="chev">▾</span></summary>
+                        <div class="multi-select-panel">
+                            <div class="multi-select-actions">
+                                <button type="button" class="link-btn" data-action="all">Select all</button>
+                                <button type="button" class="link-btn" data-action="none">Clear</button>
+                            </div>
+                            <div id="subjectOptions"></div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="filter-block">
+                    <label class="filter-label">House</label>
+                    <details class="multi-select" id="houseFilter">
+                        <summary>All houses <span class="chev">▾</span></summary>
+                        <div class="multi-select-panel">
+                            <div class="multi-select-actions">
+                                <button type="button" class="link-btn" data-action="all">Select all</button>
+                                <button type="button" class="link-btn" data-action="none">Clear</button>
+                            </div>
+                            <div id="houseOptions"></div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="filter-block">
+                    <label class="filter-label">Gender</label>
+                    <details class="multi-select" id="genderFilter">
+                        <summary>All genders <span class="chev">▾</span></summary>
+                        <div class="multi-select-panel">
+                            <div class="multi-select-actions">
+                                <button type="button" class="link-btn" data-action="all">Select all</button>
+                                <button type="button" class="link-btn" data-action="none">Clear</button>
+                            </div>
+                            <div id="genderOptions"></div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="filter-block" id="participationFilterBlock">
+                    <label class="filter-label">Participation (compiled list only)</label>
+                    <details class="multi-select" id="participationFilter">
+                        <summary>All students <span class="chev">▾</span></summary>
+                        <div class="multi-select-panel">
+                            <label class="check-row"><input type="radio" name="participation" value="all" checked> Show all students</label>
+                            <label class="check-row"><input type="radio" name="participation" value="atLeastOne"> Only students with 1+ Olympiad</label>
+                            <label class="check-row"><input type="radio" name="participation" value="none"> Only students with none</label>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="actions-row">
+                <button class="btn btn-primary" id="generateBtn">Generate report</button>
+                <span class="spacer"></span>
+                <span class="summary-pill" id="filterSummary">Ready</span>
+            </div>
+        </div>
+
+        <!-- Preview + download -->
+        <div class="card" id="previewCard" hidden>
+            <h2 id="previewTitle">Preview</h2>
+            <p class="card-sub" id="previewSub"></p>
+
+            <div class="search-wrap preview-search">
+                <input type="text" id="previewSearch" placeholder="Find a student in this preview&hellip;">
+            </div>
+
+            <div id="previewArea"></div>
+
+            <div class="actions-row">
+                <button class="btn btn-amber" id="downloadCsvBtn">Download CSV</button>
+                <button class="btn btn-outline" id="downloadPdfBtn">Download PDF</button>
+                <span class="spacer"></span>
+                <span class="summary-pill" id="resultSummary"></span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { jsPDF } from 'https://esm.sh/jspdf@2.5.1';
+import autoTable from 'https://esm.sh/jspdf-autotable@3.8.2';
+
+/* =========================================================
+   CONFIGURE ME
+   ========================================================= */
+const SUPABASE_URL = 'https://ckltcwampaagyzneaznt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNrbHRjd2FtcGFhZ3l6bmVhem50Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI1MDI2NjgsImV4cCI6MjA0ODA3ODY2OH0.pUT2kngS0nkzFBjI-P6g8azU5E3tZzGDQGL68-AUWFc';
+const SIGN_IN_URL = 'https://myjvp.in/teachers/?ref=https%3A%2F%2Fmyjvp.in%2Folympiad-reports%2F';
+const SCHOOL_NAME = 'JVP School';
+
+const ALL_CLASSES = ['1-A1','1-A2','1-A3','2-A1','2-A2','2-A3','2-A4','3-A1','3-A2','3-A3','3-A4',
+    '4-A1','4-A2','4-A3','4-A4','5-A1','5-A2','5-A3','5-A4','6-A1','6-A2','6-A3','6-A4',
+    '7-A1','7-A2','7-A3','7-A4','8-A1','8-A2','8-A3','8-A4','9-A1','9-A2','9-A3','9-A4',
+    '10-A1','10-A2','10-A3','11-SCI','11-COM','11-HUM','12-SCI','12-COM','12-HUM'];
+
+const SUBJECTS = [
+    { key: 'G.K.',            code: 'GK'   },
+    { key: 'English',         code: 'ENG'  },
+    { key: 'Science',         code: 'SCI'  },
+    { key: 'Mathematics',     code: 'MATH' },
+    { key: 'Computer',        code: 'CS'   },
+    { key: 'Social Science',  code: 'SST'  },
+    { key: 'Commerce',        code: 'COM'  },
+];
+/* ========================================================= */
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const el = (id) => document.getElementById(id);
+const statePanel = el('statePanel');
+const appContent = el('appContent');
+const roleBadge = el('roleBadge');
+const signOutBtn = el('signOutBtn');
+const generateBtn = el('generateBtn');
+const filterSummary = el('filterSummary');
+const previewCard = el('previewCard');
+const previewTitle = el('previewTitle');
+const previewSub = el('previewSub');
+const previewArea = el('previewArea');
+const previewSearch = el('previewSearch');
+const resultSummary = el('resultSummary');
+const downloadCsvBtn = el('downloadCsvBtn');
+const downloadPdfBtn = el('downloadPdfBtn');
+const toastEl = el('toast');
+const participationFilterBlock = el('participationFilterBlock');
+const subjectFilterBlock = el('subjectFilterBlock');
+
+let currentUser = null;
+let currentMode = 'subject';       // 'subject' | 'compiled'
+let houseValues = [];
+let genderValues = [];
+
+// Latest generated report, kept in memory so downloads don't re-query.
+let report = null; // { mode, generatedAt, filtersLabel, subjectGroups?: [{subject, rows}], compiledRows?: [], subjectsUsed: [] }
+
+function showState(html) {
+    statePanel.hidden = false;
+    appContent.hidden = true;
+    statePanel.innerHTML = html;
+}
+
+function errorPanel(title, detail) {
+    return `<h2>${title}</h2><p>${detail}</p>`;
+}
+
+function showToast(message, type = '') {
+    toastEl.textContent = message;
+    toastEl.className = 'toast show' + (type ? ' ' + type : '');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => { toastEl.className = 'toast'; }, 2800);
+}
+
+/* ---------------- Auth (admin only) ---------------- */
+async function init() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+        window.location.href = SIGN_IN_URL;
+        return;
+    }
+    currentUser = session.user;
+
+    supabase.auth.onAuthStateChange((event, s) => {
+        if (event === 'SIGNED_OUT' || !s) window.location.href = SIGN_IN_URL;
+    });
+
+    const { data: adminRow, error: adminErr } = await supabase
+        .from('admins')
+        .select('id')
+        .eq('id', currentUser.id)
+        .maybeSingle();
+
+    if (adminErr) {
+        showState(errorPanel('We could not verify your access.', adminErr.message));
+        return;
+    }
+    if (!adminRow) {
+        showState(errorPanel('Admin access only.', 'Olympiad reports can only be generated by school admins. Contact the school office if you believe this is a mistake.'));
+        return;
+    }
+
+    roleBadge.hidden = false;
+    roleBadge.textContent = 'Admin';
+    signOutBtn.hidden = false;
+    signOutBtn.onclick = () => supabase.auth.signOut();
+
+    buildClassOptions();
+    buildSubjectOptions();
+    await buildDynamicOptions();
+
+    wireModeToggle();
+    wireMultiSelects();
+    wireGenerate();
+    wireDownloads();
+    wirePreviewSearch();
+
+    statePanel.hidden = true;
+    appContent.hidden = false;
+}
+
+/* ---------------- Filter option builders ---------------- */
+function buildClassOptions() {
+    const wrap = el('classOptions');
+    ALL_CLASSES.forEach((c) => {
+        const label = document.createElement('label');
+        label.className = 'check-row';
+        label.innerHTML = `<input type="checkbox" value="${c}" checked> ${c}`;
+        wrap.appendChild(label);
+    });
+    refreshMultiSummary('classFilter', 'classOptions', 'classes');
+}
+
+function buildSubjectOptions() {
+    const wrap = el('subjectOptions');
+    SUBJECTS.forEach((s) => {
+        const label = document.createElement('label');
+        label.className = 'check-row';
+        label.innerHTML = `<input type="checkbox" value="${s.key}" checked> ${s.key}`;
+        wrap.appendChild(label);
+    });
+    refreshMultiSummary('subjectFilter', 'subjectOptions', 'subjects');
+}
+
+async function buildDynamicOptions() {
+    const { data, error } = await supabase.from('students').select('house, gender');
+    if (error) {
+        showToast('Could not load house/gender filters: ' + error.message, 'error');
+        return;
+    }
+    houseValues = [...new Set((data || []).map((r) => (r.house || '').trim()).filter(Boolean))].sort();
+    genderValues = [...new Set((data || []).map((r) => (r.gender || '').trim()).filter(Boolean))].sort();
+
+    const houseWrap = el('houseOptions');
+    if (houseValues.length === 0) {
+        houseWrap.innerHTML = '<p style="font-size:0.8rem;color:var(--gray-500);padding:0.3rem 0.1rem;">No house data recorded.</p>';
+    } else {
+        houseValues.forEach((h) => {
+            const label = document.createElement('label');
+            label.className = 'check-row';
+            label.innerHTML = `<input type="checkbox" value="${h}" checked> ${h}`;
+            houseWrap.appendChild(label);
+        });
+    }
+
+    const genderWrap = el('genderOptions');
+    if (genderValues.length === 0) {
+        genderWrap.innerHTML = '<p style="font-size:0.8rem;color:var(--gray-500);padding:0.3rem 0.1rem;">No gender data recorded.</p>';
+    } else {
+        genderValues.forEach((g) => {
+            const label = document.createElement('label');
+            label.className = 'check-row';
+            label.innerHTML = `<input type="checkbox" value="${g}" checked> ${g}`;
+            genderWrap.appendChild(label);
+        });
+    }
+
+    refreshMultiSummary('houseFilter', 'houseOptions', 'houses');
+    refreshMultiSummary('genderFilter', 'genderOptions', 'genders');
+}
+
+function refreshMultiSummary(detailsId, optionsId, noun) {
+    const details = el(detailsId);
+    const summary = details.querySelector('summary');
+    const chev = summary.querySelector('.chev');
+    const boxes = [...el(optionsId).querySelectorAll('input[type="checkbox"]')];
+    const total = boxes.length;
+    const checked = boxes.filter((b) => b.checked).length;
+    let text;
+    if (total === 0) text = `No ${noun}`;
+    else if (checked === total) text = `All ${noun}`;
+    else if (checked === 0) text = `No ${noun} selected`;
+    else text = `${checked} of ${total} ${noun}`;
+    summary.firstChild.textContent = text + ' ';
+    summary.appendChild(chev);
+}
+
+function getChecked(optionsId) {
+    return [...el(optionsId).querySelectorAll('input[type="checkbox"]:checked')].map((b) => b.value);
+}
+
+function wireMultiSelects() {
+    const configs = [
+        ['classFilter', 'classOptions', 'classes'],
+        ['subjectFilter', 'subjectOptions', 'subjects'],
+        ['houseFilter', 'houseOptions', 'houses'],
+        ['genderFilter', 'genderOptions', 'genders'],
+    ];
+    configs.forEach(([detailsId, optionsId, noun]) => {
+        const details = el(detailsId);
+        details.querySelectorAll('.multi-select-actions [data-action]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const check = btn.dataset.action === 'all';
+                el(optionsId).querySelectorAll('input[type="checkbox"]').forEach((b) => { b.checked = check; });
+                refreshMultiSummary(detailsId, optionsId, noun);
+            });
+        });
+        el(optionsId).addEventListener('change', () => refreshMultiSummary(detailsId, optionsId, noun));
+    });
+}
+
+/* ---------------- Mode toggle ---------------- */
+function wireModeToggle() {
+    const buttons = [...document.querySelectorAll('.mode-btn')];
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            currentMode = btn.dataset.mode;
+            buttons.forEach((b) => b.classList.toggle('active', b === btn));
+            btn.querySelector('input[type="radio"]').checked = true;
+            // Subject filter is meaningless in compiled mode (always all subjects, shown as columns).
+            subjectFilterBlock.style.opacity = currentMode === 'compiled' ? '0.45' : '1';
+            subjectFilterBlock.style.pointerEvents = currentMode === 'compiled' ? 'none' : 'auto';
+            participationFilterBlock.style.opacity = currentMode === 'compiled' ? '1' : '0.45';
+            participationFilterBlock.style.pointerEvents = currentMode === 'compiled' ? 'auto' : 'none';
+        });
+    });
+    // initial state
+    subjectFilterBlock.style.opacity = '1';
+    participationFilterBlock.style.opacity = '0.45';
+    participationFilterBlock.style.pointerEvents = 'none';
+}
+
+/* ---------------- Generate report ---------------- */
+function wireGenerate() {
+    generateBtn.addEventListener('click', generateReport);
+}
+
+async function generateReport() {
+    const classes = getChecked('classOptions');
+    const subjectsChosen = currentMode === 'compiled'
+        ? SUBJECTS.map((s) => s.key)
+        : getChecked('subjectOptions');
+    const houses = houseValues.length ? getChecked('houseOptions') : null; // null = no house filter applicable
+    const genders = genderValues.length ? getChecked('genderOptions') : null;
+    const participationMode = document.querySelector('input[name="participation"]:checked').value;
+
+    if (classes.length === 0) {
+        showToast('Select at least one class.', 'error');
+        return;
+    }
+    if (currentMode === 'subject' && subjectsChosen.length === 0) {
+        showToast('Select at least one subject.', 'error');
+        return;
+    }
+    if (houseValues.length && houses.length === 0) {
+        showToast('Select at least one house, or clear the filter to include all.', 'error');
+        return;
+    }
+    if (genderValues.length && genders.length === 0) {
+        showToast('Select at least one gender, or clear the filter to include all.', 'error');
+        return;
+    }
+
+    generateBtn.disabled = true;
+    generateBtn.textContent = 'Generating…';
+    filterSummary.textContent = 'Fetching students…';
+
+    try {
+        let query = supabase
+            .from('students')
+            .select('id, roll_number, name, class, house, gender')
+            .in('class', classes)
+            .order('name', { ascending: true });
+        if (houses) query = query.in('house', houses);
+        if (genders) query = query.in('gender', genders);
+
+        const { data: studentRows, error: sErr } = await query;
+        if (sErr) throw sErr;
+
+        const studentsList = (studentRows || []).slice().sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+
+        if (studentsList.length === 0) {
+            report = null;
+            renderEmptyPreview('No students match these filters.');
+            resultSummary.textContent = '0 students';
+            filterSummary.textContent = 'No matches';
+            return;
+        }
+
+        const ids = studentsList.map((s) => s.id);
+        const { data: partRows, error: pErr } = await supabase
+            .from('olympiad_participation')
+            .select('student_id, subject')
+            .in('student_id', ids)
+            .in('subject', subjectsChosen);
+        if (pErr) throw pErr;
+
+        const bySubject = new Map(); // subject -> Set(studentId)
+        subjectsChosen.forEach((s) => bySubject.set(s, new Set()));
+        (partRows || []).forEach((r) => {
+            if (bySubject.has(r.subject)) bySubject.get(r.subject).add(r.student_id);
+        });
+
+        const filtersLabel = describeFilters(classes, subjectsChosen, houses, genders, participationMode);
+
+        if (currentMode === 'subject') {
+            const subjectGroups = subjectsChosen.map((subjKey) => {
+                const idSet = bySubject.get(subjKey) || new Set();
+                const rows = studentsList.filter((s) => idSet.has(s.id));
+                return { subject: subjKey, rows };
+            });
+            report = {
+                mode: 'subject',
+                generatedAt: new Date(),
+                filtersLabel,
+                subjectGroups,
+                subjectsUsed: subjectsChosen,
+            };
+            renderSubjectPreview(subjectGroups);
+            const totalEntries = subjectGroups.reduce((sum, g) => sum + g.rows.length, 0);
+            resultSummary.textContent = `${totalEntries} entr${totalEntries === 1 ? 'y' : 'ies'} across ${subjectGroups.length} subject${subjectGroups.length === 1 ? '' : 's'}`;
+        } else {
+            let compiledRows = studentsList.map((s) => {
+                const subjectFlags = {};
+                let count = 0;
+                SUBJECTS.forEach((subj) => {
+                    const has = (bySubject.get(subj.key) || new Set()).has(s.id);
+                    subjectFlags[subj.key] = has;
+                    if (has) count += 1;
+                });
+                return { ...s, subjectFlags, count };
+            });
+            if (participationMode === 'atLeastOne') compiledRows = compiledRows.filter((r) => r.count > 0);
+            if (participationMode === 'none') compiledRows = compiledRows.filter((r) => r.count === 0);
+
+            report = {
+                mode: 'compiled',
+                generatedAt: new Date(),
+                filtersLabel,
+                compiledRows,
+                subjectsUsed: SUBJECTS.map((s) => s.key),
+            };
+            renderCompiledPreview(compiledRows);
+            resultSummary.textContent = `${compiledRows.length} student${compiledRows.length === 1 ? '' : 's'}`;
+        }
+
+        filterSummary.textContent = 'Report ready';
+        previewCard.hidden = false;
+        previewSearch.value = '';
+        previewSub.textContent = filtersLabel;
+        previewTitle.textContent = currentMode === 'subject' ? 'Preview — subject-wise lists' : 'Preview — compiled list';
+    } catch (err) {
+        showToast('Could not generate report: ' + err.message, 'error');
+        filterSummary.textContent = 'Failed — try again';
+    } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = 'Generate report';
+    }
+}
+
+function describeFilters(classes, subjects, houses, genders, participationMode) {
+    const parts = [];
+    parts.push(classes.length === ALL_CLASSES.length ? 'All classes' : `${classes.length} class${classes.length === 1 ? '' : 'es'}`);
+    if (currentMode === 'subject') {
+        parts.push(subjects.length === SUBJECTS.length ? 'all subjects' : `${subjects.length} subject${subjects.length === 1 ? '' : 's'}`);
+    }
+    if (houses && houses.length !== houseValues.length) parts.push(`${houses.length} house${houses.length === 1 ? '' : 's'}`);
+    if (genders && genders.length !== genderValues.length) parts.push(`${genders.length} gender${genders.length === 1 ? '' : 's'}`);
+    if (currentMode === 'compiled' && participationMode !== 'all') {
+        parts.push(participationMode === 'atLeastOne' ? 'participating students only' : 'non-participating students only');
+    }
+    return parts.join(' · ') + ' · sorted alphabetically by name';
+}
+
+/* ---------------- Preview rendering ---------------- */
+function renderEmptyPreview(message) {
+    previewCard.hidden = false;
+    previewTitle.textContent = 'Preview';
+    previewSub.textContent = '';
+    previewArea.innerHTML = `<div class="table-scroll"><table><tbody><tr class="empty-row"><td>${message}</td></tr></tbody></table></div>`;
+}
+
+function renderSubjectPreview(subjectGroups) {
+    previewArea.innerHTML = '';
+    subjectGroups.forEach((group) => {
+        const section = document.createElement('div');
+        section.className = 'subject-group';
+        section.dataset.subject = group.subject;
+
+        const head = document.createElement('div');
+        head.className = 'subject-group-head';
+        head.innerHTML = `<h3>${group.subject}</h3><span class="count-badge ${group.rows.length === 0 ? 'zero' : ''}">${group.rows.length}</span>`;
+        section.appendChild(head);
+
+        const scroll = document.createElement('div');
+        scroll.className = 'table-scroll';
+        const table = document.createElement('table');
+        table.innerHTML = `
+            <thead><tr>
+                <th>Name</th><th>Class</th><th>House</th><th class="center">Roll</th>
+            </tr></thead>
+            <tbody></tbody>`;
+        const tbody = table.querySelector('tbody');
+        if (group.rows.length === 0) {
+            tbody.innerHTML = `<tr class="empty-row"><td colspan="4">No students in this subject for the current filters.</td></tr>`;
+        } else {
+            group.rows.forEach((s) => {
+                const tr = document.createElement('tr');
+                tr.dataset.name = s.name.toLowerCase();
+                tr.innerHTML = `<td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.class)}</td><td class="${s.house ? '' : 'muted'}">${escapeHtml(s.house || '—')}</td><td class="center">${s.roll_number ?? ''}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+        scroll.appendChild(table);
+        section.appendChild(scroll);
+        previewArea.appendChild(section);
+    });
+}
+
+function renderCompiledPreview(rows) {
+    previewArea.innerHTML = '';
+    const scroll = document.createElement('div');
+    scroll.className = 'table-scroll';
+    const table = document.createElement('table');
+    const subjectHeads = SUBJECTS.map((s) => `<th class="center" title="${s.key}">${s.code}</th>`).join('');
+    table.innerHTML = `
+        <thead><tr>
+            <th>Name</th><th>Class</th><th>House</th><th class="center">Roll</th>${subjectHeads}<th class="center">Total</th>
+        </tr></thead>
+        <tbody></tbody>`;
+    const tbody = table.querySelector('tbody');
+    if (rows.length === 0) {
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="${5 + SUBJECTS.length}">No students match the current filters.</td></tr>`;
+    } else {
+        rows.forEach((s) => {
+            const tr = document.createElement('tr');
+            tr.dataset.name = s.name.toLowerCase();
+            const cells = SUBJECTS.map((subj) => `<td class="center">${s.subjectFlags[subj.key] ? '<span class="tick-yes">✓</span>' : '<span class="tick-no">–</span>'}</td>`).join('');
+            tr.innerHTML = `<td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.class)}</td><td class="${s.house ? '' : 'muted'}">${escapeHtml(s.house || '—')}</td><td class="center">${s.roll_number ?? ''}</td>${cells}<td class="center">${s.count}</td>`;
+            tbody.appendChild(tr);
+        });
+    }
+    scroll.appendChild(table);
+    previewArea.appendChild(scroll);
+}
+
+function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/* ---------------- Preview search ---------------- */
+function wirePreviewSearch() {
+    previewSearch.addEventListener('input', () => {
+        const q = previewSearch.value.trim().toLowerCase();
+        previewArea.querySelectorAll('tbody tr[data-name]').forEach((tr) => {
+            tr.classList.toggle('row-hidden', !(!q || tr.dataset.name.includes(q)));
+            tr.style.display = (!q || tr.dataset.name.includes(q)) ? '' : 'none';
+        });
+        // update per-subject counts to reflect the visible/filtered rows
+        if (report && report.mode === 'subject') {
+            previewArea.querySelectorAll('.subject-group').forEach((section) => {
+                const visible = [...section.querySelectorAll('tbody tr[data-name]')].filter((tr) => tr.style.display !== 'none').length;
+                const badge = section.querySelector('.count-badge');
+                if (badge) badge.textContent = visible;
+            });
+        }
+    });
+}
+
+/* ---------------- Downloads ---------------- */
+function wireDownloads() {
+    downloadCsvBtn.addEventListener('click', () => {
+        if (!report) { showToast('Generate a report first.', 'error'); return; }
+        try {
+            const csv = report.mode === 'subject' ? buildSubjectCsv(report) : buildCompiledCsv(report);
+            downloadFile(csv, fileBaseName(report) + '.csv', 'text/csv;charset=utf-8;');
+            showToast('CSV downloaded', 'success');
+        } catch (err) {
+            showToast('Could not build CSV: ' + err.message, 'error');
+        }
+    });
+
+    downloadPdfBtn.addEventListener('click', () => {
+        if (!report) { showToast('Generate a report first.', 'error'); return; }
+        try {
+            if (report.mode === 'subject') buildSubjectPdf(report);
+            else buildCompiledPdf(report);
+            showToast('PDF downloaded', 'success');
+        } catch (err) {
+            showToast('Could not build PDF: ' + err.message, 'error');
+        }
+    });
+}
+
+function fileBaseName(rep) {
+    const stamp = rep.generatedAt.toISOString().slice(0, 10);
+    if (rep.mode === 'subject') {
+        const label = rep.subjectGroups.length === 1 ? sanitizeFileName(rep.subjectGroups[0].subject) : 'Multi-Subject';
+        return `Olympiad_${label}_Participation_${stamp}`;
+    }
+    return `Olympiad_Compiled_Participation_${stamp}`;
+}
+
+function sanitizeFileName(str) {
+    return String(str).replace(/[^a-z0-9]+/gi, '-').replace(/(^-|-$)/g, '');
+}
+
+function csvEscape(value) {
+    const s = value === null || value === undefined ? '' : String(value);
+    if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+}
+
+function csvRow(fields) {
+    return fields.map(csvEscape).join(',') + '\r\n';
+}
+
+/* ----- CSV builders ----- */
+function buildSubjectCsv(rep) {
+    let out = '';
+    out += csvRow([`Olympiad Participation — Subject-wise Report`]);
+    out += csvRow([`Generated: ${formatDateTime(rep.generatedAt)}`]);
+    out += csvRow([`Filters: ${rep.filtersLabel}`]);
+    out += '\r\n';
+    rep.subjectGroups.forEach((group, idx) => {
+        out += csvRow([`Subject: ${group.subject}`, `${group.rows.length} student(s)`]);
+        out += csvRow(['Name', 'Class', 'House', 'Roll No.']);
+        group.rows.forEach((s) => {
+            out += csvRow([s.name, s.class, s.house || '', s.roll_number ?? '']);
+        });
+        if (idx < rep.subjectGroups.length - 1) out += '\r\n';
+    });
+    return out;
+}
+
+function buildCompiledCsv(rep) {
+    let out = '';
+    out += csvRow([`Olympiad Participation — Compiled Report (All Subjects)`]);
+    out += csvRow([`Generated: ${formatDateTime(rep.generatedAt)}`]);
+    out += csvRow([`Filters: ${rep.filtersLabel}`]);
+    out += '\r\n';
+    const header = ['Name', 'Class', 'House', 'Gender', 'Roll No.', ...SUBJECTS.map((s) => s.key), 'Total Olympiads'];
+    out += csvRow(header);
+    rep.compiledRows.forEach((s) => {
+        const row = [s.name, s.class, s.house || '', s.gender || '', s.roll_number ?? '',
+            ...SUBJECTS.map((subj) => (s.subjectFlags[subj.key] ? 'Yes' : 'No')), s.count];
+        out += csvRow(row);
+    });
+    return out;
+}
+
+function downloadFile(content, filename, mime) {
+    const blob = new Blob(['\uFEFF' + content], { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+function formatDateTime(d) {
+    return d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
+/* ----- PDF builders ----- */
+function pdfHeaderFooter(doc, title, subtitleLines) {
+    const pageWidth = doc.internal.pageSize.getWidth();
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(21, 42, 99);
+    doc.text(SCHOOL_NAME, 40, 40);
+    doc.setFontSize(11);
+    doc.setTextColor(15, 23, 42);
+    doc.text(title, 40, 58);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(100, 116, 139);
+    let y = 72;
+    subtitleLines.forEach((line) => {
+        doc.text(line, 40, y);
+        y += 12;
+    });
+    doc.setDrawColor(226, 232, 240);
+    doc.line(40, y + 2, pageWidth - 40, y + 2);
+    return y + 14;
+}
+
+function addPageNumbers(doc) {
+    const pageCount = doc.internal.getNumberOfPages();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184);
+        doc.text(`Page ${i} of ${pageCount}`, pageWidth - 40, pageHeight - 20, { align: 'right' });
+        doc.text('Generated via My JVP Olympiad Reports', 40, pageHeight - 20);
+    }
+}
+
+function buildSubjectPdf(rep) {
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const subtitle = [`Generated: ${formatDateTime(rep.generatedAt)}`, `Filters: ${rep.filtersLabel}`];
+
+    rep.subjectGroups.forEach((group, idx) => {
+        if (idx > 0) doc.addPage();
+        const startY = pdfHeaderFooter(doc, `Subject: ${group.subject}  (${group.rows.length} student${group.rows.length === 1 ? '' : 's'})`, subtitle);
+        autoTable(doc, {
+            startY,
+            margin: { left: 40, right: 40 },
+            head: [['#', 'Name', 'Class', 'House', 'Roll No.']],
+            body: group.rows.length
+                ? group.rows.map((s, i) => [i + 1, s.name, s.class, s.house || '—', s.roll_number ?? ''])
+                : [['—', 'No students match the current filters.', '', '', '']],
+            styles: { font: 'helvetica', fontSize: 9, cellPadding: 5, textColor: [15, 23, 42] },
+            headStyles: { fillColor: [30, 58, 138], textColor: 255, fontStyle: 'bold', fontSize: 8.5 },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
+            columnStyles: { 0: { cellWidth: 28, halign: 'center' }, 4: { cellWidth: 60, halign: 'center' } },
+        });
+    });
+
+    addPageNumbers(doc);
+    doc.save(fileBaseName(rep) + '.pdf');
+}
+
+function buildCompiledPdf(rep) {
+    const doc = new jsPDF({ unit: 'pt', format: 'a4', orientation: 'landscape' });
+    const subtitle = [`Generated: ${formatDateTime(rep.generatedAt)}`, `Filters: ${rep.filtersLabel}`];
+    const startY = pdfHeaderFooter(doc, `Compiled Olympiad Participation (${rep.compiledRows.length} student${rep.compiledRows.length === 1 ? '' : 's'})`, subtitle);
+
+    const head = [['#', 'Name', 'Class', 'House', 'Roll', ...SUBJECTS.map((s) => s.code), 'Total']];
+    const body = rep.compiledRows.length
+        ? rep.compiledRows.map((s, i) => [
+              i + 1, s.name, s.class, s.house || '—', s.roll_number ?? '',
+              ...SUBJECTS.map((subj) => (s.subjectFlags[subj.key] ? 'Y' : '–')),
+              s.count,
+          ])
+        : [['—', 'No students match the current filters.', '', '', '', ...SUBJECTS.map(() => ''), '']];
+
+    const subjectColStyles = {};
+    SUBJECTS.forEach((_, i) => { subjectColStyles[5 + i] = { halign: 'center', cellWidth: 34 }; });
+
+    autoTable(doc, {
+        startY,
+        margin: { left: 40, right: 40 },
+        head,
+        body,
+        styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 5, textColor: [15, 23, 42] },
+        headStyles: { fillColor: [30, 58, 138], textColor: 255, fontStyle: 'bold', fontSize: 8 },
+        alternateRowStyles: { fillColor: [248, 250, 252] },
+        columnStyles: {
+            0: { cellWidth: 24, halign: 'center' },
+            4: { cellWidth: 40, halign: 'center' },
+            ...subjectColStyles,
+            [5 + SUBJECTS.length]: { cellWidth: 40, halign: 'center', fontStyle: 'bold' },
+        },
+    });
+
+    addPageNumbers(doc);
+    doc.save(fileBaseName(rep) + '.pdf');
+}
+
+init();
+</script>
+</body>
+</html>
