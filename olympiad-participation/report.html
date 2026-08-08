@@ -874,6 +874,28 @@ function wireModeToggle() {
     participationFilterBlock.style.pointerEvents = 'none';
 }
 
+/* ---------------- Participation fetch (paginated) ---------------- */
+// Supabase/PostgREST caps a single response at 1000 rows by default, and long .in() lists can
+// also trip a 400 on the REST URL. Filtering by subject keeps the filter list short, and paging
+// with .range() keeps us safe even if a subject's participation grows past 1000 rows.
+async function fetchParticipationBySubjects(subjects) {
+    const pageSize = 1000;
+    let from = 0;
+    let all = [];
+    while (true) {
+        const { data, error } = await supabase
+            .from('olympiad_participation')
+            .select('student_id, subject')
+            .in('subject', subjects)
+            .range(from, from + pageSize - 1);
+        if (error) throw error;
+        all = all.concat(data || []);
+        if (!data || data.length < pageSize) break;
+        from += pageSize;
+    }
+    return all;
+}
+
 /* ---------------- Generate report ---------------- */
 function wireGenerate() {
     generateBtn.addEventListener('click', generateReport);
@@ -931,18 +953,18 @@ async function generateReport() {
             return;
         }
 
-        const ids = studentsList.map((s) => s.id);
-        const { data: partRows, error: pErr } = await supabase
-            .from('olympiad_participation')
-            .select('student_id, subject')
-            .in('student_id', ids)
-            .in('subject', subjectsChosen);
-        if (pErr) throw pErr;
+        // Filter only by subject (a short list) rather than by student_id (which can run into the
+        // hundreds and produce a REST URL long enough for the server to reject with a 400). We
+        // match against our student set client-side instead.
+        const studentIdSet = new Set(studentsList.map((s) => s.id));
+        const partRows = await fetchParticipationBySubjects(subjectsChosen);
 
         const bySubject = new Map(); // subject -> Set(studentId)
         subjectsChosen.forEach((s) => bySubject.set(s, new Set()));
-        (partRows || []).forEach((r) => {
-            if (bySubject.has(r.subject)) bySubject.get(r.subject).add(r.student_id);
+        partRows.forEach((r) => {
+            if (bySubject.has(r.subject) && studentIdSet.has(r.student_id)) {
+                bySubject.get(r.subject).add(r.student_id);
+            }
         });
 
         const filtersLabel = describeFilters(classes, subjectsChosen, houses, genders, participationMode);
