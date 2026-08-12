@@ -1278,14 +1278,14 @@ function buildSubjectPdf(rep) {
         autoTable(doc, {
             startY,
             margin: { left: 40, right: 40 },
-            head: [['#', 'Name', 'Class', 'House', 'Roll No.']],
+            head: [['#', 'Name', 'Class']],
             body: group.rows.length
-                ? group.rows.map((s, i) => [i + 1, s.name, s.class, s.house || '—', s.roll_number ?? ''])
+                ? group.rows.map((s, i) => [i + 1, s.name, s.class])
                 : [['—', 'No students match the current filters.', '', '', '']],
             styles: { font: 'helvetica', fontSize: 9, cellPadding: 5, textColor: [15, 23, 42] },
             headStyles: { fillColor: [30, 58, 138], textColor: 255, fontStyle: 'bold', fontSize: 8.5 },
             alternateRowStyles: { fillColor: [248, 250, 252] },
-            columnStyles: { 0: { cellWidth: 28, halign: 'center' }, 4: { cellWidth: 60, halign: 'center' } },
+            columnStyles: { 0: { cellWidth: 28, halign: 'center' } },
         });
     });
 
@@ -1298,10 +1298,10 @@ function buildCompiledPdf(rep) {
     const subtitle = [`Generated: ${formatDateTime(rep.generatedAt)}`, `Filters: ${rep.filtersLabel}`];
     const startY = pdfHeaderFooter(doc, `Compiled Olympiad Participation (${rep.compiledRows.length} student${rep.compiledRows.length === 1 ? '' : 's'})`, subtitle);
 
-    const head = [['#', 'Name', 'Class', 'House', 'Roll', ...SUBJECTS.map((s) => s.code), 'Total']];
+    const head = [['#', 'Name', 'Class', ...SUBJECTS.map((s) => s.code), 'Total']];
     const body = rep.compiledRows.length
         ? rep.compiledRows.map((s, i) => [
-              i + 1, s.name, s.class, s.house || '—', s.roll_number ?? '',
+              i + 1, s.name, s.class,
               ...SUBJECTS.map((subj) => (s.subjectFlags[subj.key] ? 'Y' : '–')),
               s.count,
           ])
@@ -1320,7 +1320,6 @@ function buildCompiledPdf(rep) {
         alternateRowStyles: { fillColor: [248, 250, 252] },
         columnStyles: {
             0: { cellWidth: 24, halign: 'center' },
-            4: { cellWidth: 40, halign: 'center' },
             ...subjectColStyles,
             [5 + SUBJECTS.length]: { cellWidth: 40, halign: 'center', fontStyle: 'bold' },
         },
