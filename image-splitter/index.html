@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enlarge — Poster Print Splitter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAFAF7;
+    --card:#FFFFFF;
+    --ink:#1A2333;
+    --slate:#5B6472;
+    --slate-light:#8A93A0;
+    --line:#DFE3E8;
+    --line-strong:#C4CAD1;
+    --accent:#E4572E;
+    --accent-dark:#C43F1B;
+    --accent-tint:#FDECE6;
+    --success:#2D9A6A;
+    --focus:#2F6FE0;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(26,35,51,.04), 0 6px 18px rgba(26,35,51,.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.45;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  ::selection{background:var(--accent-tint); color:var(--accent-dark);}
+  a{color:var(--focus);}
+
+  button, input, select{font-family:inherit; color:inherit;}
+  button{cursor:pointer;}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+
+  /* ---------- header ---------- */
+  header.app-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 24px; border-bottom:1px solid var(--line);
+    background:var(--card);
+    position:sticky; top:0; z-index:20;
+  }
+  .brand{display:flex; align-items:baseline; gap:10px;}
+  .brand-mark{
+    width:26px;height:26px;border:2px solid var(--ink); position:relative; flex:none;
+  }
+  .brand-mark::before, .brand-mark::after{
+    content:""; position:absolute; background:var(--accent);
+  }
+  .brand-mark::before{ width:2px; height:10px; top:-5px; left:5px; }
+  .brand-mark::after{ width:10px; height:2px; top:5px; left:-5px; }
+  .brand h1{font-size:16px; margin:0; letter-spacing:.01em; font-weight:700;}
+  .brand span.tag{font-size:12px; color:var(--slate); font-family:'JetBrains Mono',monospace;}
+  .header-actions{display:flex; gap:10px; align-items:center;}
+
+  /* ---------- layout ---------- */
+  main.layout{
+    display:grid;
+    grid-template-columns: 360px 1fr;
+    gap:0;
+    min-height:calc(100vh - 63px);
+  }
+  @media (max-width: 920px){
+    main.layout{grid-template-columns:1fr;}
+  }
+
+  aside.controls{
+    border-right:1px solid var(--line);
+    padding:20px 20px 80px;
+    overflow-y:auto;
+    background:var(--card);
+  }
+  @media (max-width:920px){
+    aside.controls{border-right:none; border-bottom:1px solid var(--line); padding-bottom:24px;}
+  }
+
+  .step{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+    background:var(--card);
+  }
+  .step[data-disabled="true"]{opacity:.45; pointer-events:none;}
+  .step-head{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .step-num{
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    width:22px;height:22px;border-radius:50%;
+    background:var(--ink); color:#fff;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .step-title{font-size:14px; font-weight:600;}
+  .field{margin-bottom:12px;}
+  .field:last-child{margin-bottom:0;}
+  .field label.field-label{
+    display:block; font-size:11.5px; font-weight:600; text-transform:uppercase;
+    letter-spacing:.04em; color:var(--slate); margin-bottom:6px;
+  }
+  .hint{font-size:12px; color:var(--slate-light); margin-top:5px; line-height:1.4;}
+
+  select, .num-input{
+    width:100%; padding:9px 10px; border:1px solid var(--line-strong); border-radius:7px;
+    background:#fff; font-size:13.5px;
+  }
+  .row{display:flex; gap:10px;}
+  .row > *{flex:1;}
+
+  .seg{
+    display:flex; border:1px solid var(--line-strong); border-radius:7px; overflow:hidden;
+  }
+  .seg button{
+    flex:1; border:none; background:#fff; padding:8px 6px; font-size:12.5px; font-weight:500;
+    border-right:1px solid var(--line-strong); color:var(--slate);
+  }
+  .seg button:last-child{border-right:none;}
+  .seg button.active{background:var(--ink); color:#fff;}
+
+  .grid-presets{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;}
+  .grid-presets button{
+    border:1px solid var(--line-strong); background:#fff; border-radius:7px;
+    padding:7px 10px; font-size:12.5px; font-family:'JetBrains Mono',monospace;
+  }
+  .grid-presets button.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+  input[type="range"]{
+    width:100%; accent-color:var(--accent); height:20px;
+  }
+  .range-readout{
+    display:flex; justify-content:space-between; font-size:12px; color:var(--slate); margin-top:2px;
+    font-family:'JetBrains Mono',monospace;
+  }
+
+  .radio-cards{display:flex; flex-direction:column; gap:8px;}
+  .radio-card{
+    display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line-strong);
+    border-radius:8px; padding:10px; cursor:pointer;
+  }
+  .radio-card.active{border-color:var(--accent); background:var(--accent-tint);}
+  .radio-card input{margin-top:3px;}
+  .radio-card .rc-title{font-size:13px; font-weight:600;}
+  .radio-card .rc-desc{font-size:12px; color:var(--slate);}
+
+  /* upload dropzone */
+  .dropzone{
+    border:2px dashed var(--line-strong); border-radius:var(--radius);
+    padding:36px 16px; text-align:center; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .dropzone.drag{border-color:var(--accent); background:var(--accent-tint);}
+  .dropzone svg{width:34px;height:34px; margin-bottom:10px; color:var(--slate-light);}
+  .dropzone .dz-title{font-size:14px; font-weight:600; margin-bottom:4px;}
+  .dropzone .dz-sub{font-size:12px; color:var(--slate-light);}
+  #fileInput{display:none;}
+
+  .file-chip{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    border:1px solid var(--line-strong); border-radius:8px; padding:10px 12px; font-size:12.5px;
+  }
+  .file-chip .fc-name{font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .file-chip .fc-meta{color:var(--slate-light); font-family:'JetBrains Mono',monospace; font-size:11px;}
+  .file-chip button{background:none; border:none; color:var(--slate); font-size:16px; line-height:1;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border-radius:8px; padding:11px 16px; font-size:13.5px; font-weight:600;
+    border:1px solid transparent; width:100%;
+  }
+  .btn-primary{background:var(--accent); color:#fff;}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-secondary{background:var(--ink); color:#fff;}
+  .btn-secondary:hover{background:#0f151f;}
+  .btn-ghost{background:#fff; border-color:var(--line-strong); color:var(--ink);}
+  .btn-ghost:hover{border-color:var(--slate);}
+  .btn-sm{padding:7px 10px; font-size:12.5px; width:auto;}
+  .btn:disabled{opacity:.4; cursor:not-allowed;}
+  .action-row{display:flex; gap:10px; margin-top:14px;}
+
+  .error-msg{
+    background:#FDECEC; border:1px solid #F3B8B0; color:#9A2C1F; border-radius:8px;
+    padding:10px 12px; font-size:13px; margin-bottom:14px; display:none;
+  }
+  .error-msg.show{display:block;}
+
+  /* ---------- preview ---------- */
+  section.preview{
+    padding:24px 28px 60px;
+  }
+  .preview-empty{
+    height:70vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--slate-light); text-align:center; gap:10px;
+  }
+  .preview-empty svg{width:56px;height:56px; opacity:.5;}
+  .preview-empty h2{font-size:16px; color:var(--slate); font-weight:600; margin:0;}
+  .preview-empty p{font-size:13px; max-width:320px; margin:0;}
+
+  .preview-header{
+    display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    margin-bottom:16px;
+  }
+  .preview-header h2{font-size:15px; font-weight:700; margin:0;}
+  .dims-readout{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--slate);
+    background:var(--card); border:1px solid var(--line); border-radius:7px; padding:6px 10px;
+  }
+  .dims-readout b{color:var(--ink);}
+
+  .assembled-wrap{
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/24px 24px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/24px 24px,
+      var(--card);
+    border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; display:flex; align-items:center; justify-content:center;
+    margin-bottom:22px; box-shadow:var(--shadow);
+  }
+  #assembledCanvas{
+    max-width:100%; display:block; box-shadow:0 2px 14px rgba(26,35,51,.18);
+  }
+
+  .sheets-header{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+  }
+  .sheets-header h3{font-size:13px; font-weight:700; margin:0; text-transform:uppercase; letter-spacing:.04em; color:var(--slate);}
+  .sheets-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:14px;
+  }
+  .sheet-tile{
+    border:1px solid var(--line); border-radius:9px; background:var(--card); overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .sheet-tile .st-canvas-wrap{
+    padding:10px; display:flex; align-items:center; justify-content:center; background:#EDEFF2;
+    position:relative;
+  }
+  .sheet-tile canvas{max-width:100%; display:block; box-shadow:0 1px 6px rgba(0,0,0,.15); background:#fff;}
+  .corner-mark{position:absolute; width:9px; height:9px; border-color:var(--accent); }
+  .corner-tl{top:6px; left:6px; border-top:1.5px solid; border-left:1.5px solid;}
+  .corner-tr{top:6px; right:6px; border-top:1.5px solid; border-right:1.5px solid;}
+  .corner-bl{bottom:6px; left:6px; border-bottom:1.5px solid; border-left:1.5px solid;}
+  .corner-br{bottom:6px; right:6px; border-bottom:1.5px solid; border-right:1.5px solid;}
+  .sheet-tile .st-label{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:8px 10px; font-family:'JetBrains Mono',monospace; font-size:11px;
+    border-top:1px solid var(--line);
+  }
+  .st-label .st-num{font-weight:700; color:var(--ink);}
+  .st-label .st-pos{color:var(--slate-light);}
+
+  .actions-bar{
+    display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;
+  }
+  .actions-bar .btn{width:auto; padding:12px 22px;}
+
+  .toast{
+    position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:#fff; padding:10px 18px; border-radius:8px; font-size:13px;
+    box-shadow:var(--shadow); z-index:50; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(-4px);}
+
+  /* ---------- print ---------- */
+  #printArea{display:none;}
+  @media print{
+    header.app-header, aside.controls, section.preview > *:not(#printArea){display:none !important;}
+    body, main.layout{background:#fff; display:block;}
+    #printArea{display:block;}
+    .print-page{
+      display:flex; align-items:center; justify-content:center;
+      page-break-after:always; break-after:page;
+      width:100%; height:100%;
+    }
+    .print-page:last-child{page-break-after:auto; break-after:auto;}
+    .print-page canvas{display:block;}
+    .print-tag{
+      position:fixed; font-family:'JetBrains Mono',monospace; font-size:9px; color:#aaa;
+      bottom:2mm; right:3mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"></div>
+    <h1>Enlarge</h1>
+    <span class="tag mono">poster print splitter</span>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-ghost btn-sm" id="resetBtn" style="display:none;">Reset</button>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="controls">
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <!-- STEP 1: UPLOAD -->
+    <div class="step" id="stepUpload">
+      <div class="step-head">
+        <div class="step-num">1</div>
+        <div class="step-title">Upload image</div>
+      </div>
+      <div id="uploadZoneWrap">
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload image">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <div class="dz-title">Drop an image, or click to browse</div>
+          <div class="dz-sub">JPG, PNG, WebP, GIF — any size</div>
+        </div>
+      </div>
+      <div id="fileChipWrap" style="display:none; margin-top:2px;"></div>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <!-- STEP 2: PAPER -->
+    <div class="step" id="stepPaper" data-disabled="true">
+      <div class="step-head"><div class="step-num">2</div><div class="step-title">Paper &amp; orientation</div></div>
+      <div class="field">
+        <label class="field-label" for="paperSelect">Paper size</label>
+        <select id="paperSelect">
+          <option value="A4" selected>A4 — 210 × 297 mm</option>
+          <option value="A3">A3 — 297 × 420 mm</option>
+          <option value="A5">A5 — 148 × 210 mm</option>
+          <option value="A6">A6 — 105 × 148 mm</option>
+          <option value="Letter">US Letter — 215.9 × 279.4 mm</option>
+          <option value="Legal">US Legal — 215.9 × 355.6 mm</option>
+          <option value="Tabloid">Tabloid — 279.4 × 431.8 mm</option>
+          <option value="Custom">Custom size…</option>
+        </select>
+      </div>
+      <div class="field" id="customSizeField" style="display:none;">
+        <label class="field-label">Custom size (mm)</label>
+        <div class="row">
+          <input type="number" class="num-input" id="customW" min="20" max="2000" value="210" placeholder="Width">
+          <input type="number" class="num-input" id="customH" min="20" max="2000" value="297" placeholder="Height">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">Orientation</label>
+        <div class="seg" id="orientSeg">
+          <button data-val="portrait" class="active">Portrait</button>
+          <button data-val="landscape">Landscape</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="marginRange">Printer margin</label>
+        <input type="range" id="marginRange" min="0" max="20" step="1" value="0">
+        <div class="range-readout"><span id="marginVal">0 mm</span><span>0–20 mm</span></div>
+        <div class="hint">Set to 0 for borderless printing. Increase if your printer can't print to the edge of the page.</div>
+      </div>
+    </div>
+
+    <!-- STEP 3: LAYOUT -->
+    <div class="step" id="stepLayout" data-disabled="true">
+      <div class="step-head"><div class="step-num">3</div><div class="step-title">Layout</div></div>
+      <div class="field">
+        <label class="field-label">Grid presets</label>
+        <div class="grid-presets" id="gridPresets">
+          <button data-cols="2" data-rows="2" class="active">2 × 2</button>
+          <button data-cols="3" data-rows="2">3 × 2</button>
+          <button data-cols="3" data-rows="3">3 × 3</button>
+          <button data-cols="4" data-rows="3">4 × 3</button>
+          <button data-cols="4" data-rows="4">4 × 4</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">Custom grid</label>
+        <div class="row">
+          <input type="number" class="num-input" id="colsInput" min="1" max="10" value="2">
+          <input type="number" class="num-input" id="rowsInput" min="1" max="10" value="2">
+        </div>
+        <div class="hint">Columns × rows. Large grids (over ~25 sheets) take longer to render.</div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="overlapRange">Sheet overlap</label>
+        <input type="range" id="overlapRange" min="0" max="30" step="1" value="0">
+        <div class="range-readout"><span id="overlapVal">0 mm</span><span>0–30 mm</span></div>
+        <div class="hint">Duplicates a strip of image on neighboring sheets, so you can overlap the paper edges to align them precisely before trimming or gluing.</div>
+      </div>
+    </div>
+
+    <!-- STEP 4: FIT -->
+    <div class="step" id="stepFit" data-disabled="true">
+      <div class="step-head"><div class="step-num">4</div><div class="step-title">Fit &amp; position</div></div>
+      <div class="field">
+        <div class="radio-cards" id="fitModeCards">
+          <label class="radio-card active" data-val="contain">
+            <input type="radio" name="fitMode" value="contain" checked>
+            <span><span class="rc-title">Fit whole image</span><br><span class="rc-desc">No cropping. Outer sheets may have a small white margin so the aspect ratio stays exact.</span></span>
+          </label>
+          <label class="radio-card" data-val="cover">
+            <input type="radio" name="fitMode" value="cover">
+            <span><span class="rc-title">Fill every sheet</span><br><span class="rc-desc">No white space, but the image is cropped slightly to match the paper grid exactly.</span></span>
+          </label>
+        </div>
+      </div>
+      <div id="panFields" style="display:none;">
+        <div class="field">
+          <label class="field-label" for="panX">Horizontal crop position</label>
+          <input type="range" id="panX" min="0" max="100" value="50">
+        </div>
+        <div class="field">
+          <label class="field-label" for="panY">Vertical crop position</label>
+          <input type="range" id="panY" min="0" max="100" value="50">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="qualitySelect">Print quality</label>
+        <select id="qualitySelect">
+          <option value="100">Draft — 100 dpi (fast)</option>
+          <option value="150" selected>Standard — 150 dpi</option>
+          <option value="300">High — 300 dpi (slower)</option>
+        </select>
+      </div>
+    </div>
+
+  </aside>
+
+  <section class="preview" id="previewSection">
+    <div class="preview-empty" id="previewEmpty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+      <h2>Your enlarged poster preview will appear here</h2>
+      <p>Upload an image on the left to see the full assembled poster, the sheet grid, and every printable page.</p>
+    </div>
+
+    <div id="previewContent" style="display:none;">
+      <div class="preview-header">
+        <h2>Assembled poster preview</h2>
+        <div class="dims-readout" id="dimsReadout"></div>
+      </div>
+      <div class="assembled-wrap">
+        <canvas id="assembledCanvas"></canvas>
+      </div>
+
+      <div class="sheets-header">
+        <h3 id="sheetsCount">Sheets</h3>
+      </div>
+      <div class="sheets-grid" id="sheetsGrid"></div>
+
+      <div class="actions-bar">
+        <button class="btn btn-primary" id="printBtn">🖨️ Print sheets</button>
+        <button class="btn btn-secondary" id="pdfBtn">⬇ Download as PDF</button>
+      </div>
+      <p class="hint" style="margin-top:12px;">When the print dialog opens, set <b>Scale</b> to <b>100% / Actual size</b> and <b>Margins</b> to <b>None</b> for accurate results.</p>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+<style id="dynamicPrintStyle"></style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var PAPER_SIZES = {
+    A3:[297,420], A4:[210,297], A5:[148,210], A6:[105,148],
+    Letter:[215.9,279.4], Legal:[215.9,355.6], Tabloid:[279.4,431.8]
+  };
+  var MAX_PIXELS = 24000000; // safety cap for decoded working image
+  var MAX_SHEETS_WARN = 30;
+
+  var state = {
+    img:null, natW:0, natH:0, fileName:"", fileSizeLabel:"",
+    paper:"A4", customW:210, customH:297,
+    orientation:"portrait", margin:0, overlap:0,
+    cols:2, rows:2, fitMode:"contain", panX:0.5, panY:0.5, dpi:150,
+    objectUrl:null
+  };
+
+  // ---------- element refs ----------
+  var $ = function(id){ return document.getElementById(id); };
+  var dropzone = $("dropzone"), fileInput = $("fileInput"), fileChipWrap = $("fileChipWrap");
+  var errorMsg = $("errorMsg");
+  var stepPaper = $("stepPaper"), stepLayout = $("stepLayout"), stepFit = $("stepFit");
+  var previewEmpty = $("previewEmpty"), previewContent = $("previewContent");
+  var assembledCanvas = $("assembledCanvas");
+  var sheetsGrid = $("sheetsGrid"), sheetsCount = $("sheetsCount");
+  var dimsReadout = $("dimsReadout");
+  var resetBtn = $("resetBtn");
+  var toast = $("toast");
+
+  function showError(msg){
+    errorMsg.textContent = msg;
+    errorMsg.classList.add("show");
+    window.clearTimeout(showError._t);
+    showError._t = window.setTimeout(function(){ errorMsg.classList.remove("show"); }, 6000);
+  }
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add("show");
+    window.clearTimeout(showToast._t);
+    showToast._t = window.setTimeout(function(){ toast.classList.remove("show"); }, 2200);
+  }
+  function clamp(v,min,max){ return Math.max(min, Math.min(max, v)); }
+
+  // ---------- file handling ----------
+  function onFilesSelected(files){
+    errorMsg.classList.remove("show");
+    if(!files || !files.length) return;
+    var file = files[0];
+    if(!file.type || file.type.indexOf("image/") !== 0){
+      showError("That file doesn't look like an image. Please choose a JPG, PNG, WebP, or GIF.");
+      return;
+    }
+    if(file.size > 60*1024*1024){
+      showError("This image is very large (over 60 MB) and may not load reliably in the browser.");
+    }
+    if(state.objectUrl){ URL.revokeObjectURL(state.objectUrl); }
+    var url = URL.createObjectURL(file);
+    state.objectUrl = url;
+    var img = new Image();
+    img.onload = function(){
+      try{
+        finishImageLoad(img, file);
+      }catch(e){
+        showError("Something went wrong reading that image. Please try a different file.");
+      }
+    };
+    img.onerror = function(){
+      showError("This image couldn't be decoded. It may be corrupted or in an unsupported format.");
+    };
+    img.src = url;
+  }
+
+  function finishImageLoad(img, file){
+    var w = img.naturalWidth, h = img.naturalHeight;
+    if(!w || !h){ showError("This image has no readable dimensions."); return; }
+
+    var srcForCanvas = img;
+    if(w*h > MAX_PIXELS){
+      var ratio = Math.sqrt(MAX_PIXELS/(w*h));
+      var nw = Math.max(1, Math.round(w*ratio));
+      var nh = Math.max(1, Math.round(h*ratio));
+      var off = document.createElement("canvas");
+      off.width = nw; off.height = nh;
+      off.getContext("2d").drawImage(img, 0, 0, nw, nh);
+      srcForCanvas = off;
+      w = nw; h = nh;
+      showToast("Large image resized to " + nw + "×" + nh + "px for smoother editing.");
+    }
+
+    state.img = srcForCanvas;
+    state.natW = w; state.natH = h;
+    state.fileName = file.name;
+    state.fileSizeLabel = formatBytes(file.size);
+
+    stepPaper.removeAttribute("data-disabled");
+    stepLayout.removeAttribute("data-disabled");
+    stepFit.removeAttribute("data-disabled");
+    resetBtn.style.display = "";
+
+    renderFileChip();
+    previewEmpty.style.display = "none";
+    previewContent.style.display = "block";
+    scheduleRender();
+  }
+
+  function formatBytes(b){
+    if(b < 1024) return b + " B";
+    if(b < 1024*1024) return (b/1024).toFixed(0) + " KB";
+    return (b/(1024*1024)).toFixed(1) + " MB";
+  }
+
+  function renderFileChip(){
+    fileChipWrap.style.display = "block";
+    fileChipWrap.innerHTML = "";
+    var chip = document.createElement("div");
+    chip.className = "file-chip";
+    chip.innerHTML =
+      '<div style="overflow:hidden;">' +
+        '<div class="fc-name"></div>' +
+        '<div class="fc-meta">' + state.natW + ' × ' + state.natH + 'px · ' + state.fileSizeLabel + '</div>' +
+      '</div>' +
+      '<button type="button" aria-label="Remove image">✕</button>';
+    chip.querySelector(".fc-name").textContent = state.fileName;
+    chip.querySelector("button").addEventListener("click", resetAll);
+    fileChipWrap.appendChild(chip);
+    $("uploadZoneWrap").style.display = "none";
+  }
+
+  function resetAll(){
+    if(state.objectUrl){ URL.revokeObjectURL(state.objectUrl); }
+    state.img = null; state.natW = 0; state.natH = 0; state.objectUrl = null;
+    fileInput.value = "";
+    fileChipWrap.style.display = "none";
+    fileChipWrap.innerHTML = "";
+    $("uploadZoneWrap").style.display = "block";
+    stepPaper.setAttribute("data-disabled","true");
+    stepLayout.setAttribute("data-disabled","true");
+    stepFit.setAttribute("data-disabled","true");
+    resetBtn.style.display = "none";
+    previewEmpty.style.display = "flex";
+    previewContent.style.display = "none";
+    errorMsg.classList.remove("show");
+  }
+
+  dropzone.addEventListener("click", function(){ fileInput.click(); });
+  dropzone.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ fileInput.click(); } });
+  fileInput.addEventListener("change", function(e){ onFilesSelected(e.target.files); });
+  ["dragenter","dragover"].forEach(function(ev){
+    dropzone.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dropzone.classList.add("drag"); });
+  });
+  ["dragleave","drop"].forEach(function(ev){
+    dropzone.addEventListener(ev, function(e){ e.preventDefault(); e.stopPropagation(); dropzone.classList.remove("drag"); });
+  });
+  dropzone.addEventListener("drop", function(e){
+    var dt = e.dataTransfer;
+    if(dt && dt.files) onFilesSelected(dt.files);
+  });
+  resetBtn.addEventListener("click", resetAll);
+
+  // ---------- controls wiring ----------
+  var paperSelect = $("paperSelect"), customSizeField = $("customSizeField");
+  var customWInput = $("customW"), customHInput = $("customH");
+  paperSelect.addEventListener("change", function(){
+    state.paper = paperSelect.value;
+    customSizeField.style.display = (state.paper === "Custom") ? "block" : "none";
+    scheduleRender();
+  });
+  customWInput.addEventListener("input", function(){ state.customW = clamp(parseFloat(customWInput.value)||210, 20, 2000); scheduleRender(); });
+  customHInput.addEventListener("input", function(){ state.customH = clamp(parseFloat(customHInput.value)||297, 20, 2000); scheduleRender(); });
+
+  var orientSeg = $("orientSeg");
+  orientSeg.addEventListener("click", function(e){
+    var btn = e.target.closest("button"); if(!btn) return;
+    state.orientation = btn.getAttribute("data-val");
+    Array.prototype.forEach.call(orientSeg.children, function(b){ b.classList.toggle("active", b===btn); });
+    scheduleRender();
+  });
+
+  var marginRange = $("marginRange"), marginVal = $("marginVal");
+  marginRange.addEventListener("input", function(){
+    state.margin = parseFloat(marginRange.value);
+    marginVal.textContent = state.margin + " mm";
+    scheduleRender();
+  });
+
+  var gridPresets = $("gridPresets"), colsInput = $("colsInput"), rowsInput = $("rowsInput");
+  gridPresets.addEventListener("click", function(e){
+    var btn = e.target.closest("button"); if(!btn) return;
+    state.cols = parseInt(btn.getAttribute("data-cols"),10);
+    state.rows = parseInt(btn.getAttribute("data-rows"),10);
+    colsInput.value = state.cols; rowsInput.value = state.rows;
+    Array.prototype.forEach.call(gridPresets.children, function(b){ b.classList.toggle("active", b===btn); });
+    scheduleRender();
+  });
+  function onGridInputChange(){
+    state.cols = clamp(parseInt(colsInput.value,10)||1, 1, 10);
+    state.rows = clamp(parseInt(rowsInput.value,10)||1, 1, 10);
+    Array.prototype.forEach.call(gridPresets.children, function(b){ b.classList.remove("active"); });
+    if(state.cols*state.rows > MAX_SHEETS_WARN){
+      showToast("Large grid (" + (state.cols*state.rows) + " sheets) — rendering may take a moment.");
+    }
+    scheduleRender();
+  }
+  colsInput.addEventListener("input", onGridInputChange);
+  rowsInput.addEventListener("input", onGridInputChange);
+
+  var overlapRange = $("overlapRange"), overlapVal = $("overlapVal");
+  overlapRange.addEventListener("input", function(){
+    state.overlap = parseFloat(overlapRange.value);
+    overlapVal.textContent = state.overlap + " mm";
+    scheduleRender();
+  });
+
+  var fitModeCards = $("fitModeCards"), panFields = $("panFields");
+  fitModeCards.addEventListener("click", function(e){
+    var card = e.target.closest(".radio-card"); if(!card) return;
+    state.fitMode = card.getAttribute("data-val");
+    Array.prototype.forEach.call(fitModeCards.children, function(c){ c.classList.toggle("active", c===card); });
+    var radio = card.querySelector("input"); if(radio) radio.checked = true;
+    panFields.style.display = (state.fitMode === "cover") ? "block" : "none";
+    scheduleRender();
+  });
+  var panX = $("panX"), panY = $("panY");
+  panX.addEventListener("input", function(){ state.panX = parseInt(panX.value,10)/100; scheduleRender(); });
+  panY.addEventListener("input", function(){ state.panY = parseInt(panY.value,10)/100; scheduleRender(); });
+
+  var qualitySelect = $("qualitySelect");
+  qualitySelect.addEventListener("change", function(){ state.dpi = parseInt(qualitySelect.value,10); scheduleRender(); });
+
+  // ---------- layout math ----------
+  function getPaperDims(){
+    return state.paper === "Custom" ? [state.customW, state.customH] : PAPER_SIZES[state.paper];
+  }
+
+  function computeLayout(){
+    var dims = getPaperDims();
+    var a = dims[0], b = dims[1];
+    var pageW, pageH;
+    if(state.orientation === "landscape"){ pageW = Math.max(a,b); pageH = Math.min(a,b); }
+    else { pageW = Math.min(a,b); pageH = Math.max(a,b); }
+
+    var margin = clamp(state.margin, 0, Math.min(pageW,pageH)/2 - 1);
+    var Ws = pageW - 2*margin, Hs = pageH - 2*margin;
+    var overlap = clamp(state.overlap, 0, Math.max(0, Math.min(Ws,Hs) - 1));
+    var cols = state.cols, rows = state.rows;
+
+    var TW = cols*Ws - (cols-1)*overlap;
+    var TH = rows*Hs - (rows-1)*overlap;
+
+    var W = state.natW, H = state.natH;
+    var scale = (state.fitMode === "contain")
+      ? Math.min(TW/W, TH/H)
+      : Math.max(TW/W, TH/H);
+    var renderedW = W*scale, renderedH = H*scale;
+
+    var offsetX, offsetY;
+    if(state.fitMode === "contain"){
+      offsetX = (TW - renderedW)/2;
+      offsetY = (TH - renderedH)/2;
+    } else {
+      offsetX = state.panX * (TW - renderedW);
+      offsetY = state.panY * (TH - renderedH);
+    }
+
+    var ppm = state.dpi / 25.4;
+
+    return {
+      pageW:pageW, pageH:pageH, margin:margin, Ws:Ws, Hs:Hs, overlap:overlap,
+      cols:cols, rows:rows, TW:TW, TH:TH, scale:scale,
+      renderedW:renderedW, renderedH:renderedH, offsetX:offsetX, offsetY:offsetY, ppm:ppm
+    };
+  }
+
+  function getSheetParams(layout, r, c, ppmOverride){
+    var Ws=layout.Ws, Hs=layout.Hs, overlap=layout.overlap;
+    var offsetX=layout.offsetX, offsetY=layout.offsetY;
+    var renderedW=layout.renderedW, renderedH=layout.renderedH, scale=layout.scale;
+    var ppm = ppmOverride || layout.ppm;
+
+    var x0 = c*(Ws-overlap), y0 = r*(Hs-overlap);
+    var ix0 = Math.max(x0, offsetX), ix1 = Math.min(x0+Ws, offsetX+renderedW);
+    var iy0 = Math.max(y0, offsetY), iy1 = Math.min(y0+Hs, offsetY+renderedH);
+
+    var sheetWpx = Math.max(1, Math.round(Ws*ppm));
+    var sheetHpx = Math.max(1, Math.round(Hs*ppm));
+
+    if(ix1 <= ix0 || iy1 <= iy0){
+      return { sheetWpx:sheetWpx, sheetHpx:sheetHpx, empty:true, x0:x0, y0:y0 };
+    }
+    var sx = (ix0-offsetX)/scale, sy = (iy0-offsetY)/scale;
+    var sw = (ix1-ix0)/scale, sh = (iy1-iy0)/scale;
+    var dx = (ix0-x0)*ppm, dy = (iy0-y0)*ppm;
+    var dw = (ix1-ix0)*ppm, dh = (iy1-iy0)*ppm;
+
+    return { sheetWpx:sheetWpx, sheetHpx:sheetHpx, empty:false, sx:sx, sy:sy, sw:sw, sh:sh, dx:dx, dy:dy, dw:dw, dh:dh, x0:x0, y0:y0 };
+  }
+
+  function drawSheet(canvas, layout, r, c, ppmOverride){
+    var p = getSheetParams(layout, r, c, ppmOverride);
+    canvas.width = p.sheetWpx; canvas.height = p.sheetHpx;
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    if(!p.empty){
+      ctx.drawImage(state.img, p.sx, p.sy, p.sw, p.sh, p.dx, p.dy, p.dw, p.dh);
+    }
+    return canvas;
+  }
+
+  function mmToInches(mm){ return mm/25.4; }
+
+  // ---------- rendering ----------
+  var renderTimer = null;
+  function scheduleRender(){
+    if(!state.img) return;
+    window.clearTimeout(renderTimer);
+    renderTimer = window.setTimeout(renderAll, 40);
+  }
+
+  function renderAll(){
+    var layout = computeLayout();
+    renderDims(layout);
+    renderAssembled(layout);
+    renderSheetTiles(layout);
+  }
+
+  function renderDims(layout){
+    var wCm = (layout.TW/10).toFixed(1), hCm = (layout.TH/10).toFixed(1);
+    var wIn = mmToInches(layout.TW).toFixed(1), hIn = mmToInches(layout.TH).toFixed(1);
+    dimsReadout.innerHTML = "Assembled size: <b>" + wCm + " × " + hCm + " cm</b>" +
+      " (" + wIn + " × " + hIn + " in) — " + layout.cols + "×" + layout.rows + " sheets";
+    sheetsCount.textContent = "Sheets (" + (layout.cols*layout.rows) + ")";
+  }
+
+  function renderAssembled(layout){
+    var wrap = assembledCanvas.parentElement;
+    var maxW = Math.max(240, wrap.clientWidth - 40);
+    var maxH = 520;
+    var s = Math.min(maxW/layout.TW, maxH/layout.TH);
+    var cw = Math.max(1, Math.round(layout.TW*s));
+    var ch = Math.max(1, Math.round(layout.TH*s));
+    assembledCanvas.width = cw; assembledCanvas.height = ch;
+    var ctx = assembledCanvas.getContext("2d");
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0,0,cw,ch);
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0,0,cw,ch); ctx.clip();
+    ctx.drawImage(state.img, layout.offsetX*s, layout.offsetY*s, layout.renderedW*s, layout.renderedH*s);
+    ctx.restore();
+
+    // grid overlay
+    ctx.lineWidth = 1.25;
+    ctx.setLineDash([5,4]);
+    ctx.strokeStyle = "rgba(228,87,46,0.9)";
+    for(var r=0;r<layout.rows;r++){
+      for(var c=0;c<layout.cols;c++){
+        var x0 = c*(layout.Ws-layout.overlap)*s;
+        var y0 = r*(layout.Hs-layout.overlap)*s;
+        var w = layout.Ws*s, h = layout.Hs*s;
+        ctx.strokeRect(x0+0.5, y0+0.5, w, h);
+      }
+    }
+    ctx.setLineDash([]);
+
+    // corner registration marks + sheet numbers
+    ctx.fillStyle = "#1A2333";
+    ctx.font = "600 11px 'JetBrains Mono', monospace";
+    var n = 1;
+    for(var r2=0;r2<layout.rows;r2++){
+      for(var c2=0;c2<layout.cols;c2++){
+        var x = c2*(layout.Ws-layout.overlap)*s;
+        var y = r2*(layout.Hs-layout.overlap)*s;
+        var w2 = layout.Ws*s, h2 = layout.Hs*s;
+        drawCornerMarks(ctx, x, y, w2, h2);
+        ctx.fillStyle = "rgba(255,255,255,0.88)";
+        ctx.fillRect(x+6, y+6, 22, 14);
+        ctx.fillStyle = "#1A2333";
+        ctx.fillText(String(n).padStart(2,"0"), x+9, y+16);
+        n++;
+      }
+    }
+  }
+
+  function drawCornerMarks(ctx, x, y, w, h){
+    var len = 9;
+    ctx.strokeStyle = "#E4572E";
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([]);
+    var corners = [[x,y,1,1],[x+w,y,-1,1],[x,y+h,1,-1],[x+w,y+h,-1,-1]];
+    corners.forEach(function(cn){
+      var cx=cn[0], cy=cn[1], dx=cn[2], dy=cn[3];
+      ctx.beginPath();
+      ctx.moveTo(cx, cy + dy*len); ctx.lineTo(cx, cy); ctx.lineTo(cx + dx*len, cy);
+      ctx.stroke();
+    });
+  }
+
+  function renderSheetTiles(layout){
+    sheetsGrid.innerHTML = "";
+    var total = layout.cols*layout.rows;
+    var thumbPpm = total > 24 ? 2.2 : 3.5;
+    var n = 1;
+    for(var r=0;r<layout.rows;r++){
+      for(var c=0;c<layout.cols;c++){
+        (function(r,c,n){
+          var tile = document.createElement("div");
+          tile.className = "sheet-tile";
+          var wrapEl = document.createElement("div");
+          wrapEl.className = "st-canvas-wrap";
+          var canvas = document.createElement("canvas");
+          drawSheet(canvas, layout, r, c, thumbPpm);
+          wrapEl.appendChild(canvas);
+          ["corner-tl","corner-tr","corner-bl","corner-br"].forEach(function(cls){
+            var m = document.createElement("div");
+            m.className = "corner-mark " + cls;
+            wrapEl.appendChild(m);
+          });
+          var label = document.createElement("div");
+          label.className = "st-label";
+          label.innerHTML = '<span class="st-num">SHEET ' + String(n).padStart(2,"0") + ' / ' + String(layout.cols*layout.rows).padStart(2,"0") + '</span>' +
+            '<span class="st-pos">R' + (r+1) + 'C' + (c+1) + '</span>';
+          tile.appendChild(wrapEl);
+          tile.appendChild(label);
+          sheetsGrid.appendChild(tile);
+        })(r,c,n);
+        n++;
+      }
+    }
+  }
+
+  window.addEventListener("resize", function(){ scheduleRender(); });
+
+  // ---------- print ----------
+  function buildPrintPages(){
+    var layout = computeLayout();
+    var printArea = $("printArea");
+    printArea.innerHTML = "";
+    var total = layout.cols*layout.rows;
+    var n = 1;
+    for(var r=0;r<layout.rows;r++){
+      for(var c=0;c<layout.cols;c++){
+        var page = document.createElement("div");
+        page.className = "print-page";
+        page.style.padding = layout.margin + "mm";
+        var canvas = document.createElement("canvas");
+        drawSheet(canvas, layout, r, c);
+        canvas.style.width = layout.Ws + "mm";
+        canvas.style.height = layout.Hs + "mm";
+        page.appendChild(canvas);
+        var tag = document.createElement("div");
+        tag.className = "print-tag";
+        tag.textContent = "Sheet " + n + "/" + total + " · R" + (r+1) + "C" + (c+1);
+        page.appendChild(tag);
+        printArea.appendChild(page);
+        n++;
+      }
+    }
+    $("dynamicPrintStyle").textContent =
+      "@page{ size:" + layout.pageW + "mm " + layout.pageH + "mm; margin:0; }";
+    return layout;
+  }
+
+  $("printBtn").addEventListener("click", function(){
+    if(!state.img) return;
+    buildPrintPages();
+    window.setTimeout(function(){ window.print(); }, 60);
+  });
+
+  // ---------- PDF ----------
+  $("pdfBtn").addEventListener("click", function(){
+    if(!state.img) return;
+    var btn = $("pdfBtn");
+    var originalText = btn.textContent;
+    btn.textContent = "Generating PDF…";
+    btn.disabled = true;
+    window.setTimeout(function(){
+      try{
+        generatePdf();
+      }catch(e){
+        showError("PDF generation failed. Try lowering print quality or the grid size.");
+      }finally{
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }, 30);
+  });
+
+  function generatePdf(){
+    var layout = computeLayout();
+    var jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
+    if(!jsPDFCtor){ showError("PDF library failed to load. Check your connection and try again."); return; }
+    var orient = state.orientation === "landscape" ? "l" : "p";
+    var pdf = new jsPDFCtor({ unit:"mm", format:[layout.pageW, layout.pageH], orientation:orient });
+    var tmp = document.createElement("canvas");
+    var first = true;
+    for(var r=0;r<layout.rows;r++){
+      for(var c=0;c<layout.cols;c++){
+        drawSheet(tmp, layout, r, c);
+        var dataUrl = tmp.toDataURL("image/jpeg", 0.92);
+        if(!first){ pdf.addPage([layout.pageW, layout.pageH], orient); }
+        pdf.addImage(dataUrl, "JPEG", layout.margin, layout.margin, layout.Ws, layout.Hs);
+        first = false;
+      }
+    }
+    var base = (state.fileName || "poster").replace(/\.[^.]+$/, "");
+    pdf.save(base + "-enlarged.pdf");
+    showToast("PDF downloaded.");
+  }
+
+})();
+</script>
+</body>
+</html>
